@@ -38,15 +38,15 @@
 
 
     
-        <meta property="og:image" content="/blog/sidebar-listing.png" >
+        <meta property="og:image" content="/blog/2022-08-02-webscraping-with-rselenium/featured.png" >
         <meta property="twitter:card" content="summary_large_image">
-        <meta name="twitter:image" content="/blog/sidebar-listing.png" >
+        <meta name="twitter:image" content="/blog/2022-08-02-webscraping-with-rselenium/featured.png" >
     
     
   <meta itemprop="name" content="Webscraping with RSelenium">
-<meta itemprop="description" content=""><meta itemprop="datePublished" content="2020-05-25T00:00:00+00:00" />
-<meta itemprop="dateModified" content="2020-05-25T00:00:00+00:00" />
-<meta itemprop="wordCount" content="0">
+<meta itemprop="description" content="Introduction In this blogpost, I want to tell you about web scraping using RSelenium, something which I&rsquo;ve recently been learning and which I am very enthusiastic about, because it is very powerful. I want to do this in the context of an example. I have been supervising undergraduate students, and a group of students asked me where they could get a list of members of the Iranian parliament. So I went to the official English-language website of the Iranian parliament, and looked up the list of members."><meta itemprop="datePublished" content="2020-05-27T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2020-05-27T00:00:00+00:00" />
+<meta itemprop="wordCount" content="1794"><meta itemprop="image" content="/blog/2022-08-02-webscraping-with-rselenium/featured.png">
 <meta itemprop="keywords" content="" />
   
   
@@ -119,22 +119,374 @@
         <h1 class="f1 lh-solid measure-narrow mb3 fw4">Webscraping with RSelenium</h1>
         
         <p class="f6 measure lh-copy mv1">By Bas Machielsen</p>
-        <p class="f7 db mv0 ttu">May 25, 2020</p>
+        <p class="f7 db mv0 ttu">May 27, 2020</p>
 
       
 
       </header>
       <section class="post-body pt5 pb4">
         
+
+
+
+<h2 id="introduction">Introduction
+  <a href="#introduction"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>In this blogpost, I want to tell you about web scraping using <code>RSelenium</code>, something which I&rsquo;ve recently been learning and which I am very enthusiastic about, because it is very powerful. I want to do this in the context of an example. I have been supervising undergraduate students, and a group of students asked me where they could get a list of members of the Iranian parliament. So I went to 
+<a href="https://en.parliran.ir/eng/en/10th%20Term" target="_blank" rel="noopener">the official English-language website</a> of the Iranian parliament, and looked up the list of members.</p>
+<p>Naturally, I wanted to scrape all of these names. For those of you familiar with scraping, a first approach would be something like the following. For those who aren&rsquo;t, I have another nice blog post about elementary web scraping, but maybe you can follow along!</p>
+<ul>
+<li>
+<p>First, we observe, by looking at the html-structure of the page, that all the names are stored in a <code>&lt;div&gt;</code> of class <code>text-left h4</code>.</p>
+</li>
+<li>
+<p>We can use 
+<a href="https://www.w3schools.com/css/css_selectors.asp" target="_blank" rel="noopener">CSS selectors</a> to find the specific elements of these classes:</p>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#900;font-weight:bold">library</span>(rvest)
+</span></span><span style="display:flex;"><span>url <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#d14">&#34;https://en.parliran.ir/eng/en/10th%20Term&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#900;font-weight:bold">read_html</span>(url) <span style="color:#000;font-weight:bold">%&gt;%</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">html_nodes</span>(<span style="color:#d14">&#34;div .text-left.h4:not(.blue)&#34;</span>)
+</span></span></code></pre></div><p>Here I am saying, select all nodes (separate chunks of html, be it <code>&lt;p&gt;</code>, <code>&lt;a&gt;</code>, <code>&lt;div&gt;</code> or something else), that are <code>&lt;div&gt;</code>, and have the classes <code>text-left</code>, <code>h4</code>, and don&rsquo;t have <code>blue</code>. (The reason for no blue is that it would take some unnecessary information. Try it out yourself!)</p>
+<p>Now, we can extract the names with the help of the <code>html_text</code> command from the <code>rvest</code> package, which extract all text inside these particular html-elements:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#900;font-weight:bold">read_html</span>(url) <span style="color:#000;font-weight:bold">%&gt;%</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">html_nodes</span>(<span style="color:#d14">&#34;div .text-left.h4:not(.blue)&#34;</span>) <span style="color:#000;font-weight:bold">%&gt;%</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">html_text</span>()
+</span></span></code></pre></div><p>Don&rsquo;t worry about the <code>Name:</code> parts for now. We&rsquo;ll clean those later.</p>
+<p>The difficulty is: these are obviously not all members of Iran&rsquo;s parliament. If you go to the 
+<a href="https://en.parliran.ir/eng/en/10th%20Term" target="_blank" rel="noopener">actual website</a>, you will notice that there are pages 1 to 10 (and up to 29), which you can click. But if you do so, the page&rsquo;s URL does not change! That means we cannot readily scrape the names of all members by navigating to a new URL. Here, <code>RSelenium</code> comes into play.</p>
+
+
+
+
+<h2 id="rselenium">RSelenium
+  <a href="#rselenium"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<ul>
+<li>What is Selenium?</li>
+</ul>
+<blockquote>
+<p>Selenium is a project focused on automating web browsers.</p>
+</blockquote>
+<p>from 
+<a href="https://cran.r-project.org/web/packages/RSelenium/vignettes/basics.html" target="_blank" rel="noopener">this vignette</a>. In layman&rsquo;s terms, Selenium creates &lsquo;robot browsers&rsquo; that you can control by giving commands.</p>
+<ul>
+<li>What is RSelenium?</li>
+</ul>
+<blockquote>
+<p>The goal of RSelenium is to make it easy to connect to a Selenium Server/Remote Selenium Server from within R. RSelenium provides R bindings for the Selenium Webdriver API.</p>
+</blockquote>
+<blockquote>
+<p>RSelenium allows you to carry out unit testing and regression testing on your webapps and webpages across a range of browser/OS combinations. This allows us to integrate from within R testing and manipulation of popular projects such as Shiny Apps.</p>
+</blockquote>
+<p>Originally, RSelenium was used primarily to test apps by creating virtual environments of different browsers, and see how they look/behave. We will be using it to create a virtual browser, give it some commands, and extract data in a <code>for</code> loop as we go. Specifically, we will use the virtual browser to navigate through each of the 10 pages, and scrape all the names as we go along!</p>
+
+
+
+
+<h2 id="setting-up-a-virtual-browser">Setting up a Virtual Browser
+  <a href="#setting-up-a-virtual-browser"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>To get <code>RSelenium</code> working, we need two things: 
+<a href="https://www.docker.com/why-docker" target="_blank" rel="noopener">Docker</a> to set up a server to run the virtual browser on, and the <code>RSelenium</code> package.</p>
+<p>In Ubuntu, the OS of my preference, Docker can be installed in the following way:</p>
+<pre tabindex="0"><code class="language-{}" data-lang="{}">$ sudo apt-get install docker.io
+</code></pre><p>.. and you start it, up and test whether it is working by executing the following query in the command bash:</p>
+<pre tabindex="0"><code class="language-{}" data-lang="{}">$ sudo service docker start
+
+$ sudo docker run hello-world
+</code></pre><p>Following which you should get the following output:</p>
+<pre tabindex="0"><code class="language-{}" data-lang="{}">Unable to find image &#39;hello-world:latest&#39; locally
+latest: Pulling from library/hello-world
+0e03bdcc26d7: Pull complete 
+Digest: sha256:6a65f928fb91fcfbc963f7aa6d57c8eeb426ad9a20c7ee045538ef34847f44f1
+Status: Downloaded newer image for hello-world:latest
+
+Hello from Docker!
+This message shows that your installation appears to be working correctly.
+
+To generate this message, Docker took the following steps:
+ 1. The Docker client contacted the Docker daemon.
+ 2. The Docker daemon pulled the &#34;hello-world&#34; image from the Docker Hub.
+    (amd64)
+ 3. The Docker daemon created a new container from that image which runs the
+    executable that produces the output you are currently reading.
+ 4. The Docker daemon streamed that output to the Docker client, which sent it
+    to your terminal.
+
+To try something more ambitious, you can run an Ubuntu container with:
+ $ docker run -it ubuntu bash
+
+Share images, automate workflows, and more with a free Docker ID:
+ https://hub.docker.com/
+
+For more examples and ideas, visit:
+ https://docs.docker.com/get-started/
+</code></pre>
+
+
+
+<h2 id="installing-rselenium">Installing RSelenium
+  <a href="#installing-rselenium"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>You can install and load RSelenium in the way you&rsquo;re used to:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#900;font-weight:bold">install.packages</span>(<span style="color:#d14">&#39;RSelenium&#39;</span>)
+</span></span></code></pre></div><p>It seems that <code>devtools</code> is required to get Selenium working, so load it with:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#900;font-weight:bold">library</span>(devtools)
+</span></span><span style="display:flex;"><span><span style="color:#900;font-weight:bold">library</span>(RSelenium)
+</span></span></code></pre></div><p>Now you can start up a Selenium-server (in command prompt) by entering:</p>
+<pre tabindex="0"><code class="language-{}" data-lang="{}">$ sudo docker run -d -p 4445:4444 selenium/standalone-chrome
+</code></pre><p>Check if it&rsquo;s working by entering <code>docker ps</code> in command prompt, following which you should get a list containing the one server you just set up, and some additional information (CONTAINER ID, IMAGE, etc.)</p>
+<p>You can replace chrome by any other browser, and the version no. by a specific desired version number of your liking, by entering e.g. <code>$ sudo docker run -d -p 4445:4444 selenium/standalone-chrone:1.0.0</code> Now, back in R, we use <code>RSelenium</code> to connect to the server we&rsquo;ve just created:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>remDr <span style="color:#000;font-weight:bold">&lt;-</span> RSelenium<span style="color:#000;font-weight:bold">::</span><span style="color:#900;font-weight:bold">remoteDriver</span>(remoteServerAddr <span style="color:#000;font-weight:bold">=</span> <span style="color:#d14">&#34;localhost&#34;</span>,
+</span></span><span style="display:flex;"><span>                                 port <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">4445L</span>,
+</span></span><span style="display:flex;"><span>                                 browserName <span style="color:#000;font-weight:bold">=</span> <span style="color:#d14">&#34;chrome&#34;</span>)
+</span></span></code></pre></div><p>And we can start navigating, just like we would do in a real browser:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>remDr<span style="color:#000;font-weight:bold">$</span><span style="color:#900;font-weight:bold">open</span>()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>remDr<span style="color:#000;font-weight:bold">$</span><span style="color:#900;font-weight:bold">navigate</span>(<span style="color:#d14">&#34;http://bas-m.netlify.app&#34;</span>) 
+</span></span></code></pre></div><p>The only difference is that we know explicitly write down our activities (clicks, filling in forms, etc.) using a few simple commands. The basic commands used to navigate a browser can be found 
+<a href="https://cran.r-project.org/web/packages/RSelenium/vignettes/basics.html" target="_blank" rel="noopener">here</a>, for example.</p>
+
+
+
+
+<h2 id="scraping-in-r-using-selenium">Scraping in R Using Selenium
+  <a href="#scraping-in-r-using-selenium"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>Now, let&rsquo;s get back to the job we started with: scraping the names of Iranian MP&rsquo;s! We know how to navigate to the desired webpage in RSelenium, and we know we want the following:</p>
+<ol>
+<li>We want to scrape all MP&rsquo;s names on page 1.</li>
+<li>We want to go to page 2.</li>
+<li>We want to scrape all MP&rsquo;s names on page 2.</li>
+<li>Etc. etc. until page 29</li>
+</ol>
+<p>Let us start with the sample case - we scrape all names from page 1, and then click on page 2, and scrape all names from that page:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#998;font-style:italic">#By default, we end up at page 1</span>
+</span></span><span style="display:flex;"><span>remDr<span style="color:#000;font-weight:bold">$</span><span style="color:#900;font-weight:bold">navigate</span>(<span style="color:#d14">&#34;https://en.parliran.ir/eng/en/10th%20Term&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>remDr<span style="color:#000;font-weight:bold">$</span><span style="color:#900;font-weight:bold">getPageSource</span>() <span style="color:#000;font-weight:bold">%&gt;%</span>
+</span></span><span style="display:flex;"><span>  magrittr<span style="color:#000;font-weight:bold">::</span><span style="color:#900;font-weight:bold">extract2</span>(<span style="color:#099">1</span>) <span style="color:#000;font-weight:bold">%&gt;%</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">read_html</span>() <span style="color:#000;font-weight:bold">%&gt;%</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">html_nodes</span>(<span style="color:#d14">&#34;div .text-left.h4:not(.blue)&#34;</span>) <span style="color:#000;font-weight:bold">%&gt;%</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">html_text</span>()
+</span></span></code></pre></div><p>Notice that we used the same CSS Selector as before to get the names. If all pages have a similar markup, then we can use the same CSS Selector on every page. We&rsquo;ll soon find out whether that&rsquo;s the case. Let us store the obtained names in a vector:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>names <span style="color:#000;font-weight:bold">&lt;-</span> remDr<span style="color:#000;font-weight:bold">$</span><span style="color:#900;font-weight:bold">getPageSource</span>() <span style="color:#000;font-weight:bold">%&gt;%</span>
+</span></span><span style="display:flex;"><span>  magrittr<span style="color:#000;font-weight:bold">::</span><span style="color:#900;font-weight:bold">extract2</span>(<span style="color:#099">1</span>) <span style="color:#000;font-weight:bold">%&gt;%</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">read_html</span>() <span style="color:#000;font-weight:bold">%&gt;%</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">html_nodes</span>(<span style="color:#d14">&#34;div .text-left.h4:not(.blue)&#34;</span>) <span style="color:#000;font-weight:bold">%&gt;%</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">html_text</span>()
+</span></span></code></pre></div><p>.. and attempt to navigate to page two:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>remDr<span style="color:#000;font-weight:bold">$</span><span style="color:#900;font-weight:bold">navigate</span>(<span style="color:#d14">&#34;https://en.parliran.ir/eng/en/10th%20Term&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>remDr<span style="color:#000;font-weight:bold">$</span><span style="color:#900;font-weight:bold">findElement</span>(using <span style="color:#000;font-weight:bold">=</span> <span style="color:#d14">&#34;css&#34;</span>, <span style="color:#d14">&#39;input[value=&#34;2&#34;]&#39;</span>) <span style="color:#000;font-weight:bold">-&gt;</span> elem
+</span></span><span style="display:flex;"><span>elem<span style="color:#000;font-weight:bold">$</span><span style="color:#900;font-weight:bold">clickElement</span>()
+</span></span></code></pre></div><p>Now we have navigated to page 2! Let us now find the names on page 2:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>remDr<span style="color:#000;font-weight:bold">$</span><span style="color:#900;font-weight:bold">getPageSource</span>() <span style="color:#000;font-weight:bold">%&gt;%</span>
+</span></span><span style="display:flex;"><span>  magrittr<span style="color:#000;font-weight:bold">::</span><span style="color:#900;font-weight:bold">extract2</span>(<span style="color:#099">1</span>) <span style="color:#000;font-weight:bold">%&gt;%</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">read_html</span>() <span style="color:#000;font-weight:bold">%&gt;%</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">html_nodes</span>(<span style="color:#d14">&#34;div .text-left.h4:not(.blue)&#34;</span>) <span style="color:#000;font-weight:bold">%&gt;%</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">html_text</span>()
+</span></span></code></pre></div><p>And let&rsquo;s also store them in <code>names</code>, the vector we&rsquo;ve made before:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>names <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">c</span>(names, 
+</span></span><span style="display:flex;"><span>           remDr<span style="color:#000;font-weight:bold">$</span><span style="color:#900;font-weight:bold">getPageSource</span>() <span style="color:#000;font-weight:bold">%&gt;%</span>
+</span></span><span style="display:flex;"><span>                magrittr<span style="color:#000;font-weight:bold">::</span><span style="color:#900;font-weight:bold">extract2</span>(<span style="color:#099">1</span>) <span style="color:#000;font-weight:bold">%&gt;%</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#900;font-weight:bold">read_html</span>() <span style="color:#000;font-weight:bold">%&gt;%</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#900;font-weight:bold">html_nodes</span>(<span style="color:#d14">&#34;div .text-left.h4:not(.blue)&#34;</span>) <span style="color:#000;font-weight:bold">%&gt;%</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#900;font-weight:bold">html_text</span>()
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>names
+</span></span></code></pre></div>
+
+
+
+<h2 id="scraping-all-pages">Scraping all pages
+  <a href="#scraping-all-pages"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>Let us now proceed to scrape all pages at once, meaning, using one <code>for</code> loop! We can make clever use that the values of the CSS selectors for the buttons are numbers 1 to 29, so we can use that to generate code to go to the next page after storing the results of the current page. For clarity&rsquo;s sake, we start from scratch, closing our current session:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>remDr<span style="color:#000;font-weight:bold">$</span><span style="color:#900;font-weight:bold">close</span>()
+</span></span></code></pre></div><p>And assuming only that we&rsquo;ve set up our Selenium server using Docker:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>remDr <span style="color:#000;font-weight:bold">&lt;-</span> RSelenium<span style="color:#000;font-weight:bold">::</span><span style="color:#900;font-weight:bold">remoteDriver</span>(remoteServerAddr <span style="color:#000;font-weight:bold">=</span> <span style="color:#d14">&#34;localhost&#34;</span>,
+</span></span><span style="display:flex;"><span>                                 port <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">4445L</span>,
+</span></span><span style="display:flex;"><span>                                 browserName <span style="color:#000;font-weight:bold">=</span> <span style="color:#d14">&#34;chrome&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>remDr<span style="color:#000;font-weight:bold">$</span><span style="color:#900;font-weight:bold">open</span>()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>remDr<span style="color:#000;font-weight:bold">$</span><span style="color:#900;font-weight:bold">navigate</span>(<span style="color:#d14">&#34;https://en.parliran.ir/eng/en/10th%20Term&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic">#Page 1</span>
+</span></span><span style="display:flex;"><span>names <span style="color:#000;font-weight:bold">&lt;-</span> remDr<span style="color:#000;font-weight:bold">$</span><span style="color:#900;font-weight:bold">getPageSource</span>() <span style="color:#000;font-weight:bold">%&gt;%</span>
+</span></span><span style="display:flex;"><span>  magrittr<span style="color:#000;font-weight:bold">::</span><span style="color:#900;font-weight:bold">extract2</span>(<span style="color:#099">1</span>) <span style="color:#000;font-weight:bold">%&gt;%</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">read_html</span>() <span style="color:#000;font-weight:bold">%&gt;%</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">html_nodes</span>(<span style="color:#d14">&#34;div .text-left.h4:not(.blue)&#34;</span>) <span style="color:#000;font-weight:bold">%&gt;%</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">html_text</span>()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic">#Page 2 to 29</span>
+</span></span><span style="display:flex;"><span><span style="color:#900;font-weight:bold">for</span>(i in <span style="color:#099">2</span><span style="color:#000;font-weight:bold">:</span><span style="color:#099">29</span>) {
+</span></span><span style="display:flex;"><span>  <span style="color:#998;font-style:italic">#Get the correct CSS Selector for each page</span>
+</span></span><span style="display:flex;"><span>  element <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">paste</span>(<span style="color:#d14">&#39;input[value=&#34;x&#34;]&#39;</span>)
+</span></span><span style="display:flex;"><span>  element <span style="color:#000;font-weight:bold">&lt;-</span> stringr<span style="color:#000;font-weight:bold">::</span><span style="color:#900;font-weight:bold">str_replace</span>(element, <span style="color:#d14">&#34;x&#34;</span>, <span style="color:#900;font-weight:bold">as.character</span>(i))
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>  <span style="color:#998;font-style:italic">#Click on page i button</span>
+</span></span><span style="display:flex;"><span>  remDr<span style="color:#000;font-weight:bold">$</span><span style="color:#900;font-weight:bold">findElement</span>(using <span style="color:#000;font-weight:bold">=</span> <span style="color:#d14">&#34;css&#34;</span>, element) <span style="color:#000;font-weight:bold">-&gt;</span> clickthis
+</span></span><span style="display:flex;"><span>  clickthis<span style="color:#000;font-weight:bold">$</span><span style="color:#900;font-weight:bold">clickElement</span>()
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>  <span style="color:#998;font-style:italic">#Scrape the names</span>
+</span></span><span style="display:flex;"><span>  names <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">c</span>(names, 
+</span></span><span style="display:flex;"><span>             remDr<span style="color:#000;font-weight:bold">$</span><span style="color:#900;font-weight:bold">getPageSource</span>() <span style="color:#000;font-weight:bold">%&gt;%</span>
+</span></span><span style="display:flex;"><span>               magrittr<span style="color:#000;font-weight:bold">::</span><span style="color:#900;font-weight:bold">extract2</span>(<span style="color:#099">1</span>) <span style="color:#000;font-weight:bold">%&gt;%</span>
+</span></span><span style="display:flex;"><span>               <span style="color:#900;font-weight:bold">read_html</span>() <span style="color:#000;font-weight:bold">%&gt;%</span>
+</span></span><span style="display:flex;"><span>               <span style="color:#900;font-weight:bold">html_nodes</span>(<span style="color:#d14">&#34;div .text-left.h4:not(.blue)&#34;</span>) <span style="color:#000;font-weight:bold">%&gt;%</span>
+</span></span><span style="display:flex;"><span>               <span style="color:#900;font-weight:bold">html_text</span>()
+</span></span><span style="display:flex;"><span>  )
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>  names
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>And here we have it! 286 names!</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#900;font-weight:bold">head</span>(names)
+</span></span></code></pre></div><p>Let&rsquo;s clean them quickly, for completness&rsquo; sake:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>names <span style="color:#000;font-weight:bold">%&gt;%</span>
+</span></span><span style="display:flex;"><span>  stringr<span style="color:#000;font-weight:bold">::</span><span style="color:#900;font-weight:bold">str_replace</span>(<span style="color:#d14">&#34;Name:&#34;</span>, <span style="color:#d14">&#34;&#34;</span>) <span style="color:#000;font-weight:bold">%&gt;%</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">tail</span>()
+</span></span></code></pre></div>
+
+
+
+<h2 id="final-showcase-capturing-names-and-biographical-information">Final Showcase: Capturing Names and Biographical Information
+  <a href="#final-showcase-capturing-names-and-biographical-information"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>So far the small tutorial, of which I hope it was easy enough for any readers to follow along. Now, I want to illustrate some more serious applications: some of you might have noticed that the names also contain links to personalized pages of the MP&rsquo;s, which in turn contains <code>&lt;div&gt;</code>&rsquo;s with personal (biographical) information. I want to do this in 3 steps:</p>
+<ol>
+<li>I gather all the links of the MP&rsquo;s over the 10 pages.</li>
+<li>I go to each of those 286 links and extract the information</li>
+<li>I clean the data obtained in step 2.</li>
+</ol>
+
+
+
+
+<h2 id="step-1-gather-all-links">Step 1: Gather all links
+  <a href="#step-1-gather-all-links"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>In this step, I use <code>RSelenium</code> to browse through each of the ten pages, and extract the hyperlink for each politician on a particular page (check out the CSS Selector that I use).</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>remDr<span style="color:#000;font-weight:bold">$</span><span style="color:#900;font-weight:bold">navigate</span>(<span style="color:#d14">&#34;https://en.parliran.ir/eng/en/10th%20Term&#34;</span>)
+</span></span><span style="display:flex;"><span>links <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#000;font-weight:bold">NULL</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#900;font-weight:bold">for</span>(i in <span style="color:#099">1</span><span style="color:#000;font-weight:bold">:</span><span style="color:#099">29</span>){
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>  <span style="color:#998;font-style:italic">#Get the correct CSS Selector for each page</span>
+</span></span><span style="display:flex;"><span>  element <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">paste</span>(<span style="color:#d14">&#39;input[value=&#34;x&#34;]&#39;</span>)
+</span></span><span style="display:flex;"><span>  element <span style="color:#000;font-weight:bold">&lt;-</span> stringr<span style="color:#000;font-weight:bold">::</span><span style="color:#900;font-weight:bold">str_replace</span>(element, <span style="color:#d14">&#34;x&#34;</span>, <span style="color:#900;font-weight:bold">as.character</span>(i))
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>  <span style="color:#998;font-style:italic">#Click on page i button</span>
+</span></span><span style="display:flex;"><span>  remDr<span style="color:#000;font-weight:bold">$</span><span style="color:#900;font-weight:bold">findElement</span>(using <span style="color:#000;font-weight:bold">=</span> <span style="color:#d14">&#34;css&#34;</span>, element) <span style="color:#000;font-weight:bold">-&gt;</span> clickthis
+</span></span><span style="display:flex;"><span>  clickthis<span style="color:#000;font-weight:bold">$</span><span style="color:#900;font-weight:bold">clickElement</span>()
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>  <span style="color:#998;font-style:italic">#Extract all the hyperlinks to politician&#39;s pages on page i</span>
+</span></span><span style="display:flex;"><span>  links <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">c</span>(links, 
+</span></span><span style="display:flex;"><span>             remDr<span style="color:#000;font-weight:bold">$</span><span style="color:#900;font-weight:bold">getPageSource</span>() <span style="color:#000;font-weight:bold">%&gt;%</span>
+</span></span><span style="display:flex;"><span>                magrittr<span style="color:#000;font-weight:bold">::</span><span style="color:#900;font-weight:bold">extract2</span>(<span style="color:#099">1</span>) <span style="color:#000;font-weight:bold">%&gt;%</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#900;font-weight:bold">read_html</span>() <span style="color:#000;font-weight:bold">%&gt;%</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#900;font-weight:bold">html_nodes</span>(<span style="color:#d14">&#39;div.col-lg-10 a[target=&#34;_blank&#34;]&#39;</span>) <span style="color:#000;font-weight:bold">%&gt;%</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#900;font-weight:bold">html_attr</span>(<span style="color:#d14">&#34;href&#34;</span>)
+</span></span><span style="display:flex;"><span>  )
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>  links
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>And there they are!</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#900;font-weight:bold">head</span>(links)
+</span></span></code></pre></div>
+
+
+
+<h2 id="step-2-go-to-the-links-and-extract-information">Step 2: Go to the Links and Extract Information
+  <a href="#step-2-go-to-the-links-and-extract-information"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>In this step, I will go through each of the 286 obtained links, and extract the necessary information.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>info <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">list</span>()
+</span></span><span style="display:flex;"><span><span style="color:#900;font-weight:bold">for</span>(i in <span style="color:#099">1</span><span style="color:#000;font-weight:bold">:</span><span style="color:#900;font-weight:bold">length</span>(links)){
+</span></span><span style="display:flex;"><span>  info[[i]] <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">read_html</span>(links[i]) <span style="color:#000;font-weight:bold">%&gt;%</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#900;font-weight:bold">html_nodes</span>(<span style="color:#d14">&#34;div.col-lg-7 p&#34;</span>) <span style="color:#000;font-weight:bold">%&gt;%</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#900;font-weight:bold">html_text</span>() <span style="color:#000;font-weight:bold">%&gt;%</span>
+</span></span><span style="display:flex;"><span>    stringr<span style="color:#000;font-weight:bold">::</span><span style="color:#900;font-weight:bold">str_trim</span>(side <span style="color:#000;font-weight:bold">=</span> <span style="color:#d14">&#34;both&#34;</span>) <span style="color:#000;font-weight:bold">%&gt;%</span>
+</span></span><span style="display:flex;"><span>    .[. <span style="color:#000;font-weight:bold">!=</span> <span style="color:#d14">&#34;&#34;</span>] 
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div>
+
+
+
+<h2 id="step-3-cleaning-the-data">Step 3: Cleaning the Data
+  <a href="#step-3-cleaning-the-data"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>Finally, I can do some cleaning exercises, to make sure the data can be used easily by myself and others. You can download the obtained data 
+<a href="/iranianmps.csv">here</a>!</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>iranianmps <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">lapply</span>(info, data.frame) <span style="color:#000;font-weight:bold">%&gt;%</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">lapply</span>(setNames, <span style="color:#d14">&#34;var&#34;</span>) <span style="color:#000;font-weight:bold">%&gt;%</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">lapply</span>(tidyr<span style="color:#000;font-weight:bold">::</span>separate, var, sep <span style="color:#000;font-weight:bold">=</span> <span style="color:#d14">&#34;:&#34;</span>, into <span style="color:#000;font-weight:bold">=</span> <span style="color:#900;font-weight:bold">c</span>(<span style="color:#d14">&#34;var&#34;</span>, <span style="color:#d14">&#34;val&#34;</span>)) <span style="color:#000;font-weight:bold">%&gt;%</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">lapply</span>(tidyr<span style="color:#000;font-weight:bold">::</span>pivot_wider, names_from <span style="color:#000;font-weight:bold">=</span> <span style="color:#d14">&#34;var&#34;</span>, values_from <span style="color:#000;font-weight:bold">=</span> <span style="color:#d14">&#34;val&#34;</span>) <span style="color:#000;font-weight:bold">%&gt;%</span>
+</span></span><span style="display:flex;"><span>  purrr<span style="color:#000;font-weight:bold">::</span><span style="color:#900;font-weight:bold">reduce</span>(dplyr<span style="color:#000;font-weight:bold">::</span>bind_rows)
+</span></span></code></pre></div>
+
+
+
+<h2 id="conclusion">Conclusion
+  <a href="#conclusion"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>In this blog post, I demonstrated how to install and use RSelenium in the context of scraping information about Iranian Members of Parliament. I hope it was useful to some of you aiming to learn RSelenium, and tears down some barriers to first usage. Anyway, after you&rsquo;re done, you can close the connection with the Selenium server in R with:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>remDr<span style="color:#000;font-weight:bold">$</span><span style="color:#900;font-weight:bold">close</span>()
+</span></span></code></pre></div><p>And if you want to shut down your Selenium server in Docker, go to command prompt:</p>
+<pre tabindex="0"><code class="language-{}" data-lang="{}">$ docker kill [CONTAINER_ID]
+</code></pre><p>where [CONTAINER_ID] is a string corresponding to the CONTAINDER_ID box of your server. Thank you for reading, and if you have any questions, you can always 
+<a href="mailto:a.h.machielsen@uu.nl">contact me</a>.</p>
+
         
         <details closed class="f6 fw7 input-reset">
   <dl class="f6 lh-copy">
     <dt class="fw7">Posted on:</dt>
-    <dd class="fw5 ml0">May 25, 2020</dd>
+    <dd class="fw5 ml0">May 27, 2020</dd>
   </dl>
   <dl class="f6 lh-copy">
     <dt class="fw7">Length:</dt>
-    <dd class="fw5 ml0">0 minute read, 0 words</dd>
+    <dd class="fw5 ml0">9 minute read, 1794 words</dd>
   </dl>
   
   
@@ -151,12 +503,12 @@
   
   
     <a class="prev dtc pr2 tl v-top fw6"
-    href="/blog/2022-08-02-r-vs-excel-a-quick-comparison/">&larr; R vs. Excel: A quick comparison</a>
+    href="/blog/2022-08-02-batch-downloading-with-selenium/">&larr; Batch downloading with Selenium</a>
   
   
   
     <a class="next dtc pl2 tr v-top fw6"
-    href="/blog/2022-08-02-making-a-website-with-blogdown/">Making a website with blogdown &rarr;</a>
+    href="/blog/2022-08-02-r-vs-excel-a-quick-comparison/">R vs. Excel: A quick comparison &rarr;</a>
   
 </div>
 
