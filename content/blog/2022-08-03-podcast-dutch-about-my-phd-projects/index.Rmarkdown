@@ -1,0 +1,21 @@
+---
+title: Podcast (Dutch) about my PhD Projects
+author: 'Bas Machielsen'
+date: '2022-03-25'
+draft: false
+excerpt: Link to a podcast I was featured in! (In Dutch)
+layout: single
+series: null
+subtitle: ""
+tags: null
+---
+
+## Introduction
+
+I was interviewed by the Dutch economics journal *Economisch-Statistische Berichten* (ESB) about my PhD work as a part of their new Podcast series on New Economists. In the podcast, I talk about the influence of politicians' personal wealth interests on their voting behavior and the many consequences this might have. I also dive into history and give some tangible examples when politicians' personal wealth might play a role, and when it might not. If you speak Dutch, make sure to listen! I had a lot of fun, and I think the discussions with the podcasts hosts are really fruitful! 
+
+---
+
+[**Here**](https://esb.nu/events/overig/20069900/aflevering-1-vermogende-politici) is the link to the podcast. You can also listen to it here:
+
+<iframe src="https://omny.fm/shows/nieuwe-economen/1-vermogende-politici/embed" width="100%" height="180" allow="autoplay; clipboard-write" frameborder="0" title="#1 Vermogende politici"></iframe>

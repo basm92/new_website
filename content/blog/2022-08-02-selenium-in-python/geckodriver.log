@@ -1,0 +1,900 @@
+1659464577981	geckodriver	INFO	Listening on 127.0.0.1:38563
+1659464577990	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "--marionette" "-no-remote" "-profile" "/tmp/rust_mozprofileWNxToo"
+ATTENTION: default value of option mesa_glthread overridden by environment.
+ATTENTION: default value of option mesa_glthread overridden by environment.
+ATTENTION: default value of option mesa_glthread overridden by environment.
+ATTENTION: default value of option mesa_glthread overridden by environment.
+1659464579815	Marionette	INFO	Marionette enabled
+1659464579823	Marionette	INFO	Listening on port 42951
+Read port: 42951
+1659464580046	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at /tmp/rust_mozprofileWNxToo/search.json.mozlz4", (void 0)))
+Missing chrome or resource URL: resource://gre/modules/UpdateListener.jsm
+Missing chrome or resource URL: resource://gre/modules/UpdateListener.sys.mjs
+console.error: "Unable to find target with innerWindowId:6442450945"
+console.error: "Unable to find target with innerWindowId:6442450945"
+console.error: "Unable to find target with innerWindowId:6442450946"
+console.error: "Unable to find target with innerWindowId:6442450946"
+JavaScript error: , line 0: NotFoundError: No such JSWindowActor 'DevToolsFrame'
+JavaScript error: , line 0: NotFoundError: No such JSWindowActor 'DevToolsFrame'
+1659464856730	Marionette	INFO	Stopped listening on port 42951
+Missing chrome or resource URL: resource://gre/modules/UpdateListener.jsm
+Missing chrome or resource URL: resource://gre/modules/UpdateListener.sys.mjs
+console.error: "Error during quit-application-granted: [Exception... \"File error: Not found\"  nsresult: \"0x80520012 (NS_ERROR_FILE_NOT_FOUND)\"  location: \"JS frame :: resource:///modules/BrowserGlue.jsm :: _onQuitApplicationGranted/tasks< :: line 2006\"  data: no]"
+1659464862891	geckodriver	INFO	Listening on 127.0.0.1:38811
+1659464862896	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "--marionette" "-no-remote" "-profile" "/tmp/rust_mozprofiledgvrZI"
+ATTENTION: default value of option mesa_glthread overridden by environment.
+ATTENTION: default value of option mesa_glthread overridden by environment.
+ATTENTION: default value of option mesa_glthread overridden by environment.
+ATTENTION: default value of option mesa_glthread overridden by environment.
+1659464864800	Marionette	INFO	Marionette enabled
+1659464864806	Marionette	INFO	Listening on port 45675
+Read port: 45675
+1659464865013	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at /tmp/rust_mozprofiledgvrZI/search.json.mozlz4", (void 0)))
+Missing chrome or resource URL: resource://gre/modules/UpdateListener.jsm
+Missing chrome or resource URL: resource://gre/modules/UpdateListener.sys.mjs
+console.error: "Unable to find target with innerWindowId:6442450946"
+console.error: "Unable to find target with innerWindowId:6442450946"
+Handler function threw an exception: [Exception... "Component returned failure code: 0x80040111 (NS_ERROR_NOT_AVAILABLE) [nsIHttpChannelInternal.remoteAddress]"  nsresult: "0x80040111 (NS_ERROR_NOT_AVAILABLE)"  location: "JS frame :: resource://devtools/server/actors/network-monitor/network-observer.js :: _onResponseHeader :: line 985"  data: no]
+Stack: _onResponseHeader@resource://devtools/server/actors/network-monitor/network-observer.js:985:5
+_dispatchActivity@resource://devtools/server/actors/network-monitor/network-observer.js:558:14
+NetworkObserver.prototype.observeActivity<@resource://devtools/server/actors/network-monitor/network-observer.js:667:12
+exports.makeInfallible/<@resource://devtools/shared/ThreadSafeDevToolsUtils.js:103:22
+Line: 985, column: 0
+console.error: ({})
+console.warn: "Inspector destroyed while executing onReflow callback"
+JavaScript error: , line 0: NotFoundError: No such JSWindowActor 'DevToolsFrame'
+JavaScript error: , line 0: NotFoundError: No such JSWindowActor 'DevToolsFrame'
+JavaScript error: , line 0: NotFoundError: No such JSWindowActor 'DevToolsFrame'
+JavaScript error: , line 0: NotFoundError: No such JSWindowActor 'DevToolsFrame'
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://tr.snapchat.com"
+console.error: "Unable to find target with innerWindowId:6442450959"
+console.error: "Unable to find target with innerWindowId:6442450959"
+console.error: (new TypeError("parent is null", "resource://devtools/client/inspector/shared/style-change-tracker.js", 67))
+TypeError: parent is null: canMutationImpactCurrentStyles@resource://devtools/client/inspector/shared/style-change-tracker.js:67:24
+onMutations@resource://devtools/client/inspector/shared/style-change-tracker.js:84:41
+_emit@resource://devtools/shared/event-emitter.js:242:32
+emit@resource://devtools/shared/event-emitter.js:186:18
+emit@resource://devtools/shared/event-emitter.js:330:18
+getMutations@resource://devtools/client/fronts/walker.js:312:10
+
+console.error: "Error while calling actor 'pagestyle's method 'getLayout'" "node is null"
+console.error: (new TypeError("node is null", "resource://devtools/server/actors/page-style.js", 1004))
+console.error: (new Error("Protocol error (TypeError): node is null from: server0.conn0.windowGlobal6442450960/pagestyle34 (resource://devtools/server/actors/page-style.js:1004:5)", "resource://devtools/shared/protocol/Front.js", 376))
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: "Error while destroying front:" "inspector" (new Error("Connection closed, pending request to server0.conn0.windowGlobal6442450966/inspectorActor4, type getWalker failed\n\nRequest stack:\nrequest@resource://devtools/shared/protocol/Front.js:293:14\ngenerateRequestMethods/</frontProto[name]@resource://devtools/shared/protocol/Front/FrontClassWithSpec.js:49:19\n_getWalker@resource://devtools/client/fronts/inspector.js:90:30\ninitialize@resource://devtools/client/fronts/inspector.js:79:12\n", "resource://devtools/shared/protocol/Front.js", 107))
+console.error: "Failed to start [root-node] legacy listener for target null" (new Error("Connection closed, pending request to server0.conn0.windowGlobal6442450966/inspectorActor4, type getWalker failed\n\nRequest stack:\nrequest@resource://devtools/shared/protocol/Front.js:293:14\ngenerateRequestMethods/</frontProto[name]@resource://devtools/shared/protocol/Front/FrontClassWithSpec.js:49:19\n_getWalker@resource://devtools/client/fronts/inspector.js:90:30\ninitialize@resource://devtools/client/fronts/inspector.js:79:12\n", "resource://devtools/shared/protocol/Front.js", 107))
+JavaScript error: resource://devtools/shared/protocol/Front.js, line 107: Error: Connection closed, pending request to server0.conn0.windowGlobal6442450966/inspectorActor4, type getWalker failed
+
+Request stack:
+request@resource://devtools/shared/protocol/Front.js:293:14
+generateRequestMethods/</frontProto[name]@resource://devtools/shared/protocol/Front/FrontClassWithSpec.js:49:19
+_getWalker@resource://devtools/client/fronts/inspector.js:90:30
+initialize@resource://devtools/client/fronts/inspector.js:79:12
+
+console.error: "Failed to start [root-node] legacy listener for target null" (new TypeError("inspectorFront.walker is null", "resource://devtools/shared/commands/resource/legacy-listeners/root-node.js", 50))
+console.warn: "Error while destroying front:" "inspector" (new Error("Connection closed, pending request to server0.conn0.windowGlobal17179869185/inspectorActor4, type getWalker failed\n\nRequest stack:\nrequest@resource://devtools/shared/protocol/Front.js:293:14\ngenerateRequestMethods/</frontProto[name]@resource://devtools/shared/protocol/Front/FrontClassWithSpec.js:49:19\n_getWalker@resource://devtools/client/fronts/inspector.js:90:30\ninitialize@resource://devtools/client/fronts/inspector.js:79:12\n", "resource://devtools/shared/protocol/Front.js", 107))
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://tr.snapchat.com"
+console.warn: "Async method failed in safeAsyncMethod" (new Error("Connection closed, pending request to server0.conn0.windowGlobal17179869188/layout23, type getGrids failed\n\nRequest stack:\nrequest@resource://devtools/shared/protocol/Front.js:293:14\ngenerateRequestMethods/</frontProto[name]@resource://devtools/shared/protocol/Front/FrontClassWithSpec.js:49:19\ngetAllGrids@resource://devtools/client/fronts/layout.js:171:17\nexports.safeAsyncMethod/<@resource://devtools/shared/async-utils.js:61:25\ngetGrids@resource://devtools/client/inspector/grids/grid-inspector.js:449:35\n", "resource://devtools/shared/protocol/Front.js", 107))
+JavaScript error: , line 0: NotFoundError: No such JSWindowActor 'DevToolsFrame'
+JavaScript error: , line 0: NotFoundError: No such JSWindowActor 'DevToolsFrame'
+JavaScript error: , line 0: NotFoundError: No such JSWindowActor 'DevToolsFrame'
+JavaScript error: , line 0: NotFoundError: No such JSWindowActor 'DevToolsFrame'
+JavaScript error: , line 0: NotFoundError: No such JSWindowActor 'DevToolsFrame'
+JavaScript error: , line 0: NotFoundError: No such JSWindowActor 'DevToolsFrame'
+JavaScript error: , line 0: NotFoundError: No such JSWindowActor 'DevToolsFrame'
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.error: "Unable to find target with innerWindowId:6442450960"
+console.error: "Unable to find target with innerWindowId:6442450960"
+console.error: "Unable to find target with innerWindowId:6442450960"
+console.error: "Unable to find target with innerWindowId:6442450960"
+JavaScript error: , line 0: NotFoundError: No such JSWindowActor 'DevToolsFrame'
+Missing chrome or resource URL: resource://gre/modules/UpdateListener.jsm
+Missing chrome or resource URL: resource://gre/modules/UpdateListener.sys.mjs
+console.error: "Error during quit-application-granted: [Exception... \"File error: Not found\"  nsresult: \"0x80520012 (NS_ERROR_FILE_NOT_FOUND)\"  location: \"JS frame :: resource:///modules/BrowserGlue.jsm :: _onQuitApplicationGranted/tasks< :: line 2006\"  data: no]"
+1659465532937	Marionette	INFO	Stopped listening on port 45675
+JavaScript error: chrome://remote/content/marionette/cert.js, line 57: NS_ERROR_NOT_AVAILABLE: Component returned failure code: 0x80040111 (NS_ERROR_NOT_AVAILABLE) [nsICertOverrideService.setDisableAllSecurityChecksAndLetAttackersInterceptMyData]
+1659465537223	geckodriver	INFO	Listening on 127.0.0.1:53089
+1659465537233	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "--marionette" "-no-remote" "-profile" "/tmp/rust_mozprofileEc4sdZ"
+ATTENTION: default value of option mesa_glthread overridden by environment.
+ATTENTION: default value of option mesa_glthread overridden by environment.
+ATTENTION: default value of option mesa_glthread overridden by environment.
+ATTENTION: default value of option mesa_glthread overridden by environment.
+1659465539290	Marionette	INFO	Marionette enabled
+1659465539300	Marionette	INFO	Listening on port 42999
+Read port: 42999
+1659465539593	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at /tmp/rust_mozprofileEc4sdZ/search.json.mozlz4", (void 0)))
+Missing chrome or resource URL: resource://gre/modules/UpdateListener.jsm
+Missing chrome or resource URL: resource://gre/modules/UpdateListener.sys.mjs
+console.error: (new TypeError("parent is null", "resource://devtools/client/inspector/shared/style-change-tracker.js", 67))
+TypeError: parent is null: canMutationImpactCurrentStyles@resource://devtools/client/inspector/shared/style-change-tracker.js:67:24
+onMutations@resource://devtools/client/inspector/shared/style-change-tracker.js:84:41
+_emit@resource://devtools/shared/event-emitter.js:242:32
+emit@resource://devtools/shared/event-emitter.js:186:18
+emit@resource://devtools/shared/event-emitter.js:330:18
+getMutations@resource://devtools/client/fronts/walker.js:312:10
+
+console.error: (new TypeError("container.node.targetFront is null", "resource://devtools/client/inspector/markup/markup.js", 2320))
+JavaScript error: , line 0: NotFoundError: No such JSWindowActor 'DevToolsFrame'
+Missing chrome or resource URL: resource://gre/modules/UpdateListener.jsm
+Missing chrome or resource URL: resource://gre/modules/UpdateListener.sys.mjs
+console.error: "Error during quit-application-granted: [Exception... \"File error: Not found\"  nsresult: \"0x80520012 (NS_ERROR_FILE_NOT_FOUND)\"  location: \"JS frame :: resource:///modules/BrowserGlue.jsm :: _onQuitApplicationGranted/tasks< :: line 2006\"  data: no]"
+1659466306040	Marionette	INFO	Stopped listening on port 42999
+JavaScript error: chrome://remote/content/marionette/cert.js, line 57: NS_ERROR_NOT_AVAILABLE: Component returned failure code: 0x80040111 (NS_ERROR_NOT_AVAILABLE) [nsICertOverrideService.setDisableAllSecurityChecksAndLetAttackersInterceptMyData]
+1659466309524	geckodriver	INFO	Listening on 127.0.0.1:58749
+1659466309529	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "--marionette" "-no-remote" "-profile" "/tmp/rust_mozprofileRazAfj"
+ATTENTION: default value of option mesa_glthread overridden by environment.
+ATTENTION: default value of option mesa_glthread overridden by environment.
+ATTENTION: default value of option mesa_glthread overridden by environment.
+ATTENTION: default value of option mesa_glthread overridden by environment.
+1659466311200	Marionette	INFO	Marionette enabled
+1659466311205	Marionette	INFO	Listening on port 40101
+Read port: 40101
+1659466311342	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at /tmp/rust_mozprofileRazAfj/search.json.mozlz4", (void 0)))
+Missing chrome or resource URL: resource://gre/modules/UpdateListener.jsm
+Missing chrome or resource URL: resource://gre/modules/UpdateListener.sys.mjs
+1659466320896	geckodriver::marionette	ERROR	Failed to close browser connection: Socket not connected (os error 107)
+Missing chrome or resource URL: resource://gre/modules/UpdateListener.jsm
+Missing chrome or resource URL: resource://gre/modules/UpdateListener.sys.mjs
+console.error: "Error during quit-application-granted: [Exception... \"File error: Not found\"  nsresult: \"0x80520012 (NS_ERROR_FILE_NOT_FOUND)\"  location: \"JS frame :: resource:///modules/BrowserGlue.jsm :: _onQuitApplicationGranted/tasks< :: line 2006\"  data: no]"
+1659467004617	Marionette	INFO	Stopped listening on port 40101
+JavaScript error: chrome://remote/content/marionette/cert.js, line 57: NS_ERROR_NOT_AVAILABLE: Component returned failure code: 0x80040111 (NS_ERROR_NOT_AVAILABLE) [nsICertOverrideService.setDisableAllSecurityChecksAndLetAttackersInterceptMyData]
+1659467011847	geckodriver::marionette	ERROR	Failed to close browser connection: Socket not connected (os error 107)
+1659467028162	geckodriver	INFO	Listening on 127.0.0.1:54155
+1659467028167	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "--marionette" "-no-remote" "-profile" "/tmp/rust_mozprofileftXUjw"
+ATTENTION: default value of option mesa_glthread overridden by environment.
+ATTENTION: default value of option mesa_glthread overridden by environment.
+ATTENTION: default value of option mesa_glthread overridden by environment.
+ATTENTION: default value of option mesa_glthread overridden by environment.
+1659467029991	Marionette	INFO	Marionette enabled
+1659467030008	Marionette	INFO	Listening on port 38931
+Read port: 38931
+1659467030307	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at /tmp/rust_mozprofileftXUjw/search.json.mozlz4", (void 0)))
+Missing chrome or resource URL: resource://gre/modules/UpdateListener.jsm
+Missing chrome or resource URL: resource://gre/modules/UpdateListener.sys.mjs
+Missing chrome or resource URL: resource://gre/modules/UpdateListener.jsm
+Missing chrome or resource URL: resource://gre/modules/UpdateListener.sys.mjs
+console.error: "Error during quit-application-granted: [Exception... \"File error: Not found\"  nsresult: \"0x80520012 (NS_ERROR_FILE_NOT_FOUND)\"  location: \"JS frame :: resource:///modules/BrowserGlue.jsm :: _onQuitApplicationGranted/tasks< :: line 2006\"  data: no]"
+1659467264334	Marionette	INFO	Stopped listening on port 38931
+JavaScript error: chrome://remote/content/marionette/cert.js, line 57: NS_ERROR_NOT_AVAILABLE: Component returned failure code: 0x80040111 (NS_ERROR_NOT_AVAILABLE) [nsICertOverrideService.setDisableAllSecurityChecksAndLetAttackersInterceptMyData]
+Sandbox: Unexpected EOF, op 0 flags 00 path /proc/cpuinfo
+1659467284410	geckodriver	INFO	Listening on 127.0.0.1:39879
+1659467284414	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "--marionette" "-no-remote" "-profile" "/tmp/rust_mozprofile5K1JEU"
+ATTENTION: default value of option mesa_glthread overridden by environment.
+ATTENTION: default value of option mesa_glthread overridden by environment.
+ATTENTION: default value of option mesa_glthread overridden by environment.
+ATTENTION: default value of option mesa_glthread overridden by environment.
+1659467286003	Marionette	INFO	Marionette enabled
+1659467286011	Marionette	INFO	Listening on port 41963
+Read port: 41963
+1659467286226	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at /tmp/rust_mozprofile5K1JEU/search.json.mozlz4", (void 0)))
+Missing chrome or resource URL: resource://gre/modules/UpdateListener.jsm
+Missing chrome or resource URL: resource://gre/modules/UpdateListener.sys.mjs
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://tr.snapchat.com"
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+1659467335077	geckodriver	INFO	Listening on 127.0.0.1:36933
+1659467335083	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "--marionette" "-no-remote" "-profile" "/tmp/rust_mozprofile9vtT0U"
+ATTENTION: default value of option mesa_glthread overridden by environment.
+ATTENTION: default value of option mesa_glthread overridden by environment.
+ATTENTION: default value of option mesa_glthread overridden by environment.
+ATTENTION: default value of option mesa_glthread overridden by environment.
+1659467336641	Marionette	INFO	Marionette enabled
+1659467336649	Marionette	INFO	Listening on port 46419
+Read port: 46419
+1659467336872	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at /tmp/rust_mozprofile9vtT0U/search.json.mozlz4", (void 0)))
+Missing chrome or resource URL: resource://gre/modules/UpdateListener.jsm
+Missing chrome or resource URL: resource://gre/modules/UpdateListener.sys.mjs
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://tr.snapchat.com"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://tr.snapchat.com"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://tr.snapchat.com"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://tr.snapchat.com"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://tr.snapchat.com"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://tr.snapchat.com"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+1659467558979	Marionette	WARN	TimedPromise timed out after 500 ms: stacktrace:
+TimedPromise/<@chrome://remote/content/marionette/sync.js:237:24
+TimedPromise@chrome://remote/content/marionette/sync.js:222:10
+interaction.flushEventLoop@chrome://remote/content/marionette/interaction.js:431:10
+webdriverClickElement@chrome://remote/content/marionette/interaction.js:179:31
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://tr.snapchat.com"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+Missing chrome or resource URL: resource://gre/modules/UpdateListener.jsm
+Missing chrome or resource URL: resource://gre/modules/UpdateListener.sys.mjs
+console.error: "Error during quit-application-granted: [Exception... \"File error: Not found\"  nsresult: \"0x80520012 (NS_ERROR_FILE_NOT_FOUND)\"  location: \"JS frame :: resource:///modules/BrowserGlue.jsm :: _onQuitApplicationGranted/tasks< :: line 2006\"  data: no]"
+1659468068167	Marionette	INFO	Stopped listening on port 46419
+JavaScript error: chrome://remote/content/marionette/cert.js, line 57: NS_ERROR_NOT_AVAILABLE: Component returned failure code: 0x80040111 (NS_ERROR_NOT_AVAILABLE) [nsICertOverrideService.setDisableAllSecurityChecksAndLetAttackersInterceptMyData]
+1659510526852	geckodriver	INFO	Listening on 127.0.0.1:38829
+1659510526858	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "--marionette" "-no-remote" "-profile" "/tmp/rust_mozprofilerWBc92"
+ATTENTION: default value of option mesa_glthread overridden by environment.
+ATTENTION: default value of option mesa_glthread overridden by environment.
+ATTENTION: default value of option mesa_glthread overridden by environment.
+ATTENTION: default value of option mesa_glthread overridden by environment.
+1659510528553	Marionette	INFO	Marionette enabled
+1659510528575	Marionette	INFO	Listening on port 33919
+Read port: 33919
+1659510529040	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at /tmp/rust_mozprofilerWBc92/search.json.mozlz4", (void 0)))
+Missing chrome or resource URL: resource://gre/modules/UpdateListener.jsm
+Missing chrome or resource URL: resource://gre/modules/UpdateListener.sys.mjs
+console.error: Region.jsm: "Error fetching region" (new Error("TIMEOUT", "resource://gre/modules/Region.jsm", 769))
+console.error: Region.jsm: "Failed to fetch region" (new Error("TIMEOUT", "resource://gre/modules/Region.jsm", 421))
+JavaScript error: resource://autofill/FormAutofillHeuristics.jsm, line 109: Error: The parsing index is out of range.
+JavaScript error: resource://devtools/client/inspector/rules/utils/utils.js, line 192: TypeError: rule is undefined
+JavaScript error: resource://devtools/client/inspector/rules/utils/utils.js, line 192: TypeError: rule is undefined
+JavaScript error: resource://devtools/client/inspector/rules/utils/utils.js, line 192: TypeError: rule is undefined
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+1659510914187	geckodriver	INFO	Listening on 127.0.0.1:45407
+1659510914193	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "--marionette" "-no-remote" "-profile" "/tmp/rust_mozprofilesmZbCG"
+ATTENTION: default value of option mesa_glthread overridden by environment.
+ATTENTION: default value of option mesa_glthread overridden by environment.
+ATTENTION: default value of option mesa_glthread overridden by environment.
+ATTENTION: default value of option mesa_glthread overridden by environment.
+1659510916097	Marionette	INFO	Marionette enabled
+1659510916108	Marionette	INFO	Listening on port 39765
+Read port: 39765
+1659510916393	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at /tmp/rust_mozprofilesmZbCG/search.json.mozlz4", (void 0)))
+Missing chrome or resource URL: resource://gre/modules/UpdateListener.jsm
+Missing chrome or resource URL: resource://gre/modules/UpdateListener.sys.mjs
+JavaScript error: , line 0: NotFoundError: No such JSWindowActor 'DevToolsFrame'
+JavaScript error: , line 0: NotFoundError: No such JSWindowActor 'DevToolsFrame'
+console.error: "Error while calling actor 'pagestyle's method 'getLayout'" "node is null"
+console.error: (new TypeError("node is null", "resource://devtools/server/actors/page-style.js", 1004))
+console.error: (new TypeError("parent is null", "resource://devtools/client/inspector/shared/style-change-tracker.js", 67))
+TypeError: parent is null: canMutationImpactCurrentStyles@resource://devtools/client/inspector/shared/style-change-tracker.js:67:24
+onMutations@resource://devtools/client/inspector/shared/style-change-tracker.js:84:41
+_emit@resource://devtools/shared/event-emitter.js:242:32
+emit@resource://devtools/shared/event-emitter.js:186:18
+emit@resource://devtools/shared/event-emitter.js:330:18
+getMutations@resource://devtools/client/fronts/walker.js:312:10
+
+console.error: (new TypeError("container.node.targetFront is null", "resource://devtools/client/inspector/markup/markup.js", 2320))
+console.error: (new TypeError("container.node.targetFront is null", "resource://devtools/client/inspector/markup/markup.js", 2320))
+console.error: (new TypeError("container.node.targetFront is null", "resource://devtools/client/inspector/markup/markup.js", 2320))
+console.error: (new Error("Protocol error (TypeError): node is null from: server0.conn0.windowGlobal6442450945/pagestyle23 (resource://devtools/server/actors/page-style.js:1004:5)", "resource://devtools/shared/protocol/Front.js", 376))
+JavaScript error: , line 0: NotFoundError: No such JSWindowActor 'DevToolsFrame'
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://tr.snapchat.com"
+Missing chrome or resource URL: resource://gre/modules/UpdateListener.jsm
+Missing chrome or resource URL: resource://gre/modules/UpdateListener.sys.mjs
+console.error: "Error during quit-application-granted: [Exception... \"File error: Not found\"  nsresult: \"0x80520012 (NS_ERROR_FILE_NOT_FOUND)\"  location: \"JS frame :: resource:///modules/BrowserGlue.jsm :: _onQuitApplicationGranted/tasks< :: line 2006\"  data: no]"
+1659515702466	Marionette	INFO	Stopped listening on port 39765
+JavaScript error: chrome://remote/content/marionette/cert.js, line 57: NS_ERROR_NOT_AVAILABLE: Component returned failure code: 0x80040111 (NS_ERROR_NOT_AVAILABLE) [nsICertOverrideService.setDisableAllSecurityChecksAndLetAttackersInterceptMyData]
+1659515721072	geckodriver	INFO	Listening on 127.0.0.1:39291
+1659515721078	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "--marionette" "-no-remote" "-profile" "/tmp/rust_mozprofilePRwQ2p"
+ATTENTION: default value of option mesa_glthread overridden by environment.
+ATTENTION: default value of option mesa_glthread overridden by environment.
+ATTENTION: default value of option mesa_glthread overridden by environment.
+ATTENTION: default value of option mesa_glthread overridden by environment.
+1659515722869	Marionette	INFO	Marionette enabled
+1659515722878	Marionette	INFO	Listening on port 36053
+Read port: 36053
+1659515723150	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at /tmp/rust_mozprofilePRwQ2p/search.json.mozlz4", (void 0)))
+Missing chrome or resource URL: resource://gre/modules/UpdateListener.jsm
+Missing chrome or resource URL: resource://gre/modules/UpdateListener.sys.mjs
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://tr.snapchat.com"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+Missing chrome or resource URL: resource://gre/modules/UpdateListener.jsm
+Missing chrome or resource URL: resource://gre/modules/UpdateListener.sys.mjs
+console.error: "Error during quit-application-granted: [Exception... \"File error: Not found\"  nsresult: \"0x80520012 (NS_ERROR_FILE_NOT_FOUND)\"  location: \"JS frame :: resource:///modules/BrowserGlue.jsm :: _onQuitApplicationGranted/tasks< :: line 2006\"  data: no]"
+1659516006181	Marionette	INFO	Stopped listening on port 36053
+JavaScript error: chrome://remote/content/marionette/cert.js, line 57: NS_ERROR_NOT_AVAILABLE: Component returned failure code: 0x80040111 (NS_ERROR_NOT_AVAILABLE) [nsICertOverrideService.setDisableAllSecurityChecksAndLetAttackersInterceptMyData]
+1659516034665	geckodriver::marionette	ERROR	Failed to close browser connection: Socket not connected (os error 107)
+1659516048793	geckodriver	INFO	Listening on 127.0.0.1:45803
+1659516048799	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "--marionette" "-no-remote" "-profile" "/tmp/rust_mozprofiletHtcau"
+ATTENTION: default value of option mesa_glthread overridden by environment.
+ATTENTION: default value of option mesa_glthread overridden by environment.
+ATTENTION: default value of option mesa_glthread overridden by environment.
+ATTENTION: default value of option mesa_glthread overridden by environment.
+1659516050360	Marionette	INFO	Marionette enabled
+1659516050366	Marionette	INFO	Listening on port 35665
+Read port: 35665
+1659516050515	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at /tmp/rust_mozprofiletHtcau/search.json.mozlz4", (void 0)))
+Missing chrome or resource URL: resource://gre/modules/UpdateListener.jsm
+Missing chrome or resource URL: resource://gre/modules/UpdateListener.sys.mjs
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://tr.snapchat.com"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://tr.snapchat.com"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://tr.snapchat.com"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://tr.snapchat.com"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://tr.snapchat.com"
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+1659516818969	geckodriver	INFO	Listening on 127.0.0.1:37885
+1659516818974	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "--marionette" "-no-remote" "-profile" "/tmp/rust_mozprofile6wmp0E"
+ATTENTION: default value of option mesa_glthread overridden by environment.
+ATTENTION: default value of option mesa_glthread overridden by environment.
+ATTENTION: default value of option mesa_glthread overridden by environment.
+ATTENTION: default value of option mesa_glthread overridden by environment.
+1659516820645	Marionette	INFO	Marionette enabled
+1659516820671	Marionette	INFO	Listening on port 40297
+Read port: 40297
+1659516821129	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at /tmp/rust_mozprofile6wmp0E/search.json.mozlz4", (void 0)))
+Missing chrome or resource URL: resource://gre/modules/UpdateListener.jsm
+Missing chrome or resource URL: resource://gre/modules/UpdateListener.sys.mjs
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://tr.snapchat.com"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://tr.snapchat.com"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://tr.snapchat.com"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://tr.snapchat.com"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://tr.snapchat.com"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://tr.snapchat.com"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://tr.snapchat.com"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://tr.snapchat.com"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://tr.snapchat.com"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://tr.snapchat.com"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://tr.snapchat.com"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://tr.snapchat.com"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://tr.snapchat.com"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+1659517980524	geckodriver	INFO	Listening on 127.0.0.1:42473
+1659517980530	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "--marionette" "-no-remote" "-profile" "/tmp/rust_mozprofileueWm2T"
+ATTENTION: default value of option mesa_glthread overridden by environment.
+ATTENTION: default value of option mesa_glthread overridden by environment.
+ATTENTION: default value of option mesa_glthread overridden by environment.
+ATTENTION: default value of option mesa_glthread overridden by environment.
+1659517982362	Marionette	INFO	Marionette enabled
+1659517982376	Marionette	INFO	Listening on port 44887
+Read port: 44887
+1659517982796	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at /tmp/rust_mozprofileueWm2T/search.json.mozlz4", (void 0)))
+Missing chrome or resource URL: resource://gre/modules/UpdateListener.jsm
+Missing chrome or resource URL: resource://gre/modules/UpdateListener.sys.mjs
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://tr.snapchat.com"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+1659518055537	geckodriver	INFO	Listening on 127.0.0.1:33713
+1659518055542	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "--marionette" "-no-remote" "-profile" "/tmp/rust_mozprofileRn40Pf"
+ATTENTION: default value of option mesa_glthread overridden by environment.
+ATTENTION: default value of option mesa_glthread overridden by environment.
+ATTENTION: default value of option mesa_glthread overridden by environment.
+ATTENTION: default value of option mesa_glthread overridden by environment.
+1659518057225	Marionette	INFO	Marionette enabled
+1659518057238	Marionette	INFO	Listening on port 34913
+Read port: 34913
+1659518057475	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at /tmp/rust_mozprofileRn40Pf/search.json.mozlz4", (void 0)))
+Missing chrome or resource URL: resource://gre/modules/UpdateListener.jsm
+Missing chrome or resource URL: resource://gre/modules/UpdateListener.sys.mjs
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://tr.snapchat.com"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://tr.snapchat.com"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://tr.snapchat.com"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://tr.snapchat.com"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://tr.snapchat.com"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://tr.snapchat.com"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://tr.snapchat.com"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://tr.snapchat.com"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://tr.snapchat.com"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://tr.snapchat.com"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://tr.snapchat.com"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://tr.snapchat.com"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://tr.snapchat.com"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://tr.snapchat.com"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://tr.snapchat.com"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://tr.snapchat.com"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://tr.snapchat.com"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://tr.snapchat.com"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://tr.snapchat.com"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://tr.snapchat.com"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://tr.snapchat.com"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://tr.snapchat.com"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://tr.snapchat.com"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://tr.snapchat.com"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://tr.snapchat.com"
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+1659520076797	geckodriver	INFO	Listening on 127.0.0.1:56439
+1659520076805	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "--marionette" "-no-remote" "-profile" "/tmp/rust_mozprofileN3EnzM"
+ATTENTION: default value of option mesa_glthread overridden by environment.
+ATTENTION: default value of option mesa_glthread overridden by environment.
+ATTENTION: default value of option mesa_glthread overridden by environment.
+ATTENTION: default value of option mesa_glthread overridden by environment.
+1659520078295	Marionette	INFO	Marionette enabled
+1659520078300	Marionette	INFO	Listening on port 33563
+Read port: 33563
+1659520078495	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at /tmp/rust_mozprofileN3EnzM/search.json.mozlz4", (void 0)))
+Missing chrome or resource URL: resource://gre/modules/UpdateListener.jsm
+Missing chrome or resource URL: resource://gre/modules/UpdateListener.sys.mjs
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://tr.snapchat.com"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://tr.snapchat.com"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://tr.snapchat.com"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://tr.snapchat.com"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://tr.snapchat.com"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://tr.snapchat.com"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://tr.snapchat.com"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://tr.snapchat.com"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://tr.snapchat.com"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://tr.snapchat.com"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+1659520842860	Marionette	WARN	Ignoring event 'pageshow' because document has an invalid readyState of 'uninitialized'.
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://tr.snapchat.com"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://tr.snapchat.com"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://tr.snapchat.com"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://tr.snapchat.com"
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+1659521230353	geckodriver	INFO	Listening on 127.0.0.1:43799
+1659521231367	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "--marionette" "-no-remote" "-profile" "/tmp/rust_mozprofileKdrk0R"
+ATTENTION: default value of option mesa_glthread overridden by environment.
+ATTENTION: default value of option mesa_glthread overridden by environment.
+ATTENTION: default value of option mesa_glthread overridden by environment.
+ATTENTION: default value of option mesa_glthread overridden by environment.
+1659521233070	Marionette	INFO	Marionette enabled
+1659521233083	Marionette	INFO	Listening on port 43391
+Read port: 43391
+1659521233323	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at /tmp/rust_mozprofileKdrk0R/search.json.mozlz4", (void 0)))
+Missing chrome or resource URL: resource://gre/modules/UpdateListener.jsm
+Missing chrome or resource URL: resource://gre/modules/UpdateListener.sys.mjs
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://tr.snapchat.com"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://tr.snapchat.com"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://tr.snapchat.com"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://tr.snapchat.com"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://tr.snapchat.com"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://tr.snapchat.com"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://tr.snapchat.com"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://tr.snapchat.com"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+1659521813377	geckodriver	INFO	Listening on 127.0.0.1:52045
+1659521813385	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "--marionette" "-no-remote" "-profile" "/tmp/rust_mozprofilef3ZE8l"
+ATTENTION: default value of option mesa_glthread overridden by environment.
+ATTENTION: default value of option mesa_glthread overridden by environment.
+ATTENTION: default value of option mesa_glthread overridden by environment.
+ATTENTION: default value of option mesa_glthread overridden by environment.
+1659521814755	Marionette	INFO	Marionette enabled
+1659521814765	Marionette	INFO	Listening on port 42089
+Read port: 42089
+1659521815078	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at /tmp/rust_mozprofilef3ZE8l/search.json.mozlz4", (void 0)))
+Missing chrome or resource URL: resource://gre/modules/UpdateListener.jsm
+Missing chrome or resource URL: resource://gre/modules/UpdateListener.sys.mjs
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://tr.snapchat.com"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+1659521970256	geckodriver	INFO	Listening on 127.0.0.1:45599
+1659521970263	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "--marionette" "-no-remote" "-profile" "/tmp/rust_mozprofileX3Cvkc"
+ATTENTION: default value of option mesa_glthread overridden by environment.
+ATTENTION: default value of option mesa_glthread overridden by environment.
+ATTENTION: default value of option mesa_glthread overridden by environment.
+ATTENTION: default value of option mesa_glthread overridden by environment.
+1659521971670	Marionette	INFO	Marionette enabled
+1659521971678	Marionette	INFO	Listening on port 41597
+Read port: 41597
+1659521971918	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at /tmp/rust_mozprofileX3Cvkc/search.json.mozlz4", (void 0)))
+Missing chrome or resource URL: resource://gre/modules/UpdateListener.jsm
+Missing chrome or resource URL: resource://gre/modules/UpdateListener.sys.mjs
+1659522014494	geckodriver	INFO	Listening on 127.0.0.1:55839
+1659522014503	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "--marionette" "-no-remote" "-profile" "/tmp/rust_mozprofileufiW6k"
+ATTENTION: default value of option mesa_glthread overridden by environment.
+ATTENTION: default value of option mesa_glthread overridden by environment.
+ATTENTION: default value of option mesa_glthread overridden by environment.
+ATTENTION: default value of option mesa_glthread overridden by environment.
+1659522016490	Marionette	INFO	Marionette enabled
+1659522016497	Marionette	INFO	Listening on port 36481
+Read port: 36481
+1659522016772	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at /tmp/rust_mozprofileufiW6k/search.json.mozlz4", (void 0)))
+Missing chrome or resource URL: resource://gre/modules/UpdateListener.jsm
+Missing chrome or resource URL: resource://gre/modules/UpdateListener.sys.mjs
+1659522058266	geckodriver	INFO	Listening on 127.0.0.1:40647
+1659522058280	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "--marionette" "-no-remote" "-profile" "/tmp/rust_mozprofileusz0vG"
+ATTENTION: default value of option mesa_glthread overridden by environment.
+ATTENTION: default value of option mesa_glthread overridden by environment.
+ATTENTION: default value of option mesa_glthread overridden by environment.
+ATTENTION: default value of option mesa_glthread overridden by environment.
+1659522059967	Marionette	INFO	Marionette enabled
+1659522059974	Marionette	INFO	Listening on port 35251
+Read port: 35251
+1659522060120	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at /tmp/rust_mozprofileusz0vG/search.json.mozlz4", (void 0)))
+Missing chrome or resource URL: resource://gre/modules/UpdateListener.jsm
+Missing chrome or resource URL: resource://gre/modules/UpdateListener.sys.mjs
+Missing chrome or resource URL: resource://gre/modules/UpdateListener.jsm
+Missing chrome or resource URL: resource://gre/modules/UpdateListener.sys.mjs
+console.error: "Error during quit-application-granted: [Exception... \"File error: Not found\"  nsresult: \"0x80520012 (NS_ERROR_FILE_NOT_FOUND)\"  location: \"JS frame :: resource:///modules/BrowserGlue.jsm :: _onQuitApplicationGranted/tasks< :: line 2006\"  data: no]"
+1659522133129	Marionette	INFO	Stopped listening on port 35251
+JavaScript error: chrome://remote/content/marionette/cert.js, line 57: NS_ERROR_NOT_AVAILABLE: Component returned failure code: 0x80040111 (NS_ERROR_NOT_AVAILABLE) [nsICertOverrideService.setDisableAllSecurityChecksAndLetAttackersInterceptMyData]
+Sandbox: Unexpected EOF, op 0 flags 00 path /proc/cpuinfo
+Missing chrome or resource URL: resource://gre/modules/UpdateListener.jsm
+Missing chrome or resource URL: resource://gre/modules/UpdateListener.sys.mjs
+console.error: "Error during quit-application-granted: [Exception... \"File error: Not found\"  nsresult: \"0x80520012 (NS_ERROR_FILE_NOT_FOUND)\"  location: \"JS frame :: resource:///modules/BrowserGlue.jsm :: _onQuitApplicationGranted/tasks< :: line 2006\"  data: no]"
+1659522136838	Marionette	INFO	Stopped listening on port 36481
+JavaScript error: chrome://remote/content/marionette/cert.js, line 57: NS_ERROR_NOT_AVAILABLE: Component returned failure code: 0x80040111 (NS_ERROR_NOT_AVAILABLE) [nsICertOverrideService.setDisableAllSecurityChecksAndLetAttackersInterceptMyData]
+Sandbox: Unexpected EOF, op 0 flags 00 path /proc/cpuinfo
+Missing chrome or resource URL: resource://gre/modules/UpdateListener.jsm
+Missing chrome or resource URL: resource://gre/modules/UpdateListener.sys.mjs
+console.error: "Error during quit-application-granted: [Exception... \"File error: Not found\"  nsresult: \"0x80520012 (NS_ERROR_FILE_NOT_FOUND)\"  location: \"JS frame :: resource:///modules/BrowserGlue.jsm :: _onQuitApplicationGranted/tasks< :: line 2006\"  data: no]"
+1659522139484	Marionette	INFO	Stopped listening on port 41597
+JavaScript error: chrome://remote/content/marionette/cert.js, line 57: NS_ERROR_NOT_AVAILABLE: Component returned failure code: 0x80040111 (NS_ERROR_NOT_AVAILABLE) [nsICertOverrideService.setDisableAllSecurityChecksAndLetAttackersInterceptMyData]
+Missing chrome or resource URL: resource://gre/modules/UpdateListener.jsm
+Missing chrome or resource URL: resource://gre/modules/UpdateListener.sys.mjs
+console.error: "Error during quit-application-granted: [Exception... \"File error: Not found\"  nsresult: \"0x80520012 (NS_ERROR_FILE_NOT_FOUND)\"  location: \"JS frame :: resource:///modules/BrowserGlue.jsm :: _onQuitApplicationGranted/tasks< :: line 2006\"  data: no]"
+1659522142384	Marionette	INFO	Stopped listening on port 42089
+JavaScript error: chrome://remote/content/marionette/cert.js, line 57: NS_ERROR_NOT_AVAILABLE: Component returned failure code: 0x80040111 (NS_ERROR_NOT_AVAILABLE) [nsICertOverrideService.setDisableAllSecurityChecksAndLetAttackersInterceptMyData]
+Missing chrome or resource URL: resource://gre/modules/UpdateListener.jsm
+Missing chrome or resource URL: resource://gre/modules/UpdateListener.sys.mjs
+console.error: "Error during quit-application-granted: [Exception... \"File error: Not found\"  nsresult: \"0x80520012 (NS_ERROR_FILE_NOT_FOUND)\"  location: \"JS frame :: resource:///modules/BrowserGlue.jsm :: _onQuitApplicationGranted/tasks< :: line 2006\"  data: no]"
+1659522148649	Marionette	INFO	Stopped listening on port 43391
+JavaScript error: chrome://remote/content/marionette/cert.js, line 57: NS_ERROR_NOT_AVAILABLE: Component returned failure code: 0x80040111 (NS_ERROR_NOT_AVAILABLE) [nsICertOverrideService.setDisableAllSecurityChecksAndLetAttackersInterceptMyData]
+Sandbox: Unexpected EOF, op 0 flags 00 path /proc/cpuinfo
+1659522225715	geckodriver	INFO	Listening on 127.0.0.1:41285
+1659522225723	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "--marionette" "-no-remote" "-profile" "/tmp/rust_mozprofilekSVDBE"
+ATTENTION: default value of option mesa_glthread overridden by environment.
+ATTENTION: default value of option mesa_glthread overridden by environment.
+ATTENTION: default value of option mesa_glthread overridden by environment.
+ATTENTION: default value of option mesa_glthread overridden by environment.
+1659522227282	Marionette	INFO	Marionette enabled
+1659522227287	Marionette	INFO	Listening on port 41073
+Read port: 41073
+1659522227474	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at /tmp/rust_mozprofilekSVDBE/search.json.mozlz4", (void 0)))
+Missing chrome or resource URL: resource://gre/modules/UpdateListener.jsm
+Missing chrome or resource URL: resource://gre/modules/UpdateListener.sys.mjs
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://tr.snapchat.com"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+Missing chrome or resource URL: resource://gre/modules/UpdateListener.jsm
+Missing chrome or resource URL: resource://gre/modules/UpdateListener.sys.mjs
+console.error: "Error during quit-application-granted: [Exception... \"File error: Not found\"  nsresult: \"0x80520012 (NS_ERROR_FILE_NOT_FOUND)\"  location: \"JS frame :: resource:///modules/BrowserGlue.jsm :: _onQuitApplicationGranted/tasks< :: line 2006\"  data: no]"
+1659522278297	Marionette	INFO	Stopped listening on port 41073
+JavaScript error: chrome://remote/content/marionette/cert.js, line 57: NS_ERROR_NOT_AVAILABLE: Component returned failure code: 0x80040111 (NS_ERROR_NOT_AVAILABLE) [nsICertOverrideService.setDisableAllSecurityChecksAndLetAttackersInterceptMyData]
+1659522289594	geckodriver	INFO	Listening on 127.0.0.1:37059
+1659522289603	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "--marionette" "-no-remote" "-profile" "/tmp/rust_mozprofileT965qv"
+ATTENTION: default value of option mesa_glthread overridden by environment.
+ATTENTION: default value of option mesa_glthread overridden by environment.
+ATTENTION: default value of option mesa_glthread overridden by environment.
+ATTENTION: default value of option mesa_glthread overridden by environment.
+1659522290648	Marionette	INFO	Marionette enabled
+1659522290653	Marionette	INFO	Listening on port 43363
+Read port: 43363
+1659522290788	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at /tmp/rust_mozprofileT965qv/search.json.mozlz4", (void 0)))
+Missing chrome or resource URL: resource://gre/modules/UpdateListener.jsm
+Missing chrome or resource URL: resource://gre/modules/UpdateListener.sys.mjs
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://tr.snapchat.com"
+Missing chrome or resource URL: resource://gre/modules/UpdateListener.jsm
+Missing chrome or resource URL: resource://gre/modules/UpdateListener.sys.mjs
+console.error: "Error during quit-application-granted: [Exception... \"File error: Not found\"  nsresult: \"0x80520012 (NS_ERROR_FILE_NOT_FOUND)\"  location: \"JS frame :: resource:///modules/BrowserGlue.jsm :: _onQuitApplicationGranted/tasks< :: line 2006\"  data: no]"
+1659522322674	Marionette	INFO	Stopped listening on port 43363
+JavaScript error: chrome://remote/content/marionette/cert.js, line 57: NS_ERROR_NOT_AVAILABLE: Component returned failure code: 0x80040111 (NS_ERROR_NOT_AVAILABLE) [nsICertOverrideService.setDisableAllSecurityChecksAndLetAttackersInterceptMyData]
+1659522341730	geckodriver	INFO	Listening on 127.0.0.1:47019
+1659522341737	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "--marionette" "-no-remote" "-profile" "/tmp/rust_mozprofilewWN6vi"
+ATTENTION: default value of option mesa_glthread overridden by environment.
+ATTENTION: default value of option mesa_glthread overridden by environment.
+ATTENTION: default value of option mesa_glthread overridden by environment.
+ATTENTION: default value of option mesa_glthread overridden by environment.
+1659522342728	Marionette	INFO	Marionette enabled
+1659522342734	Marionette	INFO	Listening on port 46523
+Read port: 46523
+1659522342851	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at /tmp/rust_mozprofilewWN6vi/search.json.mozlz4", (void 0)))
+Missing chrome or resource URL: resource://gre/modules/UpdateListener.jsm
+Missing chrome or resource URL: resource://gre/modules/UpdateListener.sys.mjs
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://tr.snapchat.com"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+1659522383738	Marionette	WARN	Ignoring event 'DOMContentLoaded' because document has an invalid readyState of 'complete'.
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://tr.snapchat.com"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://tr.snapchat.com"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://tr.snapchat.com"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://tr.snapchat.com"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://tr.snapchat.com"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://tr.snapchat.com"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+1659522599966	Marionette	WARN	TimedPromise timed out after 500 ms: stacktrace:
+TimedPromise/<@chrome://remote/content/marionette/sync.js:237:24
+TimedPromise@chrome://remote/content/marionette/sync.js:222:10
+interaction.flushEventLoop@chrome://remote/content/marionette/interaction.js:431:10
+webdriverClickElement@chrome://remote/content/marionette/interaction.js:179:31
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://tr.snapchat.com"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.thuisbezorgd.nl"
+1659522656029	Marionette	INFO	Stopped listening on port 46523
+Missing chrome or resource URL: resource://gre/modules/UpdateListener.jsm
+Missing chrome or resource URL: resource://gre/modules/UpdateListener.sys.mjs
+console.error: "Error during quit-application-granted: [Exception... \"File error: Not found\"  nsresult: \"0x80520012 (NS_ERROR_FILE_NOT_FOUND)\"  location: \"JS frame :: resource:///modules/BrowserGlue.jsm :: _onQuitApplicationGranted/tasks< :: line 2006\"  data: no]"

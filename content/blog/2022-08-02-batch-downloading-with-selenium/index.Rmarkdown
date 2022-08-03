@@ -1,0 +1,148 @@
+---
+title: Batch downloading with Selenium
+author: 'Bas Machielsen'
+date: '2020-05-29'
+draft: false
+excerpt: A post about how to use the Selenium package in R to automate downloading of files.
+layout: single
+series: null
+subtitle: ""
+tags: null
+---
+
+
+```{r setup, include=FALSE, cache = TRUE}
+knitr::opts_chunk$set(echo = TRUE, cache=TRUE)
+
+library(RSelenium)
+```
+
+## Introduction
+
+In this blogpost, I briefly explain how to batch download files in RSelenium. This can be super useful if you want to download some pdf's or other files, but you don't want to click 'download' a 1000 times, and there is no other option available. 
+
+## Step 1: Setting up a Docker Container 
+
+In this case, we have to deviate from the standard case of setting up a Docker container. We have to make sure that there is a mapping between the Docker folder where the downloads will end up, and the Download folder on our 'real' machine. 
+
+```{}
+$ docker run -d -p 4445:4444 -p 5901:5900 -v /home/bas/Downloads:/home/seluser/Downloads selenium/standalone-firefox
+```
+
+As usual, we assign one set of ports to the Docker machine, and we assign another set of ports to serve as the 'means of transport' between the Docker container and our own directory. The syntax tells us that we have to first place our down directory `/home/bas/Downloads/` and then the directory where the downloads end up on the Selenium Image in the container `/home/seluser/Downloads`. 
+
+## Step 2: Specifying Firefox Preferences
+
+We also have to specify our (virtual) browser's preferences. In particular, we have to specify the download folder, and we have to specify that the browser shouldn't open download windows before downloading something (because Selenium can't handle that). 
+
+```{r}
+ePrefs <- RSelenium::makeFirefoxProfile(
+  list(
+    "browser.download.dir" = "/home/seluser/Downloads",
+    "browser.download.folderList" = 2L,
+    "browser.download.manager.showWhenStarting" = FALSE,
+    "browser.helperApps.neverAsk.saveToDisk" = "multipart/x-zip,application/zip,application/x-zip-compressed,application/x-compressed,application/msword,application/csv,text/csv,image/png ,image/jpeg, application/pdf, text/html,text/plain,  application/excel, application/vnd.ms-excel, application/x-excel, application/x-msexcel, application/octet-stream"))
+
+```
+
+```{r, echo = FALSE, eval = FALSE}
+#Alternative settings
+fprof <- RSelenium::makeFirefoxProfile(list(
+  "browser.download.folderList" = 2L,  
+  "browser.download.manager.showWhenStarting" = FALSE,
+  "browser.download.dir" = "/home/bas/Downloads",
+  "browser.helperApps.neverAsk.openFile "= "application/excel, image/jpeg, csv",
+  "browser.helperApps.neverAsk.saveToDisk" = "application/excel, image/jpeg, csv",
+  "browser.helperApps.alwaysAsk.force" = FALSE,
+  "browser.download.manager.showAlertOnComplete" = FALSE,
+  "browser.download.manager.closeWhenDone" = TRUE)
+)
+
+```
+
+Note that you should leave the download directory as '/home/seluser/Downloads', because that it the standard directory the Selenium image creates, and also because you've specified a map from that directory to your own downloads folder when you set up the Docker container.
+
+## Step 3: Downloading a file
+
+Next, we can connect to the server we've just created, instructing the browser client to take into consideration the preferences (settings) we just created in the list `ePrefs`:
+
+```{r results="hide"}
+remDr <- RSelenium::remoteDriver(browserName = "firefox",
+                      port = 4445L,
+                      extraCapabilities = ePrefs)
+
+
+remDr$open()
+```
+
+Let's now navigate to an example website (a blogpost on this website), and download a `.csv` file which I've hidden in there:
+
+```{r}
+remDr$navigate("https://bas-m.netlify.app/2020/05/27/web-scraping-with-rselenium/")
+click <- remDr$findElement("css", "#step-3-cleaning-the-data > p:nth-child(2) > a:nth-child(1)")
+
+click$clickElement()
+
+```
+
+You can check whether you can see the file in your Downloads folder (or any other folder yo might have specified) now! 
+
+## Step 4: Example: Download batch files
+
+Let's now proceed to a more interesting application: batch downloading pictures of archival data from [CBS Historisch](https://www.historisch.cbs.nl/). We will use the "Jaarcijfers voor Nederland 1943 (500 p.)" and we will start from page 1, and scrape until page 100!  We will execute a for loop over several (tens, hundreds of) pages, and download a picture on every page! 
+
+```{r}
+#Navigate to page 1
+remDr$navigate("https://www.historisch.cbs.nl/detail.php?nav_id=5-1&id=102092112")
+
+#accept the cookies
+clickhere <- remDr$findElement(using = "css", "a.cb-enable")
+clickhere$clickElement()
+```
+
+This is the preliminary work. Now, we can start a for loop over 100 pages. 
+
+```{r}
+
+for(i in 1:5) {
+
+  #Switch to the correct frame
+  webElem <- remDr$findElements("css", "iframe")
+  remDr$switchToFrame(webElem[[1]])
+  
+  #Find the two download subsequent buttons and download the file
+  remDr$findElement(using = "css", "a#downloadDirect") -> download
+  download$clickElement()
+  
+  remDr$findElement("css", "a#downloadResLink") -> download2
+  download2$clickElement()
+  
+  #Now navigate to the next page:
+  #First, switch back to the original frame
+  remDr$switchToFrame(NULL)
+  
+  #Then, find the button for page i:
+  #Find the relevant Xpath
+  path <- "//a[contains(@class, 'custom-navigation-page') and text()='y']"
+  path <- stringr::str_replace(path, "y", as.character(i+1))
+  
+  #And click to the next page
+  remDr$findElement("xpath", path) -> click
+  click$clickElement()
+  
+  #And then we can start again - make sure to add a sys.Sleep:
+  Sys.sleep(5)
+}
+
+```
+
+Don't forget to close your session afterwards:
+
+```{r}
+remDr$close()
+
+```
+
+## In the future..
+
+The next thing you might do with all these pictures is automatically OCR'ing them! The `tesseract` package allows OCRing in R, but the quality is still very low.. Perhaps it would be reasonable to do so once the algorithm is good enough to distinguish between tables and all other text. Thanks for reading!

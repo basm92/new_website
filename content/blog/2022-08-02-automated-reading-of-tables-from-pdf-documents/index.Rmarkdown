@@ -1,0 +1,198 @@
+---
+title: Automated Reading of Tables from PDF Documents
+author: 'Bas Machielsen'
+date: '2020-05-31'
+draft: false
+excerpt: A post about automated reading using an example of the Indonesian census data
+layout: single
+series: null
+subtitle: ""
+tags: null
+---
+
+
+```{r setup, include = FALSE}
+library(tidyverse)
+```
+
+## Introduction
+
+In this post, I will briefly explain how to read in a table easily from the Indonesian data sources that I have been planning to use (see [here](https://www.bps.go.id/publication/2019/10/04/9812a1c4ea25298004839596/produk-domestik-regional-bruto-kabupaten-kota-di-indonesia-2014-2018.html)). First, I download the file, containing data about municipalities in every province and their GRDP:
+
+```{r, eval = FALSE}
+
+if(!is.element("hello.pdf", list.files())){
+download.file("https://www.bps.go.id/publication/download.html?nrbvfeve=OTgxMmExYzRlYTI1Mjk4MDA0ODM5NTk2&xzmn=aHR0cHM6Ly93d3cuYnBzLmdvLmlkL3B1YmxpY2F0aW9uLzIwMTkvMTAvMDQvOTgxMmExYzRlYTI1Mjk4MDA0ODM5NTk2L3Byb2R1ay1kb21lc3Rpay1yZWdpb25hbC1icnV0by1rYWJ1cGF0ZW4ta290YS1kaS1pbmRvbmVzaWEtMjAxNC0yMDE4Lmh0bWw%3D&twoadfnoarfeauf=MjAyMi0wOC0wMyAwMDo1NDoyMg%3D%3D", destfile = "hello.pdf")}
+
+```
+
+## Reading in the table
+
+There are different ways in which I can read the table. First, I use the `tabulizer` package, from which I can use the `extract_tables` function, with two arguments:
+
+- The file path (in this case: "hello.pdf")
+- The page number (in this case, we start at page 24, so let us take that page as an example)
+
+```{r}
+library(tabulizer)
+
+#remotes::install_github(c("ropensci/tabulizerjars", "ropensci/tabulizer"), INSTALL_opts = "--no-multiarch")
+
+file <- "hello.pdf"
+
+tabulizer::extract_tables(file, pages = 24)
+```
+
+Not bad at all! But as you can see, it read two tables instead of one, and in the second table, it also missed some spaced. Finally ,the row summarizing the total is very confusing for the algorithm. A super useful feature of this package is the ability to select a part of the picture to extract:
+
+```{r eval = FALSE}
+extract_areas(file, 24)
+
+```
+
+You can also do this in two or three (or more) parts, and then combine the results to get a data.frame you want. Sometimes, or actually, most of the time, this will still not help you in getting exactly the table you want. One option is to resort to reading the table as a text, and then creating the table you want. 
+
+## Reading the table as text
+
+That is what we will do next. The same `tabulizer` package also allows us to read in text, in the following way:
+
+```{r}
+extract_text(file, 24)
+```
+
+This seems kinda messy, but you will shortly see that this is in fact just what we need. To make this clear, let's do some cleaning:
+
+```{r}
+extract_text(file, 24) %>%
+  stringr::str_split("\n") %>%
+  lapply(stringr::str_squish) %>%
+  magrittr::extract2(1) %>%
+  magrittr::extract(4:26) 
+
+```
+
+Only the last command, `magrittr:extract` contains a parameter, because that's where the actual content of the table is separated from things like the header and footer. In this case, I wanted to extract only the municipalities' info, and not the total or headers or anything, so that's why I went with row 4 to row 26, but I could've included more if I wanted to. 
+
+Let us now write this output to a vector called `data`, and see if we want split up the strings and put the data in a data.frame.
+
+```{r}
+data <- extract_text(file, 24) %>%
+  stringr::str_split("\n") %>%
+  lapply(stringr::str_squish) %>%
+  magrittr::extract2(1) %>%
+  magrittr::extract(4:26) 
+
+```
+
+## Splitting up the data in columns
+
+Naturally, we wanted to have a data.frame in which the first and second column contain information about the specific municipality, and all the other numbers afterwards to go to separate variables. Unfortunately, the `stringr::str_split` function, which is the usual way to go about this, has some limitations, forcing us to use either complicated Regex's to get the string to split in chunks we want, or to go with a second-best alternative. Fortunately, I found [this blog](https://www.r-bloggers.com/strsplit-but-keeping-the-delimiter/):
+
+
+```{r}
+strsplit2 <- function(x,
+                     split,
+                     type = "remove",
+                     perl = FALSE,
+                     ...) {
+  if (type == "remove") {
+    # use base::strsplit
+    out <- base::strsplit(x = x, split = split, perl = perl, ...)
+  } else if (type == "before") {
+    # split before the delimiter and keep it
+    out <- base::strsplit(x = x,
+                          split = paste0("(?<=.)(?=", split, ")"),
+                          perl = TRUE,
+                          ...)
+  } else if (type == "after") {
+    # split after the delimiter and keep it
+    out <- base::strsplit(x = x,
+                          split = paste0("(?<=", split, ")"),
+                          perl = TRUE,
+                          ...)
+  } else {
+    # wrong type input
+    stop("type must be remove, after or before!")
+  }
+  return(out)
+}
+
+
+```
+
+which was exactly what I was looking for: I could use easy Regex, and clean the data in very few steps:
+
+
+```{r}
+data %>%
+  strsplit2("\\s[0-9]+", type = "before") %>%
+  purrr::reduce(rbind) %>%
+  as.data.frame(row.names = F)
+```
+
+
+The example of this method is that it can be used on virtually all tables from the aforementioned .pdf file, requiring very little editing and data wrangling, which saves a lot of time. To domenstrate, let's look at pages 25, 26 and 27, the pages following the original p 24 which I started with. 
+
+- Page 25:
+
+```{r}
+data <- extract_text(file, 25) %>%
+  stringr::str_split("\n") %>%
+  lapply(stringr::str_squish) %>%
+  magrittr::extract2(1) %>%
+  magrittr::extract(4:36) #Remember to change this parameter
+
+
+data
+```
+
+```{r}
+data %>%
+  strsplit2("\\s[0-9]+", type = "before") %>%
+  purrr::reduce(rbind) %>%
+  as.data.frame(row.names = F)
+
+```
+
+- Page 26:
+
+```{r}
+data <- extract_text(file, 26) %>%
+  stringr::str_split("\n") %>%
+  lapply(stringr::str_squish) %>%
+  magrittr::extract2(1) %>%
+  magrittr::extract(4:23) #Remember to change this parameter
+
+
+data %>%
+  strsplit2("\\s[0-9]+", type = "before") %>%
+  purrr::reduce(rbind) %>%
+  as.data.frame(row.names = F)
+
+```
+
+- And finally, page 27. Let me introduce a more abstract way of recognizing the parameter, making use of `which` to find out in which character string "Jml Kab." is located, so I know at which string to stop:
+
+```{r}
+data <- extract_text(file, 27) %>%
+  stringr::str_split("\n") %>%
+  lapply(stringr::str_squish) %>%
+  magrittr::extract2(1) 
+
+uptothis <- which(stringr::str_detect(data, "Jml Kab."))-1
+
+data <- data %>%
+  magrittr::extract(4:uptothis)
+
+
+data %>%
+  strsplit2("\\s[0-9]+", type = "before") %>%
+  purrr::reduce(rbind) %>%
+  as.data.frame(row.names = F)
+
+
+```
+
+## Conclusion
+
+In this post, I attempted to explain, and show, how to easily import tables from .pdf documents in R. I also did not show a couple of other aspects, most notably, endogenous start of data extraction (a little tricker than endogenous ending), and I also did not separate the Identifiers from the names. Neither did I convert all variables to numeric, and gave variable names. If you want to know more about such basic cleaning operations, feel free to message me, or better, go to [the tidyverse website](http://www.tidyverse.org). 

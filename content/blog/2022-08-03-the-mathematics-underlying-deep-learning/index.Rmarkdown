@@ -1,0 +1,164 @@
+---
+title: The Mathematics Underlying Deep Learning
+author: 'Bas Machielsen'
+date: '2021-05-29'
+draft: false
+excerpt: Working out the underlying mathematical details of standard neural networks.
+layout: single
+series: null
+subtitle: ""
+tags: null
+---
+
+
+## Introduction
+
+In this post, I want to provide a quick primer about the mathematics underlying the backpropagation algorithm in neural networks and deep learning algorithms. I use the notation provided in [this book](http://neuralnetworksanddeeplearning.com/), chapter 2, and prove/explain in-depth where some of the equations come from. I hope this provides an intuitive and clear explanation about the logic underlying backpropagation, and it should make it easy to implement this using code.
+
+## Delta
+
+$\delta^l$ is defined as $\frac{\partial C}{\partial z^l}$, or in component form: $\delta^l_j = \frac{\partial C}{\partial z^l_j}$. The network is define such that the matrix $W^L$ represents the weights from layer $a^{l-1}$ to layer $a^l$. We start indexation at 1 (so not at 0!). Hence, layer $a^0$ and weights $W^1$ do not exist, and layer $a^1$ is the input layer. There are a total of $L$ layers in the network, each of which can have a variable number of nodes. First, we find an expression for $\delta^L$, meaning delta in the last layer. 
+
+By the chain rule, and recognizing that the only way $z^L_j$ influences the cost function is through $a^L_j$, we know that:
+
+$$
+\delta^L_j = \frac{\partial C}{\partial a^L_j} \cdot \frac{\partial a^L_j}{\partial z^L_j} 
+$$
+
+The first part of this derivative is determined by the cost function, and the second part $\frac{\partial a^L_j}{\partial z^L_j}$ evaluates to $\sigma'(z^L_j)$. Hence, in matrix form, the expression for $\delta^L$ is:
+
+$$
+\begin{pmatrix}
+\vdots \newline
+\delta^L_j \newline
+\vdots
+\end{pmatrix} = 
+\begin{pmatrix}
+\frac{\partial C}{\partial a^L_1} \newline
+\vdots \newline
+\frac{\partial C}{\partial a^L_j} \newline
+\vdots 
+\end{pmatrix} \circ \begin{pmatrix} \sigma'(z^L_1) \newline 
+\vdots \newline
+\sigma'(z^L_j) \newline
+\vdots
+\end{pmatrix}
+$$
+
+or alternatively, simply:
+
+$$
+\delta^L = \frac{\partial C}{\partial a^L} \cdot \sigma'(z^L)
+$$
+
+## From layer L to layer L-1
+
+As soon as we have a $\delta$ for layer $L$, or layer $l$ more generally, we want to find a delta for the previous layer. In the next subsection, it will become clear why. To fix ideas, suppose there are $K$ elements in layer $l+1$, indexed by $k$ and there are $J$ elements in layer $l$, indexed by $j$. Then, we start off with the definition of $\delta^l$ in component form, which we recognize to be composed of all weights that proceed from that specific node, to one of the nodes $1$ to $K$ in layer $l+1$:
+
+$$
+\delta^l_j = \frac{\partial C}{\partial z^l_j} = \sum_k \frac{\partial C}{\partial z^{l+1)}_k} \cdot \frac{\partial z^{l+1}_k}{z^l_j}
+$$
+
+The first term is by definition equal to $\delta^{l+1}_k$. The second term can be obtained by recognizing that:
+
+$$
+z^{l+1}\_k = \sum\_j w^{l+1}\_{kj} a^l\_j = \sum\_j w^{l+1}\_{kj} \sigma(z^l\_j)
+$$
+
+Differentiating this expression with respect to $z^l_j$ gives (because there is only 1 specific $z^l_j$):
+
+$$
+\frac{\partial z^{l+1}\_k}{\partial z^l\_j}=w^{l+1}\_{kj}\sigma'(z^l\_j)
+$$
+
+Substituting this expression back in the expression for $\delta^l_j$ gives:
+
+$$
+\delta^l\_j = \sum\_k \delta^{l+1}\_k \cdot w\_{kj}^{l+1} \cdot \sigma'(z^l\_j)
+$$
+
+
+In matrix form, this expression becomes:
+
+$$
+\delta^l = W\_{kj}^T \delta^{l+1} \circ \sigma'(z^l)
+$$
+
+or, more explicitly,
+
+$$
+\begin{bmatrix}
+\delta^l\_1 \newline
+\vdots \newline
+\delta^l\_J
+\end{bmatrix} = 
+\begin{bmatrix}
+w\_{11} & w\_{21} & \dots & w\_{k1} \newline
+w\_{12} & \dots & \dots & w\_{k2} \newline
+\vdots & \ddots & \ddots & \vdots \newline
+w\_{1j} & \dots & \dots & w\_{kj}
+\end{bmatrix} 
+\begin{bmatrix}
+\delta^{l+1}\_1 \newline
+\vdots \newline
+\delta^{l+1\_K}
+\end{bmatrix} \circ 
+\begin{pmatrix}
+\sigma'(z^l\_1) \newline
+\vdots \newline
+\sigma'(z^l\_j) 
+\end{pmatrix}
+$$
+
+
+with the dimensions $j$ x $1$ (layer $l$) = $j$ x $k$ (transpose of the weight matrix) times $k$ x $1$ (layer $l+1$) times $j$ x 1 (layer $l$. 
+
+## Relating Delta's to Derivatives
+
+Now that we have an expression for all $\delta^l$'s, we have to relate the weight derivatives $\frac{\partial C}{\partial w_{jk}}$ to the $\delta$'s. To see this, we realize that a particular weight to layer $l$ only influences one particular node $z_j^l$ in layer $l$. Hence, we can write the partial derivative that we are looking for as:
+
+$$
+\frac{\partial C}{\partial w^l_{jk}} = \frac{\partial C}{\partial z^l_j} \cdot \frac{\partial z^l_j}{\partial w^l_{jk}}
+$$
+Then, by definition, $\frac{\partial C}{\partial z^l_j} = \delta^l_j$. For the second partial derivative, we realize that, for a layer $l$ with $J$ nodes and a layer $l-1$ with $K$ nodes:
+
+$$
+\begin{pmatrix}
+z^l_1 \newline
+\vdots \newline
+z^l_J \end{pmatrix} = 
+\begin{pmatrix}
+w_{11} & \dots & w_{1K} \newline
+\vdots & \ddots & \vdots \newline
+w_{J1} & \dots & w_{JK}
+\end{pmatrix} 
+\begin{pmatrix}
+a^{l-1}_1 \newline
+\vdots \newline
+a^{l-1}_K
+\end{pmatrix}
+$$
+And thus, the derivative of $z^l_j$ with respect to $w_{jk}$ is just $a^{l-1}_k$. Substituting that in the expression for $\frac{\partial C}{\partial w_{jk}}$ gives:
+
+$$
+\frac{\partial C}{\partial w_{jk}} = \delta_j \cdot a^{l-1}_k
+$$
+
+Finally, in matrix form, this amounts to: 
+
+$$
+\begin{pmatrix} \frac{\partial C}{\partial w_{jk}} \end{pmatrix} = 
+\begin{pmatrix}
+\delta^l_1 \newline
+\vdots \newline
+\delta^l_j 
+\end{pmatrix}
+\cdot
+\begin{pmatrix}
+a^{l-1}_1 \newline
+\vdots \newline
+a^{l-1}_K
+\end{pmatrix}^T
+$$
+
+Which gives back a $J$ by $K$ matrix, which after multiplying exactly corresponds to the component form sketched out above. This is also what you would use in an implementation of backpropagation in code. 

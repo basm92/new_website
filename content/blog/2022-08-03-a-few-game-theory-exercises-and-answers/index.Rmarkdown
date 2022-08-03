@@ -1,0 +1,87 @@
+---
+title: A few game theory exercises and answers
+author: 'Bas Machielsen'
+date: '2021-03-05'
+draft: false
+excerpt: A blog post explaining and solving some fun game theory exercises
+layout: single
+series: null
+subtitle: ""
+tags: null
+---
+
+
+## Introduction
+
+I want to work out a couple of exercises from _Game Theory: an Introduction_, by Tadelis. Since the exercises from later chapters are not available online, and since they represent some of the more creative and fun challenges, I just wanted to post a few exercises which I worked out, as well as some (unasked) variations. 
+
+## Exercise 12.2: Cournot Revisited
+
+This exercise asks the following:
+
+> Consider the Cournot duopoly model in which two firms, 1 and 2, simultaneously choose the quantities they supply, $q_1$ and $q_2$. The price each will face is determined by the market demand function $p(q_1, q_2) = a - b(q_1 + q_2)$. Each firm has a probability $\mu$ of having a marginal unit cost of $c_L$ and a probability $1-\mu$ of having a marginal unit cost of $c_H$. These probabilities are common knowledge, but the true type is revealed only to each firm individually. Solve for the Bayesian Nash equilibrium. 
+
+The exercise makes it clear that there is uncertainty about the marginal cost parameter of both firms, but I will first start with a more simple question, which is that firm 2's marginal cost parameter is uncertain (for player 1, but observable for themselves), but not vice versa: player 1 has a fixed marginal cost parameter, say $c_1$. 
+
+Then, the profit function of player 2 is:
+
+$$
+\Pi_2 = \begin{cases} (a - b(q_1 + q_2^L))q_2^L - c_L q_2^L \hspace{2em} &\text{ if } c = c_L \newline
+(a - b(q_1 + q_2^H))q_2^H - c_H q_2^H \hspace{2em} &\text{ if } c = c_H \end{cases}
+$$
+
+And the profit function for player 1 is:
+
+$$
+\Pi_1 = \mu((a - b(q_1 + q_2^L))q_1 - c_1 q_1) + (1-\mu) ((a - b(q_1 + q_2^H))q_1 - c_1 q_1)
+$$
+
+From these profit functions, the best responses can be derived by taking the derivative with respect to the control variables. Player 1's best response will be $q_1 = f(q_2^L, q_2^H)$. Substituting player 2's best responses $q_2^L = f(q_1)$ and $q_2^H = f(q_1)$ into player 1's best responses yields a solution for $q_1$. Substituting this solution in player 2's best responses then yields a solution for both incarnations of player 2.
+
+From this solution, it is also easy to see what the solution for the actual problem would look like: The profit function for player $i$, given that their marginal costs are low and high respectively, is:
+
+$$
+\Pi_i^L = \begin{cases}
+(a - b(\mathbb{E}[q_j] + q_i^L)) \cdot q_i^L - c_L q_i^L &\text{ if MC = Low} \newline
+(a - b(\mathbb{E}[q_j] + q_i^H)) \cdot q_i^L - c_H q_i^H &\text{ if MC = High}
+\end{cases}
+$$
+
+The expected value of the other player's production $\mathbb{E}[q_j]$ equals $\mu q_j^L + (1-\mu)q_j^H$. Substituting this in the profit function, and then differentiating to find the Best Responses for player $i$ gives:
+
+$$
+BR_i = \begin{cases} q_i^L = 
+\frac{a - b(\mu q_j^L + (1-\mu) q_j^H) - c_L}{2b} \newline
+q_i^H = \frac{a - b(\mu q_j^L + (1-\mu) q_j^H) - c_H}{2b}
+\end{cases}
+$$
+
+Now, recognizing that the problems are symmetric, we can impose that $q_j^L = q_i^L$ and $q_j^H = q_i^H$. Alternatively, we could just make explicit the best responses for player 2, and then realize that in a Bayesian Nash Equilibrium, each player's best response should be a best response to the others. That would give us a system of 4 equations, and 4 unknowns. But, recognizing the symmetric nature of the problem, it is easy to make do with a system of only two equations and two unknowns. Substituting $q_j^L = q_i^L$ and $q_j^H = q_i^H$ into the best responses gives: 
+
+$$
+BR_i = \begin{cases} q_i^L = 
+\frac{a - b(\mu q_i^L + (1-\mu) q_i^H) - c_L}{2b} \newline
+q_i^H = \frac{a - b(\mu q_i^L + (1-\mu) q_i^H) - c_H}{2b}
+\end{cases}
+$$
+
+After a bit of algebra, the solution to this problem is:
+
+$$
+\begin{bmatrix}
+q_i^L \newline
+q_i^H
+\end{bmatrix} = 
+\begin{bmatrix}
+\frac{2a + c_L (\mu-3) - (\mu-1)c_H}{6b} \newline
+\frac{2a + c_L \mu - c_H (\mu+2)}{6b}
+\end{bmatrix}
+$$
+
+This solution has an elegant interpretation: suppose $\mu = 1$, so that there is no uncertainty and all firms have low marginal costs. Then, the problem's solution reduces to the solution of a standard Cournot problem with:
+
+$$
+q_i^L = \frac{2a + c_L (1-3) - (1-1) c_H}{6b} = \frac{2a - 2c_L}{6b} = \frac{a - c_L}{3b}
+$$
+
+That is to say, this is the solution to the Cournot problem were $\Pi_i = (a-b(q_i + q_j))q_i - c_L q_i$ where $q_i = q_j$. If $\mu = 0$, the solution for $q_i^H$ yields a similar result, but then for $c = c_H$. 
