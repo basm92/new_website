@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr"><head>
+  
+                           
+     
+
+
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="generator" content="Hugo 0.101.0" />
+<title>A From-Scratch Implementation of Neural Networks in Python | Bas Machielsen</title>
+
+
+<meta property="twitter:site" content="@basss92">
+<meta property="twitter:creator" content="@basss92">
+
+
+
+
+
+
+
+  
+    
+  
+<meta name="description" content="Working out the underlying mathematical details of standard neural networks.">
+
+
+<meta property="og:site_name" content="Bas Machielsen">
+<meta property="og:title" content="A From-Scratch Implementation of Neural Networks in Python | Bas Machielsen">
+<meta property="og:description" content="Working out the underlying mathematical details of standard neural networks." />
+<meta property="og:type" content="page" />
+<meta property="og:url" content="/blog/2022-08-03-a-from-scratch-implementation-of-neural-networks-in-python/" />
+<meta property="og:locale" content="en">
+
+
+
+
+    
+        <meta property="og:image" content="/blog/2022-08-03-a-from-scratch-implementation-of-neural-networks-in-python/featured.png" >
+        <meta property="twitter:card" content="summary_large_image">
+        <meta name="twitter:image" content="/blog/2022-08-03-a-from-scratch-implementation-of-neural-networks-in-python/featured.png" >
+    
+    
+  <meta itemprop="name" content="A From-Scratch Implementation of Neural Networks in Python">
+<meta itemprop="description" content="Introduction In this blog post, I wanted to write down an easy implementation of neural networks in Python. The model architecture of neural networks contains three pillars:
+The actual model (Multi-layer perceptron network), with inputs, layers, and outputs, and weights connecting these. Forward propagation - the loop from inputs to subsequent layers and finally, the output, using given weights. Backward propagation - updating the weights with gradient descent to minimize the loss."><meta itemprop="datePublished" content="2021-06-01T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2021-06-01T00:00:00+00:00" />
+<meta itemprop="wordCount" content="1642"><meta itemprop="image" content="/blog/2022-08-03-a-from-scratch-implementation-of-neural-networks-in-python/featured.png">
+<meta itemprop="keywords" content="" />
+  
+  
+  <!--[if IE]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  <link rel="shortcut icon" href="favicon_new.ico" type="image/x-icon">
+  <link rel="icon" href="favicon_new.ico" type="image/x-icon">
+  
+  
+  <link rel="stylesheet" href="/style.main.min.7aee66b22ae3b19895932b9cf4d37da828ca65fc6cd45cfdee1b36b98f4b0ae0.css" integrity="sha256-eu5msirjsZiVkyuc9NN9qCjKZfxs1Fz97hs2uY9LCuA=" media="screen">
+  
+  
+  <script src="/panelset.min.dca42702d7daf6fd31dc352efd2bcf0e4ac8c05ccaa58d9293f6177462de5d5f.js" type="text/javascript"></script>
+  
+  
+  <script src="/main.min.11d2df4163a7df9fb9d31f699461f02d84700b160cd42fa951b0982fc4d468bc.js" type="text/javascript"></script>
+</head>
+<body>
+      <div class="grid-container single">
+<header class="site-header pt4 pb2 mb4 bb b--transparent ph5 headroom z-max" role="banner">
+  <nav class="site-nav db dt-l w-100" role="navigation">
+    <a class="site-brand db dtc-l v-mid link no-underline w-100 w-33-l tc tl-l" href="/" title="Home">
+      <img src="/website_logo.png" class="dib db-l h2 w-auto" alt="Bas Machielsen">
+    </a>
+    <div class="site-links db dtc-l v-mid w-100 w-47-l tc tr-l mt3 mt0-l ttu tracked">
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/" title="Home">Home</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/about/" title="About">About</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 active" href="/blog/" title="Blog">Blog</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/project/" title="Teaching Overview &amp; Repository">Teaching</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/resume/" title="Resume">Resume</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/articles/" title="Articles">Articles</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/collection/" title="Software">Software</a>
+      
+      
+    </div>
+  </nav>
+</header>
+
+<main class="page-main pa4" role="main">
+  <section class="page-content mw7 center">
+    <article class="post-content pa0 ph4-l">
+      <header class="post-header">
+        <h1 class="f1 lh-solid measure-narrow mb3 fw4">A From-Scratch Implementation of Neural Networks in Python</h1>
+        
+        <p class="f6 measure lh-copy mv1">By Bas Machielsen</p>
+        <p class="f7 db mv0 ttu">June 1, 2021</p>
+
+      
+
+      </header>
+      <section class="post-body pt5 pb4">
+        
+
+
+
+<h2 id="introduction">Introduction
+  <a href="#introduction"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>In this blog post, I wanted to write down an easy implementation of neural networks in Python. The model architecture of neural networks contains three pillars:</p>
+<ul>
+<li>The actual model (Multi-layer perceptron network), with inputs, layers, and outputs, and weights connecting these.</li>
+<li>Forward propagation - the loop from inputs to subsequent layers and finally, the output, using given weights.</li>
+<li>Backward propagation - updating the weights with gradient descent to minimize the loss.</li>
+</ul>
+<p>In this blog post, I want to write about all three of them. I am borrowing heavily from two good resources: first, the 
+<a href="https://www.youtube.com/watch?v=aircAruvnKk" target="_blank" rel="noopener">video series on Neural Networks</a> by 3blue1brown on Youtube, and secondly, 
+<a href="https://www.youtube.com/watch?v=fMqL5vckiU0&amp;list=PL-wATfeyAMNrtbkCNsLcpoAyBBRJZVlnf&amp;index=2" target="_blank" rel="noopener">a tutorial</a> by Valerio Velardo. If you take the effort to watch these videos, you can see that Valerio&rsquo;s series provides the implementation architecture of neural networks in Python, but I think the notation by 3blue1brown is a little bit clearer. I will therefore slightly change the code, so that it matches the notation used in the 3blue1brown videos. Another good resource is 
+<a href="http://neuralnetworksanddeeplearning.com/chap2.html#the_code_for_backpropagation" target="_blank" rel="noopener">this book and accompanying code</a>, which also contains a Python-implementation of neural networks, which is virtually equivalent to mine, although it uses some operators with which I am less familiar.</p>
+
+
+
+
+<h2 id="multilayer-perceptron-architecture-and-forward-propagation">Multilayer perceptron architecture and forward propagation
+  <a href="#multilayer-perceptron-architecture-and-forward-propagation"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>Our goal is to write a function that takes an <code>\(n\)</code>-dimensional vector as an input ($n_1, \dots, n_n$), transforms it to <code>\(Z &gt; 1\)</code> intermediate layers, and finally transforms it into a <code>\(k\)</code>-dimensional output. Suppose the second layer <code>\(j\)</code> has <code>\(a_1, \dots, a_l\)</code> perceptrons in layer 2. Then, there have to be <code>\(n \cdot l\)</code> weights connecting <code>\(n\)</code> input perceptrons to <code>\(l\)</code> perceptrons. Following the notation of 3blue1brown, we take element <code>\((i,j)\)</code> of the matrix to be the weight <em>to</em> <code>\(l\)</code> from <code>\(n\)</code>: in other words, if <code>\(i\)</code> changes, the layer to which the weight goes is changed, and when <code>\(j\)</code> changes, the layer <em>from</em> which the weight goes is changed. In yet other words, different rows represent different destination nodes, and different columns represent different origin nodes:</p>
+<p>$$
+W_{layer 1 \rightarrow layer 2} = \begin{bmatrix}
+w_{n_1 \rightarrow a_1} &amp; w_{n_2 \rightarrow a_1} &amp; \dots &amp; w_{n_n \rightarrow a_1} \newline
+w_{n_1 \rightarrow a_2} &amp; w_{n_2 \rightarrow a_2} &amp; \dots &amp; w_{n_n \rightarrow a_2} \newline
+\vdots &amp; &amp; \ddots &amp; \vdots \newline
+w_{n_1 \rightarrow a_l} &amp; w_{n_2 \rightarrow a_l} &amp; \dots &amp; w_{n_n \rightarrow a_l}
+\end{bmatrix}
+$$</p>
+<p>This <code>\(l\)</code> x <code>\(n\)</code> matrix is then multiplied with a <code>\(n\)</code> x <code>\(1\)</code> vector to obtain a <code>\(l\)</code> x <code>\(1\)</code> vector, which represent all the perceptrons in layer 2. Multiplying out the above matrix with an input vector <code>\(x = (n_1, \dots, n_n)^T\)</code> gives:</p>
+<p>$$
+W\mathbb{x} = \begin{bmatrix}
+w_{n_1 \rightarrow a_1} &amp; w_{n_2 \rightarrow a_1} &amp; \dots &amp; w_{n_n \rightarrow a_1} \newline
+w_{n_1 \rightarrow a_2} &amp; w_{n_2 \rightarrow a_2} &amp; \dots &amp; w_{n_n \rightarrow a_2} \newline
+\vdots &amp; &amp; \ddots &amp; \vdots \newline
+w_{n_1 \rightarrow a_l} &amp; w_{n_2 \rightarrow a_l} &amp; \dots &amp; w_{n_n \rightarrow a_l}
+\end{bmatrix}
+\begin{bmatrix} n_1 \newline \vdots \newline  \newline n_n \end{bmatrix} = \newline
+\begin{bmatrix}
+n_1 \cdot w_{n_1 \rightarrow a_1} + \dots + n_n \cdot w_{n_n \rightarrow a_1} \newline
+\vdots \newline
+n_1 \cdot w_{n_1 \rightarrow a_l} + \dots + n_n \cdot w_{n_n \rightarrow a_l}
+\end{bmatrix}
+$$</p>
+<p>So that each entry in <code>\(a_l\)</code> is a product of the weights and the initial entries. This represents the first step in &lsquo;forward propagation&rsquo; - the multiplication of weights and inputs. Subsequent steps involve only changing the dimensions, that is, changing the matrix <code>\(\mathbb{W}\)</code> to proceed from <code>\(l\)</code> perceptrons to the next intermediate layer, or output layer. In general, if layer <code>\(L-1\)</code> has <code>\(l\)</code> elements and layer <code>\(L\)</code> has <code>\(k\)</code> elements, then the weight matrix should have <code>\(k\)</code> x <code>\(l\)</code> elements, each element <code>\((i,j)\)</code> linking element <code>\(i\)</code> in layer <code>\(L\)</code> to element <code>\(j\)</code> in layer <code>\(L-1\)</code>. Of course, this new layer should be subject to an activation function (e.g. sigmoid), which I don&rsquo;t want to pay too much attention to.</p>
+<p>Implementation in Python looks as follows, where num_inputs and num_outputs represent the dimensions of input and output layers, and hidden layers is a list of numbers, indicating (i) how many hidden layers there should be (the length of the list), and (ii) how many perceptrons (nodes) each of them should have:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">import</span> <span style="color:#555">numpy</span> <span style="color:#000;font-weight:bold">as</span> <span style="color:#555">np</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">class</span> <span style="color:#458;font-weight:bold">MLP</span>(<span style="color:#0086b3">object</span>):
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">def</span> __init__(<span style="color:#999">self</span>, num_inputs<span style="color:#000;font-weight:bold">=</span><span style="color:#099">3</span>, hidden_layers<span style="color:#000;font-weight:bold">=</span>[<span style="color:#099">3</span>, <span style="color:#099">3</span>], num_outputs<span style="color:#000;font-weight:bold">=</span><span style="color:#099">2</span>):
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>num_inputs <span style="color:#000;font-weight:bold">=</span> num_inputs
+</span></span><span style="display:flex;"><span>        <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>hidden_layers <span style="color:#000;font-weight:bold">=</span> hidden_layers
+</span></span><span style="display:flex;"><span>        <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>num_outputs <span style="color:#000;font-weight:bold">=</span> num_outputs
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#998;font-style:italic"># create a list that saves the dimensions of the layers</span>
+</span></span><span style="display:flex;"><span>        layers <span style="color:#000;font-weight:bold">=</span> [num_inputs] <span style="color:#000;font-weight:bold">+</span> hidden_layers <span style="color:#000;font-weight:bold">+</span> [num_outputs]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#998;font-style:italic"># fill in random weights with the correct dimensions</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#998;font-style:italic"># if layer i has k elements, layer i+1 has j elements, the matrix should have j x k elements</span>
+</span></span><span style="display:flex;"><span>        weights <span style="color:#000;font-weight:bold">=</span> []
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">for</span> i <span style="color:#000;font-weight:bold">in</span> <span style="color:#0086b3">range</span>(<span style="color:#0086b3">len</span>(layers)<span style="color:#000;font-weight:bold">-</span><span style="color:#099">1</span>):
+</span></span><span style="display:flex;"><span>            w <span style="color:#000;font-weight:bold">=</span> np<span style="color:#000;font-weight:bold">.</span>random<span style="color:#000;font-weight:bold">.</span>rand(layers[i<span style="color:#000;font-weight:bold">+</span><span style="color:#099">1</span>], layers[i])
+</span></span><span style="display:flex;"><span>            weights<span style="color:#000;font-weight:bold">.</span>append(w)
+</span></span><span style="display:flex;"><span>        <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>weights <span style="color:#000;font-weight:bold">=</span> weights
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">def</span> <span style="color:#900;font-weight:bold">forward_propagate</span>(<span style="color:#999">self</span>, inputs):
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#998;font-style:italic"># the input layer activation is just the input itself</span>
+</span></span><span style="display:flex;"><span>        activations <span style="color:#000;font-weight:bold">=</span> inputs
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#998;font-style:italic"># iterate through the network layers</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">for</span> w <span style="color:#000;font-weight:bold">in</span> <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>weights:
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            <span style="color:#998;font-style:italic"># calculate matrix multiplication between previous activation and weight matrix</span>
+</span></span><span style="display:flex;"><span>            net_inputs <span style="color:#000;font-weight:bold">=</span> w <span style="color:#000;font-weight:bold">@</span> activations
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            <span style="color:#998;font-style:italic"># apply sigmoid activation function</span>
+</span></span><span style="display:flex;"><span>            activations <span style="color:#000;font-weight:bold">=</span> <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>_sigmoid(net_inputs)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#998;font-style:italic"># return output layer activation</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">return</span> activations
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">def</span> <span style="color:#900;font-weight:bold">_sigmoid</span>(<span style="color:#999">self</span>, x):
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        y <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">1.0</span> <span style="color:#000;font-weight:bold">/</span> (<span style="color:#099">1</span> <span style="color:#000;font-weight:bold">+</span> np<span style="color:#000;font-weight:bold">.</span>exp(<span style="color:#000;font-weight:bold">-</span>x))
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">return</span> y
+</span></span></code></pre></div><p>Forward propagation is achieved by a loop that multiplies subsequent layers (that start with the input layer) by the respective weights. This implementation overwrites the values of the subsequent layers every time, to save memory. Of course, it could have been possible to save the product <code>w @ activations</code> for each iteration in the for loop. Next, we look at backward propagation, and we incorporate that insight into the algorithm.</p>
+
+
+
+
+<h2 id="backward-propagation">Backward propagation
+  <a href="#backward-propagation"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>Backward propagation calculates the partial derivatives with respect to all weight matrices. We find those in a recursive way, as implemented in the following algorithm. We then use a gradient descent algorithm to change the weight matrices in the direction in which the cost function decreases the most. Mathematically, what we attempt to implement is a gradient function consisting of the derivates of the Cost function with respect to the weights:</p>
+<p>$$
+\frac{\partial C}{\partial w^{(l)}_{jk}} = a^{l-1}_k \cdot \sigma&rsquo;(z^{(l)}_j) \cdot \frac{\partial C}{\partial a^{(l)}_j} \text{ where: } \newline
+\frac{\partial C}{\partial a^{(l)}_j} = \begin{cases} \sum_{j=1}^{n_{l+1}} w^{(l+1)}_{jk} \cdot \sigma&rsquo;(z_j^{(l+1)}) \cdot \frac{\partial C}{\partial a_j^{(l+1)}} &amp;\text{ if } l \neq L \newline
+(a^{(L)}_j - y_j) &amp;\text{ if } l = L \end{cases}
+$$</p>
+<p>In Python, the following code would implement the network with backpropagation using the same notational logic as we&rsquo;ve used before. First, we define the MLP object and forward propagation, now saving all the activations and raw inputs (named z&rsquo;s):</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">import</span> <span style="color:#555">numpy</span> <span style="color:#000;font-weight:bold">as</span> <span style="color:#555">np</span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">from</span> <span style="color:#555">random</span> <span style="color:#000;font-weight:bold">import</span> random
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">class</span> <span style="color:#458;font-weight:bold">MLP</span>(<span style="color:#0086b3">object</span>):
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">def</span> __init__(<span style="color:#999">self</span>, num_inputs<span style="color:#000;font-weight:bold">=</span><span style="color:#099">3</span>, hidden_layers<span style="color:#000;font-weight:bold">=</span>[<span style="color:#099">3</span>, <span style="color:#099">3</span>], num_outputs<span style="color:#000;font-weight:bold">=</span><span style="color:#099">2</span>):
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>num_inputs <span style="color:#000;font-weight:bold">=</span> num_inputs
+</span></span><span style="display:flex;"><span>        <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>hidden_layers <span style="color:#000;font-weight:bold">=</span> hidden_layers
+</span></span><span style="display:flex;"><span>        <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>num_outputs <span style="color:#000;font-weight:bold">=</span> num_outputs
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#998;font-style:italic"># create a generic representation of the layers</span>
+</span></span><span style="display:flex;"><span>        layers <span style="color:#000;font-weight:bold">=</span> [num_inputs] <span style="color:#000;font-weight:bold">+</span> hidden_layers <span style="color:#000;font-weight:bold">+</span> [num_outputs]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#998;font-style:italic"># create random connection weights for the layers</span>
+</span></span><span style="display:flex;"><span>        weights <span style="color:#000;font-weight:bold">=</span> []
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">for</span> i <span style="color:#000;font-weight:bold">in</span> <span style="color:#0086b3">range</span>(<span style="color:#0086b3">len</span>(layers) <span style="color:#000;font-weight:bold">-</span> <span style="color:#099">1</span>):
+</span></span><span style="display:flex;"><span>            w <span style="color:#000;font-weight:bold">=</span> np<span style="color:#000;font-weight:bold">.</span>random<span style="color:#000;font-weight:bold">.</span>rand(layers[i<span style="color:#000;font-weight:bold">+</span><span style="color:#099">1</span>], layers[i])
+</span></span><span style="display:flex;"><span>            weights<span style="color:#000;font-weight:bold">.</span>append(w)
+</span></span><span style="display:flex;"><span>        <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>weights <span style="color:#000;font-weight:bold">=</span> weights
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#998;font-style:italic"># save derivatives per layer</span>
+</span></span><span style="display:flex;"><span>        derivatives <span style="color:#000;font-weight:bold">=</span> []
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">for</span> i <span style="color:#000;font-weight:bold">in</span> <span style="color:#0086b3">range</span>(<span style="color:#0086b3">len</span>(layers) <span style="color:#000;font-weight:bold">-</span> <span style="color:#099">1</span>):
+</span></span><span style="display:flex;"><span>            d <span style="color:#000;font-weight:bold">=</span> np<span style="color:#000;font-weight:bold">.</span>zeros((layers[i<span style="color:#000;font-weight:bold">+</span><span style="color:#099">1</span>], layers[i]))
+</span></span><span style="display:flex;"><span>            derivatives<span style="color:#000;font-weight:bold">.</span>append(d)
+</span></span><span style="display:flex;"><span>        <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>derivatives <span style="color:#000;font-weight:bold">=</span> derivatives
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#998;font-style:italic"># save activations per layer</span>
+</span></span><span style="display:flex;"><span>        activations <span style="color:#000;font-weight:bold">=</span> []
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">for</span> i <span style="color:#000;font-weight:bold">in</span> <span style="color:#0086b3">range</span>(<span style="color:#0086b3">len</span>(layers)):
+</span></span><span style="display:flex;"><span>            a <span style="color:#000;font-weight:bold">=</span> np<span style="color:#000;font-weight:bold">.</span>zeros(layers[i])
+</span></span><span style="display:flex;"><span>            activations<span style="color:#000;font-weight:bold">.</span>append(a)
+</span></span><span style="display:flex;"><span>        <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>activations <span style="color:#000;font-weight:bold">=</span> activations
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#998;font-style:italic"># save raw inputs per layer</span>
+</span></span><span style="display:flex;"><span>        zs <span style="color:#000;font-weight:bold">=</span> []
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">for</span> i <span style="color:#000;font-weight:bold">in</span> <span style="color:#0086b3">range</span>(<span style="color:#0086b3">len</span>(layers)):
+</span></span><span style="display:flex;"><span>            z <span style="color:#000;font-weight:bold">=</span> np<span style="color:#000;font-weight:bold">.</span>zeros(layers[i])
+</span></span><span style="display:flex;"><span>            zs<span style="color:#000;font-weight:bold">.</span>append(z)
+</span></span><span style="display:flex;"><span>        <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>zs <span style="color:#000;font-weight:bold">=</span> zs
+</span></span></code></pre></div><p>Then, we redefine forward propagation while saving the activations and raw inputs:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">def</span> <span style="color:#900;font-weight:bold">forward_propagate</span>(<span style="color:#999">self</span>, inputs):
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#998;font-style:italic"># the input layer activation is just the input itself</span>
+</span></span><span style="display:flex;"><span>    activations <span style="color:#000;font-weight:bold">=</span> inputs
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#998;font-style:italic"># save the activations for backpropogation</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>activations[<span style="color:#099">0</span>] <span style="color:#000;font-weight:bold">=</span> activations
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#998;font-style:italic"># iterate through the network layers</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">for</span> i, w <span style="color:#000;font-weight:bold">in</span> <span style="color:#0086b3">enumerate</span>(<span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>weights):
+</span></span><span style="display:flex;"><span>        <span style="color:#998;font-style:italic"># calculate matrix multiplication between previous activation and weight matrix</span>
+</span></span><span style="display:flex;"><span>        z <span style="color:#000;font-weight:bold">=</span> np<span style="color:#000;font-weight:bold">.</span>dot(w, activations)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#998;font-style:italic"># apply sigmoid activation function</span>
+</span></span><span style="display:flex;"><span>        activations <span style="color:#000;font-weight:bold">=</span> <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>_sigmoid(z)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#998;font-style:italic"># save the activations for backpropogation</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>zs[i <span style="color:#000;font-weight:bold">+</span> <span style="color:#099">1</span>] <span style="color:#000;font-weight:bold">=</span> z
+</span></span><span style="display:flex;"><span>        <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>activations[i <span style="color:#000;font-weight:bold">+</span> <span style="color:#099">1</span>] <span style="color:#000;font-weight:bold">=</span> activations
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#998;font-style:italic"># return output layer activation</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">return</span> activations, zs
+</span></span></code></pre></div><p>Finally, we implement backward propagation as defined previously. We start with an &rsquo;error&rsquo;, meaning <code>\((a^L - y) \cdot \sigma'(z^L)\)</code>. We then compute the <code>\(\delta^L = (a^L - y) \cdot \sigma'(z^L)\)</code>. Afterwards, we implement the derivatives as <code>\(\frac{\partial C}{\partial w^l_{jk}} = \delta^l_j \cdot a^{(l-1)}_k\)</code> in matrix form. In this code, <code>\(i = l-1\)</code>. Finally, we update the error by redefining <code>\(\delta^l = ((w^{(l+1)})^T \delta^{(l+1)}) \cdot \sigma'(z^l)\)</code>.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">def</span> <span style="color:#900;font-weight:bold">back_propagate</span>(<span style="color:#999">self</span>, error):
+</span></span><span style="display:flex;"><span>    <span style="color:#998;font-style:italic"># iterate backwards through the network layers</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">for</span> i <span style="color:#000;font-weight:bold">in</span> <span style="color:#0086b3">reversed</span>(<span style="color:#0086b3">range</span>(<span style="color:#0086b3">len</span>(<span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>derivatives))):
+</span></span><span style="display:flex;"><span>           
+</span></span><span style="display:flex;"><span>        <span style="color:#998;font-style:italic"># get activation for previous layer</span>
+</span></span><span style="display:flex;"><span>        activations <span style="color:#000;font-weight:bold">=</span> <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>activations[i<span style="color:#000;font-weight:bold">+</span><span style="color:#099">1</span>]
+</span></span><span style="display:flex;"><span>        zs <span style="color:#000;font-weight:bold">=</span> <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>zs[i<span style="color:#000;font-weight:bold">+</span><span style="color:#099">1</span>]
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#998;font-style:italic"># apply sigmoid derivative function - * denotes Hadamard product</span>
+</span></span><span style="display:flex;"><span>        delta <span style="color:#000;font-weight:bold">=</span> error <span style="color:#000;font-weight:bold">*</span> <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>_sigmoid_derivative(zs)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#998;font-style:italic"># get activations for current layer</span>
+</span></span><span style="display:flex;"><span>        current_activations <span style="color:#000;font-weight:bold">=</span> <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>activations[i]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#998;font-style:italic"># save derivative after applying matrix multiplication</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>derivatives[i] <span style="color:#000;font-weight:bold">=</span> np<span style="color:#000;font-weight:bold">.</span>dot(delta, current_activations<span style="color:#000;font-weight:bold">.</span>transpose())
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#998;font-style:italic"># backpropagate the next error</span>
+</span></span><span style="display:flex;"><span>        error <span style="color:#000;font-weight:bold">=</span> np<span style="color:#000;font-weight:bold">.</span>dot(<span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>weights[i]<span style="color:#000;font-weight:bold">.</span>transpose(), delta)
+</span></span></code></pre></div>
+
+
+
+<h2 id="conclusion">Conclusion
+  <a href="#conclusion"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>These code chunks represent the core of the neural networks architecture. I have not emphasized gradient descent, which is a way to update the weights given the current weights and the derivatives. All the auxilary functions, including gradient descent, are included in the following chunk:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#000;font-weight:bold">def</span> <span style="color:#900;font-weight:bold">gradient_descent</span>(<span style="color:#999">self</span>, learningRate<span style="color:#000;font-weight:bold">=</span><span style="color:#099">1</span>):
+</span></span><span style="display:flex;"><span>    <span style="color:#998;font-style:italic"># update the weights by stepping down the gradient</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">for</span> i <span style="color:#000;font-weight:bold">in</span> <span style="color:#0086b3">range</span>(<span style="color:#0086b3">len</span>(<span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>weights)):
+</span></span><span style="display:flex;"><span>        weights <span style="color:#000;font-weight:bold">=</span> <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>weights[i]
+</span></span><span style="display:flex;"><span>        derivatives <span style="color:#000;font-weight:bold">=</span> <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>derivatives[i]
+</span></span><span style="display:flex;"><span>        weights <span style="color:#000;font-weight:bold">+=</span> derivatives <span style="color:#000;font-weight:bold">*</span> learningRate
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">def</span> <span style="color:#900;font-weight:bold">_sigmoid</span>(<span style="color:#999">self</span>, x):
+</span></span><span style="display:flex;"><span>    y <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">1.0</span> <span style="color:#000;font-weight:bold">/</span> (<span style="color:#099">1</span> <span style="color:#000;font-weight:bold">+</span> np<span style="color:#000;font-weight:bold">.</span>exp(<span style="color:#000;font-weight:bold">-</span>x))
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">return</span> y
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">def</span> <span style="color:#900;font-weight:bold">_sigmoid_derivative</span>(<span style="color:#999">self</span>, x):
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">return</span> x <span style="color:#000;font-weight:bold">*</span> (<span style="color:#099">1.0</span> <span style="color:#000;font-weight:bold">-</span> x)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">def</span> <span style="color:#900;font-weight:bold">_mse</span>(<span style="color:#999">self</span>, target, output):
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">return</span> np<span style="color:#000;font-weight:bold">.</span>average((target <span style="color:#000;font-weight:bold">-</span> output) <span style="color:#000;font-weight:bold">**</span> <span style="color:#099">2</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">def</span> <span style="color:#900;font-weight:bold">train</span>(<span style="color:#999">self</span>, inputs, targets, epochs, learning_rate):
+</span></span><span style="display:flex;"><span>    <span style="color:#998;font-style:italic"># now enter the training loop</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">for</span> i <span style="color:#000;font-weight:bold">in</span> <span style="color:#0086b3">range</span>(epochs):
+</span></span><span style="display:flex;"><span>        sum_errors <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">0</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#998;font-style:italic"># iterate through all the training data</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">for</span> j, <span style="color:#0086b3">input</span> <span style="color:#000;font-weight:bold">in</span> <span style="color:#0086b3">enumerate</span>(inputs):
+</span></span><span style="display:flex;"><span>            target <span style="color:#000;font-weight:bold">=</span> targets[j]
+</span></span><span style="display:flex;"><span>                <span style="color:#998;font-style:italic"># activate the network!</span>
+</span></span><span style="display:flex;"><span>            output <span style="color:#000;font-weight:bold">=</span> <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>forward_propagate(<span style="color:#0086b3">input</span>)
+</span></span><span style="display:flex;"><span>            error <span style="color:#000;font-weight:bold">=</span> target <span style="color:#000;font-weight:bold">-</span> output
+</span></span><span style="display:flex;"><span>            <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>back_propagate(error)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            <span style="color:#998;font-style:italic"># now perform gradient descent on the derivatives</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#998;font-style:italic"># (this will update the weights</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>gradient_descent(learning_rate)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            <span style="color:#998;font-style:italic"># keep track of the MSE for reporting later</span>
+</span></span><span style="display:flex;"><span>            sum_errors <span style="color:#000;font-weight:bold">+=</span> <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>_mse(target, output)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#998;font-style:italic"># Epoch complete, report the training error</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#0086b3">print</span>(<span style="color:#d14">&#34;Error: </span><span style="color:#d14">{}</span><span style="color:#d14"> at epoch </span><span style="color:#d14">{}</span><span style="color:#d14">&#34;</span><span style="color:#000;font-weight:bold">.</span>format(sum_errors <span style="color:#000;font-weight:bold">/</span> <span style="color:#0086b3">len</span>(items), i<span style="color:#000;font-weight:bold">+</span><span style="color:#099">1</span>))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#0086b3">print</span>(<span style="color:#d14">&#34;Training complete!&#34;</span>)
+</span></span></code></pre></div><p>I hope all of this was useful, thanks for reading!</p>
+
+        
+        <details closed class="f6 fw7 input-reset">
+  <dl class="f6 lh-copy">
+    <dt class="fw7">Posted on:</dt>
+    <dd class="fw5 ml0">June 1, 2021</dd>
+  </dl>
+  <dl class="f6 lh-copy">
+    <dt class="fw7">Length:</dt>
+    <dd class="fw5 ml0">8 minute read, 1642 words</dd>
+  </dl>
+  
+  
+  
+  <dl class="f6 lh-copy">
+    <dt class="fw7">See Also:</dt>
+    
+  </dl>
+</details>
+
+      </section>
+      <footer class="post-footer">
+        <div class="post-pagination dt w-100 mt4 mb2">
+  
+  
+    <a class="prev dtc pr2 tl v-top fw6"
+    href="/blog/2022-08-03-podcast-dutch-about-my-phd-projects/">&larr; Podcast (Dutch) about my PhD Projects</a>
+  
+  
+  
+    <a class="next dtc pl2 tr v-top fw6"
+    href="/blog/2022-08-03-the-mathematics-underlying-deep-learning/">The Mathematics Underlying Deep Learning &rarr;</a>
+  
+</div>
+
+      </footer>
+    </article>
+    
+      
+<div class="post-comments pa0 pa4-l mt4">
+  
+  <script src="https://utteranc.es/client.js"
+          repo="apreshill/apero"
+          issue-term="pathname"
+          theme="boxy-light"
+          label="comments :crystal_ball:"
+          crossorigin="anonymous"
+          async
+          type="text/javascript">
+  </script>
+  
+</div>
+
+    
+  </section>
+</main>
+<footer class="site-footer pv4 bt b--transparent ph5" role="contentinfo">
+  <nav class="db dt-l w-100">
+    <p class="site-copyright f7 db dtc-l v-mid w-100 w-33-l tc tl-l pv2 pv0-l mv0 lh-copy">
+      &copy; 2022 Bas Machielsen
+      <span class="middot-divider"></span>
+      Made with <span xmlns:dct="http://purl.org/dc/terms/" property="dct:title"><a xmlns:dct="http://purl.org/dc/terms/" href="https://github.com/hugo-apero/" rel="dct:source">Hugo Apéro</a></span>.
+      <br />
+      
+Based on <span xmlns:dct="http://purl.org/dc/terms/" property="dct:title"><a xmlns:dct="http://purl.org/dc/terms/" href="https://github.com/formspree/blogophonic-hugo" rel="dct:source">Blogophonic</a></span> by <a xmlns:cc="http://creativecommons.org/ns#" href="https://formspree.io" property="cc:attributionName" rel="cc:attributionURL">Formspree</a>.
+    </p>
+    
+    <div class="site-social-links db dtc-l v-mid w-100 w-33-l tc pv2 pv0-l mv0">
+      <div class="social-icon-links" aria-hidden="true">
+  
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://github.com/basm92" title="github" target="_blank" rel="noopener">
+      <i class="fab fa-github fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://scholar.google.com/citations?user=bS8uo44AAAAJ" title="google" target="_blank" rel="noopener">
+      <i class="fab fa-google fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://twitter.com/basm92" title="twitter" target="_blank" rel="noopener">
+      <i class="fab fa-twitter fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="mailto:a.h.machielsen@uu.nl" title="envelope" >
+      <i class="fas fa-envelope fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="mailto:basmachielsen@live.nl" title="envelope" >
+      <i class="far fa-envelope fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://orcid.org/0000-0002-9692-0615" title="orcid" target="_blank" rel="noopener">
+      <i class="ai ai-orcid fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="/blog/index.xml" title="rss" >
+      <i class="fas fa-rss fa-lg fa-fw"></i>
+    </a>
+  
+</div>
+
+    </div>
+    
+    <div class="site-links f6 db dtc-l v-mid w-100 w-67-l tc tr-l pv2 pv0-l mv0">
+      
+      <a class="dib pv1 ph2 link" href="/license/" title="License">License</a>
+      
+      <a class="dib pv1 ph2 link" href="/contact/" title="Contact form">Contact</a>
+      
+      <a class="dib pv1 ph2 link" href="/contributors/" title="Contributors">Contributors</a>
+      
+    </div>
+  </nav>
+  
+    <script>
+
+    var i, text, code, codes = document.getElementsByTagName('code');
+    for (let i = 0; i < codes.length;) {
+      code = codes[i];
+      if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+        text = code.textContent;
+        if (/^\$[^$]/.test(text) && /[^$]\$$/.test(text)) {
+          text = text.replace(/^\$/, '\\(').replace(/\$$/, '\\)');
+          code.textContent = text;
+        }
+        if (/^\\\((.|\s)+\\\)$/.test(text) ||
+            /^\\\[(.|\s)+\\\]$/.test(text) ||
+            /^\$(.|\s)+\$$/.test(text) ||
+            /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+          code.outerHTML = code.innerHTML;  
+          continue;
+        }
+      }
+      i++;
+    }
+</script>
+
+  
+    
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.css" integrity="sha384-RZU/ijkSsFbcmivfdRBQDtwuwVqK7GMOw6IMvKyeWL2K5UAlyp6WonmB8m7Jd0Hn" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.js" integrity="sha384-pK1WpvzWVBQiP0/GjnvRxV4mOb0oxFuyRxJlk6vVw146n3egcN5C925NCP7a7BY8" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/contrib/auto-render.min.js" integrity="sha384-vZTG03m+2yp6N6BNi5iM4rW4oIwk5DfcNdFfxkk9ZWpDriOkXX8voJBFrAO7MpVl" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
+
+
+
+    
+  
+  
+</footer>
+
+      </div>
+    </body>
+</html>

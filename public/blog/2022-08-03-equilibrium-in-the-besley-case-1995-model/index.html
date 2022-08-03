@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr"><head>
+  
+                           
+     
+
+
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="generator" content="Hugo 0.101.0" />
+<title>Equilibrium in the Besley-Case (1995) Model | Bas Machielsen</title>
+
+
+<meta property="twitter:site" content="@basss92">
+<meta property="twitter:creator" content="@basss92">
+
+
+
+
+
+
+
+  
+    
+  
+<meta name="description" content="A post about the Besley &amp; Case (1995) Model. It explains my view on how to computationally calculate the equilibrium, which is left undetailed in the paper.">
+
+
+<meta property="og:site_name" content="Bas Machielsen">
+<meta property="og:title" content="Equilibrium in the Besley-Case (1995) Model | Bas Machielsen">
+<meta property="og:description" content="A post about the Besley &amp; Case (1995) Model. It explains my view on how to computationally calculate the equilibrium, which is left undetailed in the paper." />
+<meta property="og:type" content="page" />
+<meta property="og:url" content="/blog/2022-08-03-equilibrium-in-the-besley-case-1995-model/" />
+<meta property="og:locale" content="en">
+
+
+
+
+    
+        <meta property="og:image" content="/blog/2022-08-03-equilibrium-in-the-besley-case-1995-model/featured.png" >
+        <meta property="twitter:card" content="summary_large_image">
+        <meta name="twitter:image" content="/blog/2022-08-03-equilibrium-in-the-besley-case-1995-model/featured.png" >
+    
+    
+  <meta itemprop="name" content="Equilibrium in the Besley-Case (1995) Model">
+<meta itemprop="description" content="Introduction Besley and Case (1995) have a paper about the influence of term limits for politicians on policy behavior. They use a dynamic game. Politicians can serve either 1, or 2, periods, depending on whether they are retained. In these periods, politicians choose to put in effort. Putting in more or less effort is costly to different extents, according to their type. The chosen effort probabilistically affects a policy outcome."><meta itemprop="datePublished" content="2022-05-19T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2022-05-19T00:00:00+00:00" />
+<meta itemprop="wordCount" content="2174"><meta itemprop="image" content="/blog/2022-08-03-equilibrium-in-the-besley-case-1995-model/featured.png">
+<meta itemprop="keywords" content="" />
+  
+  
+  <!--[if IE]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  <link rel="shortcut icon" href="favicon_new.ico" type="image/x-icon">
+  <link rel="icon" href="favicon_new.ico" type="image/x-icon">
+  
+  
+  <link rel="stylesheet" href="/style.main.min.7aee66b22ae3b19895932b9cf4d37da828ca65fc6cd45cfdee1b36b98f4b0ae0.css" integrity="sha256-eu5msirjsZiVkyuc9NN9qCjKZfxs1Fz97hs2uY9LCuA=" media="screen">
+  
+  
+  <script src="/panelset.min.dca42702d7daf6fd31dc352efd2bcf0e4ac8c05ccaa58d9293f6177462de5d5f.js" type="text/javascript"></script>
+  
+  
+  <script src="/main.min.11d2df4163a7df9fb9d31f699461f02d84700b160cd42fa951b0982fc4d468bc.js" type="text/javascript"></script>
+</head>
+<body>
+      <div class="grid-container single">
+<header class="site-header pt4 pb2 mb4 bb b--transparent ph5 headroom z-max" role="banner">
+  <nav class="site-nav db dt-l w-100" role="navigation">
+    <a class="site-brand db dtc-l v-mid link no-underline w-100 w-33-l tc tl-l" href="/" title="Home">
+      <img src="/website_logo.png" class="dib db-l h2 w-auto" alt="Bas Machielsen">
+    </a>
+    <div class="site-links db dtc-l v-mid w-100 w-47-l tc tr-l mt3 mt0-l ttu tracked">
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/" title="Home">Home</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/about/" title="About">About</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 active" href="/blog/" title="Blog">Blog</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/project/" title="Teaching Overview &amp; Repository">Teaching</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/resume/" title="Resume">Resume</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/articles/" title="Articles">Articles</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/collection/" title="Software">Software</a>
+      
+      
+    </div>
+  </nav>
+</header>
+
+<main class="page-main pa4" role="main">
+  <section class="page-content mw7 center">
+    <article class="post-content pa0 ph4-l">
+      <header class="post-header">
+        <h1 class="f1 lh-solid measure-narrow mb3 fw4">Equilibrium in the Besley-Case (1995) Model</h1>
+        
+        <p class="f6 measure lh-copy mv1">By Bas Machielsen</p>
+        <p class="f7 db mv0 ttu">May 19, 2022</p>
+
+      
+
+      </header>
+      <section class="post-body pt5 pb4">
+        
+
+
+
+<h2 id="introduction">Introduction
+  <a href="#introduction"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>Besley and Case (1995) have a paper about the influence of term limits for politicians on policy behavior. They use a dynamic game. Politicians can serve either 1, or 2, periods, depending on whether they are retained. In these periods, politicians choose to put in effort. Putting in more or less effort is costly to different extents, according to their type. The chosen effort probabilistically affects a policy outcome. An infinitely-lived voter makes decisions to retain or dismiss the politician after observing the outcome. Their solution, based on Banks and Sundaram (1998) involves a <em>cut-off equilibrium</em>, with voters reelecting an incumbent policy if the probabilistically-influenced policy variable realization is higher than some threshold <code>\(r_{min}\)</code>.</p>
+<p>One of their predictions is that the equilibrium amount of effort put in by the politicians who are in their first period is higher than in their last period, irrespective of the politician&rsquo;s type. Also, politicians who are in their second period are more likely to be high-type politicians, so that cross-sectionally, it seems that politicians in the second period have put in more effort than politicians in the first period, even though, if one looks at a &ldquo;panel&rdquo; of politicians over two periods, the first period effort is higher than the second period. The interpretation is that the policy outcome is better when there is politicians who do not face a term limit, irrespective of the type (ability) of the politicians. As they put it:</p>
+<blockquote>
+<p>If two terms are allowed, then incumbents who give higher first-term payoffs to voters are more likely to be retained to serve a second term. Those in their last term put in less effort and give lower payoffs to voters, on average, compared with their first term in office.</p>
+</blockquote>
+<p>Their model is fairly general, so in this blog post, I wanted to give an easier to understand version for a specific case using Python to solve for some expressions that are not analytically soluble. I also want to demonstrate how to use standard computational techniques in macro for this specific case.</p>
+
+
+
+
+<h2 id="set-up">Set-up
+  <a href="#set-up"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>In the Besley and Case (1995) model, there can be <code>\(k\)</code> types of politicians, ordered by ability <code>\(\omega_1 &lt; \dots &lt; \omega_k\)</code>. They occur with probabilities <code>\(\pi_1, \dots, \pi_k\)</code>. In my setup, there are only two types, <code>\(\omega_1 &lt; \omega_2\)</code> with <code>\(\omega_1 = 3\)</code> and <code>\(\omega_2 = 9\)</code>. <code>\(\omega_1\)</code> occurs with probability <code>\(\pi_1 = 0.2\)</code> and <code>\(\omega_2\)</code> with probability <code>\(\pi_2 = 0.8\)</code>. The politicians per-period utility is:</p>
+<p>$$
+v(\alpha, \omega_i) = \alpha - \frac{\alpha^2}{\omega_i}
+$$
+If the politician is in power, otherwise, utility is zero. This reflects an expected reward proportional to effort, and the utility is negative in effort, meaning that effort is costly, but less negative for higher-quality types.</p>
+<p>Effort is mapped into policy outcomes, <code>\(r\)</code>, probabilistically via <code>\(F(\alpha, r)\)</code>. In the Besley and Coate (1995) setting, this can be any distribution satisfying the monotone likelihood ratio property. In my setting, I take <code>\(F(\alpha, r)\)</code> to be <code>\(\Phi(\alpha)\)</code>, meaning <code>\(R \sim \mathcal{N}(\alpha, 1)\)</code>. The voter&rsquo;s one-period utility is simply the realized outcome <code>\(r\)</code>.</p>
+
+
+
+
+<h2 id="optimization-of-the-politician">Optimization of the politician
+  <a href="#optimization-of-the-politician"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>In the second period, when retained, the politician will simply optimize their one-period utility:</p>
+<p>$$
+a^s_i = \frac{w_i}{4}
+$$</p>
+<p>In the first period, the politician will optimize:</p>
+<p>$$
+a^l_i={\arg\max} \{ v(\alpha,\omega_i) +\delta \cdot [ \text{Pr} (r \in R(\sigma) | \alpha) \cdot v(a_s(\omega_i), \omega_i)] \}
+$$</p>
+<p>In words, this means the politician will take into account their second-period optimal strategy, and the likelihood that their realized <code>\(r\)</code> is greater than the voter&rsquo;s retention <code>\(r\)</code>. Given a <em>retention rule</em>, that probability is further specified as Pr(\( r &gt; r_{\min} \)).</p>
+
+
+
+
+<h2 id="optimization-of-the-voter">Optimization of the voter
+  <a href="#optimization-of-the-voter"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>After observing the realized <code>\(r\)</code> after one period, the voter computes the belief that the incumbent is of type 1 (the low type) as follows:</p>
+<p>$$
+\beta_1 (r) = \frac{\pi_1 \cdot f(r; a_l (\omega_1))}{\pi_1 \cdot f(r; a_l (\omega_1)) + \pi_2 \cdot f(r; a_l(\omega_2))}
+$$
+The expected utility to the voter of retention is then:</p>
+<p>$$
+v_2 (r, \alpha^s, \alpha^l) = \sum_{i=1}^2 \int \beta_i (r) v(\hat{r})f(\hat{r}|\alpha^s_i) d\hat{r}
+$$
+which corresponds to the probability that the player is of type <code>\(i\)</code>, and then integrating over the entire range of potential <code>\(r\)</code>s, weighted by the density, given that they put in the optimal second period effort corresponding to their type.</p>
+<p>Banks and Sundaram (1993) then show that the Bellman equation for the voter&rsquo;s problem is:</p>
+<p>$$
+W(1, r, p) = \max \left\{v_2 (r, \alpha^s, \alpha^l) + \alpha W(0, r, \pi), W(0, r, \pi) \right\}
+$$
+where the state vector consists of <code>\(\{ 0, 1\}\)</code>, meaning how many periods the politician can still be retained, the realized <code>\(r\)</code> in the period, and the beliefs of the voter regarding the incumbent type <code>\(p\)</code>. In general, the last element of the tripe <code>\((\{0,1\}, r, p)\)</code> is the <code>\(n\)</code>-dimensional simplex, but because there are only 2 types, it is now summarized by <code>\(\beta_1 (r)\)</code>.</p>
+<p>The Bellman equation for the state <code>\(W(0,r,p)\)</code> is equal to the expected immediate reward plus the probability-weighted discounted future reward for each <code>\(W(1,r,p)\)</code>:</p>
+<p>$$
+W(0, r, p) = \sum_{i=1}^2 \pi_i \cdot \int \hat{r} f(\hat{r}|a^s_i) d\hat{r} + \delta \int W(1, \hat{r}, \beta_1 (\hat{r})) \cdot \sum_{k=1}^2 \pi_k \cdot f(\hat{r} | \alpha^s_k) d \hat{r}
+$$
+Now that we have the Bellman, we can use value-function iteration to derive the optimal <code>\(r\)</code>. We also need to take into account equilibrium conditions, so that (i) the voters respond to the optimal retention <code>\(r\)</code> according to the value function, and (ii) the politicians always set the best retention <code>\(r\)</code> given a particular estimate of the value function. Sundaram and Banks (1993) also prove that the dynamic programming theorems for this to be a contraction mapping hold.</p>
+
+
+
+
+<h2 id="implementation">Implementation
+  <a href="#implementation"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>Below, I load the libraries, and I store a Python class called <code>RetentionModel</code>.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#998;font-style:italic">#%matplotlib inline</span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">import</span> <span style="color:#555">matplotlib.pyplot</span> <span style="color:#000;font-weight:bold">as</span> <span style="color:#555">plt</span>
+</span></span><span style="display:flex;"><span>plt<span style="color:#000;font-weight:bold">.</span>rcParams[<span style="color:#d14">&#34;figure.figsize&#34;</span>] <span style="color:#000;font-weight:bold">=</span> (<span style="color:#099">11</span>, <span style="color:#099">5</span>)  <span style="color:#998;font-style:italic">#set default figure size</span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">import</span> <span style="color:#555">numpy</span> <span style="color:#000;font-weight:bold">as</span> <span style="color:#555">np</span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">from</span> <span style="color:#555">interpolation</span> <span style="color:#000;font-weight:bold">import</span> interp
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">from</span> <span style="color:#555">scipy.optimize</span> <span style="color:#000;font-weight:bold">import</span> minimize_scalar, bisect
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">from</span> <span style="color:#555">scipy.stats</span> <span style="color:#000;font-weight:bold">import</span> norm
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">import</span> <span style="color:#555">scipy.integrate</span> <span style="color:#000;font-weight:bold">as</span> <span style="color:#555">integrate</span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">import</span> <span style="color:#555">scipy.interpolate</span> <span style="color:#000;font-weight:bold">as</span> <span style="color:#555">interpolate</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">from</span> <span style="color:#555">numba</span> <span style="color:#000;font-weight:bold">import</span> jit, njit, prange, float64, int32
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">from</span> <span style="color:#555">numba.experimental</span> <span style="color:#000;font-weight:bold">import</span> jitclass
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">from</span> <span style="color:#555">tqdm</span> <span style="color:#000;font-weight:bold">import</span> tqdm
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#000;font-weight:bold">class</span> <span style="color:#458;font-weight:bold">RetentionModel</span>:
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">def</span> __init__(<span style="color:#999">self</span>,delta<span style="color:#000;font-weight:bold">=</span><span style="color:#099">0.95</span>,alpha<span style="color:#000;font-weight:bold">=</span><span style="color:#099">0.2</span>,types<span style="color:#000;font-weight:bold">=</span>(<span style="color:#099">3</span>, <span style="color:#099">9</span>),types_freq<span style="color:#000;font-weight:bold">=</span>(<span style="color:#099">0.2</span>, <span style="color:#099">0.8</span>),up<span style="color:#000;font-weight:bold">=</span><span style="color:#099">6</span>,low<span style="color:#000;font-weight:bold">=</span><span style="color:#099">2</span>):
+</span></span><span style="display:flex;"><span>        <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>delta, <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>alpha, <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>types, <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>types_freq, <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>up, <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>low <span style="color:#000;font-weight:bold">=</span> delta, alpha, types, types_freq, up, low
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>        <span style="color:#998;font-style:italic">#&#39;create a 3-dimensional grid&#39;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#998;font-style:italic">#&#39;optimal r probably somewhere in between the means&#39; of the efforts</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>x_grid <span style="color:#000;font-weight:bold">=</span> np<span style="color:#000;font-weight:bold">.</span>mgrid[<span style="color:#099">0</span>:<span style="color:#099">2</span>, <span style="color:#099">2.5</span>:<span style="color:#099">3.5</span>:<span style="color:#099">0.1</span>, <span style="color:#099">0</span>:<span style="color:#099">1.05</span>:<span style="color:#099">0.1</span>]<span style="color:#000;font-weight:bold">.</span>reshape(<span style="color:#099">3</span>, <span style="color:#000;font-weight:bold">-</span><span style="color:#099">1</span>)<span style="color:#000;font-weight:bold">.</span>T
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">def</span> <span style="color:#900;font-weight:bold">evaluated_int</span>(<span style="color:#999">self</span>, draws, value_f, typ, retention_r):
+</span></span><span style="display:flex;"><span>        <span style="color:#d14">&#34;&#34;&#34;Evaluate an integral&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>        beta_1 <span style="color:#000;font-weight:bold">=</span> <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>beta_1
+</span></span><span style="display:flex;"><span>        types_freq <span style="color:#000;font-weight:bold">=</span> <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>types_freq
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        n <span style="color:#000;font-weight:bold">=</span> <span style="color:#0086b3">len</span>(draws)
+</span></span><span style="display:flex;"><span>        realization <span style="color:#000;font-weight:bold">=</span> [value_f([<span style="color:#099">1</span>, i, beta_1(i, retention_r)])[<span style="color:#099">0</span>] <span style="color:#000;font-weight:bold">for</span> i <span style="color:#000;font-weight:bold">in</span> draws]
+</span></span><span style="display:flex;"><span>        samples <span style="color:#000;font-weight:bold">=</span> np<span style="color:#000;font-weight:bold">.</span>dot(draws, realization)
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">return</span> types_freq[typ]<span style="color:#000;font-weight:bold">*</span>np<span style="color:#000;font-weight:bold">.</span>mean(realization)
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">def</span> <span style="color:#900;font-weight:bold">vot_util</span>(<span style="color:#999">self</span>, x):
+</span></span><span style="display:flex;"><span>        <span style="color:#d14">&#34;&#34;&#34;voter utility function&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">return</span> x
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">def</span> <span style="color:#900;font-weight:bold">f</span>(<span style="color:#999">self</span>, r, effort):
+</span></span><span style="display:flex;"><span>        <span style="color:#d14">&#34;&#34;&#34;normal pdf of r according to exerted effort&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">return</span> norm<span style="color:#000;font-weight:bold">.</span>pdf(r, loc <span style="color:#000;font-weight:bold">=</span> effort, scale <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">1</span>)
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">def</span> <span style="color:#900;font-weight:bold">F</span>(<span style="color:#999">self</span>, r, effort):
+</span></span><span style="display:flex;"><span>        <span style="color:#d14">&#34;&#34;&#34;normal cdf of r according to exerted effort&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">return</span> norm<span style="color:#000;font-weight:bold">.</span>cdf(r, loc <span style="color:#000;font-weight:bold">=</span> effort, scale <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">1</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">def</span> <span style="color:#900;font-weight:bold">expected_utility</span>(<span style="color:#999">self</span>,effort, typ, retention_r, delta):
+</span></span><span style="display:flex;"><span>        F <span style="color:#000;font-weight:bold">=</span> <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>F
+</span></span><span style="display:flex;"><span>        delta <span style="color:#000;font-weight:bold">=</span> <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>delta
+</span></span><span style="display:flex;"><span>        <span style="color:#d14">&#34;&#34;&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">        Return the total expected utility a priori from 
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">        the second period and then from the first period 
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">        as a function of the retention r, discount rate and exterted effort
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">        &#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>        out <span style="color:#000;font-weight:bold">=</span> effort <span style="color:#000;font-weight:bold">-</span> (effort<span style="color:#000;font-weight:bold">**</span><span style="color:#099">2</span>)<span style="color:#000;font-weight:bold">/</span>typ <span style="color:#000;font-weight:bold">+</span> delta<span style="color:#000;font-weight:bold">*</span>(<span style="color:#099">1</span><span style="color:#000;font-weight:bold">-</span>F(retention_r, effort))<span style="color:#000;font-weight:bold">*</span>typ<span style="color:#000;font-weight:bold">/</span><span style="color:#099">4</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">return</span> out
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">def</span> <span style="color:#900;font-weight:bold">effort_first_period</span>(<span style="color:#999">self</span>, typ, retention_r):
+</span></span><span style="display:flex;"><span>        <span style="color:#d14">&#34;&#34;&#34;optimal effort in the first period given type&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#998;font-style:italic">#changed upper limit to typ, from 5</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">return</span> maximize(<span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>expected_utility, <span style="color:#099">1e-15</span>, typ, (typ, retention_r, <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>delta))[<span style="color:#099">0</span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">def</span> <span style="color:#900;font-weight:bold">effort_second_period</span>(<span style="color:#999">self</span>, typ):
+</span></span><span style="display:flex;"><span>        <span style="color:#d14">&#34;&#34;&#34;optimal effort in the second period given type and realized r&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">return</span> typ<span style="color:#000;font-weight:bold">/</span><span style="color:#099">2</span>
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">def</span> <span style="color:#900;font-weight:bold">beta_1</span>(<span style="color:#999">self</span>, r, retention_r):
+</span></span><span style="display:flex;"><span>        <span style="color:#d14">&#34;&#34;&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">        probability that type = type_1 after observing a specific r
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">        &#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>        f <span style="color:#000;font-weight:bold">=</span> <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>f
+</span></span><span style="display:flex;"><span>        types <span style="color:#000;font-weight:bold">=</span> <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>types
+</span></span><span style="display:flex;"><span>        types_freq <span style="color:#000;font-weight:bold">=</span> <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>types_freq
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        num <span style="color:#000;font-weight:bold">=</span> types_freq[<span style="color:#099">0</span>]<span style="color:#000;font-weight:bold">*</span>f(r, <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>effort_first_period(types[<span style="color:#099">0</span>], retention_r))
+</span></span><span style="display:flex;"><span>        denom <span style="color:#000;font-weight:bold">=</span> num <span style="color:#000;font-weight:bold">+</span> types_freq[<span style="color:#099">1</span>]<span style="color:#000;font-weight:bold">*</span>f(r, <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>effort_first_period(types[<span style="color:#099">1</span>], retention_r))
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">return</span> num<span style="color:#000;font-weight:bold">/</span>denom
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">def</span> <span style="color:#900;font-weight:bold">v_2</span>(<span style="color:#999">self</span>, r, retention_r, eff_sp_t1, eff_sp_t2):
+</span></span><span style="display:flex;"><span>        <span style="color:#d14">&#34;&#34;&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">        Calculate the second period expected utility given a certain realized r
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">        and the optimal efforts by the players
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">        &#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>        types, types_freq, f, vot_util <span style="color:#000;font-weight:bold">=</span> <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>types, <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>types_freq, <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>f, <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>vot_util
+</span></span><span style="display:flex;"><span>        beta_1 <span style="color:#000;font-weight:bold">=</span> <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>beta_1
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">def</span> <span style="color:#900;font-weight:bold">integrand</span>(x, e):
+</span></span><span style="display:flex;"><span>            <span style="color:#000;font-weight:bold">return</span> vot_util(x)<span style="color:#000;font-weight:bold">*</span>f(x, e)
+</span></span><span style="display:flex;"><span>            
+</span></span><span style="display:flex;"><span>        <span style="color:#998;font-style:italic">#&#39;under linear utility, this just simplifies to the expected value&#39;</span>
+</span></span><span style="display:flex;"><span>        out1 <span style="color:#000;font-weight:bold">=</span> beta_1(r, retention_r)<span style="color:#000;font-weight:bold">*</span>integrate<span style="color:#000;font-weight:bold">.</span>quad(integrand, a<span style="color:#000;font-weight:bold">=-</span>np<span style="color:#000;font-weight:bold">.</span>inf, b<span style="color:#000;font-weight:bold">=</span>np<span style="color:#000;font-weight:bold">.</span>inf, args<span style="color:#000;font-weight:bold">=</span>eff_sp_t1)[<span style="color:#099">0</span>]
+</span></span><span style="display:flex;"><span>        out2 <span style="color:#000;font-weight:bold">=</span> (<span style="color:#099">1</span><span style="color:#000;font-weight:bold">-</span>beta_1(r, retention_r))<span style="color:#000;font-weight:bold">*</span>integrate<span style="color:#000;font-weight:bold">.</span>quad(integrand, a<span style="color:#000;font-weight:bold">=-</span>np<span style="color:#000;font-weight:bold">.</span>inf, b<span style="color:#000;font-weight:bold">=</span>np<span style="color:#000;font-weight:bold">.</span>inf, args<span style="color:#000;font-weight:bold">=</span>eff_sp_t2)[<span style="color:#099">0</span>]
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">return</span> out1 <span style="color:#000;font-weight:bold">+</span> out2
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">def</span> <span style="color:#900;font-weight:bold">state_action_value</span>(<span style="color:#999">self</span>, action, state, v_array, retention_r):
+</span></span><span style="display:flex;"><span>        <span style="color:#d14">&#34;&#34;&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">        Given state x_grid=[{0,1}, r, beliefs], and choice actions (k,d) and a guess v,
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">        what is the maximum (RHS bellman equation)
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">        &#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>        v_2, types, types_freq, beta_1, delta, alpha, f <span style="color:#000;font-weight:bold">=</span> <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>v_2, <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>types, <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>types_freq, <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>beta_1, <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>delta, <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>alpha, <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>f
+</span></span><span style="display:flex;"><span>        vot_util, effort_first_period <span style="color:#000;font-weight:bold">=</span> <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>vot_util, <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>effort_first_period
+</span></span><span style="display:flex;"><span>        evaluated_int <span style="color:#000;font-weight:bold">=</span> <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>evaluated_int
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#998;font-style:italic">#a multidimensional linear interpolator - make v a function </span>
+</span></span><span style="display:flex;"><span>        v <span style="color:#000;font-weight:bold">=</span> interpolate<span style="color:#000;font-weight:bold">.</span>LinearNDInterpolator(<span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>x_grid, v_array, fill_value<span style="color:#000;font-weight:bold">=</span><span style="color:#099">0</span>)
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">if</span> state[<span style="color:#099">0</span>] <span style="color:#000;font-weight:bold">==</span> <span style="color:#099">0</span>:            
+</span></span><span style="display:flex;"><span>        <span style="color:#998;font-style:italic"># return is eq. to instantaneous reward + expectation over all future 1 states </span>
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>            out1 <span style="color:#000;font-weight:bold">=</span> types_freq[<span style="color:#099">0</span>]<span style="color:#000;font-weight:bold">*</span>effort_first_period(types[<span style="color:#099">0</span>], retention_r)
+</span></span><span style="display:flex;"><span>            out2 <span style="color:#000;font-weight:bold">=</span> types_freq[<span style="color:#099">1</span>]<span style="color:#000;font-weight:bold">*</span>effort_first_period(types[<span style="color:#099">1</span>], retention_r)
+</span></span><span style="display:flex;"><span>            
+</span></span><span style="display:flex;"><span>            <span style="color:#000;font-weight:bold">def</span> <span style="color:#900;font-weight:bold">integrand</span>(x, <span style="color:#000;font-weight:bold">*</span>args): <span style="color:#998;font-style:italic">#v, beta_1, types, types_freq, effort_first_period, retention_r):</span>
+</span></span><span style="display:flex;"><span>                f <span style="color:#000;font-weight:bold">=</span> <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>f
+</span></span><span style="display:flex;"><span>                
+</span></span><span style="display:flex;"><span>                term1 <span style="color:#000;font-weight:bold">=</span> types_freq[<span style="color:#099">0</span>]<span style="color:#000;font-weight:bold">*</span>f(x, effort_first_period(types[<span style="color:#099">0</span>], retention_r))
+</span></span><span style="display:flex;"><span>                term2 <span style="color:#000;font-weight:bold">=</span> types_freq[<span style="color:#099">1</span>]<span style="color:#000;font-weight:bold">*</span>f(x, effort_first_period(types[<span style="color:#099">1</span>], retention_r))
+</span></span><span style="display:flex;"><span>                out <span style="color:#000;font-weight:bold">=</span> v([<span style="color:#099">1</span>, x, beta_1(x, retention_r)])[<span style="color:#099">0</span>]<span style="color:#000;font-weight:bold">*</span>(term1 <span style="color:#000;font-weight:bold">+</span> term2)
+</span></span><span style="display:flex;"><span>                
+</span></span><span style="display:flex;"><span>                <span style="color:#000;font-weight:bold">return</span> out
+</span></span><span style="display:flex;"><span>            
+</span></span><span style="display:flex;"><span>            <span style="color:#000;font-weight:bold">def</span> <span style="color:#900;font-weight:bold">calc_integral</span>(func, a, b, n, <span style="color:#000;font-weight:bold">*</span>args):
+</span></span><span style="display:flex;"><span>                delta <span style="color:#000;font-weight:bold">=</span> (b<span style="color:#000;font-weight:bold">-</span>a)<span style="color:#000;font-weight:bold">/</span>n
+</span></span><span style="display:flex;"><span>                points <span style="color:#000;font-weight:bold">=</span> np<span style="color:#000;font-weight:bold">.</span>linspace(a, b, n)
+</span></span><span style="display:flex;"><span>                
+</span></span><span style="display:flex;"><span>                values <span style="color:#000;font-weight:bold">=</span> [func(i, <span style="color:#000;font-weight:bold">*</span>args) <span style="color:#000;font-weight:bold">for</span> i <span style="color:#000;font-weight:bold">in</span> points]
+</span></span><span style="display:flex;"><span>                <span style="color:#998;font-style:italic">#values = func(points, *args)</span>
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>                <span style="color:#000;font-weight:bold">return</span> delta<span style="color:#000;font-weight:bold">*</span>np<span style="color:#000;font-weight:bold">.</span>sum(values)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            
+</span></span><span style="display:flex;"><span>            out3 <span style="color:#000;font-weight:bold">=</span> calc_integral(integrand, <span style="color:#099">0</span>, <span style="color:#099">13</span>, <span style="color:#099">30</span>, 
+</span></span><span style="display:flex;"><span>                                 v, 
+</span></span><span style="display:flex;"><span>                                 beta_1, 
+</span></span><span style="display:flex;"><span>                                 types, 
+</span></span><span style="display:flex;"><span>                                 types_freq, 
+</span></span><span style="display:flex;"><span>                                 effort_first_period,
+</span></span><span style="display:flex;"><span>                                 retention_r)
+</span></span><span style="display:flex;"><span>                                  
+</span></span><span style="display:flex;"><span>            <span style="color:#000;font-weight:bold">return</span> out1 <span style="color:#000;font-weight:bold">+</span> out2 <span style="color:#000;font-weight:bold">+</span> alpha<span style="color:#000;font-weight:bold">*</span>(out3)
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">elif</span> state[<span style="color:#099">0</span>] <span style="color:#000;font-weight:bold">==</span> <span style="color:#099">1</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#998;font-style:italic">#both dismiss and keep are possible    </span>
+</span></span><span style="display:flex;"><span>            <span style="color:#000;font-weight:bold">if</span> action <span style="color:#000;font-weight:bold">==</span> <span style="color:#d14">&#34;k&#34;</span>:
+</span></span><span style="display:flex;"><span>                one <span style="color:#000;font-weight:bold">=</span> alpha<span style="color:#000;font-weight:bold">*</span>v([<span style="color:#099">0</span>, state[<span style="color:#099">1</span>], types_freq[<span style="color:#099">0</span>]])[<span style="color:#099">0</span>]
+</span></span><span style="display:flex;"><span>                two <span style="color:#000;font-weight:bold">=</span> v_2(state[<span style="color:#099">1</span>], 
+</span></span><span style="display:flex;"><span>                          retention_r, 
+</span></span><span style="display:flex;"><span>                          <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>effort_second_period(types[<span style="color:#099">0</span>]), 
+</span></span><span style="display:flex;"><span>                          <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>effort_second_period(types[<span style="color:#099">1</span>]))
+</span></span><span style="display:flex;"><span>                
+</span></span><span style="display:flex;"><span>                <span style="color:#000;font-weight:bold">return</span> one <span style="color:#000;font-weight:bold">+</span> two 
+</span></span><span style="display:flex;"><span>            
+</span></span><span style="display:flex;"><span>            <span style="color:#000;font-weight:bold">elif</span> action <span style="color:#000;font-weight:bold">==</span> <span style="color:#d14">&#34;d&#34;</span>:
+</span></span><span style="display:flex;"><span>                <span style="color:#000;font-weight:bold">return</span> v([<span style="color:#099">0</span>, state[<span style="color:#099">1</span>], types_freq[<span style="color:#099">0</span>]])[<span style="color:#099">0</span>]
+</span></span><span style="display:flex;"><span>            
+</span></span><span style="display:flex;"><span>            <span style="color:#000;font-weight:bold">else</span>:
+</span></span><span style="display:flex;"><span>                <span style="color:#000;font-weight:bold">raise</span> <span style="color:#900;font-weight:bold">ValueError</span>(<span style="color:#d14">&#34;No action chosen&#34;</span>)
+</span></span><span style="display:flex;"><span>        
+</span></span></code></pre></div><p>I also define a custom maximizer, to take into account that the voter maximizes over a dichotomous \( \{ \text{dismiss, retain} \} \) decision. The politician uses a normal (continuous) maximizer, which I also implement. Finally, I use a Monte Carlo approximation for most complicated integrals I calculate:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#000;font-weight:bold">def</span> <span style="color:#900;font-weight:bold">maximize</span>(g, a, b, args):
+</span></span><span style="display:flex;"><span>    <span style="color:#d14">&#34;&#34;&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">    Maximize the function g over the interval [a, b].
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">    We use the fact that the maximizer of g on any interval is
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">    also the minimizer of -g.  The tuple args collects any extra
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">    arguments to g.
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">    Returns the maximal value and the maximizer.
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">    &#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    objective <span style="color:#000;font-weight:bold">=</span> <span style="color:#000;font-weight:bold">lambda</span> x: <span style="color:#000;font-weight:bold">-</span>g(x, <span style="color:#000;font-weight:bold">*</span>args)
+</span></span><span style="display:flex;"><span>    result <span style="color:#000;font-weight:bold">=</span> minimize_scalar(objective, bounds<span style="color:#000;font-weight:bold">=</span>(a, b), method<span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#39;bounded&#39;</span>)
+</span></span><span style="display:flex;"><span>    maximizer, maximum <span style="color:#000;font-weight:bold">=</span> result<span style="color:#000;font-weight:bold">.</span>x, <span style="color:#000;font-weight:bold">-</span>result<span style="color:#000;font-weight:bold">.</span>fun
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">return</span> maximizer, maximum
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Write a maximizer like the concept maximizer above to find the optimal value for each point on the grid</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">def</span> <span style="color:#900;font-weight:bold">maximize_sav</span>(function, args):
+</span></span><span style="display:flex;"><span>    <span style="color:#d14">&#34;&#34;&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">    a function that maximizes the sav for a given state, v_array, and retention_r
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">    and on the basis of choices k,v
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">    
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">    returns the maximizer (the best action) and the maximum
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">    &#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>    state <span style="color:#000;font-weight:bold">=</span> args[<span style="color:#099">0</span>]
+</span></span><span style="display:flex;"><span>    v_array <span style="color:#000;font-weight:bold">=</span> args[<span style="color:#099">1</span>]
+</span></span><span style="display:flex;"><span>    retention_r <span style="color:#000;font-weight:bold">=</span> args[<span style="color:#099">2</span>]
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">if</span> state[<span style="color:#099">0</span>] <span style="color:#000;font-weight:bold">==</span> <span style="color:#099">0</span>:
+</span></span><span style="display:flex;"><span>        action <span style="color:#000;font-weight:bold">=</span> <span style="color:#d14">&#34;d&#34;</span>
+</span></span><span style="display:flex;"><span>        maximum <span style="color:#000;font-weight:bold">=</span> function(<span style="color:#d14">&#34;d&#34;</span>, state, v_array, retention_r)
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">elif</span> state[<span style="color:#099">0</span>] <span style="color:#000;font-weight:bold">==</span> <span style="color:#099">1</span>:
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        dismiss <span style="color:#000;font-weight:bold">=</span> function(<span style="color:#d14">&#34;d&#34;</span>, state, v_array, retention_r)
+</span></span><span style="display:flex;"><span>        keep <span style="color:#000;font-weight:bold">=</span> function(<span style="color:#d14">&#34;k&#34;</span>, state, v_array, retention_r)
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">if</span>  dismiss <span style="color:#000;font-weight:bold">&gt;</span> keep:
+</span></span><span style="display:flex;"><span>            action <span style="color:#000;font-weight:bold">=</span> <span style="color:#d14">&#34;d&#34;</span>
+</span></span><span style="display:flex;"><span>            maximum <span style="color:#000;font-weight:bold">=</span> dismiss
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">else</span>:
+</span></span><span style="display:flex;"><span>            action <span style="color:#000;font-weight:bold">=</span> <span style="color:#d14">&#34;k&#34;</span>
+</span></span><span style="display:flex;"><span>            maximum <span style="color:#000;font-weight:bold">=</span> keep
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">return</span> action, maximum
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">def</span> <span style="color:#900;font-weight:bold">monte_carlo_uniform</span>(func,
+</span></span><span style="display:flex;"><span>                       a<span style="color:#000;font-weight:bold">=-</span><span style="color:#099">10</span>,
+</span></span><span style="display:flex;"><span>                       b<span style="color:#000;font-weight:bold">=</span><span style="color:#099">10</span>,
+</span></span><span style="display:flex;"><span>                       n<span style="color:#000;font-weight:bold">=</span><span style="color:#099">150</span>):
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    subsets <span style="color:#000;font-weight:bold">=</span> np<span style="color:#000;font-weight:bold">.</span>arange(<span style="color:#099">0</span>, n<span style="color:#000;font-weight:bold">+</span><span style="color:#099">1</span>, n<span style="color:#000;font-weight:bold">/</span><span style="color:#099">10</span>)
+</span></span><span style="display:flex;"><span>    steps <span style="color:#000;font-weight:bold">=</span> n<span style="color:#000;font-weight:bold">/</span><span style="color:#099">10</span>
+</span></span><span style="display:flex;"><span>    u <span style="color:#000;font-weight:bold">=</span> np<span style="color:#000;font-weight:bold">.</span>zeros(n)
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">for</span> i <span style="color:#000;font-weight:bold">in</span> <span style="color:#0086b3">range</span>(<span style="color:#099">10</span>):
+</span></span><span style="display:flex;"><span>        start <span style="color:#000;font-weight:bold">=</span> <span style="color:#0086b3">int</span>(subsets[i])
+</span></span><span style="display:flex;"><span>        end <span style="color:#000;font-weight:bold">=</span> <span style="color:#0086b3">int</span>(subsets[i<span style="color:#000;font-weight:bold">+</span><span style="color:#099">1</span>])
+</span></span><span style="display:flex;"><span>        u[start:end] <span style="color:#000;font-weight:bold">=</span> np<span style="color:#000;font-weight:bold">.</span>random<span style="color:#000;font-weight:bold">.</span>uniform(low<span style="color:#000;font-weight:bold">=</span>i<span style="color:#000;font-weight:bold">/</span><span style="color:#099">10</span>, high<span style="color:#000;font-weight:bold">=</span>(i<span style="color:#000;font-weight:bold">+</span><span style="color:#099">1</span>)<span style="color:#000;font-weight:bold">/</span><span style="color:#099">10</span>, size<span style="color:#000;font-weight:bold">=</span>end<span style="color:#000;font-weight:bold">-</span>start)
+</span></span><span style="display:flex;"><span>    np<span style="color:#000;font-weight:bold">.</span>random<span style="color:#000;font-weight:bold">.</span>shuffle(u)
+</span></span><span style="display:flex;"><span>    u_func <span style="color:#000;font-weight:bold">=</span> func(a<span style="color:#000;font-weight:bold">+</span>(b<span style="color:#000;font-weight:bold">-</span>a)<span style="color:#000;font-weight:bold">*</span>u)
+</span></span><span style="display:flex;"><span>    s <span style="color:#000;font-weight:bold">=</span> ((b<span style="color:#000;font-weight:bold">-</span>a)<span style="color:#000;font-weight:bold">/</span>n)<span style="color:#000;font-weight:bold">*</span>u_func<span style="color:#000;font-weight:bold">.</span>sum()
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">return</span> s
+</span></span></code></pre></div>
+
+
+
+<h2 id="value-function-iteration">Value Function Iteration
+  <a href="#value-function-iteration"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>Then, I instantiate an instance of the model and apply value function iteration:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>model <span style="color:#000;font-weight:bold">=</span> RetentionModel(delta<span style="color:#000;font-weight:bold">=</span><span style="color:#099">0.99</span>, alpha <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">0.2</span>)
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#000;font-weight:bold">def</span> <span style="color:#900;font-weight:bold">T</span>(v, rm, retention_r):
+</span></span><span style="display:flex;"><span>    <span style="color:#d14">&#34;&#34;&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">    The Bellman operator.  Updates the guess of the value function.
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">    * ce is an instance of CakeEating
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">    * v is an array representing a guess of the value function
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">    &#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>    v_new <span style="color:#000;font-weight:bold">=</span> np<span style="color:#000;font-weight:bold">.</span>empty_like(v)
+</span></span><span style="display:flex;"><span>    p_new <span style="color:#000;font-weight:bold">=</span> [<span style="color:#000;font-weight:bold">None</span>]<span style="color:#000;font-weight:bold">*</span><span style="color:#0086b3">len</span>(v_new)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">for</span> i, x <span style="color:#000;font-weight:bold">in</span> <span style="color:#0086b3">enumerate</span>(rm<span style="color:#000;font-weight:bold">.</span>x_grid):
+</span></span><span style="display:flex;"><span>        <span style="color:#998;font-style:italic"># Maximize RHS of Bellman equation at state x</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#998;font-style:italic">#replace by my custom maximize function</span>
+</span></span><span style="display:flex;"><span>        sol <span style="color:#000;font-weight:bold">=</span> maximize_sav(rm<span style="color:#000;font-weight:bold">.</span>state_action_value, args<span style="color:#000;font-weight:bold">=</span>(x, v, retention_r))
+</span></span><span style="display:flex;"><span>        p_new[i] <span style="color:#000;font-weight:bold">=</span> sol[<span style="color:#099">0</span>]
+</span></span><span style="display:flex;"><span>        v_new[i] <span style="color:#000;font-weight:bold">=</span> sol[<span style="color:#099">1</span>]
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>    new_retention_r <span style="color:#000;font-weight:bold">=</span> rm<span style="color:#000;font-weight:bold">.</span>x_grid[p_new<span style="color:#000;font-weight:bold">.</span>index(<span style="color:#d14">&#39;k&#39;</span>)][<span style="color:#099">1</span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">return</span> p_new, v_new, new_retention_r
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#000;font-weight:bold">def</span> <span style="color:#900;font-weight:bold">compute_value_function</span>(rm,
+</span></span><span style="display:flex;"><span>                           tol<span style="color:#000;font-weight:bold">=</span><span style="color:#099">1e-3</span>,
+</span></span><span style="display:flex;"><span>                           max_iter<span style="color:#000;font-weight:bold">=</span><span style="color:#099">200</span>,
+</span></span><span style="display:flex;"><span>                           verbose<span style="color:#000;font-weight:bold">=</span><span style="color:#000;font-weight:bold">True</span>,
+</span></span><span style="display:flex;"><span>                           print_skip<span style="color:#000;font-weight:bold">=</span><span style="color:#099">1</span>):
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#998;font-style:italic"># Set up loop</span>
+</span></span><span style="display:flex;"><span>    v <span style="color:#000;font-weight:bold">=</span> np<span style="color:#000;font-weight:bold">.</span>zeros(<span style="color:#0086b3">len</span>(rm<span style="color:#000;font-weight:bold">.</span>x_grid)) <span style="color:#998;font-style:italic"># Initial guess</span>
+</span></span><span style="display:flex;"><span>    rr <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">2</span> <span style="color:#998;font-style:italic"># Initial guess</span>
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    i <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">0</span>
+</span></span><span style="display:flex;"><span>    error <span style="color:#000;font-weight:bold">=</span> tol <span style="color:#000;font-weight:bold">+</span> <span style="color:#099">1</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">while</span> i <span style="color:#000;font-weight:bold">&lt;</span> max_iter <span style="color:#000;font-weight:bold">and</span> error <span style="color:#000;font-weight:bold">&gt;</span> tol:
+</span></span><span style="display:flex;"><span>        update <span style="color:#000;font-weight:bold">=</span> T(v, rm, rr)
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        p_new <span style="color:#000;font-weight:bold">=</span> update[<span style="color:#099">0</span>]
+</span></span><span style="display:flex;"><span>        v_new <span style="color:#000;font-weight:bold">=</span> update[<span style="color:#099">1</span>]
+</span></span><span style="display:flex;"><span>        rr_new <span style="color:#000;font-weight:bold">=</span> update[<span style="color:#099">2</span>]
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        error <span style="color:#000;font-weight:bold">=</span> np<span style="color:#000;font-weight:bold">.</span>max(np<span style="color:#000;font-weight:bold">.</span>abs(v <span style="color:#000;font-weight:bold">-</span> v_new))
+</span></span><span style="display:flex;"><span>        i <span style="color:#000;font-weight:bold">+=</span> <span style="color:#099">1</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">if</span> verbose <span style="color:#000;font-weight:bold">and</span> i <span style="color:#000;font-weight:bold">%</span> print_skip <span style="color:#000;font-weight:bold">==</span> <span style="color:#099">0</span>:
+</span></span><span style="display:flex;"><span>            <span style="color:#0086b3">print</span>(<span style="color:#d14">f</span><span style="color:#d14">&#34;Error at iteration </span><span style="color:#d14">{</span>i<span style="color:#d14">}</span><span style="color:#d14"> is </span><span style="color:#d14">{</span>error<span style="color:#d14">}</span><span style="color:#d14">.&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        v <span style="color:#000;font-weight:bold">=</span> v_new
+</span></span><span style="display:flex;"><span>        rr <span style="color:#000;font-weight:bold">=</span> rr_new
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">if</span> i <span style="color:#000;font-weight:bold">==</span> max_iter:
+</span></span><span style="display:flex;"><span>        <span style="color:#0086b3">print</span>(<span style="color:#d14">&#34;Failed to converge!&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">if</span> verbose <span style="color:#000;font-weight:bold">and</span> i <span style="color:#000;font-weight:bold">&lt;</span> max_iter:
+</span></span><span style="display:flex;"><span>        <span style="color:#0086b3">print</span>(<span style="color:#d14">f</span><span style="color:#d14">&#34;</span><span style="color:#d14">\n</span><span style="color:#d14">Converged in </span><span style="color:#d14">{</span>i<span style="color:#d14">}</span><span style="color:#d14"> iterations.&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">return</span> p_new, v_new, rr_new
+</span></span></code></pre></div>
+
+
+
+<h2 id="solution">Solution
+  <a href="#solution"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>The procedure converges and the model is saved under <code>out</code>:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>out <span style="color:#000;font-weight:bold">=</span> compute_value_function(model)
+</span></span></code></pre></div><pre tabindex="0"><code>## Error at iteration 1 is 4.09024743100576.
+## Error at iteration 2 is 1.608588398221574.
+## Error at iteration 3 is 0.17448573956574087.
+## Error at iteration 4 is 0.14479551187642237.
+## Error at iteration 5 is 0.06623950959972902.
+## Error at iteration 6 is 0.03690126342482625.
+## Error at iteration 7 is 0.03690126342482625.
+## Error at iteration 8 is 0.0003930360580230996.
+## 
+## Converged in 8 iterations.
+</code></pre><p>and the optimal retention <code>\(r\)</code> for this specific case is:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>out[<span style="color:#099">2</span>]
+</span></span></code></pre></div><pre tabindex="0"><code>## 3.3
+</code></pre><p>.. which is an interior solution to the problem. It is also easily verifiable that this solution satisfies the characterization by Banks and Sundaram (1993), in that there is a cut-off \( r \), with no lower \( r \) being used for retention.</p>
+<p>I hope this has been useful! If you have any tips or remarks, let me know, and thanks for reading.</p>
+
+        
+        <details closed class="f6 fw7 input-reset">
+  <dl class="f6 lh-copy">
+    <dt class="fw7">Posted on:</dt>
+    <dd class="fw5 ml0">May 19, 2022</dd>
+  </dl>
+  <dl class="f6 lh-copy">
+    <dt class="fw7">Length:</dt>
+    <dd class="fw5 ml0">11 minute read, 2174 words</dd>
+  </dl>
+  
+  
+  
+  <dl class="f6 lh-copy">
+    <dt class="fw7">See Also:</dt>
+    
+  </dl>
+</details>
+
+      </section>
+      <footer class="post-footer">
+        <div class="post-pagination dt w-100 mt4 mb2">
+  
+  
+  
+  
+    <a class="next dtc pl2 tr v-top fw6"
+    href="/blog/2022-08-03-podcast-dutch-about-my-phd-projects/">Podcast (Dutch) about my PhD Projects &rarr;</a>
+  
+</div>
+
+      </footer>
+    </article>
+    
+      
+<div class="post-comments pa0 pa4-l mt4">
+  
+  <script src="https://utteranc.es/client.js"
+          repo="apreshill/apero"
+          issue-term="pathname"
+          theme="boxy-light"
+          label="comments :crystal_ball:"
+          crossorigin="anonymous"
+          async
+          type="text/javascript">
+  </script>
+  
+</div>
+
+    
+  </section>
+</main>
+<footer class="site-footer pv4 bt b--transparent ph5" role="contentinfo">
+  <nav class="db dt-l w-100">
+    <p class="site-copyright f7 db dtc-l v-mid w-100 w-33-l tc tl-l pv2 pv0-l mv0 lh-copy">
+      &copy; 2022 Bas Machielsen
+      <span class="middot-divider"></span>
+      Made with <span xmlns:dct="http://purl.org/dc/terms/" property="dct:title"><a xmlns:dct="http://purl.org/dc/terms/" href="https://github.com/hugo-apero/" rel="dct:source">Hugo Apéro</a></span>.
+      <br />
+      
+Based on <span xmlns:dct="http://purl.org/dc/terms/" property="dct:title"><a xmlns:dct="http://purl.org/dc/terms/" href="https://github.com/formspree/blogophonic-hugo" rel="dct:source">Blogophonic</a></span> by <a xmlns:cc="http://creativecommons.org/ns#" href="https://formspree.io" property="cc:attributionName" rel="cc:attributionURL">Formspree</a>.
+    </p>
+    
+    <div class="site-social-links db dtc-l v-mid w-100 w-33-l tc pv2 pv0-l mv0">
+      <div class="social-icon-links" aria-hidden="true">
+  
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://github.com/basm92" title="github" target="_blank" rel="noopener">
+      <i class="fab fa-github fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://scholar.google.com/citations?user=bS8uo44AAAAJ" title="google" target="_blank" rel="noopener">
+      <i class="fab fa-google fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://twitter.com/basm92" title="twitter" target="_blank" rel="noopener">
+      <i class="fab fa-twitter fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="mailto:a.h.machielsen@uu.nl" title="envelope" >
+      <i class="fas fa-envelope fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="mailto:basmachielsen@live.nl" title="envelope" >
+      <i class="far fa-envelope fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://orcid.org/0000-0002-9692-0615" title="orcid" target="_blank" rel="noopener">
+      <i class="ai ai-orcid fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="/blog/index.xml" title="rss" >
+      <i class="fas fa-rss fa-lg fa-fw"></i>
+    </a>
+  
+</div>
+
+    </div>
+    
+    <div class="site-links f6 db dtc-l v-mid w-100 w-67-l tc tr-l pv2 pv0-l mv0">
+      
+      <a class="dib pv1 ph2 link" href="/license/" title="License">License</a>
+      
+      <a class="dib pv1 ph2 link" href="/contact/" title="Contact form">Contact</a>
+      
+      <a class="dib pv1 ph2 link" href="/contributors/" title="Contributors">Contributors</a>
+      
+    </div>
+  </nav>
+  
+    <script>
+
+    var i, text, code, codes = document.getElementsByTagName('code');
+    for (let i = 0; i < codes.length;) {
+      code = codes[i];
+      if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+        text = code.textContent;
+        if (/^\$[^$]/.test(text) && /[^$]\$$/.test(text)) {
+          text = text.replace(/^\$/, '\\(').replace(/\$$/, '\\)');
+          code.textContent = text;
+        }
+        if (/^\\\((.|\s)+\\\)$/.test(text) ||
+            /^\\\[(.|\s)+\\\]$/.test(text) ||
+            /^\$(.|\s)+\$$/.test(text) ||
+            /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+          code.outerHTML = code.innerHTML;  
+          continue;
+        }
+      }
+      i++;
+    }
+</script>
+
+  
+    
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.css" integrity="sha384-RZU/ijkSsFbcmivfdRBQDtwuwVqK7GMOw6IMvKyeWL2K5UAlyp6WonmB8m7Jd0Hn" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.js" integrity="sha384-pK1WpvzWVBQiP0/GjnvRxV4mOb0oxFuyRxJlk6vVw146n3egcN5C925NCP7a7BY8" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/contrib/auto-render.min.js" integrity="sha384-vZTG03m+2yp6N6BNi5iM4rW4oIwk5DfcNdFfxkk9ZWpDriOkXX8voJBFrAO7MpVl" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
+
+
+
+    
+  
+  
+</footer>
+
+      </div>
+    </body>
+</html>

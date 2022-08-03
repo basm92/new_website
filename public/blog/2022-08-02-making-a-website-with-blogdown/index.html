@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr"><head>
+  
+                           
+     
+
+
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="generator" content="Hugo 0.101.0" />
+<title>Making a website with blogdown | Bas Machielsen</title>
+
+
+<meta property="twitter:site" content="@basss92">
+<meta property="twitter:creator" content="@basss92">
+
+
+
+
+
+
+
+  
+    
+  
+<meta name="description" content="A blog post about how to make a website using R in a few simple steps.">
+
+
+<meta property="og:site_name" content="Bas Machielsen">
+<meta property="og:title" content="Making a website with blogdown | Bas Machielsen">
+<meta property="og:description" content="A blog post about how to make a website using R in a few simple steps." />
+<meta property="og:type" content="page" />
+<meta property="og:url" content="/blog/2022-08-02-making-a-website-with-blogdown/" />
+<meta property="og:locale" content="en">
+
+
+
+
+    
+        <meta property="og:image" content="/blog/2022-08-02-making-a-website-with-blogdown/featured.png" >
+        <meta property="twitter:card" content="summary_large_image">
+        <meta name="twitter:image" content="/blog/2022-08-02-making-a-website-with-blogdown/featured.png" >
+    
+    
+  <meta itemprop="name" content="Making a website with blogdown">
+<meta itemprop="description" content="Introduction This is the first blog post on my own website. I&rsquo;ve decided to make this website using the R package blogdown. The website looks very nice now (in my humble opinion), but it was tedious to make. When attempting to create the website, I first tried out a couple of themes before I settled on the basic &ldquo;lithium&rdquo; theme, because it was by far the easiest theme to wrap your head around."><meta itemprop="datePublished" content="2020-05-17T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2020-05-17T00:00:00+00:00" />
+<meta itemprop="wordCount" content="1843"><meta itemprop="image" content="/blog/2022-08-02-making-a-website-with-blogdown/featured.png">
+<meta itemprop="keywords" content="" />
+  
+  
+  <!--[if IE]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  <link rel="shortcut icon" href="favicon_new.ico" type="image/x-icon">
+  <link rel="icon" href="favicon_new.ico" type="image/x-icon">
+  
+  
+  <link rel="stylesheet" href="/style.main.min.7aee66b22ae3b19895932b9cf4d37da828ca65fc6cd45cfdee1b36b98f4b0ae0.css" integrity="sha256-eu5msirjsZiVkyuc9NN9qCjKZfxs1Fz97hs2uY9LCuA=" media="screen">
+  
+  
+  <script src="/panelset.min.dca42702d7daf6fd31dc352efd2bcf0e4ac8c05ccaa58d9293f6177462de5d5f.js" type="text/javascript"></script>
+  
+  
+  <script src="/main.min.11d2df4163a7df9fb9d31f699461f02d84700b160cd42fa951b0982fc4d468bc.js" type="text/javascript"></script>
+</head>
+<body>
+      <div class="grid-container single">
+<header class="site-header pt4 pb2 mb4 bb b--transparent ph5 headroom z-max" role="banner">
+  <nav class="site-nav db dt-l w-100" role="navigation">
+    <a class="site-brand db dtc-l v-mid link no-underline w-100 w-33-l tc tl-l" href="/" title="Home">
+      <img src="/website_logo.png" class="dib db-l h2 w-auto" alt="Bas Machielsen">
+    </a>
+    <div class="site-links db dtc-l v-mid w-100 w-47-l tc tr-l mt3 mt0-l ttu tracked">
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/" title="Home">Home</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/about/" title="About">About</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 active" href="/blog/" title="Blog">Blog</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/project/" title="Teaching Overview &amp; Repository">Teaching</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/resume/" title="Resume">Resume</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/articles/" title="Articles">Articles</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/collection/" title="Software">Software</a>
+      
+      
+    </div>
+  </nav>
+</header>
+
+<main class="page-main pa4" role="main">
+  <section class="page-content mw7 center">
+    <article class="post-content pa0 ph4-l">
+      <header class="post-header">
+        <h1 class="f1 lh-solid measure-narrow mb3 fw4">Making a website with blogdown</h1>
+        
+        <p class="f6 measure lh-copy mv1">By Bas Machielsen</p>
+        <p class="f7 db mv0 ttu">May 17, 2020</p>
+
+      
+
+      </header>
+      <section class="post-body pt5 pb4">
+        
+
+
+
+<h2 id="introduction">Introduction
+  <a href="#introduction"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>This is the first blog post on my own website. I&rsquo;ve decided to make this website using the R package <code>blogdown</code>. The website looks very nice now (in my humble opinion), but it was tedious to make. When attempting to create the website, I first tried out a couple of themes before I settled on the basic &ldquo;lithium&rdquo; theme, because it was by far the easiest theme to wrap your head around. I want to summarize some difficulties I experienced while making the website, thereby (possibly) helping people who run into the same or similar problems.</p>
+
+
+
+
+<h2 id="good-things">Good things
+  <a href="#good-things"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>First of all, I think it pays to go over the good things of <code>blogdown</code>. You can literally create a site in seconds, by executing:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#900;font-weight:bold">install.packages</span>(<span style="color:#d14">&#39;blogdown&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#900;font-weight:bold">library</span>(blogdown)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># If you haven&#39;t done so yet:</span>
+</span></span><span style="display:flex;"><span>blogdown<span style="color:#000;font-weight:bold">::</span><span style="color:#900;font-weight:bold">install_hugo</span>()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>blogdown<span style="color:#000;font-weight:bold">::</span><span style="color:#900;font-weight:bold">new_site</span>(theme <span style="color:#000;font-weight:bold">=</span> <span style="color:#d14">&#34;githubrepo/theme&#34;</span>) 
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># It will pick this &#39;lithium&#39; theme as the default.</span>
+</span></span></code></pre></div><p>RStudio will start up a new directory with a .Rproj file, and you can start filling out some information in the <code>config.toml</code> file, which is very intuitive, and you can create some posts by executing <code>blogdown::new_post()</code> and your blog is up and running (albeit off-line :) ). You can preview your website by running <code>blogdown::serve_site()</code>, in which case it will pop up in your viewer. You also have the possibility to preview your site in your browsers by clicking the 3rd icon on the left (in the viewer). So far the easy part: picking a theme is the first tedious aspect.</p>
+
+
+
+
+<h2 id="picking-a-theme">Picking A Theme
+  <a href="#picking-a-theme"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>There are a variety of Hugo themes available 
+<a href="https://themes.gohugo.io/" target="_blank" rel="noopener"><strong>here</strong></a>. To reiterate, you can install any one of those themes with <code>blogdown</code> by entering <code>blogdown::new_site(theme = &quot;alex-shpak/hugo-book&quot;)</code> to pick just one random example. As soon as you do that, your website will look exactly like this one:</p>
+<img src="https://www.rostrum.blog/post/2019-09-05-blogdown-author-tags-and-categories_files/lithium-default.png" width="450" />
+<p>And you can start changing the .toml header to include your own preferences. If you want to keep to the basics, this is pretty much all there is to create a site.</p>
+<p>But.</p>
+<p>It seems that the way themes are configured internally differs greatly among themes. So themes have wildly different built-in possibilities, and some themes facilitate doing some thing (e.g., creating a timeline of blog posts), whereas others facilitate doing something else (e.g. make an overview of pictures on some page), while making it <em>very</em> difficult to do the other thing.</p>
+
+
+
+
+<h2 id="academic">Academic
+  <a href="#academic"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>One of the most popular themes seems to be &lsquo;Academic&rsquo;. Whereas I like the look of it (check it out 
+<a href="https://themes.gohugo.io//theme/academic/courses/" target="_blank" rel="noopener">here</a>), I also thought it was completely overwhelming to somebody just starting with <code>blogdown</code> and hugo. First of all, the file structure in the basic theme is mind-boggling, so you don&rsquo;t really know where you should start, and second of all, not all basic options are included in the standard config.toml file. That means that if you want to change, for example, your name and profession, you have to find some other way.</p>
+<p>Secondly, one of the things I didn&rsquo;t like about Academic is that you basically have one large <code>/index/</code> page, and if you use the menu, it just redirects you to a differrent position on the page. I realize that&rsquo;s more of a subjective thing, but anyway. I don&rsquo;t like scrolling, and I thought it might be nicer to have multiple pages instead of one long one. I&rsquo;m sure Academic provides the tools and the possibilities to do this, but in that case, you would have to spend a lot of time on familiarizing yourself with the Hugo language, and if you aren&rsquo;t already, with html.</p>
+
+
+
+
+<h2 id="changing-your-favicon">Changing your favicon
+  <a href="#changing-your-favicon"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>The next thing which I insisted on doing was to change the icon of my website in your browser to my custom <code>bas_m</code> icon. The standard icon is the symbol of the chemical element Lithium, and I thought that wasn&rsquo;t <em>that</em> appropriate for my website. After a while, I figured out the thing is called a <em>favicon</em>, and if you have a picture, you can generate free <em>favicons</em> on, for example, 
+<a href="https://favicon.io/" target="_blank" rel="noopener">this website</a>. Any other website you find with a Google search will also do. The website will give you a couple of <em>favicons</em> as output, of which you can select the most appropriate, and place it in the <code>/static/img/</code> folder of your website. At least, this is the case in the <code>Lithium</code> theme which I use. It might be supposed that the <em>favicon</em> should end up somewhere else in a different theme, which illustrate the point that I was trying to get across before: there is a large heterogeneity in configurations among Hugo themes, which does not contribute to user-friendliness, especially for the uninitiated in web development.</p>
+<p>By the way, if you&rsquo;re looking for a nice <em>favicon</em>, you can generate one using the R package <code>hexSticker</code>. The package&rsquo;s 
+<a href="https://github.com/GuangchuangYu/hexSticker" target="_blank" rel="noopener"><strong>github page</strong></a> provides some nice examples you can get started with. You might have to install some new fonts, first on your system, and then in R using:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#900;font-weight:bold">library</span>(extrafont)
+</span></span><span style="display:flex;"><span><span style="color:#900;font-weight:bold">font_import</span>(pattern<span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;Roboto&#34;</span>)
+</span></span></code></pre></div><p>Anyway, that&rsquo;s basically it: you&rsquo;re set-up with your own website, and you got rid of the most annoying features of the standard theme. Next, I address some of the layout which I wanted to get done, and because of which I had to deviate from the standard theme.</p>
+
+
+
+
+<h2 id="html-code">Html code
+  <a href="#html-code"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>One advantage of <code>blogdown</code> and similar tools is that you don&rsquo;t have to manually code huge chunks of .html and .css yourself: you can just build a website practically without any knowledge of html or css. However, one of the things that I wanted to get done is including some of my contact information next to the introduction on my 
+<a href="https://bas-m.netlify.app" target="_blank" rel="noopener">home page</a>. As far as I know, I could do this in two ways:</p>
+<ul>
+<li>create a custom .html layout for my home page supported by some .css in separate files (I&rsquo;ll talk about this later)</li>
+<li>make use of the possibility that Markdown supports html code, and create a separate <code>&lt;div&gt;</code> for my contact info, and wrap my introduction text around it.</li>
+</ul>
+<p>As you hopefully noticed, I opted for the second choice, although the first one would have been possible. The point that I&rsquo;m trying to make is: if you&rsquo;re looking for even the slightest bit of customization, you <em>will</em> end up having to make some changes in the html or css files of the theme. If you don&rsquo;t want to do that, Hugo and <code>blogdown</code> is probably not the best option. If you do, a Hugo website works just great! You don&rsquo;t have to apply <em>that</em> many changes, and you will still end up with a website with a unique flavor, which looks, in my opinion, nicer than a Google or Wordpress website.</p>
+
+
+
+
+<h2 id="arranging-the-site-and-blog">Arranging the site and blog
+  <a href="#arranging-the-site-and-blog"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>Lastly, I wanted to get one more thing done. The Lithium-theme comes with a blog integration, and the Hugo/javascript backend makes it such that as soon as you make a new blog post, a link to the title and the date end up on the index page. I didn&rsquo;t want that. I wanted my index page to be just my own text, and I wanted to relegate my blogs to appear on the page &lsquo;Blogs&rsquo;! As you&rsquo;ve guessed, I worked that out, but I thought it was quite tricky, and I ended up finding the solution using my own common sense: the Hugo documentation and searching the fora provided no significant help.</p>
+<p>(To be fair, I know nothing about the Hugo language, but I thought its documentation and fora weren&rsquo;t that accessible either.)</p>
+<p>So what I did was the following: I created a new folder in the root directory called <code>layouts</code> (this I got from the forums), a subfolder called <code>_default</code>, which allows the user to include page-specific layouts that differ from the default, and I copied the first part of the &rsquo;list&rsquo; default layout to a new file called <code>index.html</code>:</p>
+<pre tabindex="0"><code>{{ partial &#34;header.html&#34; . }}
+
+&lt;main class=&#34;content&#34; role=&#34;main&#34;&gt;
+
+  {{ if .Content }}
+  &lt;article class=&#34;article&#34;&gt;
+    {{ if .Title }}
+    &lt;h1 class=&#34;article-title&#34;&gt;{{ .Title }}&lt;/h1&gt;
+    {{ end }}
+    &lt;div class=&#34;article-content&#34;&gt;
+      {{ .Content }}
+    &lt;/div&gt;
+  &lt;/article&gt;
+  {{ end }}
+
+&lt;/main&gt;
+{{ partial &#34;footer.html&#34; . }}
+</code></pre><p>As far as I understand, this gives me an index page with <em>just</em> a header, the content with the appropriate <code>&lt;h1&gt;, &lt;h2&gt;</code>&rsquo;s, etc., and a footer. That worked for the index page.</p>
+<p>Next, I wanted to relegate the blog widget to the blogs page. This was a little more confusing, but what I did was the following:</p>
+<ol>
+<li>
+<p>I created a new .html file in the same /layouts/ folder called <strong>blogs.html</strong>, and I pasted the entire content of the default layout&rsquo;s <code>list.html</code> (the default layout, in the Lithium theme, can be found under /themes/hugo-lithium/layouts/_default, but don&rsquo;t change them) to a new page in the <code>~/layouts/_default</code> folder.</p>
+</li>
+<li>
+<p>This didn&rsquo;t work yet. After some initial testing, I found that the Blogs-page wasn&rsquo;t responding at all to changes in the layout file, so I had to do some Googling to find out that I was supposed to explicitly include in the YAML-header of my <code>Blogs.Rmd</code> file the item: <code>layout: blogs</code> (<code>blogs</code> because my layout file was also called blogs.html). After doing that, I found that the layout was responsive to changes, but I still struggled to get the widget to appear.</p>
+</li>
+<li>
+<p>Finally, what solved the issue was the following: the code of <code>list.html</code>, and up until this point, of my <code>blogs.html</code> looked like this:</p>
+</li>
+</ol>
+<pre tabindex="0"><code>{{ partial &#34;header.html&#34; . }}
+
+&lt;main class=&#34;content&#34; role=&#34;main&#34;&gt;
+
+  {{ if .Content }}
+  &lt;article class=&#34;article&#34;&gt;
+    {{ if .Title }}
+    &lt;h1 class=&#34;article-title&#34;&gt;{{ .Title }}&lt;/h1&gt;
+    {{ end }}
+    &lt;div class=&#34;article-content&#34;&gt;
+      {{ .Content }}
+    &lt;/div&gt;
+  &lt;/article&gt;
+  {{ end }}
+  &lt;div class=&#34;archive&#34;&gt;
+    {{ $pages := .Pages }}
+    {{ if .IsHome }}
+    {{ $pages = .Site.RegularPages }}
+    {{ end }}
+    {{ range (where $pages &#34;Section&#34; &#34;!=&#34; &#34;&#34;).GroupByDate &#34;2006&#34; }}
+    &lt;h2 class=&#34;archive-title&#34;&gt;{{ .Key }}&lt;/h2&gt;
+    {{ range .Pages }}
+    &lt;article class=&#34;archive-item&#34;&gt;
+      &lt;a href=&#34;{{ .RelPermalink }}&#34; class=&#34;archive-item-link&#34;&gt;{{ .Title }}&lt;/a&gt;
+      &lt;span class=&#34;archive-item-date&#34;&gt;
+        {{ .Date.Format &#34;2006-01-02&#34; }}
+      &lt;/span&gt;
+    &lt;/article&gt;
+    {{ end }}
+    {{ end }}
+  &lt;/div&gt;
+
+&lt;/main&gt;
+
+{{ partial &#34;footer.html&#34; . }}
+</code></pre><ol start="4">
+<li>
+<p>Specifically, I started to pay attention to the <code>{{ if .IsHome}}</code> line, and I thought: &ldquo;Given that my Blogs page isn&rsquo;t the homepage, shouldn&rsquo;t I change <code>{{ if .IsHome }}</code> to <code>{{ if not .IsHome }}</code>?&rdquo; As soon as I did that, the issue was solved!</p>
+</li>
+<li>
+<p>For the interested, I figured out that the upper part of the chunk is just Hugo telling us to place the normal content (e.g. introductory text) on the blog page, and then the lower part of the chunk tells us to fetch all the names and dates of the blog posts we&rsquo;ve made and put them in a list.</p>
+</li>
+</ol>
+
+
+
+
+<h2 id="conclusion">Conclusion
+  <a href="#conclusion"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>After all, that didn&rsquo;t seem that difficult, but it was difficult enough to figure out the logic of Hugo, and in the end, I did end up having to read documentation about a system I was competely unfamiliar with. Anyway, I think it worked out great, and if I want, I can always change the css of the website to give it a more individual flavor. I have to think about that, though: I really like this default layout. Thanks for reading, and hope it helps!</p>
+
+        
+        <details closed class="f6 fw7 input-reset">
+  <dl class="f6 lh-copy">
+    <dt class="fw7">Posted on:</dt>
+    <dd class="fw5 ml0">May 17, 2020</dd>
+  </dl>
+  <dl class="f6 lh-copy">
+    <dt class="fw7">Length:</dt>
+    <dd class="fw5 ml0">9 minute read, 1843 words</dd>
+  </dl>
+  
+  
+  
+  <dl class="f6 lh-copy">
+    <dt class="fw7">See Also:</dt>
+    
+  </dl>
+</details>
+
+      </section>
+      <footer class="post-footer">
+        <div class="post-pagination dt w-100 mt4 mb2">
+  
+  
+    <a class="prev dtc pr2 tl v-top fw6"
+    href="/blog/2022-08-02-webscraping-with-rselenium/">&larr; Webscraping with RSelenium</a>
+  
+  
+  
+    <a class="next dtc pl2 tr v-top fw6"
+    href="/blog/2022-08-02-r-filtering-with-across-in-dplyr/">R: filtering with across in dplyr &rarr;</a>
+  
+</div>
+
+      </footer>
+    </article>
+    
+      
+<div class="post-comments pa0 pa4-l mt4">
+  
+  <script src="https://utteranc.es/client.js"
+          repo="apreshill/apero"
+          issue-term="pathname"
+          theme="boxy-light"
+          label="comments :crystal_ball:"
+          crossorigin="anonymous"
+          async
+          type="text/javascript">
+  </script>
+  
+</div>
+
+    
+  </section>
+</main>
+<footer class="site-footer pv4 bt b--transparent ph5" role="contentinfo">
+  <nav class="db dt-l w-100">
+    <p class="site-copyright f7 db dtc-l v-mid w-100 w-33-l tc tl-l pv2 pv0-l mv0 lh-copy">
+      &copy; 2022 Bas Machielsen
+      <span class="middot-divider"></span>
+      Made with <span xmlns:dct="http://purl.org/dc/terms/" property="dct:title"><a xmlns:dct="http://purl.org/dc/terms/" href="https://github.com/hugo-apero/" rel="dct:source">Hugo Apéro</a></span>.
+      <br />
+      
+Based on <span xmlns:dct="http://purl.org/dc/terms/" property="dct:title"><a xmlns:dct="http://purl.org/dc/terms/" href="https://github.com/formspree/blogophonic-hugo" rel="dct:source">Blogophonic</a></span> by <a xmlns:cc="http://creativecommons.org/ns#" href="https://formspree.io" property="cc:attributionName" rel="cc:attributionURL">Formspree</a>.
+    </p>
+    
+    <div class="site-social-links db dtc-l v-mid w-100 w-33-l tc pv2 pv0-l mv0">
+      <div class="social-icon-links" aria-hidden="true">
+  
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://github.com/basm92" title="github" target="_blank" rel="noopener">
+      <i class="fab fa-github fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://scholar.google.com/citations?user=bS8uo44AAAAJ" title="google" target="_blank" rel="noopener">
+      <i class="fab fa-google fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://twitter.com/basm92" title="twitter" target="_blank" rel="noopener">
+      <i class="fab fa-twitter fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="mailto:a.h.machielsen@uu.nl" title="envelope" >
+      <i class="fas fa-envelope fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="mailto:basmachielsen@live.nl" title="envelope" >
+      <i class="far fa-envelope fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://orcid.org/0000-0002-9692-0615" title="orcid" target="_blank" rel="noopener">
+      <i class="ai ai-orcid fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="/blog/index.xml" title="rss" >
+      <i class="fas fa-rss fa-lg fa-fw"></i>
+    </a>
+  
+</div>
+
+    </div>
+    
+    <div class="site-links f6 db dtc-l v-mid w-100 w-67-l tc tr-l pv2 pv0-l mv0">
+      
+      <a class="dib pv1 ph2 link" href="/license/" title="License">License</a>
+      
+      <a class="dib pv1 ph2 link" href="/contact/" title="Contact form">Contact</a>
+      
+      <a class="dib pv1 ph2 link" href="/contributors/" title="Contributors">Contributors</a>
+      
+    </div>
+  </nav>
+  
+    <script>
+
+    var i, text, code, codes = document.getElementsByTagName('code');
+    for (let i = 0; i < codes.length;) {
+      code = codes[i];
+      if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+        text = code.textContent;
+        if (/^\$[^$]/.test(text) && /[^$]\$$/.test(text)) {
+          text = text.replace(/^\$/, '\\(').replace(/\$$/, '\\)');
+          code.textContent = text;
+        }
+        if (/^\\\((.|\s)+\\\)$/.test(text) ||
+            /^\\\[(.|\s)+\\\]$/.test(text) ||
+            /^\$(.|\s)+\$$/.test(text) ||
+            /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+          code.outerHTML = code.innerHTML;  
+          continue;
+        }
+      }
+      i++;
+    }
+</script>
+
+  
+    
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.css" integrity="sha384-RZU/ijkSsFbcmivfdRBQDtwuwVqK7GMOw6IMvKyeWL2K5UAlyp6WonmB8m7Jd0Hn" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.js" integrity="sha384-pK1WpvzWVBQiP0/GjnvRxV4mOb0oxFuyRxJlk6vVw146n3egcN5C925NCP7a7BY8" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/contrib/auto-render.min.js" integrity="sha384-vZTG03m+2yp6N6BNi5iM4rW4oIwk5DfcNdFfxkk9ZWpDriOkXX8voJBFrAO7MpVl" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
+
+
+
+    
+  
+  
+</footer>
+
+      </div>
+    </body>
+</html>

@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr"><head>
+  
+                           
+     
+
+
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="generator" content="Hugo 0.101.0" />
+<title>A few game theory exercises and answers | Bas Machielsen</title>
+
+
+<meta property="twitter:site" content="@basss92">
+<meta property="twitter:creator" content="@basss92">
+
+
+
+
+
+
+
+  
+    
+  
+<meta name="description" content="A blog post explaining and solving some fun game theory exercises">
+
+
+<meta property="og:site_name" content="Bas Machielsen">
+<meta property="og:title" content="A few game theory exercises and answers | Bas Machielsen">
+<meta property="og:description" content="A blog post explaining and solving some fun game theory exercises" />
+<meta property="og:type" content="page" />
+<meta property="og:url" content="/blog/2022-08-03-a-few-game-theory-exercises-and-answers/" />
+<meta property="og:locale" content="en">
+
+
+
+
+    
+        <meta property="og:image" content="/blog/2022-08-03-a-few-game-theory-exercises-and-answers/featured.png" >
+        <meta property="twitter:card" content="summary_large_image">
+        <meta name="twitter:image" content="/blog/2022-08-03-a-few-game-theory-exercises-and-answers/featured.png" >
+    
+    
+  <meta itemprop="name" content="A few game theory exercises and answers">
+<meta itemprop="description" content="Introduction I want to work out a couple of exercises from Game Theory: an Introduction, by Tadelis. Since the exercises from later chapters are not available online, and since they represent some of the more creative and fun challenges, I just wanted to post a few exercises which I worked out, as well as some (unasked) variations.
+Exercise 12.2: Cournot Revisited This exercise asks the following:
+Consider the Cournot duopoly model in which two firms, 1 and 2, simultaneously choose the quantities they supply, \(q_1\) and \(q_2\)."><meta itemprop="datePublished" content="2021-03-05T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2021-03-05T00:00:00+00:00" />
+<meta itemprop="wordCount" content="755"><meta itemprop="image" content="/blog/2022-08-03-a-few-game-theory-exercises-and-answers/featured.png">
+<meta itemprop="keywords" content="" />
+  
+  
+  <!--[if IE]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  <link rel="shortcut icon" href="favicon_new.ico" type="image/x-icon">
+  <link rel="icon" href="favicon_new.ico" type="image/x-icon">
+  
+  
+  <link rel="stylesheet" href="/style.main.min.7aee66b22ae3b19895932b9cf4d37da828ca65fc6cd45cfdee1b36b98f4b0ae0.css" integrity="sha256-eu5msirjsZiVkyuc9NN9qCjKZfxs1Fz97hs2uY9LCuA=" media="screen">
+  
+  
+  <script src="/panelset.min.dca42702d7daf6fd31dc352efd2bcf0e4ac8c05ccaa58d9293f6177462de5d5f.js" type="text/javascript"></script>
+  
+  
+  <script src="/main.min.11d2df4163a7df9fb9d31f699461f02d84700b160cd42fa951b0982fc4d468bc.js" type="text/javascript"></script>
+</head>
+<body>
+      <div class="grid-container single">
+<header class="site-header pt4 pb2 mb4 bb b--transparent ph5 headroom z-max" role="banner">
+  <nav class="site-nav db dt-l w-100" role="navigation">
+    <a class="site-brand db dtc-l v-mid link no-underline w-100 w-33-l tc tl-l" href="/" title="Home">
+      <img src="/website_logo.png" class="dib db-l h2 w-auto" alt="Bas Machielsen">
+    </a>
+    <div class="site-links db dtc-l v-mid w-100 w-47-l tc tr-l mt3 mt0-l ttu tracked">
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/" title="Home">Home</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/about/" title="About">About</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 active" href="/blog/" title="Blog">Blog</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/project/" title="Teaching Overview &amp; Repository">Teaching</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/resume/" title="Resume">Resume</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/articles/" title="Articles">Articles</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/collection/" title="Software">Software</a>
+      
+      
+    </div>
+  </nav>
+</header>
+
+<main class="page-main pa4" role="main">
+  <section class="page-content mw7 center">
+    <article class="post-content pa0 ph4-l">
+      <header class="post-header">
+        <h1 class="f1 lh-solid measure-narrow mb3 fw4">A few game theory exercises and answers</h1>
+        
+        <p class="f6 measure lh-copy mv1">By Bas Machielsen</p>
+        <p class="f7 db mv0 ttu">March 5, 2021</p>
+
+      
+
+      </header>
+      <section class="post-body pt5 pb4">
+        
+
+
+
+<h2 id="introduction">Introduction
+  <a href="#introduction"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>I want to work out a couple of exercises from <em>Game Theory: an Introduction</em>, by Tadelis. Since the exercises from later chapters are not available online, and since they represent some of the more creative and fun challenges, I just wanted to post a few exercises which I worked out, as well as some (unasked) variations.</p>
+
+
+
+
+<h2 id="exercise-122-cournot-revisited">Exercise 12.2: Cournot Revisited
+  <a href="#exercise-122-cournot-revisited"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>This exercise asks the following:</p>
+<blockquote>
+<p>Consider the Cournot duopoly model in which two firms, 1 and 2, simultaneously choose the quantities they supply, <code>\(q_1\)</code> and <code>\(q_2\)</code>. The price each will face is determined by the market demand function <code>\(p(q_1, q_2) = a - b(q_1 + q_2)\)</code>. Each firm has a probability <code>\(\mu\)</code> of having a marginal unit cost of <code>\(c_L\)</code> and a probability <code>\(1-\mu\)</code> of having a marginal unit cost of <code>\(c_H\)</code>. These probabilities are common knowledge, but the true type is revealed only to each firm individually. Solve for the Bayesian Nash equilibrium.</p>
+</blockquote>
+<p>The exercise makes it clear that there is uncertainty about the marginal cost parameter of both firms, but I will first start with a more simple question, which is that firm 2&rsquo;s marginal cost parameter is uncertain (for player 1, but observable for themselves), but not vice versa: player 1 has a fixed marginal cost parameter, say <code>\(c_1\)</code>.</p>
+<p>Then, the profit function of player 2 is:</p>
+<p>$$
+\Pi_2 = \begin{cases} (a - b(q_1 + q_2^L))q_2^L - c_L q_2^L \hspace{2em} &amp;\text{ if } c = c_L \newline
+(a - b(q_1 + q_2^H))q_2^H - c_H q_2^H \hspace{2em} &amp;\text{ if } c = c_H \end{cases}
+$$</p>
+<p>And the profit function for player 1 is:</p>
+<p>$$
+\Pi_1 = \mu((a - b(q_1 + q_2^L))q_1 - c_1 q_1) + (1-\mu) ((a - b(q_1 + q_2^H))q_1 - c_1 q_1)
+$$</p>
+<p>From these profit functions, the best responses can be derived by taking the derivative with respect to the control variables. Player 1&rsquo;s best response will be <code>\(q_1 = f(q_2^L, q_2^H)\)</code>. Substituting player 2&rsquo;s best responses <code>\(q_2^L = f(q_1)\)</code> and <code>\(q_2^H = f(q_1)\)</code> into player 1&rsquo;s best responses yields a solution for <code>\(q_1\)</code>. Substituting this solution in player 2&rsquo;s best responses then yields a solution for both incarnations of player 2.</p>
+<p>From this solution, it is also easy to see what the solution for the actual problem would look like: The profit function for player <code>\(i\)</code>, given that their marginal costs are low and high respectively, is:</p>
+<p>$$
+\Pi_i^L = \begin{cases}
+(a - b(\mathbb{E}[q_j] + q_i^L)) \cdot q_i^L - c_L q_i^L &amp;\text{ if MC = Low} \newline
+(a - b(\mathbb{E}[q_j] + q_i^H)) \cdot q_i^L - c_H q_i^H &amp;\text{ if MC = High}
+\end{cases}
+$$</p>
+<p>The expected value of the other player&rsquo;s production <code>\(\mathbb{E}[q_j]\)</code> equals <code>\(\mu q_j^L + (1-\mu)q_j^H\)</code>. Substituting this in the profit function, and then differentiating to find the Best Responses for player <code>\(i\)</code> gives:</p>
+<p>$$
+BR_i = \begin{cases} q_i^L =
+\frac{a - b(\mu q_j^L + (1-\mu) q_j^H) - c_L}{2b} \newline
+q_i^H = \frac{a - b(\mu q_j^L + (1-\mu) q_j^H) - c_H}{2b}
+\end{cases}
+$$</p>
+<p>Now, recognizing that the problems are symmetric, we can impose that <code>\(q_j^L = q_i^L\)</code> and <code>\(q_j^H = q_i^H\)</code>. Alternatively, we could just make explicit the best responses for player 2, and then realize that in a Bayesian Nash Equilibrium, each player&rsquo;s best response should be a best response to the others. That would give us a system of 4 equations, and 4 unknowns. But, recognizing the symmetric nature of the problem, it is easy to make do with a system of only two equations and two unknowns. Substituting <code>\(q_j^L = q_i^L\)</code> and <code>\(q_j^H = q_i^H\)</code> into the best responses gives:</p>
+<p>$$
+BR_i = \begin{cases} q_i^L =
+\frac{a - b(\mu q_i^L + (1-\mu) q_i^H) - c_L}{2b} \newline
+q_i^H = \frac{a - b(\mu q_i^L + (1-\mu) q_i^H) - c_H}{2b}
+\end{cases}
+$$</p>
+<p>After a bit of algebra, the solution to this problem is:</p>
+<p>$$
+\begin{bmatrix}
+q_i^L \newline
+q_i^H
+\end{bmatrix} =
+\begin{bmatrix}
+\frac{2a + c_L (\mu-3) - (\mu-1)c_H}{6b} \newline
+\frac{2a + c_L \mu - c_H (\mu+2)}{6b}
+\end{bmatrix}
+$$</p>
+<p>This solution has an elegant interpretation: suppose <code>\(\mu = 1\)</code>, so that there is no uncertainty and all firms have low marginal costs. Then, the problem&rsquo;s solution reduces to the solution of a standard Cournot problem with:</p>
+<p>$$
+q_i^L = \frac{2a + c_L (1-3) - (1-1) c_H}{6b} = \frac{2a - 2c_L}{6b} = \frac{a - c_L}{3b}
+$$</p>
+<p>That is to say, this is the solution to the Cournot problem were <code>\(\Pi_i = (a-b(q_i + q_j))q_i - c_L q_i\)</code> where <code>\(q_i = q_j\)</code>. If <code>\(\mu = 0\)</code>, the solution for <code>\(q_i^H\)</code> yields a similar result, but then for <code>\(c = c_H\)</code>.</p>
+
+        
+        <details closed class="f6 fw7 input-reset">
+  <dl class="f6 lh-copy">
+    <dt class="fw7">Posted on:</dt>
+    <dd class="fw5 ml0">March 5, 2021</dd>
+  </dl>
+  <dl class="f6 lh-copy">
+    <dt class="fw7">Length:</dt>
+    <dd class="fw5 ml0">4 minute read, 755 words</dd>
+  </dl>
+  
+  
+  
+  <dl class="f6 lh-copy">
+    <dt class="fw7">See Also:</dt>
+    
+  </dl>
+</details>
+
+      </section>
+      <footer class="post-footer">
+        <div class="post-pagination dt w-100 mt4 mb2">
+  
+  
+    <a class="prev dtc pr2 tl v-top fw6"
+    href="/blog/2022-08-03-the-mathematics-underlying-deep-learning/">&larr; The Mathematics Underlying Deep Learning</a>
+  
+  
+  
+    <a class="next dtc pl2 tr v-top fw6"
+    href="/blog/2022-08-03-the-within-fe-estimator-visualized/">The Within (FE) Estimator Visualized &rarr;</a>
+  
+</div>
+
+      </footer>
+    </article>
+    
+      
+<div class="post-comments pa0 pa4-l mt4">
+  
+  <script src="https://utteranc.es/client.js"
+          repo="apreshill/apero"
+          issue-term="pathname"
+          theme="boxy-light"
+          label="comments :crystal_ball:"
+          crossorigin="anonymous"
+          async
+          type="text/javascript">
+  </script>
+  
+</div>
+
+    
+  </section>
+</main>
+<footer class="site-footer pv4 bt b--transparent ph5" role="contentinfo">
+  <nav class="db dt-l w-100">
+    <p class="site-copyright f7 db dtc-l v-mid w-100 w-33-l tc tl-l pv2 pv0-l mv0 lh-copy">
+      &copy; 2022 Bas Machielsen
+      <span class="middot-divider"></span>
+      Made with <span xmlns:dct="http://purl.org/dc/terms/" property="dct:title"><a xmlns:dct="http://purl.org/dc/terms/" href="https://github.com/hugo-apero/" rel="dct:source">Hugo Apéro</a></span>.
+      <br />
+      
+Based on <span xmlns:dct="http://purl.org/dc/terms/" property="dct:title"><a xmlns:dct="http://purl.org/dc/terms/" href="https://github.com/formspree/blogophonic-hugo" rel="dct:source">Blogophonic</a></span> by <a xmlns:cc="http://creativecommons.org/ns#" href="https://formspree.io" property="cc:attributionName" rel="cc:attributionURL">Formspree</a>.
+    </p>
+    
+    <div class="site-social-links db dtc-l v-mid w-100 w-33-l tc pv2 pv0-l mv0">
+      <div class="social-icon-links" aria-hidden="true">
+  
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://github.com/basm92" title="github" target="_blank" rel="noopener">
+      <i class="fab fa-github fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://scholar.google.com/citations?user=bS8uo44AAAAJ" title="google" target="_blank" rel="noopener">
+      <i class="fab fa-google fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://twitter.com/basm92" title="twitter" target="_blank" rel="noopener">
+      <i class="fab fa-twitter fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="mailto:a.h.machielsen@uu.nl" title="envelope" >
+      <i class="fas fa-envelope fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="mailto:basmachielsen@live.nl" title="envelope" >
+      <i class="far fa-envelope fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://orcid.org/0000-0002-9692-0615" title="orcid" target="_blank" rel="noopener">
+      <i class="ai ai-orcid fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="/blog/index.xml" title="rss" >
+      <i class="fas fa-rss fa-lg fa-fw"></i>
+    </a>
+  
+</div>
+
+    </div>
+    
+    <div class="site-links f6 db dtc-l v-mid w-100 w-67-l tc tr-l pv2 pv0-l mv0">
+      
+      <a class="dib pv1 ph2 link" href="/license/" title="License">License</a>
+      
+      <a class="dib pv1 ph2 link" href="/contact/" title="Contact form">Contact</a>
+      
+      <a class="dib pv1 ph2 link" href="/contributors/" title="Contributors">Contributors</a>
+      
+    </div>
+  </nav>
+  
+    <script>
+
+    var i, text, code, codes = document.getElementsByTagName('code');
+    for (let i = 0; i < codes.length;) {
+      code = codes[i];
+      if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+        text = code.textContent;
+        if (/^\$[^$]/.test(text) && /[^$]\$$/.test(text)) {
+          text = text.replace(/^\$/, '\\(').replace(/\$$/, '\\)');
+          code.textContent = text;
+        }
+        if (/^\\\((.|\s)+\\\)$/.test(text) ||
+            /^\\\[(.|\s)+\\\]$/.test(text) ||
+            /^\$(.|\s)+\$$/.test(text) ||
+            /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+          code.outerHTML = code.innerHTML;  
+          continue;
+        }
+      }
+      i++;
+    }
+</script>
+
+  
+    
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.css" integrity="sha384-RZU/ijkSsFbcmivfdRBQDtwuwVqK7GMOw6IMvKyeWL2K5UAlyp6WonmB8m7Jd0Hn" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.js" integrity="sha384-pK1WpvzWVBQiP0/GjnvRxV4mOb0oxFuyRxJlk6vVw146n3egcN5C925NCP7a7BY8" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/contrib/auto-render.min.js" integrity="sha384-vZTG03m+2yp6N6BNi5iM4rW4oIwk5DfcNdFfxkk9ZWpDriOkXX8voJBFrAO7MpVl" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
+
+
+
+    
+  
+  
+</footer>
+
+      </div>
+    </body>
+</html>

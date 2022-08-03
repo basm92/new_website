@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Bas Machielsen</title>
+    <link>/</link>
+    <description>Recent content on Bas Machielsen</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Sat, 30 Jul 2022 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Clio</title>
+      <link>/collection/clio/</link>
+      <pubDate>Fri, 01 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/collection/clio/</guid>
+      <description>Clio is an R package that serves as a bridge between the user and the website Clio Infra, a repository containing publicly available data on various aspects of economic history at the country level. This package is designed to quickly and efficiently extract data, allowing the user to make large queries. This way, the user is not confined to manually downloading Excel files, and the associated filtering and merging process. The package also facilitates transparent and reproducible data collection, and it is ‘typo robust’ to a certain extent, to prevent annoyance.</description>
+    </item>
+    
+    <item>
+      <title>HDNG</title>
+      <link>/collection/hdng/</link>
+      <pubDate>Wed, 01 Jan 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/collection/hdng/</guid>
+      <description>hdng is a package facilitating the use of the HDNG Database, a database containing quantative information in various aspects of Dutch municipalities from about 1800 to the 1980&amp;rsquo;s. This package aids the user in finding their way through the database, allowing them to search for wanted variables, browse within categories, and finally, make a query to extract the wanted data.</description>
+    </item>
+    
+    <item>
+      <title>PhD Thesis</title>
+      <link>/articles/phd_thesis/</link>
+      <pubDate>Sat, 30 Jul 2022 00:00:00 +0000</pubDate>
+      
+      <guid>/articles/phd_thesis/</guid>
+      <description>My PhD Thesis My PhD Thesis is available in two parts. First, the actual thesis, which is downloadable via this link.
+Replication Package The main thesis is accompanied by a replication package, which can be found here. The purpose of this package is to share shareable data, but also to make my findings reproducible by showing the code that lead to the results in each table.</description>
+    </item>
+    
+    <item>
+      <title>Returns to Politics Under A Changing Political System</title>
+      <link>/articles/polrents/</link>
+      <pubDate>Sat, 30 Jul 2022 00:00:00 +0000</pubDate>
+      
+      <guid>/articles/polrents/</guid>
+      <description>Abstract Economists frequently assert that politicians derive financial returns from a political career, but it is unclear what allows them to do so. In this paper, I derive estimates of the returns to consecutive Lower House mandates exploiting the repeated treatment assignment resulting from Dutch district-level elections (1860-1917). Based on newly-collected data from probate inventories, I obtain a measure of personal wealth for a sample of just-elected politicians and their losing contenders.</description>
+    </item>
+    
+    <item>
+      <title>Thesis Supervision 2022</title>
+      <link>/project/thesis2022/</link>
+      <pubDate>Fri, 01 Jul 2022 00:00:00 +0000</pubDate>
+      
+      <guid>/project/thesis2022/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Democratization, Personal Wealth of Politicians and Voting Behavior</title>
+      <link>/articles/polelite_vb/</link>
+      <pubDate>Thu, 30 Jun 2022 00:00:00 +0000</pubDate>
+      
+      <guid>/articles/polelite_vb/</guid>
+      <description>Abstract From about 1850 to 1920, a wave of democratization and liberalization swept over Western Europe, bringing about universal suffrage and an expansion of government. Using newly-collected probate inventories that provide a measure of politicians&amp;rsquo; personal wealth, this paper investigates the role of personal wealth in this process illustrated by the case of the Netherlands. I show that parliaments became significantly less wealthy over time. I then analyze voting behavior of politicians on several laws extending the franchise and increasing taxes.</description>
+    </item>
+    
+    <item>
+      <title>Equilibrium in the Besley-Case (1995) Model</title>
+      <link>/blog/2022-08-03-equilibrium-in-the-besley-case-1995-model/</link>
+      <pubDate>Thu, 19 May 2022 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2022-08-03-equilibrium-in-the-besley-case-1995-model/</guid>
+      <description>Introduction Besley and Case (1995) have a paper about the influence of term limits for politicians on policy behavior. They use a dynamic game. Politicians can serve either 1, or 2, periods, depending on whether they are retained. In these periods, politicians choose to put in effort. Putting in more or less effort is costly to different extents, according to their type. The chosen effort probabilistically affects a policy outcome.</description>
+    </item>
+    
+    <item>
+      <title>Podcast (Dutch) about my PhD Projects</title>
+      <link>/blog/2022-08-03-podcast-dutch-about-my-phd-projects/</link>
+      <pubDate>Fri, 25 Mar 2022 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2022-08-03-podcast-dutch-about-my-phd-projects/</guid>
+      <description>Introduction I was interviewed by the Dutch economics journal Economisch-Statistische Berichten (ESB) about my PhD work as a part of their new Podcast series on New Economists. In the podcast, I talk about the influence of politicians&amp;rsquo; personal wealth interests on their voting behavior and the many consequences this might have. I also dive into history and give some tangible examples when politicians&amp;rsquo; personal wealth might play a role, and when it might not.</description>
+    </item>
+    
+    <item>
+      <title>The Wealth of The Dutch Political Elite (1870-1922)</title>
+      <link>/articles/wealth/</link>
+      <pubDate>Thu, 30 Sep 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/articles/wealth/</guid>
+      <description>Abstract Using newly-collected archival data, this study investigates the wealth and investment portfolio&amp;rsquo;s of Dutch politicians from 1870 to 1922. In a period when the political and economic situation underwent many changes, this study finds that the political arena remains rather static: politicians are wealthy in comparison to the average citizen. Secondly, Upper House members are by far the wealthiest politicians followed by executives. Lower house politicians are the poorest on average, consistent with the lower house being accessible by the entire male population of the country.</description>
+    </item>
+    
+    <item>
+      <title>BSc Theses Political Connections</title>
+      <link>/project/polcon/</link>
+      <pubDate>Sun, 01 Aug 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/project/polcon/</guid>
+      <description>Introduction In short, this theme will allow you to:
+Get to know the main literature about political connections. Understand the main theories about political connections and political interference with business and markets. Understand the difference between empirical and theoretical questions, and identify the main methods used in empirical research. Formulate your own ideas about political connections Get an impression of the variation of mechanisms around the world to regulate politicians&amp;rsquo; behavior.</description>
+    </item>
+    
+    <item>
+      <title>Thesis Supervision 2021</title>
+      <link>/project/thesis2021/</link>
+      <pubDate>Thu, 01 Jul 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/project/thesis2021/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>A From-Scratch Implementation of Neural Networks in Python</title>
+      <link>/blog/2022-08-03-a-from-scratch-implementation-of-neural-networks-in-python/</link>
+      <pubDate>Tue, 01 Jun 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2022-08-03-a-from-scratch-implementation-of-neural-networks-in-python/</guid>
+      <description>Introduction In this blog post, I wanted to write down an easy implementation of neural networks in Python. The model architecture of neural networks contains three pillars:
+The actual model (Multi-layer perceptron network), with inputs, layers, and outputs, and weights connecting these. Forward propagation - the loop from inputs to subsequent layers and finally, the output, using given weights. Backward propagation - updating the weights with gradient descent to minimize the loss.</description>
+    </item>
+    
+    <item>
+      <title>The Mathematics Underlying Deep Learning</title>
+      <link>/blog/2022-08-03-the-mathematics-underlying-deep-learning/</link>
+      <pubDate>Sat, 29 May 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2022-08-03-the-mathematics-underlying-deep-learning/</guid>
+      <description>Introduction In this post, I want to provide a quick primer about the mathematics underlying the backpropagation algorithm in neural networks and deep learning algorithms. I use the notation provided in this book, chapter 2, and prove/explain in-depth where some of the equations come from. I hope this provides an intuitive and clear explanation about the logic underlying backpropagation, and it should make it easy to implement this using code.</description>
+    </item>
+    
+    <item>
+      <title>A few game theory exercises and answers</title>
+      <link>/blog/2022-08-03-a-few-game-theory-exercises-and-answers/</link>
+      <pubDate>Fri, 05 Mar 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2022-08-03-a-few-game-theory-exercises-and-answers/</guid>
+      <description>Introduction I want to work out a couple of exercises from Game Theory: an Introduction, by Tadelis. Since the exercises from later chapters are not available online, and since they represent some of the more creative and fun challenges, I just wanted to post a few exercises which I worked out, as well as some (unasked) variations.
+Exercise 12.2: Cournot Revisited This exercise asks the following:
+Consider the Cournot duopoly model in which two firms, 1 and 2, simultaneously choose the quantities they supply, \(q_1\) and \(q_2\).</description>
+    </item>
+    
+    <item>
+      <title>The Within (FE) Estimator Visualized</title>
+      <link>/blog/2022-08-03-the-within-fe-estimator-visualized/</link>
+      <pubDate>Mon, 22 Feb 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2022-08-03-the-within-fe-estimator-visualized/</guid>
+      <description>Introduction In this post, I will visualize what the FE-estimator does by benchmarking it to the OLS estimator. I use World Bank data on trade and GDP per capita to estimate (i) a regression equation with OLS, (ii) describing the procedure involved in estimating the FE coefficient and (iii) visualize what that means in this specific setting.
+Downloading the Data First of all, we make use of the WDI package in R to download some (admittedly, pretty random) World Bank data.</description>
+    </item>
+    
+    <item>
+      <title>Solving for a Bayesian Perfect Equilibrium: A simple example</title>
+      <link>/blog/2022-08-03-solving-for-a-bayesian-perfect-equilibrium-a-simple-example/</link>
+      <pubDate>Wed, 30 Dec 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2022-08-03-solving-for-a-bayesian-perfect-equilibrium-a-simple-example/</guid>
+      <description>Introduction I just want to set up a reminder on how to solve for Perfect Bayesian Equilibria (PBE) in the case there might be no pooling or separating equilibria, or in the case there might be additional equilibria next to pooling or separating equilibria. I will do this on the basis of a short game, which is depicted in the figure below, taken from this video. The game is about a &amp;ldquo;terrorist group&amp;rdquo; and a &amp;ldquo;state&amp;rdquo;, whose interests are, respectively, committing terrorist attacks and preventing/resisting them.</description>
+    </item>
+    
+    <item>
+      <title>Working with git from R using usethis</title>
+      <link>/blog/2022-08-03-working-with-git-from-r-using-usethis/</link>
+      <pubDate>Sat, 26 Sep 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2022-08-03-working-with-git-from-r-using-usethis/</guid>
+      <description>Introduction This post serves as a reminder and introduction into the usethis package, which provides an interface (and sometimes, a guide) to efficiently working with git from within R. We suppose that git (a version control system) is already installed on your system. The workflow should not vary between operating systems.
+Packages like blogdown or hugodown often allow the user to create a folder, with lots of auxilary and supplementary files and an appropriate structure to ensure things work as they&amp;rsquo;re supposed to.</description>
+    </item>
+    
+    <item>
+      <title>Selenium in Python</title>
+      <link>/blog/2022-08-02-selenium-in-python/</link>
+      <pubDate>Wed, 15 Jul 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2022-08-02-selenium-in-python/</guid>
+      <description>Introduction This is a small user guide to getting Selenium to work in Python (on a MacOS). In my experience, the Python-Selenium combo works a little bit more smoothly than the R variant. Python seems to be a little bit faster, but the real advantage comes from not having to use Docker: your system will just load a browser (which you can see), and then program, using a for loop, for instance.</description>
+    </item>
+    
+    <item>
+      <title>Automated Reading of Tables from PDF Documents</title>
+      <link>/blog/2022-08-02-automated-reading-of-tables-from-pdf-documents/</link>
+      <pubDate>Sun, 31 May 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2022-08-02-automated-reading-of-tables-from-pdf-documents/</guid>
+      <description>Introduction In this post, I will briefly explain how to read in a table easily from the Indonesian data sources that I have been planning to use (see here). First, I download the file, containing data about municipalities in every province and their GRDP:
+if(!is.element(&amp;#34;hello.pdf&amp;#34;, list.files())){ download.file(&amp;#34;https://www.bps.go.id/publication/download.html?nrbvfeve=OTgxMmExYzRlYTI1Mjk4MDA0ODM5NTk2&amp;amp;xzmn=aHR0cHM6Ly93d3cuYnBzLmdvLmlkL3B1YmxpY2F0aW9uLzIwMTkvMTAvMDQvOTgxMmExYzRlYTI1Mjk4MDA0ODM5NTk2L3Byb2R1ay1kb21lc3Rpay1yZWdpb25hbC1icnV0by1rYWJ1cGF0ZW4ta290YS1kaS1pbmRvbmVzaWEtMjAxNC0yMDE4Lmh0bWw%3D&amp;amp;twoadfnoarfeauf=MjAyMi0wOC0wMyAwMDo1NDoyMg%3D%3D&amp;#34;, destfile = &amp;#34;hello.pdf&amp;#34;)} Reading in the table There are different ways in which I can read the table. First, I use the tabulizer package, from which I can use the extract_tables function, with two arguments:</description>
+    </item>
+    
+    <item>
+      <title>Batch downloading with Selenium</title>
+      <link>/blog/2022-08-02-batch-downloading-with-selenium/</link>
+      <pubDate>Fri, 29 May 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2022-08-02-batch-downloading-with-selenium/</guid>
+      <description>Introduction In this blogpost, I briefly explain how to batch download files in RSelenium. This can be super useful if you want to download some pdf&amp;rsquo;s or other files, but you don&amp;rsquo;t want to click &amp;lsquo;download&amp;rsquo; a 1000 times, and there is no other option available.
+Step 1: Setting up a Docker Container In this case, we have to deviate from the standard case of setting up a Docker container.</description>
+    </item>
+    
+    <item>
+      <title>R vs. Excel: A quick comparison</title>
+      <link>/blog/2022-08-02-r-vs-excel-a-quick-comparison/</link>
+      <pubDate>Mon, 25 May 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2022-08-02-r-vs-excel-a-quick-comparison/</guid>
+      <description>Once upon a time, I wrote a small pamphlet called ‘R vs. Excel: A quick comparison’ aimed at former or current Excel users to convince them to take up R, and leave aside Microsoft Excel entirely. I think the pamphlet contains some good arguments, so you can read about it here.</description>
+    </item>
+    
+    <item>
+      <title>Webscraping with RSelenium</title>
+      <link>/blog/2022-08-02-webscraping-with-rselenium/</link>
+      <pubDate>Mon, 25 May 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2022-08-02-webscraping-with-rselenium/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Making a website with blogdown</title>
+      <link>/blog/2022-08-02-making-a-website-with-blogdown/</link>
+      <pubDate>Sun, 17 May 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2022-08-02-making-a-website-with-blogdown/</guid>
+      <description>Introduction This is the first blog post on my own website. I&amp;rsquo;ve decided to make this website using the R package blogdown. The website looks very nice now (in my humble opinion), but it was tedious to make. When attempting to create the website, I first tried out a couple of themes before I settled on the basic &amp;ldquo;lithium&amp;rdquo; theme, because it was by far the easiest theme to wrap your head around.</description>
+    </item>
+    
+    <item>
+      <title>R: filtering with across in dplyr</title>
+      <link>/blog/2022-08-02-r-filtering-with-across-in-dplyr/</link>
+      <pubDate>Sun, 17 May 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2022-08-02-r-filtering-with-across-in-dplyr/</guid>
+      <description>Introduction The newest versions of the dplyr package introduced a new function, across(), to be used within summarise, mutate and filter functions, and I am trying to learn it. I am, however, having a hard time understanding the use and the mechanics of the function in combination with filter. While this vignette has ample examples on mutate and summarise, the examples on filter are few and not very insightful. The same is true for several non-official guides that I have read.</description>
+    </item>
+    
+    <item>
+      <title>Big Data, Big Questions</title>
+      <link>/project/bdbq/</link>
+      <pubDate>Mon, 01 Jul 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/project/bdbq/</guid>
+      <description>Introduction The links above contain:
+A repository for my course materials used in the working groups for the course Big Data, Big Questions at Utrecht University.
+This includes data sources, lecture slides, and other resources The lecture slides</description>
+    </item>
+    
+    <item>
+      <title>Contact</title>
+      <link>/contact/</link>
+      <pubDate>Mon, 25 Feb 2019 13:38:41 -0600</pubDate>
+      
+      <guid>/contact/</guid>
+      <description>** Contact page don&amp;rsquo;t contain a body, just the front matter above. See form.html in the layouts folder.
+Formspree requires a (free) account and new form to be set up. The link is made on the final published url in the field: Restrict to Domain. It is possible to register up to 2 emails free and you can select which one you want the forms to go to within Formspree in the Settings tab.</description>
+    </item>
+    
+    <item>
+      <title>Contributors</title>
+      <link>/contributors/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/contributors/</guid>
+      <description>Thank you to all the folks who have contributed both technical and creative skills to this project:
+Desirée De Leon 🦒 (designed 5 of the custom color themes, made illustrations for the workshop, and provided general aesthetic feedback along the way)
+Garrick Aden-Buie 🧙‍♀️ (debugged headroom.js and lent his panelset.js code to the theme)
+Allison Horst 🐕 (awesome illustrations of campfires, seedlings, and evergreens, as well as my R Markdown hedgehog mascot 🦔)</description>
+    </item>
+    
+    <item>
+      <title>License</title>
+      <link>/license/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/license/</guid>
+      <description>My blog posts are released under a Creative Commons Attribution-ShareAlike 4.0 International License.</description>
+    </item>
+    
+  </channel>
+</rss>

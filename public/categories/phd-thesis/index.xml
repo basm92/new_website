@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>PhD Thesis on Bas Machielsen</title>
+    <link>/categories/phd-thesis/</link>
+    <description>Recent content in PhD Thesis on Bas Machielsen</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Sat, 30 Jul 2022 00:00:00 +0000</lastBuildDate><atom:link href="/categories/phd-thesis/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>PhD Thesis</title>
+      <link>/articles/phd_thesis/</link>
+      <pubDate>Sat, 30 Jul 2022 00:00:00 +0000</pubDate>
+      
+      <guid>/articles/phd_thesis/</guid>
+      <description>My PhD Thesis My PhD Thesis is available in two parts. First, the actual thesis, which is downloadable via this link.
+Replication Package The main thesis is accompanied by a replication package, which can be found here. The purpose of this package is to share shareable data, but also to make my findings reproducible by showing the code that lead to the results in each table.</description>
+    </item>
+    
+  </channel>
+</rss>

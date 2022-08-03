@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr"><head>
+  
+                           
+     
+
+
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="generator" content="Hugo 0.101.0" />
+<title>Automated Reading of Tables from PDF Documents | Bas Machielsen</title>
+
+
+<meta property="twitter:site" content="@basss92">
+<meta property="twitter:creator" content="@basss92">
+
+
+
+
+
+
+
+  
+    
+  
+<meta name="description" content="A post about automated reading using an example of the Indonesian census data">
+
+
+<meta property="og:site_name" content="Bas Machielsen">
+<meta property="og:title" content="Automated Reading of Tables from PDF Documents | Bas Machielsen">
+<meta property="og:description" content="A post about automated reading using an example of the Indonesian census data" />
+<meta property="og:type" content="page" />
+<meta property="og:url" content="/blog/2022-08-02-automated-reading-of-tables-from-pdf-documents/" />
+<meta property="og:locale" content="en">
+
+
+
+
+    
+        <meta property="og:image" content="/blog/2022-08-02-automated-reading-of-tables-from-pdf-documents/featured.png" >
+        <meta property="twitter:card" content="summary_large_image">
+        <meta name="twitter:image" content="/blog/2022-08-02-automated-reading-of-tables-from-pdf-documents/featured.png" >
+    
+    
+  <meta itemprop="name" content="Automated Reading of Tables from PDF Documents">
+<meta itemprop="description" content="Introduction In this post, I will briefly explain how to read in a table easily from the Indonesian data sources that I have been planning to use (see here). First, I download the file, containing data about municipalities in every province and their GRDP:
+if(!is.element(&#34;hello.pdf&#34;, list.files())){ download.file(&#34;https://www.bps.go.id/publication/download.html?nrbvfeve=OTgxMmExYzRlYTI1Mjk4MDA0ODM5NTk2&amp;xzmn=aHR0cHM6Ly93d3cuYnBzLmdvLmlkL3B1YmxpY2F0aW9uLzIwMTkvMTAvMDQvOTgxMmExYzRlYTI1Mjk4MDA0ODM5NTk2L3Byb2R1ay1kb21lc3Rpay1yZWdpb25hbC1icnV0by1rYWJ1cGF0ZW4ta290YS1kaS1pbmRvbmVzaWEtMjAxNC0yMDE4Lmh0bWw%3D&amp;twoadfnoarfeauf=MjAyMi0wOC0wMyAwMDo1NDoyMg%3D%3D&#34;, destfile = &#34;hello.pdf&#34;)} Reading in the table There are different ways in which I can read the table. First, I use the tabulizer package, from which I can use the extract_tables function, with two arguments:"><meta itemprop="datePublished" content="2020-05-31T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2020-05-31T00:00:00+00:00" />
+<meta itemprop="wordCount" content="3152"><meta itemprop="image" content="/blog/2022-08-02-automated-reading-of-tables-from-pdf-documents/featured.png">
+<meta itemprop="keywords" content="" />
+  
+  
+  <!--[if IE]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  <link rel="shortcut icon" href="favicon_new.ico" type="image/x-icon">
+  <link rel="icon" href="favicon_new.ico" type="image/x-icon">
+  
+  
+  <link rel="stylesheet" href="/style.main.min.7aee66b22ae3b19895932b9cf4d37da828ca65fc6cd45cfdee1b36b98f4b0ae0.css" integrity="sha256-eu5msirjsZiVkyuc9NN9qCjKZfxs1Fz97hs2uY9LCuA=" media="screen">
+  
+  
+  <script src="/panelset.min.dca42702d7daf6fd31dc352efd2bcf0e4ac8c05ccaa58d9293f6177462de5d5f.js" type="text/javascript"></script>
+  
+  
+  <script src="/main.min.11d2df4163a7df9fb9d31f699461f02d84700b160cd42fa951b0982fc4d468bc.js" type="text/javascript"></script>
+</head>
+<body>
+      <div class="grid-container single">
+<header class="site-header pt4 pb2 mb4 bb b--transparent ph5 headroom z-max" role="banner">
+  <nav class="site-nav db dt-l w-100" role="navigation">
+    <a class="site-brand db dtc-l v-mid link no-underline w-100 w-33-l tc tl-l" href="/" title="Home">
+      <img src="/website_logo.png" class="dib db-l h2 w-auto" alt="Bas Machielsen">
+    </a>
+    <div class="site-links db dtc-l v-mid w-100 w-47-l tc tr-l mt3 mt0-l ttu tracked">
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/" title="Home">Home</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/about/" title="About">About</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 active" href="/blog/" title="Blog">Blog</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/project/" title="Teaching Overview &amp; Repository">Teaching</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/resume/" title="Resume">Resume</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/articles/" title="Articles">Articles</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/collection/" title="Software">Software</a>
+      
+      
+    </div>
+  </nav>
+</header>
+
+<main class="page-main pa4" role="main">
+  <section class="page-content mw7 center">
+    <article class="post-content pa0 ph4-l">
+      <header class="post-header">
+        <h1 class="f1 lh-solid measure-narrow mb3 fw4">Automated Reading of Tables from PDF Documents</h1>
+        
+        <p class="f6 measure lh-copy mv1">By Bas Machielsen</p>
+        <p class="f7 db mv0 ttu">May 31, 2020</p>
+
+      
+
+      </header>
+      <section class="post-body pt5 pb4">
+        
+
+
+
+<h2 id="introduction">Introduction
+  <a href="#introduction"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>In this post, I will briefly explain how to read in a table easily from the Indonesian data sources that I have been planning to use (see 
+<a href="https://www.bps.go.id/publication/2019/10/04/9812a1c4ea25298004839596/produk-domestik-regional-bruto-kabupaten-kota-di-indonesia-2014-2018.html" target="_blank" rel="noopener">here</a>). First, I download the file, containing data about municipalities in every province and their GRDP:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#900;font-weight:bold">if</span>(<span style="color:#000;font-weight:bold">!</span><span style="color:#900;font-weight:bold">is.element</span>(<span style="color:#d14">&#34;hello.pdf&#34;</span>, <span style="color:#900;font-weight:bold">list.files</span>())){
+</span></span><span style="display:flex;"><span><span style="color:#900;font-weight:bold">download.file</span>(<span style="color:#d14">&#34;https://www.bps.go.id/publication/download.html?nrbvfeve=OTgxMmExYzRlYTI1Mjk4MDA0ODM5NTk2&amp;xzmn=aHR0cHM6Ly93d3cuYnBzLmdvLmlkL3B1YmxpY2F0aW9uLzIwMTkvMTAvMDQvOTgxMmExYzRlYTI1Mjk4MDA0ODM5NTk2L3Byb2R1ay1kb21lc3Rpay1yZWdpb25hbC1icnV0by1rYWJ1cGF0ZW4ta290YS1kaS1pbmRvbmVzaWEtMjAxNC0yMDE4Lmh0bWw%3D&amp;twoadfnoarfeauf=MjAyMi0wOC0wMyAwMDo1NDoyMg%3D%3D&#34;</span>, destfile <span style="color:#000;font-weight:bold">=</span> <span style="color:#d14">&#34;hello.pdf&#34;</span>)}
+</span></span></code></pre></div>
+
+
+
+<h2 id="reading-in-the-table">Reading in the table
+  <a href="#reading-in-the-table"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>There are different ways in which I can read the table. First, I use the <code>tabulizer</code> package, from which I can use the <code>extract_tables</code> function, with two arguments:</p>
+<ul>
+<li>The file path (in this case: &ldquo;hello.pdf&rdquo;)</li>
+<li>The page number (in this case, we start at page 24, so let us take that page as an example)</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#900;font-weight:bold">library</span>(tabulizer)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic">#remotes::install_github(c(&#34;ropensci/tabulizerjars&#34;, &#34;ropensci/tabulizer&#34;), INSTALL_opts = &#34;--no-multiarch&#34;)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>file <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#d14">&#34;hello.pdf&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>tabulizer<span style="color:#000;font-weight:bold">::</span><span style="color:#900;font-weight:bold">extract_tables</span>(file, pages <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">24</span>)
+</span></span></code></pre></div><pre tabindex="0"><code>## [[1]]
+##       [,1]                       [,2]     [,3]      [,4]     [,5]     [,6]    
+##  [1,] &#34;KABUPATEN/KOTA&#34;           &#34;&#34;       &#34;&#34;        &#34;&#34;       &#34;&#34;       &#34;&#34;      
+##  [2,] &#34;&#34;                         &#34;2014&#34;   &#34;2015&#34;    &#34;2016&#34;   &#34;2017*&#34;  &#34;2018**&#34;
+##  [3,] &#34;Regency/Municipality&#34;     &#34;&#34;       &#34;&#34;        &#34;&#34;       &#34;&#34;       &#34;&#34;      
+##  [4,] &#34;(1)&#34;                      &#34;(2)&#34;    &#34;(3)&#34;     &#34;(4)&#34;    &#34;(5)&#34;    &#34;(6)&#34;   
+##  [5,] &#34;01. Kab. Simeulue&#34;        &#34;1.517&#34;  &#34;1.640&#34;   &#34;1.773&#34;  &#34;1.897&#34;  &#34;2.048&#34; 
+##  [6,] &#34;02. Kab. Aceh Singkil&#34;    &#34;1.686&#34;  &#34;1.816&#34;   &#34;1.981&#34;  &#34;2.127&#34;  &#34;2.259&#34; 
+##  [7,] &#34;03. Kab. Aceh Selatan&#34;    &#34;3.930&#34;  &#34;4.227&#34;   &#34;4.554&#34;  &#34;4.855&#34;  &#34;5.210&#34; 
+##  [8,] &#34;04. Kab. Aceh Tenggara&#34;   &#34;3.314&#34;  &#34;3.567&#34;   &#34;3.883&#34;  &#34;4.236&#34;  &#34;4.558&#34; 
+##  [9,] &#34;05. Kab. Aceh Timur&#34;      &#34;8.695&#34;  &#34;8.196&#34;   &#34;8.510&#34;  &#34;9.105&#34;  &#34;9.700&#34; 
+## [10,] &#34;06. Kab. Aceh Tengah&#34;     &#34;5.463&#34;  &#34;5.875&#34;   &#34;6.307&#34;  &#34;6.722&#34;  &#34;7.184&#34; 
+## [11,] &#34;07. Kab. Aceh Barat&#34;      &#34;5.469&#34;  &#34;5.828&#34;   &#34;6.184&#34;  &#34;6.943&#34;  &#34;7.651&#34; 
+## [12,] &#34;08. Kab. Aceh Besar&#34;      &#34;9.650&#34;  &#34;10.327&#34;  &#34;10.969&#34; &#34;11.637&#34; &#34;12.501&#34;
+## [13,] &#34;09. Kab. Pidie&#34;           &#34;7.255&#34;  &#34;7.862&#34;   &#34;8.490&#34;  &#34;9.187&#34;  &#34;9.904&#34; 
+## [14,] &#34;10. Kab. Bireun&#34;          &#34;9.392&#34;  &#34;10.069&#34;  &#34;10.726&#34; &#34;11.411&#34; &#34;12.139&#34;
+## [15,] &#34;11. Kab. Aceh Utara&#34;      &#34;19.941&#34; &#34;16.340&#34;  &#34;16.696&#34; &#34;17.542&#34; &#34;18.953&#34;
+## [16,] &#34;12. Kab. Aceh Barat Daya&#34; &#34;2.780&#34;  &#34;2.968&#34;   &#34;3.175&#34;  &#34;3.395&#34;  &#34;3.635&#34; 
+## [17,] &#34;13. Kab. Gayo Lues&#34;       &#34;1.934&#34;  &#34;2.076&#34;   &#34;2.234&#34;  &#34;2.428&#34;  &#34;2.597&#34; 
+## [18,] &#34;14. Kab. Aceh Tamiang&#34;    &#34;5.648&#34;  &#34;5.763&#34;   &#34;6.063&#34;  &#34;6.518&#34;  &#34;7.008&#34; 
+## [19,] &#34;15. Kab. Nagan Raya&#34;      &#34;5.457&#34;  &#34;5.775&#34;   &#34;6.159&#34;  &#34;6.571&#34;  &#34;6.931&#34; 
+## [20,] &#34;16. Kab. Aceh Jaya&#34;       &#34;1.839&#34;  &#34;1.981id&#34; &#34;2.116&#34;  &#34;2.275&#34;  &#34;2.434&#34; 
+## [21,] &#34;17. Kab. Bener Meriah&#34;    &#34;3.312&#34;  &#34;3.55.0&#34;  &#34;3.802&#34;  &#34;3.998&#34;  &#34;4.203&#34; 
+## [22,] &#34;18. Kab. Pidie Jaya&#34;      &#34;2.389&#34;  &#34;2o.598&#34;  &#34;2.770&#34;  &#34;3.013&#34;  &#34;3.242&#34; 
+## [23,] &#34;71. Kota Banda Aceh&#34;      &#34;13.502&#34; &#34;g14.494&#34; &#34;15.801&#34; &#34;16.685&#34; &#34;17.571&#34;
+## 
+## [[2]]
+##      [,1]                                                 [,2]         
+## [1,] &#34;71. Kota Banda Aceh&#34;                                &#34;&#34;           
+## [2,] &#34;72. Kota Sabang&#34;                                    &#34;&#34;           
+## [3,] &#34;73. Kota Langsa 74. Kota Lhokseumawe&#34;               &#34;&#34;           
+## [4,] &#34;75. Kota Subulussalam&#34;                              &#34;&#34;           
+## [5,] &#34;Jml Kab./Kota Total of Reg./Mun. Provinsi/Province&#34; &#34;ww  128.246&#34;
+##      [,3]           [,4] [,5]              [,6]              [,7]             
+## [1,] &#34;13.502&#34;       &#34;&#34;   &#34;14.494&#34;          &#34;15.801&#34;          &#34;16.685&#34;         
+## [2,] &#34;992 .&#34;        &#34;&#34;   &#34;1.070&#34;           &#34;1.158&#34;           &#34;1.273&#34;          
+## [3,] &#34;3.562ps9.321&#34; &#34;&#34;   &#34;3.875 7.636&#34;     &#34;4.217 7.729&#34;     &#34;4.538 8.070&#34;    
+## [4,] &#34;. 1.b201&#34;     &#34;&#34;   &#34;1.295&#34;           &#34;1.400&#34;           &#34;1.536&#34;          
+## [5,] &#34;127.897&#34;      &#34;&#34;   &#34;128.831 129.093&#34; &#34;136.698 136.844&#34; &#34;145.962 145.807&#34;
+##      [,8]            
+## [1,] &#34;17.571&#34;        
+## [2,] &#34;1.399&#34;         
+## [3,] &#34;4.8908.454&#34;    
+## [4,] &#34;1.642&#34;         
+## [5,] &#34;156.114155.912&#34;
+</code></pre><p>Not bad at all! But as you can see, it read two tables instead of one, and in the second table, it also missed some spaced. Finally ,the row summarizing the total is very confusing for the algorithm. A super useful feature of this package is the ability to select a part of the picture to extract:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#900;font-weight:bold">extract_areas</span>(file, <span style="color:#099">24</span>)
+</span></span></code></pre></div><p>You can also do this in two or three (or more) parts, and then combine the results to get a data.frame you want. Sometimes, or actually, most of the time, this will still not help you in getting exactly the table you want. One option is to resort to reading the table as a text, and then creating the table you want.</p>
+
+
+
+
+<h2 id="reading-the-table-as-text">Reading the table as text
+  <a href="#reading-the-table-as-text"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>That is what we will do next. The same <code>tabulizer</code> package also allows us to read in text, in the following way:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#900;font-weight:bold">extract_text</span>(file, <span style="color:#099">24</span>)
+</span></span></code></pre></div><pre tabindex="0"><code>## [1] &#34;KABUPATEN/KOTA\nRegency/Municipality\n(1) (2) (3) (4) (5) (6)\n01. Kab. Simeulue 1.517            1.640            1.773            1.897            2.048            \n02. Kab. Aceh Singkil 1.686            1.816            1.981            2.127            2.259            \n03. Kab. Aceh Selatan 3.930            4.227            4.554            4.855            5.210            \n04. Kab. Aceh Tenggara 3.314            3.567            3.883            4.236            4.558            \n05. Kab. Aceh Timur 8.695            8.196            8.510            9.105            9.700            \n06. Kab. Aceh Tengah 5.463            5.875            6.307            6.722            7.184            \n07. Kab. Aceh Barat 5.469            5.828            6.184            6.943            7.651            \n08. Kab. Aceh Besar 9.650            10.327          10.969          11.637          12.501          \n09. Kab. Pidie 7.255            7.862            8.490            9.187            9.904            \n10. Kab. Bireun 9.392            10.069          10.726          11.411          12.139          \n11. Kab. Aceh Utara 19.941          16.340          16.696          17.542          18.953          \n12. Kab. Aceh Barat Daya 2.780            2.968            3.175            3.395            3.635            \n13. Kab. Gayo Lues 1.934            2.076            2.234            2.428            2.597            \n14. Kab. Aceh Tamiang 5.648            5.763            6.063            6.518            7.008            \n15. Kab. Nagan Raya 5.457            5.775            6.159            6.571            6.931            \n16. Kab. Aceh Jaya 1.839            1.981            2.116            2.275            2.434            \n17. Kab. Bener Meriah 3.312            3.550            3.802            3.998            4.203            \n18. Kab. Pidie Jaya 2.389            2.598            2.770            3.013            3.242            \n71. Kota Banda Aceh 13.502          14.494          15.801          16.685          17.571          \n72. Kota Sabang 992               1.070            1.158            1.273            1.399            \n73. Kota Langsa 3.562            3.875            4.217            4.538            4.890            \n74. Kota Lhokseumawe 9.321            7.636            7.729            8.070            8.454            \n75. Kota Subulussalam 1.201            1.295            1.400            1.536            1.642            \nJml Kab./Kota Total of Reg./Mun. 128.246        128.831        136.698        145.962        156.114        \nProvinsi/Province 127.897        129.093        136.844        145.807        155.912        \nCatatan/Note: \n#) Merupakan pecahan dari kabupaten yang berada diatasnya/ As a part of Regency/Municipality above\n* Angka sementara/Preliminary figures\n** Angka sangat sementara/Very preliminary figures\nTabel/Table  1.\nPDRB Provinsi Aceh Atas Dasar Harga Berlaku \nMenurut Kabupaten/Kota (miliar rupiah), 2014-2018\nGRDP of Aceh Province at Current Market Prices \nby Regency/Municipality (billion rupiahs), 2014-2018\n2018**201620152014 2017*\n3\nht\ntp\ns:\n//w\nww\n.b\nps\n.g\no.\nid\n&#34;
+</code></pre><p>This seems kinda messy, but you will shortly see that this is in fact just what we need. To make this clear, let&rsquo;s do some cleaning:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#900;font-weight:bold">extract_text</span>(file, <span style="color:#099">24</span>) <span style="color:#000;font-weight:bold">%&gt;%</span>
+</span></span><span style="display:flex;"><span>  stringr<span style="color:#000;font-weight:bold">::</span><span style="color:#900;font-weight:bold">str_split</span>(<span style="color:#d14">&#34;\n&#34;</span>) <span style="color:#000;font-weight:bold">%&gt;%</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">lapply</span>(stringr<span style="color:#000;font-weight:bold">::</span>str_squish) <span style="color:#000;font-weight:bold">%&gt;%</span>
+</span></span><span style="display:flex;"><span>  magrittr<span style="color:#000;font-weight:bold">::</span><span style="color:#900;font-weight:bold">extract2</span>(<span style="color:#099">1</span>) <span style="color:#000;font-weight:bold">%&gt;%</span>
+</span></span><span style="display:flex;"><span>  magrittr<span style="color:#000;font-weight:bold">::</span><span style="color:#900;font-weight:bold">extract</span>(<span style="color:#099">4</span><span style="color:#000;font-weight:bold">:</span><span style="color:#099">26</span>) 
+</span></span></code></pre></div><pre tabindex="0"><code>##  [1] &#34;01. Kab. Simeulue 1.517 1.640 1.773 1.897 2.048&#34;       
+##  [2] &#34;02. Kab. Aceh Singkil 1.686 1.816 1.981 2.127 2.259&#34;   
+##  [3] &#34;03. Kab. Aceh Selatan 3.930 4.227 4.554 4.855 5.210&#34;   
+##  [4] &#34;04. Kab. Aceh Tenggara 3.314 3.567 3.883 4.236 4.558&#34;  
+##  [5] &#34;05. Kab. Aceh Timur 8.695 8.196 8.510 9.105 9.700&#34;     
+##  [6] &#34;06. Kab. Aceh Tengah 5.463 5.875 6.307 6.722 7.184&#34;    
+##  [7] &#34;07. Kab. Aceh Barat 5.469 5.828 6.184 6.943 7.651&#34;     
+##  [8] &#34;08. Kab. Aceh Besar 9.650 10.327 10.969 11.637 12.501&#34; 
+##  [9] &#34;09. Kab. Pidie 7.255 7.862 8.490 9.187 9.904&#34;          
+## [10] &#34;10. Kab. Bireun 9.392 10.069 10.726 11.411 12.139&#34;     
+## [11] &#34;11. Kab. Aceh Utara 19.941 16.340 16.696 17.542 18.953&#34;
+## [12] &#34;12. Kab. Aceh Barat Daya 2.780 2.968 3.175 3.395 3.635&#34;
+## [13] &#34;13. Kab. Gayo Lues 1.934 2.076 2.234 2.428 2.597&#34;      
+## [14] &#34;14. Kab. Aceh Tamiang 5.648 5.763 6.063 6.518 7.008&#34;   
+## [15] &#34;15. Kab. Nagan Raya 5.457 5.775 6.159 6.571 6.931&#34;     
+## [16] &#34;16. Kab. Aceh Jaya 1.839 1.981 2.116 2.275 2.434&#34;      
+## [17] &#34;17. Kab. Bener Meriah 3.312 3.550 3.802 3.998 4.203&#34;   
+## [18] &#34;18. Kab. Pidie Jaya 2.389 2.598 2.770 3.013 3.242&#34;     
+## [19] &#34;71. Kota Banda Aceh 13.502 14.494 15.801 16.685 17.571&#34;
+## [20] &#34;72. Kota Sabang 992 1.070 1.158 1.273 1.399&#34;           
+## [21] &#34;73. Kota Langsa 3.562 3.875 4.217 4.538 4.890&#34;         
+## [22] &#34;74. Kota Lhokseumawe 9.321 7.636 7.729 8.070 8.454&#34;    
+## [23] &#34;75. Kota Subulussalam 1.201 1.295 1.400 1.536 1.642&#34;
+</code></pre><p>Only the last command, <code>magrittr:extract</code> contains a parameter, because that&rsquo;s where the actual content of the table is separated from things like the header and footer. In this case, I wanted to extract only the municipalities&rsquo; info, and not the total or headers or anything, so that&rsquo;s why I went with row 4 to row 26, but I could&rsquo;ve included more if I wanted to.</p>
+<p>Let us now write this output to a vector called <code>data</code>, and see if we want split up the strings and put the data in a data.frame.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>data <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">extract_text</span>(file, <span style="color:#099">24</span>) <span style="color:#000;font-weight:bold">%&gt;%</span>
+</span></span><span style="display:flex;"><span>  stringr<span style="color:#000;font-weight:bold">::</span><span style="color:#900;font-weight:bold">str_split</span>(<span style="color:#d14">&#34;\n&#34;</span>) <span style="color:#000;font-weight:bold">%&gt;%</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">lapply</span>(stringr<span style="color:#000;font-weight:bold">::</span>str_squish) <span style="color:#000;font-weight:bold">%&gt;%</span>
+</span></span><span style="display:flex;"><span>  magrittr<span style="color:#000;font-weight:bold">::</span><span style="color:#900;font-weight:bold">extract2</span>(<span style="color:#099">1</span>) <span style="color:#000;font-weight:bold">%&gt;%</span>
+</span></span><span style="display:flex;"><span>  magrittr<span style="color:#000;font-weight:bold">::</span><span style="color:#900;font-weight:bold">extract</span>(<span style="color:#099">4</span><span style="color:#000;font-weight:bold">:</span><span style="color:#099">26</span>) 
+</span></span></code></pre></div>
+
+
+
+<h2 id="splitting-up-the-data-in-columns">Splitting up the data in columns
+  <a href="#splitting-up-the-data-in-columns"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>Naturally, we wanted to have a data.frame in which the first and second column contain information about the specific municipality, and all the other numbers afterwards to go to separate variables. Unfortunately, the <code>stringr::str_split</code> function, which is the usual way to go about this, has some limitations, forcing us to use either complicated Regex&rsquo;s to get the string to split in chunks we want, or to go with a second-best alternative. Fortunately, I found 
+<a href="https://www.r-bloggers.com/strsplit-but-keeping-the-delimiter/" target="_blank" rel="noopener">this blog</a>:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>strsplit2 <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">function</span>(x,
+</span></span><span style="display:flex;"><span>                     split,
+</span></span><span style="display:flex;"><span>                     type <span style="color:#000;font-weight:bold">=</span> <span style="color:#d14">&#34;remove&#34;</span>,
+</span></span><span style="display:flex;"><span>                     perl <span style="color:#000;font-weight:bold">=</span> <span style="color:#000;font-weight:bold">FALSE</span>,
+</span></span><span style="display:flex;"><span>                     <span style="color:#000;font-weight:bold">...</span>) {
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">if </span>(type <span style="color:#000;font-weight:bold">==</span> <span style="color:#d14">&#34;remove&#34;</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#998;font-style:italic"># use base::strsplit</span>
+</span></span><span style="display:flex;"><span>    out <span style="color:#000;font-weight:bold">&lt;-</span> base<span style="color:#000;font-weight:bold">::</span><span style="color:#900;font-weight:bold">strsplit</span>(x <span style="color:#000;font-weight:bold">=</span> x, split <span style="color:#000;font-weight:bold">=</span> split, perl <span style="color:#000;font-weight:bold">=</span> perl, <span style="color:#000;font-weight:bold">...</span>)
+</span></span><span style="display:flex;"><span>  } else <span style="color:#900;font-weight:bold">if </span>(type <span style="color:#000;font-weight:bold">==</span> <span style="color:#d14">&#34;before&#34;</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#998;font-style:italic"># split before the delimiter and keep it</span>
+</span></span><span style="display:flex;"><span>    out <span style="color:#000;font-weight:bold">&lt;-</span> base<span style="color:#000;font-weight:bold">::</span><span style="color:#900;font-weight:bold">strsplit</span>(x <span style="color:#000;font-weight:bold">=</span> x,
+</span></span><span style="display:flex;"><span>                          split <span style="color:#000;font-weight:bold">=</span> <span style="color:#900;font-weight:bold">paste0</span>(<span style="color:#d14">&#34;(?&lt;=.)(?=&#34;</span>, split, <span style="color:#d14">&#34;)&#34;</span>),
+</span></span><span style="display:flex;"><span>                          perl <span style="color:#000;font-weight:bold">=</span> <span style="color:#000;font-weight:bold">TRUE</span>,
+</span></span><span style="display:flex;"><span>                          <span style="color:#000;font-weight:bold">...</span>)
+</span></span><span style="display:flex;"><span>  } else <span style="color:#900;font-weight:bold">if </span>(type <span style="color:#000;font-weight:bold">==</span> <span style="color:#d14">&#34;after&#34;</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#998;font-style:italic"># split after the delimiter and keep it</span>
+</span></span><span style="display:flex;"><span>    out <span style="color:#000;font-weight:bold">&lt;-</span> base<span style="color:#000;font-weight:bold">::</span><span style="color:#900;font-weight:bold">strsplit</span>(x <span style="color:#000;font-weight:bold">=</span> x,
+</span></span><span style="display:flex;"><span>                          split <span style="color:#000;font-weight:bold">=</span> <span style="color:#900;font-weight:bold">paste0</span>(<span style="color:#d14">&#34;(?&lt;=&#34;</span>, split, <span style="color:#d14">&#34;)&#34;</span>),
+</span></span><span style="display:flex;"><span>                          perl <span style="color:#000;font-weight:bold">=</span> <span style="color:#000;font-weight:bold">TRUE</span>,
+</span></span><span style="display:flex;"><span>                          <span style="color:#000;font-weight:bold">...</span>)
+</span></span><span style="display:flex;"><span>  } else {
+</span></span><span style="display:flex;"><span>    <span style="color:#998;font-style:italic"># wrong type input</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#900;font-weight:bold">stop</span>(<span style="color:#d14">&#34;type must be remove, after or before!&#34;</span>)
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">return</span>(out)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>which was exactly what I was looking for: I could use easy Regex, and clean the data in very few steps:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>data <span style="color:#000;font-weight:bold">%&gt;%</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">strsplit2</span>(<span style="color:#d14">&#34;\\s[0-9]+&#34;</span>, type <span style="color:#000;font-weight:bold">=</span> <span style="color:#d14">&#34;before&#34;</span>) <span style="color:#000;font-weight:bold">%&gt;%</span>
+</span></span><span style="display:flex;"><span>  purrr<span style="color:#000;font-weight:bold">::</span><span style="color:#900;font-weight:bold">reduce</span>(rbind) <span style="color:#000;font-weight:bold">%&gt;%</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">as.data.frame</span>(row.names <span style="color:#000;font-weight:bold">=</span> <span style="color:#999">F</span>)
+</span></span></code></pre></div><pre tabindex="0"><code>##                          V1      V2      V3      V4      V5      V6
+## 1         01. Kab. Simeulue   1.517   1.640   1.773   1.897   2.048
+## 2     02. Kab. Aceh Singkil   1.686   1.816   1.981   2.127   2.259
+## 3     03. Kab. Aceh Selatan   3.930   4.227   4.554   4.855   5.210
+## 4    04. Kab. Aceh Tenggara   3.314   3.567   3.883   4.236   4.558
+## 5       05. Kab. Aceh Timur   8.695   8.196   8.510   9.105   9.700
+## 6      06. Kab. Aceh Tengah   5.463   5.875   6.307   6.722   7.184
+## 7       07. Kab. Aceh Barat   5.469   5.828   6.184   6.943   7.651
+## 8       08. Kab. Aceh Besar   9.650  10.327  10.969  11.637  12.501
+## 9            09. Kab. Pidie   7.255   7.862   8.490   9.187   9.904
+## 10          10. Kab. Bireun   9.392  10.069  10.726  11.411  12.139
+## 11      11. Kab. Aceh Utara  19.941  16.340  16.696  17.542  18.953
+## 12 12. Kab. Aceh Barat Daya   2.780   2.968   3.175   3.395   3.635
+## 13       13. Kab. Gayo Lues   1.934   2.076   2.234   2.428   2.597
+## 14    14. Kab. Aceh Tamiang   5.648   5.763   6.063   6.518   7.008
+## 15      15. Kab. Nagan Raya   5.457   5.775   6.159   6.571   6.931
+## 16       16. Kab. Aceh Jaya   1.839   1.981   2.116   2.275   2.434
+## 17    17. Kab. Bener Meriah   3.312   3.550   3.802   3.998   4.203
+## 18      18. Kab. Pidie Jaya   2.389   2.598   2.770   3.013   3.242
+## 19      71. Kota Banda Aceh  13.502  14.494  15.801  16.685  17.571
+## 20          72. Kota Sabang     992   1.070   1.158   1.273   1.399
+## 21          73. Kota Langsa   3.562   3.875   4.217   4.538   4.890
+## 22     74. Kota Lhokseumawe   9.321   7.636   7.729   8.070   8.454
+## 23    75. Kota Subulussalam   1.201   1.295   1.400   1.536   1.642
+</code></pre><p>The example of this method is that it can be used on virtually all tables from the aforementioned .pdf file, requiring very little editing and data wrangling, which saves a lot of time. To domenstrate, let&rsquo;s look at pages 25, 26 and 27, the pages following the original p 24 which I started with.</p>
+<ul>
+<li>Page 25:</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>data <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">extract_text</span>(file, <span style="color:#099">25</span>) <span style="color:#000;font-weight:bold">%&gt;%</span>
+</span></span><span style="display:flex;"><span>  stringr<span style="color:#000;font-weight:bold">::</span><span style="color:#900;font-weight:bold">str_split</span>(<span style="color:#d14">&#34;\n&#34;</span>) <span style="color:#000;font-weight:bold">%&gt;%</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">lapply</span>(stringr<span style="color:#000;font-weight:bold">::</span>str_squish) <span style="color:#000;font-weight:bold">%&gt;%</span>
+</span></span><span style="display:flex;"><span>  magrittr<span style="color:#000;font-weight:bold">::</span><span style="color:#900;font-weight:bold">extract2</span>(<span style="color:#099">1</span>) <span style="color:#000;font-weight:bold">%&gt;%</span>
+</span></span><span style="display:flex;"><span>  magrittr<span style="color:#000;font-weight:bold">::</span><span style="color:#900;font-weight:bold">extract</span>(<span style="color:#099">4</span><span style="color:#000;font-weight:bold">:</span><span style="color:#099">36</span>) <span style="color:#998;font-style:italic">#Remember to change this parameter</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>data
+</span></span></code></pre></div><pre tabindex="0"><code>##  [1] &#34;01. Kab. Nias 2.443 2.677 2.966 3.234 3.509&#34;                     
+##  [2] &#34;02. Kab. Mandailing Natal 8.758 9.586 10.660 11.713 12.618&#34;      
+##  [3] &#34;03. Kab. Tapanuli Selatan 9.310 10.058 10.965 11.983 12.902&#34;     
+##  [4] &#34;04. Kab. Tapanuli Tengah 6.516 7.140 7.850 8.545 9.230&#34;          
+##  [5] &#34;05. Kab. Tapanuli Utara 5.429 5.856 6.300 6.766 7.297&#34;           
+##  [6] &#34;06. Kab. Toba Samosir 5.173 5.623 6.124 6.642 7.167&#34;             
+##  [7] &#34;07. Kab. Labuhan Batu 22.176 24.083 26.505 29.032 31.303&#34;        
+##  [8] &#34;08. Kab. Asahan 24.329 26.465 29.207 32.020 34.667&#34;              
+##  [9] &#34;09. Kab. Simalungun 25.338 27.147 30.123 32.832 35.445&#34;          
+## [10] &#34;10. Kab. Dairi 6.268 6.823 7.484 8.049 8.736&#34;                    
+## [11] &#34;11. Kab. Karo 13.817 15.150 16.728 18.066 19.359&#34;                
+## [12] &#34;12. Kab. Deli Serdang 69.674 76.735 85.152 93.194 101.120&#34;       
+## [13] &#34;13. Kab. Langkat 27.875 30.742 34.105 37.119 39.819&#34;             
+## [14] &#34;14. Kab. Nias Selatan 4.298 4.729 5.193 5.696 6.262&#34;             
+## [15] &#34;15. Kab. Humbang Hasundutan 4.050 4.413 4.777 5.130 5.524&#34;       
+## [16] &#34;16. Kab. Pakpak Bharat 754 826 917 994 1.083&#34;                    
+## [17] &#34;17. Kab. Samosir 2.838 3.144 3.443 3.752 4.085&#34;                  
+## [18] &#34;18. Kab. Serdang Bedagai 18.457 20.152 22.114 24.095 25.995&#34;     
+## [19] &#34;19. Kab. Batu Bara 23.461 25.395 27.555 29.770 31.972&#34;           
+## [20] &#34;20. Kab. Padang Lawas Utara 7.448 8.222 9.074 9.904 10.765&#34;      
+## [21] &#34;21. Kab. Padang Lawas 7.288 7.853 8.808 9.705 10.591&#34;            
+## [22] &#34;22. Kab. Labuhan Batu Selatan 17.601 19.052 21.004 23.196 25.124&#34;
+## [23] &#34;23. Kab. Labuhan Batu Utara 16.262 17.620 19.374 21.162 22.750&#34;  
+## [24] &#34;24. Kab. Nias Utara 2.319 2.525 2.775 3.008 3.252&#34;               
+## [25] &#34;25. Kab. Nias Barat 1.184 1.289 1.414 1.548 1.672&#34;               
+## [26] &#34;71. Kota Sibolga 3.429 3.836 4.263 4.645 5.064&#34;                  
+## [27] &#34;72. Kota Tanjung Balai 5.439 6.052 6.723 7.425 8.176&#34;            
+## [28] &#34;73. Kota Pematang Siantar 9.555 10.566 11.579 12.444 13.177&#34;     
+## [29] &#34;74. Kota Tebing Tinggi 3.912 4.288 4.725 5.123 5.513&#34;            
+## [30] &#34;75. Kota Medan 148.247 164.722 184.809 203.016 222.482&#34;          
+## [31] &#34;76. Kota Binjai 7.649 8.382 9.112 9.905 10.765&#34;                  
+## [32] &#34;77. Kota Padang Sidempuan 4.001 4.425 4.903 5.372 5.859&#34;         
+## [33] &#34;78. Kota Gunungsitoli 3.212 3.595 4.034 4.503 5.010&#34;
+</code></pre><div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>data <span style="color:#000;font-weight:bold">%&gt;%</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">strsplit2</span>(<span style="color:#d14">&#34;\\s[0-9]+&#34;</span>, type <span style="color:#000;font-weight:bold">=</span> <span style="color:#d14">&#34;before&#34;</span>) <span style="color:#000;font-weight:bold">%&gt;%</span>
+</span></span><span style="display:flex;"><span>  purrr<span style="color:#000;font-weight:bold">::</span><span style="color:#900;font-weight:bold">reduce</span>(rbind) <span style="color:#000;font-weight:bold">%&gt;%</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">as.data.frame</span>(row.names <span style="color:#000;font-weight:bold">=</span> <span style="color:#999">F</span>)
+</span></span></code></pre></div><pre tabindex="0"><code>##                               V1       V2       V3       V4       V5       V6
+## 1                  01. Kab. Nias    2.443    2.677    2.966    3.234    3.509
+## 2      02. Kab. Mandailing Natal    8.758    9.586   10.660   11.713   12.618
+## 3      03. Kab. Tapanuli Selatan    9.310   10.058   10.965   11.983   12.902
+## 4       04. Kab. Tapanuli Tengah    6.516    7.140    7.850    8.545    9.230
+## 5        05. Kab. Tapanuli Utara    5.429    5.856    6.300    6.766    7.297
+## 6          06. Kab. Toba Samosir    5.173    5.623    6.124    6.642    7.167
+## 7          07. Kab. Labuhan Batu   22.176   24.083   26.505   29.032   31.303
+## 8                08. Kab. Asahan   24.329   26.465   29.207   32.020   34.667
+## 9            09. Kab. Simalungun   25.338   27.147   30.123   32.832   35.445
+## 10                10. Kab. Dairi    6.268    6.823    7.484    8.049    8.736
+## 11                 11. Kab. Karo   13.817   15.150   16.728   18.066   19.359
+## 12         12. Kab. Deli Serdang   69.674   76.735   85.152   93.194  101.120
+## 13              13. Kab. Langkat   27.875   30.742   34.105   37.119   39.819
+## 14         14. Kab. Nias Selatan    4.298    4.729    5.193    5.696    6.262
+## 15   15. Kab. Humbang Hasundutan    4.050    4.413    4.777    5.130    5.524
+## 16        16. Kab. Pakpak Bharat      754      826      917      994    1.083
+## 17              17. Kab. Samosir    2.838    3.144    3.443    3.752    4.085
+## 18      18. Kab. Serdang Bedagai   18.457   20.152   22.114   24.095   25.995
+## 19            19. Kab. Batu Bara   23.461   25.395   27.555   29.770   31.972
+## 20   20. Kab. Padang Lawas Utara    7.448    8.222    9.074    9.904   10.765
+## 21         21. Kab. Padang Lawas    7.288    7.853    8.808    9.705   10.591
+## 22 22. Kab. Labuhan Batu Selatan   17.601   19.052   21.004   23.196   25.124
+## 23   23. Kab. Labuhan Batu Utara   16.262   17.620   19.374   21.162   22.750
+## 24           24. Kab. Nias Utara    2.319    2.525    2.775    3.008    3.252
+## 25           25. Kab. Nias Barat    1.184    1.289    1.414    1.548    1.672
+## 26              71. Kota Sibolga    3.429    3.836    4.263    4.645    5.064
+## 27        72. Kota Tanjung Balai    5.439    6.052    6.723    7.425    8.176
+## 28     73. Kota Pematang Siantar    9.555   10.566   11.579   12.444   13.177
+## 29        74. Kota Tebing Tinggi    3.912    4.288    4.725    5.123    5.513
+## 30                75. Kota Medan  148.247  164.722  184.809  203.016  222.482
+## 31               76. Kota Binjai    7.649    8.382    9.112    9.905   10.765
+## 32     77. Kota Padang Sidempuan    4.001    4.425    4.903    5.372    5.859
+## 33         78. Kota Gunungsitoli    3.212    3.595    4.034    4.503    5.010
+</code></pre><ul>
+<li>Page 26:</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>data <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">extract_text</span>(file, <span style="color:#099">26</span>) <span style="color:#000;font-weight:bold">%&gt;%</span>
+</span></span><span style="display:flex;"><span>  stringr<span style="color:#000;font-weight:bold">::</span><span style="color:#900;font-weight:bold">str_split</span>(<span style="color:#d14">&#34;\n&#34;</span>) <span style="color:#000;font-weight:bold">%&gt;%</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">lapply</span>(stringr<span style="color:#000;font-weight:bold">::</span>str_squish) <span style="color:#000;font-weight:bold">%&gt;%</span>
+</span></span><span style="display:flex;"><span>  magrittr<span style="color:#000;font-weight:bold">::</span><span style="color:#900;font-weight:bold">extract2</span>(<span style="color:#099">1</span>) <span style="color:#000;font-weight:bold">%&gt;%</span>
+</span></span><span style="display:flex;"><span>  magrittr<span style="color:#000;font-weight:bold">::</span><span style="color:#900;font-weight:bold">extract</span>(<span style="color:#099">4</span><span style="color:#000;font-weight:bold">:</span><span style="color:#099">23</span>) <span style="color:#998;font-style:italic">#Remember to change this parameter</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>data <span style="color:#000;font-weight:bold">%&gt;%</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">strsplit2</span>(<span style="color:#d14">&#34;\\s[0-9]+&#34;</span>, type <span style="color:#000;font-weight:bold">=</span> <span style="color:#d14">&#34;before&#34;</span>) <span style="color:#000;font-weight:bold">%&gt;%</span>
+</span></span><span style="display:flex;"><span>  purrr<span style="color:#000;font-weight:bold">::</span><span style="color:#900;font-weight:bold">reduce</span>(rbind) <span style="color:#000;font-weight:bold">%&gt;%</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">as.data.frame</span>(row.names <span style="color:#000;font-weight:bold">=</span> <span style="color:#999">F</span>)
+</span></span></code></pre></div><pre tabindex="0"><code>##                                  V1       V2       V3       V4       V5
+## 1       01. Kab. Kepulauan Mentawai    3.027    3.396    3.726    4.089
+## 2          02. Kab. Pesisir Selatan    9.114   10.197   11.271   12.522
+## 3                    03. Kab. Solok    9.408   10.165   11.053   11.980
+## 4                04. Kab. Sijunjung    6.471    6.955    7.439    7.978
+## 5              05. Kab. Tanah Datar    9.178    9.901   10.735   11.620
+## 6          06. Kab. Padang Pariaman   14.153   15.846   17.533   19.182
+## 7                     07. Kab. Agam   13.918   15.248   16.693   18.220
+## 8          08. Kab. Lima Puluh Kota   10.564   11.583   12.678   13.783
+## 9                  09. Kab. Pasaman    5.951    6.505    7.336    8.008
+## 10           10. Kab. Solok Selatan    3.891    4.236    4.598    4.987
+## 11             11. Kab. Dharmasraya    7.155    7.725    8.438    9.282
+## 12           12. Kab. Pasaman Barat   10.703   11.713   12.794   14.068
+## 13                  71. Kota Padang   41.266   45.093   49.386   53.869
+## 14                   72. Kota Solok    2.729    2.965    3.241    3.555
+## 15             73. Kota Sawah Lunto    2.514    2.715    2.938    3.214
+## 16          74. Kota Padang Panjang    2.348    2.533    2.774    3.028
+## 17             75. Kota Bukittinggi    5.636    6.170    6.783    7.453
+## 18              76. Kota Payakumbuh    4.181    4.655    5.203    5.757
+## 19                77. Kota Pariaman    3.406    3.699    4.037    4.387
+## 20 Jml Kab./Kota Total of Reg./Mun.  165.612  181.302  198.656  216.982
+##          V6
+## 1     4.397
+## 2    13.643
+## 3    12.801
+## 4     8.516
+## 5    12.393
+## 6    20.639
+## 7    19.506
+## 8    14.739
+## 9     8.530
+## 10    5.303
+## 11    9.917
+## 12   14.997
+## 13   58.272
+## 14    3.835
+## 15    3.461
+## 16    3.269
+## 17    8.069
+## 18    6.342
+## 19    4.765
+## 20  233.394
+</code></pre><ul>
+<li>And finally, page 27. Let me introduce a more abstract way of recognizing the parameter, making use of <code>which</code> to find out in which character string &ldquo;Jml Kab.&rdquo; is located, so I know at which string to stop:</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>data <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">extract_text</span>(file, <span style="color:#099">27</span>) <span style="color:#000;font-weight:bold">%&gt;%</span>
+</span></span><span style="display:flex;"><span>  stringr<span style="color:#000;font-weight:bold">::</span><span style="color:#900;font-weight:bold">str_split</span>(<span style="color:#d14">&#34;\n&#34;</span>) <span style="color:#000;font-weight:bold">%&gt;%</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">lapply</span>(stringr<span style="color:#000;font-weight:bold">::</span>str_squish) <span style="color:#000;font-weight:bold">%&gt;%</span>
+</span></span><span style="display:flex;"><span>  magrittr<span style="color:#000;font-weight:bold">::</span><span style="color:#900;font-weight:bold">extract2</span>(<span style="color:#099">1</span>) 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>uptothis <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">which</span>(stringr<span style="color:#000;font-weight:bold">::</span><span style="color:#900;font-weight:bold">str_detect</span>(data, <span style="color:#d14">&#34;Jml Kab.&#34;</span>))<span style="color:#099">-1</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>data <span style="color:#000;font-weight:bold">&lt;-</span> data <span style="color:#000;font-weight:bold">%&gt;%</span>
+</span></span><span style="display:flex;"><span>  magrittr<span style="color:#000;font-weight:bold">::</span><span style="color:#900;font-weight:bold">extract</span>(<span style="color:#099">4</span><span style="color:#000;font-weight:bold">:</span>uptothis)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>data <span style="color:#000;font-weight:bold">%&gt;%</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">strsplit2</span>(<span style="color:#d14">&#34;\\s[0-9]+&#34;</span>, type <span style="color:#000;font-weight:bold">=</span> <span style="color:#d14">&#34;before&#34;</span>) <span style="color:#000;font-weight:bold">%&gt;%</span>
+</span></span><span style="display:flex;"><span>  purrr<span style="color:#000;font-weight:bold">::</span><span style="color:#900;font-weight:bold">reduce</span>(rbind) <span style="color:#000;font-weight:bold">%&gt;%</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">as.data.frame</span>(row.names <span style="color:#000;font-weight:bold">=</span> <span style="color:#999">F</span>)
+</span></span></code></pre></div><pre tabindex="0"><code>##                            V1       V2       V3       V4       V5       V6
+## 1   01. Kab. Kuantan Singingi   24.022   25.195   27.522   29.518   30.652
+## 2     02. Kab. Indragiri Hulu   33.762   34.584   37.033   38.740   40.392
+## 3    03. Kab. Indragiri Hilir   47.822   51.800   57.292   60.891   60.223
+## 4          04. Kab. Pelalawan   35.401   38.176   41.165   43.871   46.154
+## 5               05. Kab. Siak   85.736   77.236   78.942   79.619   84.674
+## 6             06. Kab. Kampar   68.817   66.285   69.676   71.587   77.197
+## 7         07. Kab. Rokan Hulu   25.355   26.907   29.146   31.006   32.311
+## 8          08. Kab. Bengkalis  165.899  135.505  132.201  132.994  149.407
+## 9        09. Kab. Rokan Hilir   74.546   70.693   73.268   74.030   78.707
+## 10 10. Kab. Kepulauan Meranti   15.127   15.152   16.044   16.731   18.186
+## 11        71. Kota Pekan Baru   73.841   83.664   92.129  101.112  108.840
+## 12             73. Kota Dumai   23.628   25.454   27.962   30.299   32.994
+</code></pre>
+
+
+
+<h2 id="conclusion">Conclusion
+  <a href="#conclusion"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>In this post, I attempted to explain, and show, how to easily import tables from .pdf documents in R. I also did not show a couple of other aspects, most notably, endogenous start of data extraction (a little tricker than endogenous ending), and I also did not separate the Identifiers from the names. Neither did I convert all variables to numeric, and gave variable names. If you want to know more about such basic cleaning operations, feel free to message me, or better, go to 
+<a href="http://www.tidyverse.org" target="_blank" rel="noopener">the tidyverse website</a>.</p>
+
+        
+        <details closed class="f6 fw7 input-reset">
+  <dl class="f6 lh-copy">
+    <dt class="fw7">Posted on:</dt>
+    <dd class="fw5 ml0">May 31, 2020</dd>
+  </dl>
+  <dl class="f6 lh-copy">
+    <dt class="fw7">Length:</dt>
+    <dd class="fw5 ml0">15 minute read, 3152 words</dd>
+  </dl>
+  
+  
+  
+  <dl class="f6 lh-copy">
+    <dt class="fw7">See Also:</dt>
+    
+  </dl>
+</details>
+
+      </section>
+      <footer class="post-footer">
+        <div class="post-pagination dt w-100 mt4 mb2">
+  
+  
+    <a class="prev dtc pr2 tl v-top fw6"
+    href="/blog/2022-08-02-selenium-in-python/">&larr; Selenium in Python</a>
+  
+  
+  
+    <a class="next dtc pl2 tr v-top fw6"
+    href="/blog/2022-08-02-batch-downloading-with-selenium/">Batch downloading with Selenium &rarr;</a>
+  
+</div>
+
+      </footer>
+    </article>
+    
+      
+<div class="post-comments pa0 pa4-l mt4">
+  
+  <script src="https://utteranc.es/client.js"
+          repo="apreshill/apero"
+          issue-term="pathname"
+          theme="boxy-light"
+          label="comments :crystal_ball:"
+          crossorigin="anonymous"
+          async
+          type="text/javascript">
+  </script>
+  
+</div>
+
+    
+  </section>
+</main>
+<footer class="site-footer pv4 bt b--transparent ph5" role="contentinfo">
+  <nav class="db dt-l w-100">
+    <p class="site-copyright f7 db dtc-l v-mid w-100 w-33-l tc tl-l pv2 pv0-l mv0 lh-copy">
+      &copy; 2022 Bas Machielsen
+      <span class="middot-divider"></span>
+      Made with <span xmlns:dct="http://purl.org/dc/terms/" property="dct:title"><a xmlns:dct="http://purl.org/dc/terms/" href="https://github.com/hugo-apero/" rel="dct:source">Hugo Apéro</a></span>.
+      <br />
+      
+Based on <span xmlns:dct="http://purl.org/dc/terms/" property="dct:title"><a xmlns:dct="http://purl.org/dc/terms/" href="https://github.com/formspree/blogophonic-hugo" rel="dct:source">Blogophonic</a></span> by <a xmlns:cc="http://creativecommons.org/ns#" href="https://formspree.io" property="cc:attributionName" rel="cc:attributionURL">Formspree</a>.
+    </p>
+    
+    <div class="site-social-links db dtc-l v-mid w-100 w-33-l tc pv2 pv0-l mv0">
+      <div class="social-icon-links" aria-hidden="true">
+  
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://github.com/basm92" title="github" target="_blank" rel="noopener">
+      <i class="fab fa-github fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://scholar.google.com/citations?user=bS8uo44AAAAJ" title="google" target="_blank" rel="noopener">
+      <i class="fab fa-google fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://twitter.com/basm92" title="twitter" target="_blank" rel="noopener">
+      <i class="fab fa-twitter fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="mailto:a.h.machielsen@uu.nl" title="envelope" >
+      <i class="fas fa-envelope fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="mailto:basmachielsen@live.nl" title="envelope" >
+      <i class="far fa-envelope fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://orcid.org/0000-0002-9692-0615" title="orcid" target="_blank" rel="noopener">
+      <i class="ai ai-orcid fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="/blog/index.xml" title="rss" >
+      <i class="fas fa-rss fa-lg fa-fw"></i>
+    </a>
+  
+</div>
+
+    </div>
+    
+    <div class="site-links f6 db dtc-l v-mid w-100 w-67-l tc tr-l pv2 pv0-l mv0">
+      
+      <a class="dib pv1 ph2 link" href="/license/" title="License">License</a>
+      
+      <a class="dib pv1 ph2 link" href="/contact/" title="Contact form">Contact</a>
+      
+      <a class="dib pv1 ph2 link" href="/contributors/" title="Contributors">Contributors</a>
+      
+    </div>
+  </nav>
+  
+    <script>
+
+    var i, text, code, codes = document.getElementsByTagName('code');
+    for (let i = 0; i < codes.length;) {
+      code = codes[i];
+      if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+        text = code.textContent;
+        if (/^\$[^$]/.test(text) && /[^$]\$$/.test(text)) {
+          text = text.replace(/^\$/, '\\(').replace(/\$$/, '\\)');
+          code.textContent = text;
+        }
+        if (/^\\\((.|\s)+\\\)$/.test(text) ||
+            /^\\\[(.|\s)+\\\]$/.test(text) ||
+            /^\$(.|\s)+\$$/.test(text) ||
+            /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+          code.outerHTML = code.innerHTML;  
+          continue;
+        }
+      }
+      i++;
+    }
+</script>
+
+  
+    
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.css" integrity="sha384-RZU/ijkSsFbcmivfdRBQDtwuwVqK7GMOw6IMvKyeWL2K5UAlyp6WonmB8m7Jd0Hn" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.js" integrity="sha384-pK1WpvzWVBQiP0/GjnvRxV4mOb0oxFuyRxJlk6vVw146n3egcN5C925NCP7a7BY8" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/contrib/auto-render.min.js" integrity="sha384-vZTG03m+2yp6N6BNi5iM4rW4oIwk5DfcNdFfxkk9ZWpDriOkXX8voJBFrAO7MpVl" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
+
+
+
+    
+  
+  
+</footer>
+
+      </div>
+    </body>
+</html>

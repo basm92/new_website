@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr"><head>
+  
+                           
+     
+
+
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="generator" content="Hugo 0.101.0" />
+<title>Batch downloading with Selenium | Bas Machielsen</title>
+
+
+<meta property="twitter:site" content="@basss92">
+<meta property="twitter:creator" content="@basss92">
+
+
+
+
+
+
+
+  
+    
+  
+<meta name="description" content="A post about how to use the Selenium package in R to automate downloading of files.">
+
+
+<meta property="og:site_name" content="Bas Machielsen">
+<meta property="og:title" content="Batch downloading with Selenium | Bas Machielsen">
+<meta property="og:description" content="A post about how to use the Selenium package in R to automate downloading of files." />
+<meta property="og:type" content="page" />
+<meta property="og:url" content="/blog/2022-08-02-batch-downloading-with-selenium/" />
+<meta property="og:locale" content="en">
+
+
+
+
+    
+        <meta property="og:image" content="/blog/2022-08-02-batch-downloading-with-selenium/featured.png" >
+        <meta property="twitter:card" content="summary_large_image">
+        <meta name="twitter:image" content="/blog/2022-08-02-batch-downloading-with-selenium/featured.png" >
+    
+    
+  <meta itemprop="name" content="Batch downloading with Selenium">
+<meta itemprop="description" content="Introduction In this blogpost, I briefly explain how to batch download files in RSelenium. This can be super useful if you want to download some pdf&rsquo;s or other files, but you don&rsquo;t want to click &lsquo;download&rsquo; a 1000 times, and there is no other option available.
+Step 1: Setting up a Docker Container In this case, we have to deviate from the standard case of setting up a Docker container."><meta itemprop="datePublished" content="2020-05-29T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2020-05-29T00:00:00+00:00" />
+<meta itemprop="wordCount" content="638"><meta itemprop="image" content="/blog/2022-08-02-batch-downloading-with-selenium/featured.png">
+<meta itemprop="keywords" content="" />
+  
+  
+  <!--[if IE]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  <link rel="shortcut icon" href="favicon_new.ico" type="image/x-icon">
+  <link rel="icon" href="favicon_new.ico" type="image/x-icon">
+  
+  
+  <link rel="stylesheet" href="/style.main.min.7aee66b22ae3b19895932b9cf4d37da828ca65fc6cd45cfdee1b36b98f4b0ae0.css" integrity="sha256-eu5msirjsZiVkyuc9NN9qCjKZfxs1Fz97hs2uY9LCuA=" media="screen">
+  
+  
+  <script src="/panelset.min.dca42702d7daf6fd31dc352efd2bcf0e4ac8c05ccaa58d9293f6177462de5d5f.js" type="text/javascript"></script>
+  
+  
+  <script src="/main.min.11d2df4163a7df9fb9d31f699461f02d84700b160cd42fa951b0982fc4d468bc.js" type="text/javascript"></script>
+</head>
+<body>
+      <div class="grid-container single">
+<header class="site-header pt4 pb2 mb4 bb b--transparent ph5 headroom z-max" role="banner">
+  <nav class="site-nav db dt-l w-100" role="navigation">
+    <a class="site-brand db dtc-l v-mid link no-underline w-100 w-33-l tc tl-l" href="/" title="Home">
+      <img src="/website_logo.png" class="dib db-l h2 w-auto" alt="Bas Machielsen">
+    </a>
+    <div class="site-links db dtc-l v-mid w-100 w-47-l tc tr-l mt3 mt0-l ttu tracked">
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/" title="Home">Home</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/about/" title="About">About</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 active" href="/blog/" title="Blog">Blog</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/project/" title="Teaching Overview &amp; Repository">Teaching</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/resume/" title="Resume">Resume</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/articles/" title="Articles">Articles</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/collection/" title="Software">Software</a>
+      
+      
+    </div>
+  </nav>
+</header>
+
+<main class="page-main pa4" role="main">
+  <section class="page-content mw7 center">
+    <article class="post-content pa0 ph4-l">
+      <header class="post-header">
+        <h1 class="f1 lh-solid measure-narrow mb3 fw4">Batch downloading with Selenium</h1>
+        
+        <p class="f6 measure lh-copy mv1">By Bas Machielsen</p>
+        <p class="f7 db mv0 ttu">May 29, 2020</p>
+
+      
+
+      </header>
+      <section class="post-body pt5 pb4">
+        
+
+
+
+<h2 id="introduction">Introduction
+  <a href="#introduction"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>In this blogpost, I briefly explain how to batch download files in RSelenium. This can be super useful if you want to download some pdf&rsquo;s or other files, but you don&rsquo;t want to click &lsquo;download&rsquo; a 1000 times, and there is no other option available.</p>
+
+
+
+
+<h2 id="step-1-setting-up-a-docker-container">Step 1: Setting up a Docker Container
+  <a href="#step-1-setting-up-a-docker-container"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>In this case, we have to deviate from the standard case of setting up a Docker container. We have to make sure that there is a mapping between the Docker folder where the downloads will end up, and the Download folder on our &lsquo;real&rsquo; machine.</p>
+<pre tabindex="0"><code class="language-{}" data-lang="{}">$ docker run -d -p 4445:4444 -p 5901:5900 -v /home/bas/Downloads:/home/seluser/Downloads selenium/standalone-firefox
+</code></pre><p>As usual, we assign one set of ports to the Docker machine, and we assign another set of ports to serve as the &lsquo;means of transport&rsquo; between the Docker container and our own directory. The syntax tells us that we have to first place our down directory <code>/home/bas/Downloads/</code> and then the directory where the downloads end up on the Selenium Image in the container <code>/home/seluser/Downloads</code>.</p>
+
+
+
+
+<h2 id="step-2-specifying-firefox-preferences">Step 2: Specifying Firefox Preferences
+  <a href="#step-2-specifying-firefox-preferences"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>We also have to specify our (virtual) browser&rsquo;s preferences. In particular, we have to specify the download folder, and we have to specify that the browser shouldn&rsquo;t open download windows before downloading something (because Selenium can&rsquo;t handle that).</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>ePrefs <span style="color:#000;font-weight:bold">&lt;-</span> RSelenium<span style="color:#000;font-weight:bold">::</span><span style="color:#900;font-weight:bold">makeFirefoxProfile</span>(
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">list</span>(
+</span></span><span style="display:flex;"><span>    <span style="color:#d14">&#34;browser.download.dir&#34;</span> <span style="color:#000;font-weight:bold">=</span> <span style="color:#d14">&#34;/home/seluser/Downloads&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#d14">&#34;browser.download.folderList&#34;</span> <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">2L</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#d14">&#34;browser.download.manager.showWhenStarting&#34;</span> <span style="color:#000;font-weight:bold">=</span> <span style="color:#000;font-weight:bold">FALSE</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#d14">&#34;browser.helperApps.neverAsk.saveToDisk&#34;</span> <span style="color:#000;font-weight:bold">=</span> <span style="color:#d14">&#34;multipart/x-zip,application/zip,application/x-zip-compressed,application/x-compressed,application/msword,application/csv,text/csv,image/png ,image/jpeg, application/pdf, text/html,text/plain,  application/excel, application/vnd.ms-excel, application/x-excel, application/x-msexcel, application/octet-stream&#34;</span>))
+</span></span></code></pre></div><p>Note that you should leave the download directory as &lsquo;/home/seluser/Downloads&rsquo;, because that it the standard directory the Selenium image creates, and also because you&rsquo;ve specified a map from that directory to your own downloads folder when you set up the Docker container.</p>
+
+
+
+
+<h2 id="step-3-downloading-a-file">Step 3: Downloading a file
+  <a href="#step-3-downloading-a-file"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>Next, we can connect to the server we&rsquo;ve just created, instructing the browser client to take into consideration the preferences (settings) we just created in the list <code>ePrefs</code>:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>remDr <span style="color:#000;font-weight:bold">&lt;-</span> RSelenium<span style="color:#000;font-weight:bold">::</span><span style="color:#900;font-weight:bold">remoteDriver</span>(browserName <span style="color:#000;font-weight:bold">=</span> <span style="color:#d14">&#34;firefox&#34;</span>,
+</span></span><span style="display:flex;"><span>                      port <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">4445L</span>,
+</span></span><span style="display:flex;"><span>                      extraCapabilities <span style="color:#000;font-weight:bold">=</span> ePrefs)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>remDr<span style="color:#000;font-weight:bold">$</span><span style="color:#900;font-weight:bold">open</span>()
+</span></span></code></pre></div><p>Let&rsquo;s now navigate to an example website (a blogpost on this website), and download a <code>.csv</code> file which I&rsquo;ve hidden in there:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>remDr<span style="color:#000;font-weight:bold">$</span><span style="color:#900;font-weight:bold">navigate</span>(<span style="color:#d14">&#34;https://bas-m.netlify.app/2020/05/27/web-scraping-with-rselenium/&#34;</span>)
+</span></span><span style="display:flex;"><span>click <span style="color:#000;font-weight:bold">&lt;-</span> remDr<span style="color:#000;font-weight:bold">$</span><span style="color:#900;font-weight:bold">findElement</span>(<span style="color:#d14">&#34;css&#34;</span>, <span style="color:#d14">&#34;#step-3-cleaning-the-data &gt; p:nth-child(2) &gt; a:nth-child(1)&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>click<span style="color:#000;font-weight:bold">$</span><span style="color:#900;font-weight:bold">clickElement</span>()
+</span></span></code></pre></div><p>You can check whether you can see the file in your Downloads folder (or any other folder yo might have specified) now!</p>
+
+
+
+
+<h2 id="step-4-example-download-batch-files">Step 4: Example: Download batch files
+  <a href="#step-4-example-download-batch-files"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>Let&rsquo;s now proceed to a more interesting application: batch downloading pictures of archival data from 
+<a href="https://www.historisch.cbs.nl/" target="_blank" rel="noopener">CBS Historisch</a>. We will use the &ldquo;Jaarcijfers voor Nederland 1943 (500 p.)&rdquo; and we will start from page 1, and scrape until page 100!  We will execute a for loop over several (tens, hundreds of) pages, and download a picture on every page!</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#998;font-style:italic">#Navigate to page 1</span>
+</span></span><span style="display:flex;"><span>remDr<span style="color:#000;font-weight:bold">$</span><span style="color:#900;font-weight:bold">navigate</span>(<span style="color:#d14">&#34;https://www.historisch.cbs.nl/detail.php?nav_id=5-1&amp;id=102092112&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic">#accept the cookies</span>
+</span></span><span style="display:flex;"><span>clickhere <span style="color:#000;font-weight:bold">&lt;-</span> remDr<span style="color:#000;font-weight:bold">$</span><span style="color:#900;font-weight:bold">findElement</span>(using <span style="color:#000;font-weight:bold">=</span> <span style="color:#d14">&#34;css&#34;</span>, <span style="color:#d14">&#34;a.cb-enable&#34;</span>)
+</span></span><span style="display:flex;"><span>clickhere<span style="color:#000;font-weight:bold">$</span><span style="color:#900;font-weight:bold">clickElement</span>()
+</span></span></code></pre></div><p>This is the preliminary work. Now, we can start a for loop over 100 pages.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#900;font-weight:bold">for</span>(i in <span style="color:#099">1</span><span style="color:#000;font-weight:bold">:</span><span style="color:#099">5</span>) {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#998;font-style:italic">#Switch to the correct frame</span>
+</span></span><span style="display:flex;"><span>  webElem <span style="color:#000;font-weight:bold">&lt;-</span> remDr<span style="color:#000;font-weight:bold">$</span><span style="color:#900;font-weight:bold">findElements</span>(<span style="color:#d14">&#34;css&#34;</span>, <span style="color:#d14">&#34;iframe&#34;</span>)
+</span></span><span style="display:flex;"><span>  remDr<span style="color:#000;font-weight:bold">$</span><span style="color:#900;font-weight:bold">switchToFrame</span>(webElem[[1]])
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>  <span style="color:#998;font-style:italic">#Find the two download subsequent buttons and download the file</span>
+</span></span><span style="display:flex;"><span>  remDr<span style="color:#000;font-weight:bold">$</span><span style="color:#900;font-weight:bold">findElement</span>(using <span style="color:#000;font-weight:bold">=</span> <span style="color:#d14">&#34;css&#34;</span>, <span style="color:#d14">&#34;a#downloadDirect&#34;</span>) <span style="color:#000;font-weight:bold">-&gt;</span> download
+</span></span><span style="display:flex;"><span>  download<span style="color:#000;font-weight:bold">$</span><span style="color:#900;font-weight:bold">clickElement</span>()
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>  remDr<span style="color:#000;font-weight:bold">$</span><span style="color:#900;font-weight:bold">findElement</span>(<span style="color:#d14">&#34;css&#34;</span>, <span style="color:#d14">&#34;a#downloadResLink&#34;</span>) <span style="color:#000;font-weight:bold">-&gt;</span> download2
+</span></span><span style="display:flex;"><span>  download2<span style="color:#000;font-weight:bold">$</span><span style="color:#900;font-weight:bold">clickElement</span>()
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>  <span style="color:#998;font-style:italic">#Now navigate to the next page:</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#998;font-style:italic">#First, switch back to the original frame</span>
+</span></span><span style="display:flex;"><span>  remDr<span style="color:#000;font-weight:bold">$</span><span style="color:#900;font-weight:bold">switchToFrame</span>(<span style="color:#000;font-weight:bold">NULL</span>)
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>  <span style="color:#998;font-style:italic">#Then, find the button for page i:</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#998;font-style:italic">#Find the relevant Xpath</span>
+</span></span><span style="display:flex;"><span>  path <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#d14">&#34;//a[contains(@class, &#39;custom-navigation-page&#39;) and text()=&#39;y&#39;]&#34;</span>
+</span></span><span style="display:flex;"><span>  path <span style="color:#000;font-weight:bold">&lt;-</span> stringr<span style="color:#000;font-weight:bold">::</span><span style="color:#900;font-weight:bold">str_replace</span>(path, <span style="color:#d14">&#34;y&#34;</span>, <span style="color:#900;font-weight:bold">as.character</span>(i<span style="color:#099">+1</span>))
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>  <span style="color:#998;font-style:italic">#And click to the next page</span>
+</span></span><span style="display:flex;"><span>  remDr<span style="color:#000;font-weight:bold">$</span><span style="color:#900;font-weight:bold">findElement</span>(<span style="color:#d14">&#34;xpath&#34;</span>, path) <span style="color:#000;font-weight:bold">-&gt;</span> click
+</span></span><span style="display:flex;"><span>  click<span style="color:#000;font-weight:bold">$</span><span style="color:#900;font-weight:bold">clickElement</span>()
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>  <span style="color:#998;font-style:italic">#And then we can start again - make sure to add a sys.Sleep:</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">Sys.sleep</span>(<span style="color:#099">5</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>Don&rsquo;t forget to close your session afterwards:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>remDr<span style="color:#000;font-weight:bold">$</span><span style="color:#900;font-weight:bold">close</span>()
+</span></span></code></pre></div>
+
+
+
+<h2 id="in-the-future">In the future..
+  <a href="#in-the-future"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>The next thing you might do with all these pictures is automatically OCR&rsquo;ing them! The <code>tesseract</code> package allows OCRing in R, but the quality is still very low.. Perhaps it would be reasonable to do so once the algorithm is good enough to distinguish between tables and all other text. Thanks for reading!</p>
+
+        
+        <details closed class="f6 fw7 input-reset">
+  <dl class="f6 lh-copy">
+    <dt class="fw7">Posted on:</dt>
+    <dd class="fw5 ml0">May 29, 2020</dd>
+  </dl>
+  <dl class="f6 lh-copy">
+    <dt class="fw7">Length:</dt>
+    <dd class="fw5 ml0">3 minute read, 638 words</dd>
+  </dl>
+  
+  
+  
+  <dl class="f6 lh-copy">
+    <dt class="fw7">See Also:</dt>
+    
+  </dl>
+</details>
+
+      </section>
+      <footer class="post-footer">
+        <div class="post-pagination dt w-100 mt4 mb2">
+  
+  
+    <a class="prev dtc pr2 tl v-top fw6"
+    href="/blog/2022-08-02-automated-reading-of-tables-from-pdf-documents/">&larr; Automated Reading of Tables from PDF Documents</a>
+  
+  
+  
+    <a class="next dtc pl2 tr v-top fw6"
+    href="/blog/2022-08-02-r-vs-excel-a-quick-comparison/">R vs. Excel: A quick comparison &rarr;</a>
+  
+</div>
+
+      </footer>
+    </article>
+    
+      
+<div class="post-comments pa0 pa4-l mt4">
+  
+  <script src="https://utteranc.es/client.js"
+          repo="apreshill/apero"
+          issue-term="pathname"
+          theme="boxy-light"
+          label="comments :crystal_ball:"
+          crossorigin="anonymous"
+          async
+          type="text/javascript">
+  </script>
+  
+</div>
+
+    
+  </section>
+</main>
+<footer class="site-footer pv4 bt b--transparent ph5" role="contentinfo">
+  <nav class="db dt-l w-100">
+    <p class="site-copyright f7 db dtc-l v-mid w-100 w-33-l tc tl-l pv2 pv0-l mv0 lh-copy">
+      &copy; 2022 Bas Machielsen
+      <span class="middot-divider"></span>
+      Made with <span xmlns:dct="http://purl.org/dc/terms/" property="dct:title"><a xmlns:dct="http://purl.org/dc/terms/" href="https://github.com/hugo-apero/" rel="dct:source">Hugo Apéro</a></span>.
+      <br />
+      
+Based on <span xmlns:dct="http://purl.org/dc/terms/" property="dct:title"><a xmlns:dct="http://purl.org/dc/terms/" href="https://github.com/formspree/blogophonic-hugo" rel="dct:source">Blogophonic</a></span> by <a xmlns:cc="http://creativecommons.org/ns#" href="https://formspree.io" property="cc:attributionName" rel="cc:attributionURL">Formspree</a>.
+    </p>
+    
+    <div class="site-social-links db dtc-l v-mid w-100 w-33-l tc pv2 pv0-l mv0">
+      <div class="social-icon-links" aria-hidden="true">
+  
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://github.com/basm92" title="github" target="_blank" rel="noopener">
+      <i class="fab fa-github fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://scholar.google.com/citations?user=bS8uo44AAAAJ" title="google" target="_blank" rel="noopener">
+      <i class="fab fa-google fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://twitter.com/basm92" title="twitter" target="_blank" rel="noopener">
+      <i class="fab fa-twitter fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="mailto:a.h.machielsen@uu.nl" title="envelope" >
+      <i class="fas fa-envelope fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="mailto:basmachielsen@live.nl" title="envelope" >
+      <i class="far fa-envelope fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://orcid.org/0000-0002-9692-0615" title="orcid" target="_blank" rel="noopener">
+      <i class="ai ai-orcid fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="/blog/index.xml" title="rss" >
+      <i class="fas fa-rss fa-lg fa-fw"></i>
+    </a>
+  
+</div>
+
+    </div>
+    
+    <div class="site-links f6 db dtc-l v-mid w-100 w-67-l tc tr-l pv2 pv0-l mv0">
+      
+      <a class="dib pv1 ph2 link" href="/license/" title="License">License</a>
+      
+      <a class="dib pv1 ph2 link" href="/contact/" title="Contact form">Contact</a>
+      
+      <a class="dib pv1 ph2 link" href="/contributors/" title="Contributors">Contributors</a>
+      
+    </div>
+  </nav>
+  
+    <script>
+
+    var i, text, code, codes = document.getElementsByTagName('code');
+    for (let i = 0; i < codes.length;) {
+      code = codes[i];
+      if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+        text = code.textContent;
+        if (/^\$[^$]/.test(text) && /[^$]\$$/.test(text)) {
+          text = text.replace(/^\$/, '\\(').replace(/\$$/, '\\)');
+          code.textContent = text;
+        }
+        if (/^\\\((.|\s)+\\\)$/.test(text) ||
+            /^\\\[(.|\s)+\\\]$/.test(text) ||
+            /^\$(.|\s)+\$$/.test(text) ||
+            /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+          code.outerHTML = code.innerHTML;  
+          continue;
+        }
+      }
+      i++;
+    }
+</script>
+
+  
+    
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.css" integrity="sha384-RZU/ijkSsFbcmivfdRBQDtwuwVqK7GMOw6IMvKyeWL2K5UAlyp6WonmB8m7Jd0Hn" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.js" integrity="sha384-pK1WpvzWVBQiP0/GjnvRxV4mOb0oxFuyRxJlk6vVw146n3egcN5C925NCP7a7BY8" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/contrib/auto-render.min.js" integrity="sha384-vZTG03m+2yp6N6BNi5iM4rW4oIwk5DfcNdFfxkk9ZWpDriOkXX8voJBFrAO7MpVl" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
+
+
+
+    
+  
+  
+</footer>
+
+      </div>
+    </body>
+</html>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Software on Bas Machielsen</title>
+    <link>/collection/</link>
+    <description>Recent content in Software on Bas Machielsen</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Fri, 01 Jan 2021 00:00:00 +0000</lastBuildDate><atom:link href="/collection/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Clio</title>
+      <link>/collection/clio/</link>
+      <pubDate>Fri, 01 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/collection/clio/</guid>
+      <description>Clio is an R package that serves as a bridge between the user and the website Clio Infra, a repository containing publicly available data on various aspects of economic history at the country level. This package is designed to quickly and efficiently extract data, allowing the user to make large queries. This way, the user is not confined to manually downloading Excel files, and the associated filtering and merging process. The package also facilitates transparent and reproducible data collection, and it is ‘typo robust’ to a certain extent, to prevent annoyance.</description>
+    </item>
+    
+    <item>
+      <title>HDNG</title>
+      <link>/collection/hdng/</link>
+      <pubDate>Wed, 01 Jan 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/collection/hdng/</guid>
+      <description>hdng is a package facilitating the use of the HDNG Database, a database containing quantative information in various aspects of Dutch municipalities from about 1800 to the 1980&amp;rsquo;s. This package aids the user in finding their way through the database, allowing them to search for wanted variables, browse within categories, and finally, make a query to extract the wanted data.</description>
+    </item>
+    
+  </channel>
+</rss>

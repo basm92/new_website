@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Course on Bas Machielsen</title>
+    <link>/categories/course/</link>
+    <description>Recent content in Course on Bas Machielsen</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Fri, 01 Jul 2022 00:00:00 +0000</lastBuildDate><atom:link href="/categories/course/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Thesis Supervision 2022</title>
+      <link>/project/thesis2022/</link>
+      <pubDate>Fri, 01 Jul 2022 00:00:00 +0000</pubDate>
+      
+      <guid>/project/thesis2022/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>BSc Theses Political Connections</title>
+      <link>/project/polcon/</link>
+      <pubDate>Sun, 01 Aug 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/project/polcon/</guid>
+      <description>Introduction In short, this theme will allow you to:
+Get to know the main literature about political connections. Understand the main theories about political connections and political interference with business and markets. Understand the difference between empirical and theoretical questions, and identify the main methods used in empirical research. Formulate your own ideas about political connections Get an impression of the variation of mechanisms around the world to regulate politicians&amp;rsquo; behavior.</description>
+    </item>
+    
+    <item>
+      <title>Thesis Supervision 2021</title>
+      <link>/project/thesis2021/</link>
+      <pubDate>Thu, 01 Jul 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/project/thesis2021/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Big Data, Big Questions</title>
+      <link>/project/bdbq/</link>
+      <pubDate>Mon, 01 Jul 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/project/bdbq/</guid>
+      <description>Introduction The links above contain:
+A repository for my course materials used in the working groups for the course Big Data, Big Questions at Utrecht University.
+This includes data sources, lecture slides, and other resources The lecture slides</description>
+    </item>
+    
+  </channel>
+</rss>

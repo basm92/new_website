@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr"><head>
+  
+                           
+     
+
+
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="generator" content="Hugo 0.101.0" />
+<title>Selenium in Python | Bas Machielsen</title>
+
+
+<meta property="twitter:site" content="@basss92">
+<meta property="twitter:creator" content="@basss92">
+
+
+
+
+
+
+
+  
+    
+  
+<meta name="description" content="Introducing how to use Selenium in a Python inferface.">
+
+
+<meta property="og:site_name" content="Bas Machielsen">
+<meta property="og:title" content="Selenium in Python | Bas Machielsen">
+<meta property="og:description" content="Introducing how to use Selenium in a Python inferface." />
+<meta property="og:type" content="page" />
+<meta property="og:url" content="/blog/2022-08-02-selenium-in-python/" />
+<meta property="og:locale" content="en">
+
+
+
+
+    
+        <meta property="og:image" content="/blog/2022-08-02-selenium-in-python/featured.png" >
+        <meta property="twitter:card" content="summary_large_image">
+        <meta name="twitter:image" content="/blog/2022-08-02-selenium-in-python/featured.png" >
+    
+    
+  <meta itemprop="name" content="Selenium in Python">
+<meta itemprop="description" content="Introduction This is a small user guide to getting Selenium to work in Python (on a MacOS). In my experience, the Python-Selenium combo works a little bit more smoothly than the R variant. Python seems to be a little bit faster, but the real advantage comes from not having to use Docker: your system will just load a browser (which you can see), and then program, using a for loop, for instance."><meta itemprop="datePublished" content="2020-07-15T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2020-07-15T00:00:00+00:00" />
+<meta itemprop="wordCount" content="1135"><meta itemprop="image" content="/blog/2022-08-02-selenium-in-python/featured.png">
+<meta itemprop="keywords" content="" />
+  
+  
+  <!--[if IE]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  <link rel="shortcut icon" href="favicon_new.ico" type="image/x-icon">
+  <link rel="icon" href="favicon_new.ico" type="image/x-icon">
+  
+  
+  <link rel="stylesheet" href="/style.main.min.7aee66b22ae3b19895932b9cf4d37da828ca65fc6cd45cfdee1b36b98f4b0ae0.css" integrity="sha256-eu5msirjsZiVkyuc9NN9qCjKZfxs1Fz97hs2uY9LCuA=" media="screen">
+  
+  
+  <script src="/panelset.min.dca42702d7daf6fd31dc352efd2bcf0e4ac8c05ccaa58d9293f6177462de5d5f.js" type="text/javascript"></script>
+  
+  
+  <script src="/main.min.11d2df4163a7df9fb9d31f699461f02d84700b160cd42fa951b0982fc4d468bc.js" type="text/javascript"></script>
+</head>
+<body>
+      <div class="grid-container single">
+<header class="site-header pt4 pb2 mb4 bb b--transparent ph5 headroom z-max" role="banner">
+  <nav class="site-nav db dt-l w-100" role="navigation">
+    <a class="site-brand db dtc-l v-mid link no-underline w-100 w-33-l tc tl-l" href="/" title="Home">
+      <img src="/website_logo.png" class="dib db-l h2 w-auto" alt="Bas Machielsen">
+    </a>
+    <div class="site-links db dtc-l v-mid w-100 w-47-l tc tr-l mt3 mt0-l ttu tracked">
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/" title="Home">Home</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/about/" title="About">About</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 active" href="/blog/" title="Blog">Blog</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/project/" title="Teaching Overview &amp; Repository">Teaching</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/resume/" title="Resume">Resume</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/articles/" title="Articles">Articles</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/collection/" title="Software">Software</a>
+      
+      
+    </div>
+  </nav>
+</header>
+
+<main class="page-main pa4" role="main">
+  <section class="page-content mw7 center">
+    <article class="post-content pa0 ph4-l">
+      <header class="post-header">
+        <h1 class="f1 lh-solid measure-narrow mb3 fw4">Selenium in Python</h1>
+        
+        <p class="f6 measure lh-copy mv1">By Bas Machielsen</p>
+        <p class="f7 db mv0 ttu">July 15, 2020</p>
+
+      
+
+      </header>
+      <section class="post-body pt5 pb4">
+        
+
+
+
+<h2 id="introduction">Introduction
+  <a href="#introduction"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>This is a small user guide to getting Selenium to work in Python (on a MacOS). In my experience, the Python-Selenium combo works a little bit more smoothly than the R variant. Python seems to be a little bit faster, but the real advantage comes from not having to use Docker: your system will just load a browser (which you can see), and then program, using a <code>for</code> loop, for instance.</p>
+<p>Throughout this guide, I also make use of <code>reticulate</code>, a package to enable Python in R (as I&rsquo;m writing this in RMarkdown). First, we start with a small setup.</p>
+
+
+
+
+<h2 id="setup-in-r">Setup in R
+  <a href="#setup-in-r"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>Getting Python to work in an RStudio environment is very easy. You need the package <code>reticulate</code>, and depending on your OS, and your version of Python, you can &rsquo;load in&rsquo; Pyton by executing either:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#900;font-weight:bold">library</span>(reticulate)
+</span></span><span style="display:flex;"><span><span style="color:#900;font-weight:bold">use_python</span>(<span style="color:#d14">&#34;path/to/pythoninstallation&#34;</span>)
+</span></span></code></pre></div><p>which comes down to the following in my case (I use the Anaconda Python distribution):</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#900;font-weight:bold">library</span>(reticulate)
+</span></span><span style="display:flex;"><span><span style="color:#900;font-weight:bold">use_python</span>(<span style="color:#d14">&#34;/opt/anaconda3/bin/python3&#34;</span>)
+</span></span></code></pre></div><p>You can check whether a Python distribution is available on your system by executing (Macs have a version of Python installed by default, or so I understand):</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#900;font-weight:bold">py_available</span>()
+</span></span></code></pre></div><p>The cool thing about this is that you can access Python-objects in R, and R objects in Python, as demonstrated 
+<a href="https://rstudio.github.io/reticulate/articles/r_markdown.html" target="_blank" rel="noopener">here</a> for example.</p>
+
+
+
+
+<h2 id="setup-of-selenium-in-python">Setup of Selenium in Python
+  <a href="#setup-of-selenium-in-python"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>Now, let&rsquo;s get back to business. I&rsquo;ve done another guide of Selenium in R, and the <code>RSelenium</code> package, R&rsquo;s Selenium client, insists (kind of) that we use Docker. This is nice, but not for the uniniated. Selenium in Python can be used without it, and I prefer that, as I can keep an eye on what happens and do some debugging on the spot.</p>
+<p>First, we need a couple of libraries: the <code>webdriver</code> part is the equivalent to R&rsquo;s <code>RSelenium</code>, and gives us a few commands (which differ sharply from R&rsquo;s Selenium interface!) to instruct the driver what to do. I also need <code>time</code>, to give the browser some time to load, after performing various steps. Finally, I need <code>BeautifulSoup</code> and <code>pandas</code> for webscraping and data-tidying, respectively.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#000;font-weight:bold">from</span> <span style="color:#555">selenium</span> <span style="color:#000;font-weight:bold">import</span> webdriver
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">from</span> <span style="color:#555">selenium.webdriver.common.keys</span> <span style="color:#000;font-weight:bold">import</span> Keys
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">from</span> <span style="color:#555">selenium.common.exceptions</span> <span style="color:#000;font-weight:bold">import</span> NoSuchElementException   
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">import</span> <span style="color:#555">time</span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">import</span> <span style="color:#555">os</span> 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">from</span> <span style="color:#555">bs4</span> <span style="color:#000;font-weight:bold">import</span> BeautifulSoup
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">import</span> <span style="color:#555">pandas</span> <span style="color:#000;font-weight:bold">as</span> <span style="color:#555">pd</span>
+</span></span></code></pre></div><p>I also need a selenium driver for the browser I want to use. I have opted for Firefox, which uses a driver called geckodriver, but you can any browser that provides a selenium-driver. A short overview can be found in the table on 
+<a href="https://www.selenium.dev/documentation/en/webdriver/driver_requirements/" target="_blank" rel="noopener">this page</a>.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#998;font-style:italic">#os.chdir(&#34;/Users/basmachielsen/&#34;)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>browser <span style="color:#000;font-weight:bold">=</span> webdriver<span style="color:#000;font-weight:bold">.</span>Firefox(executable_path<span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#39;./geckodriver&#39;</span>)
+</span></span></code></pre></div><p>At this point, a browser window opens! We can &lsquo;control&rsquo; this browser window the way we are used to, but of course, the point of selenium is to write a program that controls this systematically for you. Let&rsquo;s demonstrate this briefly using the website 
+<a href="www.thuisbezorgd.nl">Thuisbezorgd</a>, the largest Dutch food delivery website.</p>
+
+
+
+
+<h2 id="short-demonstration">Short Demonstration
+  <a href="#short-demonstration"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>First, I navigate to the website, and search for a location, e.g. Utrecht Centraal station. Note that I use <code>time.sleep</code> to give the browser enough time to load. It is very easy to find elements and click them, as demonstrated by:</p>
+<ul>
+<li>finding them by CSS selector,</li>
+<li>entering something (or not)</li>
+<li>and then clicking them.</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>browser<span style="color:#000;font-weight:bold">.</span>delete_all_cookies()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>browser<span style="color:#000;font-weight:bold">.</span>get(<span style="color:#d14">&#34;http://www.thuisbezorgd.nl&#34;</span>)
+</span></span><span style="display:flex;"><span>time<span style="color:#000;font-weight:bold">.</span>sleep(<span style="color:#099">2</span>)
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">try</span>: 
+</span></span><span style="display:flex;"><span>    browser<span style="color:#000;font-weight:bold">.</span>find_element_by_xpath(<span style="color:#d14">&#39;//button[text()=&#34;OK&#34;]&#39;</span>)<span style="color:#000;font-weight:bold">.</span>click()
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">except</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#0086b3">print</span>(<span style="color:#d14">&#34;Geen cookies meer&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>elem <span style="color:#000;font-weight:bold">=</span> browser<span style="color:#000;font-weight:bold">.</span>find_element_by_xpath(<span style="color:#d14">&#39;//input&#39;</span>)
+</span></span><span style="display:flex;"><span>elem<span style="color:#000;font-weight:bold">.</span>clear()
+</span></span><span style="display:flex;"><span>elem<span style="color:#000;font-weight:bold">.</span>send_keys(<span style="color:#d14">&#34;Utrecht Centraal&#34;</span>, Keys<span style="color:#000;font-weight:bold">.</span>RETURN)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>time<span style="color:#000;font-weight:bold">.</span>sleep(<span style="color:#099">2</span>)
+</span></span><span style="display:flex;"><span>elem<span style="color:#000;font-weight:bold">.</span>send_keys(Keys<span style="color:#000;font-weight:bold">.</span>DOWN, Keys<span style="color:#000;font-weight:bold">.</span>RETURN, Keys<span style="color:#000;font-weight:bold">.</span>RETURN)
+</span></span></code></pre></div><p>I end up on a page with all available restaurants in the neighbourhood. I save the html-code for this page:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>time<span style="color:#000;font-weight:bold">.</span>sleep(<span style="color:#099">5</span>)
+</span></span><span style="display:flex;"><span>content <span style="color:#000;font-weight:bold">=</span> browser<span style="color:#000;font-weight:bold">.</span>page_source
+</span></span></code></pre></div><p>Next, I want to extract the names of these restaurants. I can do that by making a list, and then using beautifulSoup&rsquo;s <code>findAll</code> method to find all elements that meet certain criteria:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>time<span style="color:#000;font-weight:bold">.</span>sleep(<span style="color:#099">2</span>)
+</span></span><span style="display:flex;"><span>soup <span style="color:#000;font-weight:bold">=</span> BeautifulSoup(content)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>names <span style="color:#000;font-weight:bold">=</span> <span style="color:#0086b3">list</span>()
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">for</span> a <span style="color:#000;font-weight:bold">in</span> soup<span style="color:#000;font-weight:bold">.</span>findAll(<span style="color:#d14">&#39;h3&#39;</span>, href<span style="color:#000;font-weight:bold">=</span><span style="color:#000;font-weight:bold">False</span>, attrs<span style="color:#000;font-weight:bold">=</span>{<span style="color:#d14">&#39;data-qa&#39;</span>:<span style="color:#d14">&#39;restaurant-info-name&#39;</span>}):
+</span></span><span style="display:flex;"><span>    names<span style="color:#000;font-weight:bold">.</span>append(a<span style="color:#000;font-weight:bold">.</span>text<span style="color:#000;font-weight:bold">.</span>strip())
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Print the names</span>
+</span></span><span style="display:flex;"><span><span style="color:#0086b3">print</span>(names[:<span style="color:#099">10</span>])
+</span></span></code></pre></div><pre tabindex="0"><code>## [&#39;Wagamama&#39;, &#34;The Ice Cream Shop - Ben &amp; Jerry&#39;s en Magnum ijs&#34;, &#39;Hola Empanadas&#39;, &#39;Eazie&#39;, &#39;Cafetaria Ten Beste&#39;, &#39;Left Eat Right&#39;, &#39;Itoshii HC&#39;, &#39;Krishna Vilas Utrecht&#39;, &#34;O&#39;Tacos&#34;, &#39;Ritos - Fresh Mex en Pokébowls&#39;]
+</code></pre><p>Now I have a list with names of restaurants. Now, let&rsquo;s do two more things: first, some restaurants have been extracted twice (because, for some reason, they feature on the page twice), so let&rsquo;s correct that.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>restos <span style="color:#000;font-weight:bold">=</span> <span style="color:#0086b3">list</span>(<span style="color:#0086b3">set</span>(names))
+</span></span></code></pre></div><p>And secondly, let&rsquo;s extract the rating for all of those restaurants by using a <code>for</code> loop around all restaurants. This consists of a couple of parts:</p>
+<p>We find the name of the restaurant on this page, click it, wait for a second, and click on &lsquo;Beoordelingen&rsquo; (Ratings).</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>elem <span style="color:#000;font-weight:bold">=</span> browser<span style="color:#000;font-weight:bold">.</span>find_element_by_partial_link_text(names[<span style="color:#099">0</span>]) <span style="color:#998;font-style:italic">#Example restaurant</span>
+</span></span><span style="display:flex;"><span>time<span style="color:#000;font-weight:bold">.</span>sleep(<span style="color:#099">2</span>)
+</span></span><span style="display:flex;"><span>elem<span style="color:#000;font-weight:bold">.</span>send_keys(Keys<span style="color:#000;font-weight:bold">.</span>RETURN)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>time<span style="color:#000;font-weight:bold">.</span>sleep(<span style="color:#099">3</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>elem <span style="color:#000;font-weight:bold">=</span> browser<span style="color:#000;font-weight:bold">.</span>find_element_by_xpath(<span style="color:#d14">&#39;//span[contains(.,&#34;Beoordelingen&#34;)]&#39;</span>)
+</span></span><span style="display:flex;"><span>elem<span style="color:#000;font-weight:bold">.</span>click()
+</span></span></code></pre></div><p>We put the page in html, and find the <code>&lt;div&gt;</code> in which the rating is located:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>content <span style="color:#000;font-weight:bold">=</span> browser<span style="color:#000;font-weight:bold">.</span>page_source
+</span></span><span style="display:flex;"><span>soup <span style="color:#000;font-weight:bold">=</span> BeautifulSoup(content)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>thediv <span style="color:#000;font-weight:bold">=</span> soup<span style="color:#000;font-weight:bold">.</span>findAll(<span style="color:#d14">&#39;div&#39;</span>, attrs<span style="color:#000;font-weight:bold">=</span>{<span style="color:#d14">&#34;data-qa&#34;</span>:<span style="color:#d14">&#34;card-element&#34;</span>})
+</span></span></code></pre></div><p>We find the <code>&lt;span&gt;</code> inside the div in which the rating is stored, and store the object together with the name of the restaurant in a list, which we append in each iteration.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>time<span style="color:#000;font-weight:bold">.</span>sleep(<span style="color:#099">5</span>)
+</span></span><span style="display:flex;"><span>rating <span style="color:#000;font-weight:bold">=</span> browser<span style="color:#000;font-weight:bold">.</span>find_element_by_xpath(<span style="color:#d14">&#39;//div[@data-qa=&#34;heading&#34;]&#39;</span>)<span style="color:#000;font-weight:bold">.</span>text
+</span></span><span style="display:flex;"><span> 
+</span></span><span style="display:flex;"><span>restaurating <span style="color:#000;font-weight:bold">=</span> <span style="color:#0086b3">list</span>()
+</span></span><span style="display:flex;"><span>restaurating<span style="color:#000;font-weight:bold">.</span>append((names[<span style="color:#099">0</span>], rating))
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#0086b3">print</span>(restaurating)
+</span></span></code></pre></div><pre tabindex="0"><code>## [(&#39;Wagamama&#39;, &#39;3&#39;)]
+</code></pre><p>Finally, we go back to the main page:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>browser<span style="color:#000;font-weight:bold">.</span>back()
+</span></span><span style="display:flex;"><span>browser<span style="color:#000;font-weight:bold">.</span>back()
+</span></span></code></pre></div>
+
+
+
+<h2 id="everything-together">Everything together
+  <a href="#everything-together"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>Let&rsquo;s do the same thing in a <code>for</code> loop, adding a few tweaks that improve the robustness of the code in case of failures, and allowing for a few sleeps to prevent request overload:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#000;font-weight:bold">def</span> <span style="color:#900;font-weight:bold">scroll_down</span>(spt <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">0.7</span>):
+</span></span><span style="display:flex;"><span>  SCROLL_PAUSE_TIME <span style="color:#000;font-weight:bold">=</span> spt
+</span></span><span style="display:flex;"><span>  <span style="color:#998;font-style:italic"># Get scroll height</span>
+</span></span><span style="display:flex;"><span>  last_height <span style="color:#000;font-weight:bold">=</span> browser<span style="color:#000;font-weight:bold">.</span>execute_script(<span style="color:#d14">&#34;return document.body.scrollHeight&#34;</span>)
+</span></span><span style="display:flex;"><span>  <span style="color:#000;font-weight:bold">while</span> <span style="color:#000;font-weight:bold">True</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#998;font-style:italic"># Scroll down to bottom</span>
+</span></span><span style="display:flex;"><span>    browser<span style="color:#000;font-weight:bold">.</span>execute_script(<span style="color:#d14">&#34;window.scrollTo(0, document.body.scrollHeight);&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#998;font-style:italic"># Wait to load page</span>
+</span></span><span style="display:flex;"><span>    time<span style="color:#000;font-weight:bold">.</span>sleep(SCROLL_PAUSE_TIME)
+</span></span><span style="display:flex;"><span>    <span style="color:#998;font-style:italic"># Calculate new scroll height and compare with last scroll height</span>
+</span></span><span style="display:flex;"><span>    new_height <span style="color:#000;font-weight:bold">=</span> browser<span style="color:#000;font-weight:bold">.</span>execute_script(<span style="color:#d14">&#34;return document.body.scrollHeight&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">if</span> new_height <span style="color:#000;font-weight:bold">==</span> last_height:
+</span></span><span style="display:flex;"><span>      <span style="color:#000;font-weight:bold">break</span>
+</span></span><span style="display:flex;"><span>    last_height <span style="color:#000;font-weight:bold">=</span> new_height
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#000;font-weight:bold">def</span> <span style="color:#900;font-weight:bold">go_to_main_page</span>():
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>  browser<span style="color:#000;font-weight:bold">.</span>delete_all_cookies()
+</span></span><span style="display:flex;"><span>  browser<span style="color:#000;font-weight:bold">.</span>get(<span style="color:#d14">&#34;http://www.thuisbezorgd.nl&#34;</span>)
+</span></span><span style="display:flex;"><span>  time<span style="color:#000;font-weight:bold">.</span>sleep(<span style="color:#099">2</span>)
+</span></span><span style="display:flex;"><span>  <span style="color:#000;font-weight:bold">try</span>: 
+</span></span><span style="display:flex;"><span>    browser<span style="color:#000;font-weight:bold">.</span>find_element_by_xpath(<span style="color:#d14">&#39;//button[text()=&#34;OK&#34;]&#39;</span>)<span style="color:#000;font-weight:bold">.</span>click()
+</span></span><span style="display:flex;"><span>  <span style="color:#000;font-weight:bold">except</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#0086b3">print</span>(<span style="color:#d14">&#34;Geen cookies meer&#34;</span>)
+</span></span><span style="display:flex;"><span>  elem <span style="color:#000;font-weight:bold">=</span> browser<span style="color:#000;font-weight:bold">.</span>find_element_by_xpath(<span style="color:#d14">&#39;//input&#39;</span>)
+</span></span><span style="display:flex;"><span>  elem<span style="color:#000;font-weight:bold">.</span>clear()
+</span></span><span style="display:flex;"><span>  elem<span style="color:#000;font-weight:bold">.</span>send_keys(<span style="color:#d14">&#34;Utrecht Centraal&#34;</span>, Keys<span style="color:#000;font-weight:bold">.</span>RETURN)
+</span></span><span style="display:flex;"><span>  time<span style="color:#000;font-weight:bold">.</span>sleep(<span style="color:#099">3</span>)
+</span></span><span style="display:flex;"><span>  elem<span style="color:#000;font-weight:bold">.</span>send_keys(Keys<span style="color:#000;font-weight:bold">.</span>DOWN, Keys<span style="color:#000;font-weight:bold">.</span>RETURN, Keys<span style="color:#000;font-weight:bold">.</span>RETURN)
+</span></span><span style="display:flex;"><span>  time<span style="color:#000;font-weight:bold">.</span>sleep(<span style="color:#099">4</span>)
+</span></span><span style="display:flex;"><span>  scroll_down()
+</span></span><span style="display:flex;"><span>  time<span style="color:#000;font-weight:bold">.</span>sleep(<span style="color:#099">2</span>)
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>restaurating <span style="color:#000;font-weight:bold">=</span> <span style="color:#0086b3">list</span>()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">for</span> i <span style="color:#000;font-weight:bold">in</span> restos[:<span style="color:#099">7</span>]: <span style="color:#998;font-style:italic">#Remember, in restos, all names of restaurants are stored</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#998;font-style:italic">#Get to the restaurant page</span>
+</span></span><span style="display:flex;"><span>    go_to_main_page()
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">try</span>:
+</span></span><span style="display:flex;"><span>      elem <span style="color:#000;font-weight:bold">=</span> browser<span style="color:#000;font-weight:bold">.</span>find_element_by_partial_link_text(i)
+</span></span><span style="display:flex;"><span>      time<span style="color:#000;font-weight:bold">.</span>sleep(<span style="color:#099">1</span>)
+</span></span><span style="display:flex;"><span>      elem<span style="color:#000;font-weight:bold">.</span>click()
+</span></span><span style="display:flex;"><span>      time<span style="color:#000;font-weight:bold">.</span>sleep(<span style="color:#099">3</span>)
+</span></span><span style="display:flex;"><span>      elem <span style="color:#000;font-weight:bold">=</span> browser<span style="color:#000;font-weight:bold">.</span>find_element_by_xpath(<span style="color:#d14">&#39;//span[contains(.,&#34;Beoordelingen&#34;)]&#39;</span>)
+</span></span><span style="display:flex;"><span>      time<span style="color:#000;font-weight:bold">.</span>sleep(<span style="color:#099">1</span>)
+</span></span><span style="display:flex;"><span>      elem<span style="color:#000;font-weight:bold">.</span>click()
+</span></span><span style="display:flex;"><span>      time<span style="color:#000;font-weight:bold">.</span>sleep(<span style="color:#099">2.5</span>)
+</span></span><span style="display:flex;"><span>      <span style="color:#998;font-style:italic">#Find the location of the rating element on the web page</span>
+</span></span><span style="display:flex;"><span>      rating <span style="color:#000;font-weight:bold">=</span> browser<span style="color:#000;font-weight:bold">.</span>find_element_by_xpath(<span style="color:#d14">&#39;//div[@data-qa=&#34;heading&#34;]&#39;</span>)<span style="color:#000;font-weight:bold">.</span>text
+</span></span><span style="display:flex;"><span>      <span style="color:#998;font-style:italic">#Put the name and the retrieved rating in a tuple in a list</span>
+</span></span><span style="display:flex;"><span>      restaurating<span style="color:#000;font-weight:bold">.</span>append((i, rating))
+</span></span><span style="display:flex;"><span>      
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">except</span> NoSuchElementException:
+</span></span><span style="display:flex;"><span>      <span style="color:#000;font-weight:bold">continue</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    time<span style="color:#000;font-weight:bold">.</span>sleep(<span style="color:#099">1</span>)
+</span></span></code></pre></div><p>This is what happens on your screen while the code is executing: your browser is <em>actually</em> visiting all those pages, extracts the HTML code, and finds the appropriate number to extract!</p>
+<p>![](/Jul-15-2020 20-04-13.gif)</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>restaurating
+</span></span></code></pre></div><pre tabindex="0"><code>## [(&#39;Schnitzel Utreg&#39;, &#39;4,4&#39;), (&#39;La Fortuna&#39;, &#39;2,8&#39;), (&#39;Dogma&#39;, &#39;4&#39;), (&#39;Torii Sushi&#39;, &#39;4,3&#39;), (&#39;Studio Sugar Snap&#39;, &#39;4,8&#39;), (&#39;Deluxe&#39;, &#39;3,9&#39;)]
+</code></pre><p>Finally, after all this is done, we close the browser. (You can verify this by observing that the browser actually closes on your screen :) )</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>browser<span style="color:#000;font-weight:bold">.</span>close()
+</span></span></code></pre></div>
+
+
+
+<h2 id="conclusion">Conclusion
+  <a href="#conclusion"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>In this post, I have attempted to explain how to use Selenium in Python, and <em>en passant</em>, how to use Python in RStudio. I hope you enjoyed reading this, and please 
+<a href="mailto:a.h.machielsen@uu.nl">feel free to get in touch</a> if you have any questions or remarks.</p>
+
+        
+        <details closed class="f6 fw7 input-reset">
+  <dl class="f6 lh-copy">
+    <dt class="fw7">Posted on:</dt>
+    <dd class="fw5 ml0">July 15, 2020</dd>
+  </dl>
+  <dl class="f6 lh-copy">
+    <dt class="fw7">Length:</dt>
+    <dd class="fw5 ml0">6 minute read, 1135 words</dd>
+  </dl>
+  
+  
+  
+  <dl class="f6 lh-copy">
+    <dt class="fw7">See Also:</dt>
+    
+  </dl>
+</details>
+
+      </section>
+      <footer class="post-footer">
+        <div class="post-pagination dt w-100 mt4 mb2">
+  
+  
+    <a class="prev dtc pr2 tl v-top fw6"
+    href="/blog/2022-08-03-working-with-git-from-r-using-usethis/">&larr; Working with git from R using usethis</a>
+  
+  
+  
+    <a class="next dtc pl2 tr v-top fw6"
+    href="/blog/2022-08-02-automated-reading-of-tables-from-pdf-documents/">Automated Reading of Tables from PDF Documents &rarr;</a>
+  
+</div>
+
+      </footer>
+    </article>
+    
+      
+<div class="post-comments pa0 pa4-l mt4">
+  
+  <script src="https://utteranc.es/client.js"
+          repo="apreshill/apero"
+          issue-term="pathname"
+          theme="boxy-light"
+          label="comments :crystal_ball:"
+          crossorigin="anonymous"
+          async
+          type="text/javascript">
+  </script>
+  
+</div>
+
+    
+  </section>
+</main>
+<footer class="site-footer pv4 bt b--transparent ph5" role="contentinfo">
+  <nav class="db dt-l w-100">
+    <p class="site-copyright f7 db dtc-l v-mid w-100 w-33-l tc tl-l pv2 pv0-l mv0 lh-copy">
+      &copy; 2022 Bas Machielsen
+      <span class="middot-divider"></span>
+      Made with <span xmlns:dct="http://purl.org/dc/terms/" property="dct:title"><a xmlns:dct="http://purl.org/dc/terms/" href="https://github.com/hugo-apero/" rel="dct:source">Hugo Apéro</a></span>.
+      <br />
+      
+Based on <span xmlns:dct="http://purl.org/dc/terms/" property="dct:title"><a xmlns:dct="http://purl.org/dc/terms/" href="https://github.com/formspree/blogophonic-hugo" rel="dct:source">Blogophonic</a></span> by <a xmlns:cc="http://creativecommons.org/ns#" href="https://formspree.io" property="cc:attributionName" rel="cc:attributionURL">Formspree</a>.
+    </p>
+    
+    <div class="site-social-links db dtc-l v-mid w-100 w-33-l tc pv2 pv0-l mv0">
+      <div class="social-icon-links" aria-hidden="true">
+  
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://github.com/basm92" title="github" target="_blank" rel="noopener">
+      <i class="fab fa-github fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://scholar.google.com/citations?user=bS8uo44AAAAJ" title="google" target="_blank" rel="noopener">
+      <i class="fab fa-google fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://twitter.com/basm92" title="twitter" target="_blank" rel="noopener">
+      <i class="fab fa-twitter fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="mailto:a.h.machielsen@uu.nl" title="envelope" >
+      <i class="fas fa-envelope fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="mailto:basmachielsen@live.nl" title="envelope" >
+      <i class="far fa-envelope fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://orcid.org/0000-0002-9692-0615" title="orcid" target="_blank" rel="noopener">
+      <i class="ai ai-orcid fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="/blog/index.xml" title="rss" >
+      <i class="fas fa-rss fa-lg fa-fw"></i>
+    </a>
+  
+</div>
+
+    </div>
+    
+    <div class="site-links f6 db dtc-l v-mid w-100 w-67-l tc tr-l pv2 pv0-l mv0">
+      
+      <a class="dib pv1 ph2 link" href="/license/" title="License">License</a>
+      
+      <a class="dib pv1 ph2 link" href="/contact/" title="Contact form">Contact</a>
+      
+      <a class="dib pv1 ph2 link" href="/contributors/" title="Contributors">Contributors</a>
+      
+    </div>
+  </nav>
+  
+    <script>
+
+    var i, text, code, codes = document.getElementsByTagName('code');
+    for (let i = 0; i < codes.length;) {
+      code = codes[i];
+      if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+        text = code.textContent;
+        if (/^\$[^$]/.test(text) && /[^$]\$$/.test(text)) {
+          text = text.replace(/^\$/, '\\(').replace(/\$$/, '\\)');
+          code.textContent = text;
+        }
+        if (/^\\\((.|\s)+\\\)$/.test(text) ||
+            /^\\\[(.|\s)+\\\]$/.test(text) ||
+            /^\$(.|\s)+\$$/.test(text) ||
+            /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+          code.outerHTML = code.innerHTML;  
+          continue;
+        }
+      }
+      i++;
+    }
+</script>
+
+  
+    
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.css" integrity="sha384-RZU/ijkSsFbcmivfdRBQDtwuwVqK7GMOw6IMvKyeWL2K5UAlyp6WonmB8m7Jd0Hn" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.js" integrity="sha384-pK1WpvzWVBQiP0/GjnvRxV4mOb0oxFuyRxJlk6vVw146n3egcN5C925NCP7a7BY8" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/contrib/auto-render.min.js" integrity="sha384-vZTG03m+2yp6N6BNi5iM4rW4oIwk5DfcNdFfxkk9ZWpDriOkXX8voJBFrAO7MpVl" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
+
+
+
+    
+  
+  
+</footer>
+
+      </div>
+    </body>
+</html>

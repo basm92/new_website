@@ -100,11 +100,11 @@ enableEmoji = true
   [[params.social]]
       icon      = "envelope" # icon name without the 'fa-'
       icon_pack = "fas"
-      url       = "a.h.machielsen@uu.nl"
+      url       = "mailto:a.h.machielsen@uu.nl"
   [[params.social]]
       icon      = "envelope" # icon name without the 'fa-'
       icon_pack = "far"
-      url       = "basmachielsen@live.nl"
+      url       = "mailto:basmachielsen@live.nl"
   [[params.social]]
       icon      = "orcid" # icon name without the 'fa-'
       icon_pack = "ai"
