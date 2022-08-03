@@ -15,7 +15,7 @@ links:
 - icon: slideshare
   icon_pack: fab
   name: presentation
-  url: https://www.link.com/
+  url: /papers/polrents_presentation_long.pdf
 - icon: github
   icon_pack: fab
   name: replication package

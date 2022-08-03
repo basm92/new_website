@@ -11,7 +11,7 @@ links:
 - icon: door-open
   icon_pack: fas
   name: pdf document
-  url: https://www.link.com/
+  url: /papers/wealth.pdf
 - icon: github
   icon_pack: fab
   name: replication package

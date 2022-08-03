@@ -11,11 +11,11 @@ links:
 - icon: door-open
   icon_pack: fas
   name: pdf document
-  url: https://www.link.com/
+  url: /papers/polelite_votingbehavior.pdf
 - icon: slideshare
   icon_pack: fab
   name: presentation
-  url: https://www.link.com/
+  url: /papers/polelite_votingbehavior_presentation.pdf
 - icon: github
   icon_pack: fab
   name: replication package
