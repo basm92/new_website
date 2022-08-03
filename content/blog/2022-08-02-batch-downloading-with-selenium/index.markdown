@@ -59,14 +59,14 @@ remDr <- RSelenium::remoteDriver(browserName = "firefox",
 remDr$open()
 ```
 
-Let's now navigate to an example website (a blogpost on this website), and download a `.csv` file which I've hidden in there:
+Let's now navigate to an example website (this website), and download a `.csv` file which I've hidden in there:
 
 
 ```r
-remDr$navigate("https://bas-m.netlify.app/2020/05/27/web-scraping-with-rselenium/")
-click <- remDr$findElement("css", "#step-3-cleaning-the-data > p:nth-child(2) > a:nth-child(1)")
-
-click$clickElement()
+remDr$navigate("https://bas-m.netlify.app")
+download.file("https://bas-m.netlify.app/iranianmps.csv", destfile = "iranianmps.csv")
+#click <- remDr$findElement("css", "#step-3-cleaning-the-data > p:nth-child(2) > a:nth-child(1)")
+#click$clickElement()
 ```
 
 You can check whether you can see the file in your Downloads folder (or any other folder yo might have specified) now! 

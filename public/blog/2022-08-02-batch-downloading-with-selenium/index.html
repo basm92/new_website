@@ -47,7 +47,7 @@
 <meta itemprop="description" content="Introduction In this blogpost, I briefly explain how to batch download files in RSelenium. This can be super useful if you want to download some pdf&rsquo;s or other files, but you don&rsquo;t want to click &lsquo;download&rsquo; a 1000 times, and there is no other option available.
 Step 1: Setting up a Docker Container In this case, we have to deviate from the standard case of setting up a Docker container."><meta itemprop="datePublished" content="2020-05-29T00:00:00+00:00" />
 <meta itemprop="dateModified" content="2020-05-29T00:00:00+00:00" />
-<meta itemprop="wordCount" content="638"><meta itemprop="image" content="/blog/2022-08-02-batch-downloading-with-selenium/featured.png">
+<meta itemprop="wordCount" content="639"><meta itemprop="image" content="/blog/2022-08-02-batch-downloading-with-selenium/featured.png">
 <meta itemprop="keywords" content="" />
   
   
@@ -185,11 +185,11 @@ Step 1: Setting up a Docker Container In this case, we have to deviate from the 
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>remDr<span style="color:#000;font-weight:bold">$</span><span style="color:#900;font-weight:bold">open</span>()
-</span></span></code></pre></div><p>Let&rsquo;s now navigate to an example website (a blogpost on this website), and download a <code>.csv</code> file which I&rsquo;ve hidden in there:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>remDr<span style="color:#000;font-weight:bold">$</span><span style="color:#900;font-weight:bold">navigate</span>(<span style="color:#d14">&#34;https://bas-m.netlify.app/2020/05/27/web-scraping-with-rselenium/&#34;</span>)
-</span></span><span style="display:flex;"><span>click <span style="color:#000;font-weight:bold">&lt;-</span> remDr<span style="color:#000;font-weight:bold">$</span><span style="color:#900;font-weight:bold">findElement</span>(<span style="color:#d14">&#34;css&#34;</span>, <span style="color:#d14">&#34;#step-3-cleaning-the-data &gt; p:nth-child(2) &gt; a:nth-child(1)&#34;</span>)
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>click<span style="color:#000;font-weight:bold">$</span><span style="color:#900;font-weight:bold">clickElement</span>()
+</span></span></code></pre></div><p>Let&rsquo;s now navigate to an example website (this website), and download a <code>.csv</code> file which I&rsquo;ve hidden in there:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>remDr<span style="color:#000;font-weight:bold">$</span><span style="color:#900;font-weight:bold">navigate</span>(<span style="color:#d14">&#34;https://bas-m.netlify.app&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#900;font-weight:bold">download.file</span>(<span style="color:#d14">&#34;https://bas-m.netlify.app/iranianmps.csv&#34;</span>, destfile <span style="color:#000;font-weight:bold">=</span> <span style="color:#d14">&#34;iranianmps.csv&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic">#click &lt;- remDr$findElement(&#34;css&#34;, &#34;#step-3-cleaning-the-data &gt; p:nth-child(2) &gt; a:nth-child(1)&#34;)</span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic">#click$clickElement()</span>
 </span></span></code></pre></div><p>You can check whether you can see the file in your Downloads folder (or any other folder yo might have specified) now!</p>
 
 
@@ -261,7 +261,7 @@ Step 1: Setting up a Docker Container In this case, we have to deviate from the 
   </dl>
   <dl class="f6 lh-copy">
     <dt class="fw7">Length:</dt>
-    <dd class="fw5 ml0">3 minute read, 638 words</dd>
+    <dd class="fw5 ml0">3 minute read, 639 words</dd>
   </dl>
   
   
