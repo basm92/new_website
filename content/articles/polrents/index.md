@@ -11,7 +11,7 @@ links:
 - icon: door-open
   icon_pack: fas
   name: pdf document
-  url: https://www.link.com/
+  url: /papers/polrents.pdf
 - icon: slideshare
   icon_pack: fab
   name: presentation
