@@ -17,7 +17,7 @@ show_post_date: true
 show_post_thumbnail: true
 sidebar:
   author: Bas Machielsen @basss92
-  description: "On this page, I've gather all of my blog posts. Some of them might serve merely as documentation, or as reminders, but others might take a more specific blog character. Subjects range from economics to data science to some of my teaching needs."
+  description: "On this page, I've gathered all of my blog posts. Some of them might serve merely as documentation, or as reminders, but others might take a more specific blog character. Subjects range from economics to data science to some of my teaching needs."
   show_sidebar_adunit: true
   text_link_label: Subscribe via RSS
   text_link_url: /index.xml
