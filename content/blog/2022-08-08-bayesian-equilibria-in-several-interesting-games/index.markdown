@@ -60,7 +60,7 @@ Let us first denote by `\(Z_k\)` the strategy that holds all proposed grades to 
 $$
 BR_i (Z_3) = \max \\{ \underbrace{\frac{1}{5} \cdot g_i + \frac{1}{5} \cdot 4 + \frac{1}{5} \cdot 3 + \frac{1}{5} \cdot 2 + \frac{1}{5} \cdot 1}\_\text{If X}, \underbrace{g_i}\_\text{If H} \\}
 $$
-The Best Response comes from the fact that with probability `\(\frac{1}{5}\)`, the other student draws an A, `\(g_i = 4\)`, and does not exchange according to strategy `\(Z_3\)`. The other grades are exchange, so if you choose to exchange, you get the corresponding `\(g_i + 1\)`. If you don't exchange, you get your own pay-off `\(g_i\)`. You pick `\(H\)` as long as the second term is larger than the first term, solving this inequality for `\(g_i\)` gives: 
+The Best Response comes from the fact that with probability `\(\frac{1}{5}\)`, the other student draws an A, `\(g_i = 4\)`, and does not exchange according to strategy `\(Z_3\)`. The other grades are exchanged, so if you choose to exchange, you get the corresponding `\(g_i + 1\)`. If you don't exchange, you get your own pay-off `\(g_i\)`. You pick `\(H\)` as long as the second term is larger than the first term, solving this inequality for `\(g_i\)` gives: 
 
 $$
 BR_i (Z_3) = \begin{cases}
@@ -94,8 +94,8 @@ To see why the these non-monotonic strategies are no equilibrium, consider the f
 $$
 s_i = \begin{cases}
 X &\text{ if } g_i = 4 \newline
-\\{H, X\\} &\text{ if } g=i \in \\{1,2,3\\} \newline
-X 
+\\{H, X\\} &\text{ if } g_i \in \\{1,2,3\\} \newline
+X &\text{ if } g_i = 0
 \end{cases}
 $$
 

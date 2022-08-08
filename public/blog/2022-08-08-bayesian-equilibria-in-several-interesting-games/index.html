@@ -47,7 +47,7 @@
 <meta itemprop="description" content="Introduction In this post, I want to work out a couple of games using the concept of Bayesian Nash Equilibria. Bayesian Nash Equilibria are a kind of intermediate step between basic Nash equilibria and Perfect Bayesian Equilibria, which involve multiple stages and require beliefs consistent with Bayes Rules on the equilibrium path.
 Bayesian Nash Equilibria are somewhat simpler, and usually involve only one action per type realization, and best responses based on the distribution of type realization of the other players (again conditional on one&rsquo;s own type realization)."><meta itemprop="datePublished" content="2022-08-08T00:00:00+00:00" />
 <meta itemprop="dateModified" content="2022-08-08T00:00:00+00:00" />
-<meta itemprop="wordCount" content="1283"><meta itemprop="image" content="/blog/2022-08-08-bayesian-equilibria-in-several-interesting-games/featured.png">
+<meta itemprop="wordCount" content="1289"><meta itemprop="image" content="/blog/2022-08-08-bayesian-equilibria-in-several-interesting-games/featured.png">
 <meta itemprop="keywords" content="" />
   
   
@@ -198,7 +198,7 @@ In words, this means keeping when you have an A, being indifferent when you have
 <p>$$
 BR_i (Z_3) = \max \{ \underbrace{\frac{1}{5} \cdot g_i + \frac{1}{5} \cdot 4 + \frac{1}{5} \cdot 3 + \frac{1}{5} \cdot 2 + \frac{1}{5} \cdot 1}_\text{If X}, \underbrace{g_i}_\text{If H} \}
 $$
-The Best Response comes from the fact that with probability <code>\(\frac{1}{5}\)</code>, the other student draws an A, <code>\(g_i = 4\)</code>, and does not exchange according to strategy <code>\(Z_3\)</code>. The other grades are exchange, so if you choose to exchange, you get the corresponding <code>\(g_i + 1\)</code>. If you don&rsquo;t exchange, you get your own pay-off <code>\(g_i\)</code>. You pick <code>\(H\)</code> as long as the second term is larger than the first term, solving this inequality for <code>\(g_i\)</code> gives:</p>
+The Best Response comes from the fact that with probability <code>\(\frac{1}{5}\)</code>, the other student draws an A, <code>\(g_i = 4\)</code>, and does not exchange according to strategy <code>\(Z_3\)</code>. The other grades are exchanged, so if you choose to exchange, you get the corresponding <code>\(g_i + 1\)</code>. If you don&rsquo;t exchange, you get your own pay-off <code>\(g_i\)</code>. You pick <code>\(H\)</code> as long as the second term is larger than the first term, solving this inequality for <code>\(g_i\)</code> gives:</p>
 <p>$$
 BR_i (Z_3) = \begin{cases}
 H &amp;\text{ if } g_i \geq 2.5  \newline
@@ -233,8 +233,8 @@ So that indeed, <code>\(Z_2\)</code> can be a Best Response to <code>\(Z_2\)</co
 <p>$$
 s_i = \begin{cases}
 X &amp;\text{ if } g_i = 4 \newline
-\{H, X\} &amp;\text{ if } g=i \in \{1,2,3\} \newline
-X
+\{H, X\} &amp;\text{ if } g_i \in \{1,2,3\} \newline
+X &amp;\text{ if } g_i = 0
 \end{cases}
 $$</p>
 <p>These strategies are pretty exhaustive. They are bounded from above by:</p>
@@ -285,7 +285,7 @@ $$</p>
   </dl>
   <dl class="f6 lh-copy">
     <dt class="fw7">Length:</dt>
-    <dd class="fw5 ml0">7 minute read, 1283 words</dd>
+    <dd class="fw5 ml0">7 minute read, 1289 words</dd>
   </dl>
   
   
