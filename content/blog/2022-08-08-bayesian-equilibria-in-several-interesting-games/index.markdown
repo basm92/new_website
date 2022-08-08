@@ -1,0 +1,131 @@
+---
+title: Bayesian Equilibria in Several Interesting Games
+author: Bas Machielsen
+date: '2022-08-08'
+draft: false
+excerpt: A post about how to solve for Bayesian Nash Equilibria in some original games based on the Tadelis textbook
+layout: single
+series: null
+subtitle: ""
+tags: null
+---
+
+## Introduction
+
+In this post, I want to work out a couple of games using the concept of Bayesian Nash Equilibria. Bayesian Nash Equilibria are a kind of intermediate step between basic Nash equilibria and Perfect Bayesian Equilibria, which involve multiple stages and require beliefs consistent with Bayes Rules on the equilibrium path.
+
+Bayesian Nash Equilibria are somewhat simpler, and usually involve only one action per type realization, and best responses based on the distribution of type realization of the other players (again conditional on one's own type realization). 
+
+Formally, a Bayesian Nash game consist of:
+
+$$
+\langle N, \\{ A_i \\}^n_{i=1}, \\{ \Theta_i \\}^n_{i=1}, \\{ v_i (., \theta_i): \theta_i \in \Theta_i \\}^n_{i=1}, \\{ \phi_i \\}^n_{i=1} \rangle
+$$
+In words, a number of players, a set of actions for each player, a type space for each player, a type-contingent utility function, and a set of exogenous beliefs about the other players' types, `\(\phi_i (\theta_{-i} | \theta_i)\)`. 
+
+## Game 1: Grade Exchange
+
+In the first game, we analyze a Bayesian Nash Equilibrium in the exchange of school grades. The game is as follows:
+
+> "Two students get grades `\(\{A, B, C, D, F \}\)`, with corresponding pay-offs `\(\{4,3,2,1,0\}\)` respectively. Each of the grades occur with equal probability. Conditional on receiving their own grade, they can choose to either exchange their grade with the other student (without knowing the other student's grade), denoted by `\(X\)`, or not, denoted by `\(H\)`. The exchange only takes place if both students exchange the grade. If the students exchange the grade, they get a bonus point: A becomes A+ (payoff: 5), B becomes A, etc., and the pay-offs change correspondingly. 
+
+First, as in the Tadelis book, we consider the following: assume student 2 plays the following strategy: I offer to exchange for every grade I get. What is the best response of student 1 to this strategy?
+
+Given that the other student plays exchange in all cases, we can see that the first student is facing a maximization problem depending on his or her own payoff. Denote that pay-off by `\(g_i \in G = \{ 0, \dots, 4 \}\)`. Then, the student is faced with the following problem:
+
+$$
+\max \\{ \underbrace{\sum_{G} \frac{1}{5} (g_i + 1)}\_\text{Value when X}, \underbrace{g_i}\_\text{Value when H} \\}
+$$
+The Best Response is `\(H\)` when the second term is larger than the first term. Working that out evaluates to `\(g_i \geq 3\)`, so that the Best response is the following:
+
+$$
+BR_1 (X) = \begin{cases} 
+H &\text{ if } g_i = 4 \newline
+\\{ H, X \\} &\text{ if } g_i = 3 \newline
+X &\text{ if } g_i < 3 
+\end{cases}
+$$
+In words, this means keeping when you have an A, being indifferent when you have a B, and exchanging when you have a lower grade. 
+
+Next, we are asked to look for symmetric Bayesian Nash equilibria, meaning both students should pursue the same strategy. We have just seen that the strategy "always exchange" is not a symmetric equilibrium. In order to look for equilibria, I investigate two possible classes of potential equilibria: 
+
+- 1. Don't exchange high grades (DEHG), exchange lower grades strategies (I will investigate several of them)
+
+- 2. "Non-monotonous" equilibria involving, for example, exchanging an A, not exchanging a B, then exchanging a C. In particular, I show that there are no symmetric Bayesian Nash equilibria of this kind. 
+
+### DEHG Equilibria
+
+Let us first denote by `\(Z_k\)` the strategy that holds all proposed grades to be exchanged _up until the grade corresponding to_ payoff `\(k\)`. In particular, `\(Z_2\)` is `\(\{ 0, 1, 2 \}\)`, `\(Z_3 = \{0, 1, 2, 3 \}\)`, and `\(Z_4 = \text{"Exchange Everything"} = \{0,1,2,3,4\}\)`. Using this terminology, we have calculated that the best response to `\(Z_4\)` is not `\(Z_4\)`. Let's now consider `\(Z_3\)`. 
+
+$$
+BR_i (Z_3) = \max \\{ \underbrace{\frac{1}{5} \cdot g_i + \frac{1}{5} \cdot 4 + \frac{1}{5} \cdot 3 + \frac{1}{5} \cdot 2 + \frac{1}{5} \cdot 1}\_\text{If X}, \underbrace{g_i}\_\text{If H} \\}
+$$
+The Best Response comes from the fact that with probability `\(\frac{1}{5}\)`, the other student draws an A, `\(g_i = 4\)`, and does not exchange according to strategy `\(Z_3\)`. The other grades are exchange, so if you choose to exchange, you get the corresponding `\(g_i + 1\)`. If you don't exchange, you get your own pay-off `\(g_i\)`. You pick `\(H\)` as long as the second term is larger than the first term, solving this inequality for `\(g_i\)` gives: 
+
+$$
+BR_i (Z_3) = \begin{cases}
+H &\text{ if } g_i \geq 2.5  \newline
+X &\text{ otherwise} 
+\end{cases}
+$$
+
+Meaning that against the strategy "Exchange B, C, D, F", the best response is to play "Exchange C, D, F". Hence, this is not an equilibrium. 
+
+Continuing this line of reasoning, we can now investigate `\(Z_2\)`. In particular, we can show that `\(Z_2, Z_1\)` and `\(Z_0\)` are all Bayesian Nash equilibria. For brevity, I will only show that `\(Z_2\)` is a BNE for demonstration, but _mutatis mutandis_, the same proof applies after changing the corresponding elements in the first element of the maximum operator. 
+
+$$
+BR_i (Z_2) = \max \\{ \frac{1}{5} \cdot g_i + \frac{1}{5} \cdot g_i + \frac{1}{5} \cdot 3 + \frac{1}{5} \cdot 2 + \frac{1}{5} \cdot 1, g_i \\}
+$$
+Again, asking when it is profitable to still play `\(H\)`, we find that:
+
+$$
+BR_i (Z_2) = \begin{cases}
+H &\text{ if } g_i > 2 \newline
+\\{ H, X \\} &\text{ if } g_i = 2 \newline
+X &\text{ if } g_i < 2 
+\end{cases}
+$$
+So that indeed, `\(Z_2\)` can be a Best Response to `\(Z_2\)`. In a similar fashion, `\(Z_1\)` and `\(Z_0\)` are also Best Responses to themselves. Hence, there are multiple equilibria. (There are also non-symmetric equilibria, as evidenced by the case of `\(Z_2\)` just enunciated.) 
+
+### Excluding Non-Monotonic Equilibria
+
+To see why the these non-monotonic strategies are no equilibrium, consider the following class of strategies `\(s_i\)`:
+
+$$
+s_i = \begin{cases}
+X &\text{ if } g_i = 4 \newline
+\\{H, X\\} &\text{ if } g=i \in \\{1,2,3\\} \newline
+X 
+\end{cases}
+$$
+
+These strategies are pretty exhaustive. They are bounded from above by:
+
+$$
+\max \\{ {1 \over 5} \cdot 5 + \underbrace{{3 \over 5} \cdot 4}\_\text{Maximum Payoff If Exchange} + {1 \over 5} \cdot 1 , g_i \\}
+$$
+
+Computing the Best Response over this gives `\(H : g_i > 3 {3 \over 5}\)`. Meaning that the Best Response encompasses only keeping A, and exchanging everything else. From this, it is easy to see that the Best Responses to these non-monotonic strategies involve monotonic strategies. Hence, they cannot be symmetric equilibria. 
+
+## Contrast with a simpler game
+
+Suppose the players now have to decided to exchange _before_ their own grade is realized. What would the equilibrium be? And would they prefer this to the more-information case?
+
+- In this case, players have only two strategies, exchange `\(X\)` or not exchange `\(H\)`. If the other student plays `\(X\)`, The expected utilty from exchanging is:
+
+$$
+{ 1 \over 5} \cdot (5 + 4 + 3 + 2 + 1)
+$$
+whereas the expected utility from not exchanging is:
+
+$$
+{1 \over 5 } \cdot (4 + 3 + 2 + 1 + 0)
+$$
+
+Hence, `\((s_1, s_2) = (X, X)\)` is an equilibrium strategy. Similarly, if the other player plays `\(H\)`, the best response is either `\(X\)` or `\(H\)`, meaning that there are again multiple equilibria in this game. 
+
+## Conclusion
+
+The equilibria found above are Pareto-ranked, with the equilibria involving more exchanges having a higher ex ante expected utility than the equilibria involving less exchanges. In addition, the game with less information leads to more exchange than the game with more information. Hence, more information is not always better, but can lead to adverse selection. 
+
+Hope this was interesting enough, thanks for reading! 

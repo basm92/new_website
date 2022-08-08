@@ -6,7 +6,7 @@
     <description>Recent content on Bas Machielsen</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sat, 30 Jul 2022 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 08 Aug 2022 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Clio</title>
       <link>/collection/clio/</link>
@@ -23,6 +23,16 @@
       
       <guid>/collection/hdng/</guid>
       <description>hdng is a package facilitating the use of the HDNG Database, a database containing quantative information in various aspects of Dutch municipalities from about 1800 to the 1980&amp;rsquo;s. This package aids the user in finding their way through the database, allowing them to search for wanted variables, browse within categories, and finally, make a query to extract the wanted data.</description>
+    </item>
+    
+    <item>
+      <title>Bayesian Equilibria in Several Interesting Games</title>
+      <link>/blog/2022-08-08-bayesian-equilibria-in-several-interesting-games/</link>
+      <pubDate>Mon, 08 Aug 2022 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2022-08-08-bayesian-equilibria-in-several-interesting-games/</guid>
+      <description>Introduction In this post, I want to work out a couple of games using the concept of Bayesian Nash Equilibria. Bayesian Nash Equilibria are a kind of intermediate step between basic Nash equilibria and Perfect Bayesian Equilibria, which involve multiple stages and require beliefs consistent with Bayes Rules on the equilibrium path.
+Bayesian Nash Equilibria are somewhat simpler, and usually involve only one action per type realization, and best responses based on the distribution of type realization of the other players (again conditional on one&amp;rsquo;s own type realization).</description>
     </item>
     
     <item>

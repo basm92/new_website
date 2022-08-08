@@ -6,7 +6,17 @@
     <description>Recent content in Blog on Bas Machielsen</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Thu, 19 May 2022 00:00:00 +0000</lastBuildDate><atom:link href="/blog/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 08 Aug 2022 00:00:00 +0000</lastBuildDate><atom:link href="/blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Bayesian Equilibria in Several Interesting Games</title>
+      <link>/blog/2022-08-08-bayesian-equilibria-in-several-interesting-games/</link>
+      <pubDate>Mon, 08 Aug 2022 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2022-08-08-bayesian-equilibria-in-several-interesting-games/</guid>
+      <description>Introduction In this post, I want to work out a couple of games using the concept of Bayesian Nash Equilibria. Bayesian Nash Equilibria are a kind of intermediate step between basic Nash equilibria and Perfect Bayesian Equilibria, which involve multiple stages and require beliefs consistent with Bayes Rules on the equilibrium path.
+Bayesian Nash Equilibria are somewhat simpler, and usually involve only one action per type realization, and best responses based on the distribution of type realization of the other players (again conditional on one&amp;rsquo;s own type realization).</description>
+    </item>
+    
     <item>
       <title>Equilibrium in the Besley-Case (1995) Model</title>
       <link>/blog/2022-08-03-equilibrium-in-the-besley-case-1995-model/</link>

@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr"><head>
+  
+                           
+     
+
+
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="generator" content="Hugo 0.101.0" />
+<title>Bayesian Equilibria in Several Interesting Games | Bas Machielsen</title>
+
+
+<meta property="twitter:site" content="@basss92">
+<meta property="twitter:creator" content="@basss92">
+
+
+
+
+
+
+
+  
+    
+  
+<meta name="description" content="A post about how to solve for Bayesian Nash Equilibria in some original games based on the Tadelis textbook">
+
+
+<meta property="og:site_name" content="Bas Machielsen">
+<meta property="og:title" content="Bayesian Equilibria in Several Interesting Games | Bas Machielsen">
+<meta property="og:description" content="A post about how to solve for Bayesian Nash Equilibria in some original games based on the Tadelis textbook" />
+<meta property="og:type" content="page" />
+<meta property="og:url" content="/blog/2022-08-08-bayesian-equilibria-in-several-interesting-games/" />
+<meta property="og:locale" content="en">
+
+
+
+
+    
+        <meta property="og:image" content="/blog/2022-08-08-bayesian-equilibria-in-several-interesting-games/featured.png" >
+        <meta property="twitter:card" content="summary_large_image">
+        <meta name="twitter:image" content="/blog/2022-08-08-bayesian-equilibria-in-several-interesting-games/featured.png" >
+    
+    
+  <meta itemprop="name" content="Bayesian Equilibria in Several Interesting Games">
+<meta itemprop="description" content="Introduction In this post, I want to work out a couple of games using the concept of Bayesian Nash Equilibria. Bayesian Nash Equilibria are a kind of intermediate step between basic Nash equilibria and Perfect Bayesian Equilibria, which involve multiple stages and require beliefs consistent with Bayes Rules on the equilibrium path.
+Bayesian Nash Equilibria are somewhat simpler, and usually involve only one action per type realization, and best responses based on the distribution of type realization of the other players (again conditional on one&rsquo;s own type realization)."><meta itemprop="datePublished" content="2022-08-08T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2022-08-08T00:00:00+00:00" />
+<meta itemprop="wordCount" content="1283"><meta itemprop="image" content="/blog/2022-08-08-bayesian-equilibria-in-several-interesting-games/featured.png">
+<meta itemprop="keywords" content="" />
+  
+  
+  <!--[if IE]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  <link rel="shortcut icon" href="favicon_new.ico" type="image/x-icon">
+  <link rel="icon" href="favicon_new.ico" type="image/x-icon">
+  
+  
+  <link rel="stylesheet" href="/style.main.min.7aee66b22ae3b19895932b9cf4d37da828ca65fc6cd45cfdee1b36b98f4b0ae0.css" integrity="sha256-eu5msirjsZiVkyuc9NN9qCjKZfxs1Fz97hs2uY9LCuA=" media="screen">
+  
+  
+  <script src="/panelset.min.dca42702d7daf6fd31dc352efd2bcf0e4ac8c05ccaa58d9293f6177462de5d5f.js" type="text/javascript"></script>
+  
+  
+  <script src="/main.min.1e06c3e8b7b9eb3add826b6c607187835b5b9fd33fa0d12b327a5908f7a32220.js" type="text/javascript"></script>
+</head>
+<body>
+      <div class="grid-container single">
+<header class="site-header pt4 pb2 mb4 bb b--transparent ph5 headroom z-max" role="banner">
+  <nav class="site-nav db dt-l w-100" role="navigation">
+    <a class="site-brand db dtc-l v-mid link no-underline w-100 w-33-l tc tl-l" href="/" title="Home">
+      <img src="/website_logo.png" class="dib db-l h2 w-auto" alt="Bas Machielsen">
+    </a>
+    <div class="site-links db dtc-l v-mid w-100 w-47-l tc tr-l mt3 mt0-l ttu tracked">
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/" title="Home">Home</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/about/" title="About">About</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 active" href="/blog/" title="Blog">Blog</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/project/" title="Teaching Overview &amp; Repository">Teaching</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/resume/" title="Resume">Resume</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/articles/" title="Articles">Articles</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/collection/" title="Software">Software</a>
+      
+      
+    </div>
+  </nav>
+</header>
+
+<main class="page-main pa4" role="main">
+  <section class="page-content mw7 center">
+    <article class="post-content pa0 ph4-l">
+      <header class="post-header">
+        <h1 class="f1 lh-solid measure-narrow mb3 fw4">Bayesian Equilibria in Several Interesting Games</h1>
+        
+        <p class="f6 measure lh-copy mv1">By Bas Machielsen</p>
+        <p class="f7 db mv0 ttu">August 8, 2022</p>
+
+      
+
+      </header>
+      <section class="post-body pt5 pb4">
+        
+
+
+
+<h2 id="introduction">Introduction
+  <a href="#introduction"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>In this post, I want to work out a couple of games using the concept of Bayesian Nash Equilibria. Bayesian Nash Equilibria are a kind of intermediate step between basic Nash equilibria and Perfect Bayesian Equilibria, which involve multiple stages and require beliefs consistent with Bayes Rules on the equilibrium path.</p>
+<p>Bayesian Nash Equilibria are somewhat simpler, and usually involve only one action per type realization, and best responses based on the distribution of type realization of the other players (again conditional on one&rsquo;s own type realization).</p>
+<p>Formally, a Bayesian Nash game consist of:</p>
+<p>$$
+\langle N, \{ A_i \}^n_{i=1}, \{ \Theta_i \}^n_{i=1}, \{ v_i (., \theta_i): \theta_i \in \Theta_i \}^n_{i=1}, \{ \phi_i \}^n_{i=1} \rangle
+$$
+In words, a number of players, a set of actions for each player, a type space for each player, a type-contingent utility function, and a set of exogenous beliefs about the other players&rsquo; types, <code>\(\phi_i (\theta_{-i} | \theta_i)\)</code>.</p>
+
+
+
+
+<h2 id="game-1-grade-exchange">Game 1: Grade Exchange
+  <a href="#game-1-grade-exchange"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>In the first game, we analyze a Bayesian Nash Equilibrium in the exchange of school grades. The game is as follows:</p>
+<blockquote>
+<p>&ldquo;Two students get grades <code>\(\{A, B, C, D, F \}\)</code>, with corresponding pay-offs <code>\(\{4,3,2,1,0\}\)</code> respectively. Each of the grades occur with equal probability. Conditional on receiving their own grade, they can choose to either exchange their grade with the other student (without knowing the other student&rsquo;s grade), denoted by <code>\(X\)</code>, or not, denoted by <code>\(H\)</code>. The exchange only takes place if both students exchange the grade. If the students exchange the grade, they get a bonus point: A becomes A+ (payoff: 5), B becomes A, etc., and the pay-offs change correspondingly.</p>
+</blockquote>
+<p>First, as in the Tadelis book, we consider the following: assume student 2 plays the following strategy: I offer to exchange for every grade I get. What is the best response of student 1 to this strategy?</p>
+<p>Given that the other student plays exchange in all cases, we can see that the first student is facing a maximization problem depending on his or her own payoff. Denote that pay-off by <code>\(g_i \in G = \{ 0, \dots, 4 \}\)</code>. Then, the student is faced with the following problem:</p>
+<p>$$
+\max \{ \underbrace{\sum_{G} \frac{1}{5} (g_i + 1)}_\text{Value when X}, \underbrace{g_i}_\text{Value when H} \}
+$$
+The Best Response is <code>\(H\)</code> when the second term is larger than the first term. Working that out evaluates to <code>\(g_i \geq 3\)</code>, so that the Best response is the following:</p>
+<p>$$
+BR_1 (X) = \begin{cases}
+H &amp;\text{ if } g_i = 4 \newline
+\{ H, X \} &amp;\text{ if } g_i = 3 \newline
+X &amp;\text{ if } g_i &lt; 3
+\end{cases}
+$$
+In words, this means keeping when you have an A, being indifferent when you have a B, and exchanging when you have a lower grade.</p>
+<p>Next, we are asked to look for symmetric Bayesian Nash equilibria, meaning both students should pursue the same strategy. We have just seen that the strategy &ldquo;always exchange&rdquo; is not a symmetric equilibrium. In order to look for equilibria, I investigate two possible classes of potential equilibria:</p>
+<ul>
+<li>
+<ol>
+<li>Don&rsquo;t exchange high grades (DEHG), exchange lower grades strategies (I will investigate several of them)</li>
+</ol>
+</li>
+<li>
+<ol start="2">
+<li>&ldquo;Non-monotonous&rdquo; equilibria involving, for example, exchanging an A, not exchanging a B, then exchanging a C. In particular, I show that there are no symmetric Bayesian Nash equilibria of this kind.</li>
+</ol>
+</li>
+</ul>
+
+
+
+
+<h3 id="dehg-equilibria">DEHG Equilibria
+  <a href="#dehg-equilibria"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h3>
+<p>Let us first denote by <code>\(Z_k\)</code> the strategy that holds all proposed grades to be exchanged <em>up until the grade corresponding to</em> payoff <code>\(k\)</code>. In particular, <code>\(Z_2\)</code> is <code>\(\{ 0, 1, 2 \}\)</code>, <code>\(Z_3 = \{0, 1, 2, 3 \}\)</code>, and <code>\(Z_4 = \text{&quot;Exchange Everything&quot;} = \{0,1,2,3,4\}\)</code>. Using this terminology, we have calculated that the best response to <code>\(Z_4\)</code> is not <code>\(Z_4\)</code>. Let&rsquo;s now consider <code>\(Z_3\)</code>.</p>
+<p>$$
+BR_i (Z_3) = \max \{ \underbrace{\frac{1}{5} \cdot g_i + \frac{1}{5} \cdot 4 + \frac{1}{5} \cdot 3 + \frac{1}{5} \cdot 2 + \frac{1}{5} \cdot 1}_\text{If X}, \underbrace{g_i}_\text{If H} \}
+$$
+The Best Response comes from the fact that with probability <code>\(\frac{1}{5}\)</code>, the other student draws an A, <code>\(g_i = 4\)</code>, and does not exchange according to strategy <code>\(Z_3\)</code>. The other grades are exchange, so if you choose to exchange, you get the corresponding <code>\(g_i + 1\)</code>. If you don&rsquo;t exchange, you get your own pay-off <code>\(g_i\)</code>. You pick <code>\(H\)</code> as long as the second term is larger than the first term, solving this inequality for <code>\(g_i\)</code> gives:</p>
+<p>$$
+BR_i (Z_3) = \begin{cases}
+H &amp;\text{ if } g_i \geq 2.5  \newline
+X &amp;\text{ otherwise}
+\end{cases}
+$$</p>
+<p>Meaning that against the strategy &ldquo;Exchange B, C, D, F&rdquo;, the best response is to play &ldquo;Exchange C, D, F&rdquo;. Hence, this is not an equilibrium.</p>
+<p>Continuing this line of reasoning, we can now investigate <code>\(Z_2\)</code>. In particular, we can show that <code>\(Z_2, Z_1\)</code> and <code>\(Z_0\)</code> are all Bayesian Nash equilibria. For brevity, I will only show that <code>\(Z_2\)</code> is a BNE for demonstration, but <em>mutatis mutandis</em>, the same proof applies after changing the corresponding elements in the first element of the maximum operator.</p>
+<p>$$
+BR_i (Z_2) = \max \{ \frac{1}{5} \cdot g_i + \frac{1}{5} \cdot g_i + \frac{1}{5} \cdot 3 + \frac{1}{5} \cdot 2 + \frac{1}{5} \cdot 1, g_i \}
+$$
+Again, asking when it is profitable to still play <code>\(H\)</code>, we find that:</p>
+<p>$$
+BR_i (Z_2) = \begin{cases}
+H &amp;\text{ if } g_i &gt; 2 \newline
+\{ H, X \} &amp;\text{ if } g_i = 2 \newline
+X &amp;\text{ if } g_i &lt; 2
+\end{cases}
+$$
+So that indeed, <code>\(Z_2\)</code> can be a Best Response to <code>\(Z_2\)</code>. In a similar fashion, <code>\(Z_1\)</code> and <code>\(Z_0\)</code> are also Best Responses to themselves. Hence, there are multiple equilibria. (There are also non-symmetric equilibria, as evidenced by the case of <code>\(Z_2\)</code> just enunciated.)</p>
+
+
+
+
+<h3 id="excluding-non-monotonic-equilibria">Excluding Non-Monotonic Equilibria
+  <a href="#excluding-non-monotonic-equilibria"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h3>
+<p>To see why the these non-monotonic strategies are no equilibrium, consider the following class of strategies <code>\(s_i\)</code>:</p>
+<p>$$
+s_i = \begin{cases}
+X &amp;\text{ if } g_i = 4 \newline
+\{H, X\} &amp;\text{ if } g=i \in \{1,2,3\} \newline
+X
+\end{cases}
+$$</p>
+<p>These strategies are pretty exhaustive. They are bounded from above by:</p>
+<p>$$
+\max \{ {1 \over 5} \cdot 5 + \underbrace{{3 \over 5} \cdot 4}_\text{Maximum Payoff If Exchange} + {1 \over 5} \cdot 1 , g_i \}
+$$</p>
+<p>Computing the Best Response over this gives <code>\(H : g_i &gt; 3 {3 \over 5}\)</code>. Meaning that the Best Response encompasses only keeping A, and exchanging everything else. From this, it is easy to see that the Best Responses to these non-monotonic strategies involve monotonic strategies. Hence, they cannot be symmetric equilibria.</p>
+
+
+
+
+<h2 id="contrast-with-a-simpler-game">Contrast with a simpler game
+  <a href="#contrast-with-a-simpler-game"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>Suppose the players now have to decided to exchange <em>before</em> their own grade is realized. What would the equilibrium be? And would they prefer this to the more-information case?</p>
+<ul>
+<li>In this case, players have only two strategies, exchange <code>\(X\)</code> or not exchange <code>\(H\)</code>. If the other student plays <code>\(X\)</code>, The expected utilty from exchanging is:</li>
+</ul>
+<p>$$
+{ 1 \over 5} \cdot (5 + 4 + 3 + 2 + 1)
+$$
+whereas the expected utility from not exchanging is:</p>
+<p>$$
+{1 \over 5 } \cdot (4 + 3 + 2 + 1 + 0)
+$$</p>
+<p>Hence, <code>\((s_1, s_2) = (X, X)\)</code> is an equilibrium strategy. Similarly, if the other player plays <code>\(H\)</code>, the best response is either <code>\(X\)</code> or <code>\(H\)</code>, meaning that there are again multiple equilibria in this game.</p>
+
+
+
+
+<h2 id="conclusion">Conclusion
+  <a href="#conclusion"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>The equilibria found above are Pareto-ranked, with the equilibria involving more exchanges having a higher ex ante expected utility than the equilibria involving less exchanges. In addition, the game with less information leads to more exchange than the game with more information. Hence, more information is not always better, but can lead to adverse selection.</p>
+<p>Hope this was interesting enough, thanks for reading!</p>
+
+        
+        <details closed class="f6 fw7 input-reset">
+  <dl class="f6 lh-copy">
+    <dt class="fw7">Posted on:</dt>
+    <dd class="fw5 ml0">August 8, 2022</dd>
+  </dl>
+  <dl class="f6 lh-copy">
+    <dt class="fw7">Length:</dt>
+    <dd class="fw5 ml0">7 minute read, 1283 words</dd>
+  </dl>
+  
+  
+  
+  <dl class="f6 lh-copy">
+    <dt class="fw7">See Also:</dt>
+    
+  </dl>
+</details>
+
+      </section>
+      <footer class="post-footer">
+        <div class="post-pagination dt w-100 mt4 mb2">
+  
+  
+  
+  
+    <a class="next dtc pl2 tr v-top fw6"
+    href="/blog/2022-08-03-equilibrium-in-the-besley-case-1995-model/">Equilibrium in the Besley-Case (1995) Model &rarr;</a>
+  
+</div>
+
+      </footer>
+    </article>
+    
+      
+<div class="post-comments pa0 pa4-l mt4">
+  
+  <script src="https://utteranc.es/client.js"
+          repo="basm92/new_website"
+          issue-term="pathname"
+          theme="boxy-light"
+          label="comments :crystal_ball:"
+          crossorigin="anonymous"
+          async
+          type="text/javascript">
+  </script>
+  
+</div>
+
+    
+  </section>
+</main>
+<footer class="site-footer pv4 bt b--transparent ph5" role="contentinfo">
+  <nav class="db dt-l w-100">
+    <p class="site-copyright f7 db dtc-l v-mid w-100 w-33-l tc tl-l pv2 pv0-l mv0 lh-copy">
+      &copy; 2022 Bas Machielsen
+      <span class="middot-divider"></span>
+      Made with <span xmlns:dct="http://purl.org/dc/terms/" property="dct:title"><a xmlns:dct="http://purl.org/dc/terms/" href="https://github.com/hugo-apero/" rel="dct:source">Hugo Apéro</a></span>.
+      <br />
+      
+Based on <span xmlns:dct="http://purl.org/dc/terms/" property="dct:title"><a xmlns:dct="http://purl.org/dc/terms/" href="https://github.com/formspree/blogophonic-hugo" rel="dct:source">Blogophonic</a></span> by <a xmlns:cc="http://creativecommons.org/ns#" href="https://formspree.io" property="cc:attributionName" rel="cc:attributionURL">Formspree</a>.
+    </p>
+    
+    <div class="site-social-links db dtc-l v-mid w-100 w-33-l tc pv2 pv0-l mv0">
+      <div class="social-icon-links" aria-hidden="true">
+  
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://github.com/basm92" title="github" target="_blank" rel="noopener">
+      <i class="fab fa-github fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://scholar.google.com/citations?user=bS8uo44AAAAJ" title="google" target="_blank" rel="noopener">
+      <i class="fab fa-google fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://twitter.com/basm92" title="twitter" target="_blank" rel="noopener">
+      <i class="fab fa-twitter fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="mailto:a.h.machielsen@uu.nl" title="envelope" >
+      <i class="fas fa-envelope fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="mailto:basmachielsen@live.nl" title="envelope" >
+      <i class="far fa-envelope fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://orcid.org/0000-0002-9692-0615" title="orcid" target="_blank" rel="noopener">
+      <i class="ai ai-orcid fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="/blog/index.xml" title="rss" >
+      <i class="fas fa-rss fa-lg fa-fw"></i>
+    </a>
+  
+</div>
+
+    </div>
+    
+    <div class="site-links f6 db dtc-l v-mid w-100 w-67-l tc tr-l pv2 pv0-l mv0">
+      
+      <a class="dib pv1 ph2 link" href="/license/" title="License">License</a>
+      
+      <a class="dib pv1 ph2 link" href="/contact/" title="Contact form">Contact</a>
+      
+      <a class="dib pv1 ph2 link" href="/contributors/" title="Contributors">Contributors</a>
+      
+    </div>
+  </nav>
+  
+    <script>
+
+    var i, text, code, codes = document.getElementsByTagName('code');
+    for (let i = 0; i < codes.length;) {
+      code = codes[i];
+      if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+        text = code.textContent;
+        if (/^\$[^$]/.test(text) && /[^$]\$$/.test(text)) {
+          text = text.replace(/^\$/, '\\(').replace(/\$$/, '\\)');
+          code.textContent = text;
+        }
+        if (/^\\\((.|\s)+\\\)$/.test(text) ||
+            /^\\\[(.|\s)+\\\]$/.test(text) ||
+            /^\$(.|\s)+\$$/.test(text) ||
+            /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+          code.outerHTML = code.innerHTML;  
+          continue;
+        }
+      }
+      i++;
+    }
+</script>
+
+  
+    
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.css" integrity="sha384-RZU/ijkSsFbcmivfdRBQDtwuwVqK7GMOw6IMvKyeWL2K5UAlyp6WonmB8m7Jd0Hn" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.js" integrity="sha384-pK1WpvzWVBQiP0/GjnvRxV4mOb0oxFuyRxJlk6vVw146n3egcN5C925NCP7a7BY8" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/contrib/auto-render.min.js" integrity="sha384-vZTG03m+2yp6N6BNi5iM4rW4oIwk5DfcNdFfxkk9ZWpDriOkXX8voJBFrAO7MpVl" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
+
+
+
+    
+  
+  
+</footer>
+
+      </div>
+    </body>
+</html>
