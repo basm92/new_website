@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr"><head>
+  
+                           
+     
+
+
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="generator" content="Hugo 0.101.0" />
+<title>A computational implementation of the Besley (2004) model | Bas Machielsen</title>
+
+
+<meta property="twitter:site" content="@basss92">
+<meta property="twitter:creator" content="@basss92">
+
+
+
+
+
+
+
+  
+    
+  
+<meta name="description" content="A post about the model of the influence of political wages by Besley (2004), and a computational implementation in Python.">
+
+
+<meta property="og:site_name" content="Bas Machielsen">
+<meta property="og:title" content="A computational implementation of the Besley (2004) model | Bas Machielsen">
+<meta property="og:description" content="A post about the model of the influence of political wages by Besley (2004), and a computational implementation in Python." />
+<meta property="og:type" content="page" />
+<meta property="og:url" content="/blog/2022-08-09-a-computational-implementation-of-the-besley-2004-model/" />
+<meta property="og:locale" content="en">
+
+
+
+
+    
+        <meta property="og:image" content="/blog/2022-08-09-a-computational-implementation-of-the-besley-2004-model/featured.png" >
+        <meta property="twitter:card" content="summary_large_image">
+        <meta name="twitter:image" content="/blog/2022-08-09-a-computational-implementation-of-the-besley-2004-model/featured.png" >
+    
+    
+  <meta itemprop="name" content="A computational implementation of the Besley (2004) model">
+<meta itemprop="description" content="Introduction Besley (2004) is a paper about the effects of politicians&rsquo; pay (e.g. wages) on performance. This is a classic issue, tackled firstly by Barro (1973) and Ferejohn (1986), but only recently, the literature has looked into issues surrounding the effect of wages on selection. In the literature, there is a debate about whether higher wages attract better-quality individuals or lesser-quality individuals to the political arena. Besley (2004) is a paper rationalizing the first view."><meta itemprop="datePublished" content="2022-06-15T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2022-06-15T00:00:00+00:00" />
+<meta itemprop="wordCount" content="2556"><meta itemprop="image" content="/blog/2022-08-09-a-computational-implementation-of-the-besley-2004-model/featured.png">
+<meta itemprop="keywords" content="" />
+  
+  
+  <!--[if IE]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  <link rel="shortcut icon" href="favicon_new.ico" type="image/x-icon">
+  <link rel="icon" href="favicon_new.ico" type="image/x-icon">
+  
+  
+  <link rel="stylesheet" href="/style.main.min.7aee66b22ae3b19895932b9cf4d37da828ca65fc6cd45cfdee1b36b98f4b0ae0.css" integrity="sha256-eu5msirjsZiVkyuc9NN9qCjKZfxs1Fz97hs2uY9LCuA=" media="screen">
+  
+  
+  <script src="/panelset.min.dca42702d7daf6fd31dc352efd2bcf0e4ac8c05ccaa58d9293f6177462de5d5f.js" type="text/javascript"></script>
+  
+  
+  <script src="/main.min.11d2df4163a7df9fb9d31f699461f02d84700b160cd42fa951b0982fc4d468bc.js" type="text/javascript"></script>
+</head>
+<body>
+      <div class="grid-container single">
+<header class="site-header pt4 pb2 mb4 bb b--transparent ph5 headroom z-max" role="banner">
+  <nav class="site-nav db dt-l w-100" role="navigation">
+    <a class="site-brand db dtc-l v-mid link no-underline w-100 w-33-l tc tl-l" href="/" title="Home">
+      <img src="/website_logo.png" class="dib db-l h2 w-auto" alt="Bas Machielsen">
+    </a>
+    <div class="site-links db dtc-l v-mid w-100 w-47-l tc tr-l mt3 mt0-l ttu tracked">
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/" title="Home">Home</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/about/" title="About">About</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 active" href="/blog/" title="Blog">Blog</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/project/" title="Teaching Overview &amp; Repository">Teaching</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/resume/" title="Resume">Resume</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/articles/" title="Articles">Articles</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/collection/" title="Software">Software</a>
+      
+      
+    </div>
+  </nav>
+</header>
+
+<main class="page-main pa4" role="main">
+  <section class="page-content mw7 center">
+    <article class="post-content pa0 ph4-l">
+      <header class="post-header">
+        <h1 class="f1 lh-solid measure-narrow mb3 fw4">A computational implementation of the Besley (2004) model</h1>
+        
+        <p class="f6 measure lh-copy mv1">By Bas Machielsen</p>
+        <p class="f7 db mv0 ttu">June 15, 2022</p>
+
+      
+
+      </header>
+      <section class="post-body pt5 pb4">
+        
+
+
+
+<h2 id="introduction">Introduction
+  <a href="#introduction"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>Besley (2004) is a paper about the effects of politicians&rsquo; pay (e.g. wages) on performance. This is a classic issue, tackled firstly by Barro (1973) and Ferejohn (1986), but only recently, the literature has looked into issues surrounding the effect of wages on selection. In the literature, there is a debate about whether higher wages attract better-quality individuals or lesser-quality individuals to the political arena. Besley (2004) is a paper rationalizing the first view. I will set out this view in the following blogpost. For another perspective, see Mattozzi and Merlo (2008), who rationalize the opposite selection effect (i.e. higher wages attract more opportunistic individuals).</p>
+<p>Anyway, the purpose of this blog post is to guide the reader through the model and considerations involving the solution, and a quantitative verification of several of the propositions in the article. The mechanisms in the model are threefold, meaning the effect of wages can be distinguished between three aspects:</p>
+<ul>
+<li>Ex ante selection: wages can affect the quality of people who choose to enter politics</li>
+<li>Discipline: wages can affect the incentives to exert effort and pick the right policy</li>
+<li>Ex post selection: wages can affect the ability of the political process to evaluate the quality of politicians who have been in power.</li>
+</ul>
+
+
+
+
+<h2 id="set-up">Set-Up
+  <a href="#set-up"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>The model is in discrete time, with an infinite horizon. A politician in office can make a discrete decision, <code>\(e_t = \{ 0 , 1 \}\)</code> and the world can be in two states, <code>\(s_t = \{ 0 , 1\}\)</code>. Voters receive a pay-off of <code>\(\Delta\)</code> if <code>\(e_t = s_t\)</code> and zero otherwise. This phenomenon is dubbed &lsquo;congruent policy&rsquo; in the paper, meaning policy that fits the state of the world.</p>
+<p>A politician can serve at most two terms. There are two types of politicians, congruent and dissonant politicians <code>\(\{c, d \}\)</code>, with the relative share of <code>\(\pi\)</code> congruent politicians in the pool.</p>
+<p>Dissonant politicians obtain a randomly realized <code>\(r\)</code> from distribution <code>\(G(r)\)</code> from pursuing incongruent politicies (i.e. picking <code>\(e_t \neq s_t\)</code>). The time-invariant mean of this distribution is denoted by <code>\(\mu\)</code>. All politicians get <code>\(E\)</code> from holding office, interpreted as &rsquo;ego-rents&rsquo; or office perks.</p>
+<p>With probability <code>\((1-q)\)</code>, a dissonant politician cannot implement the policy which voters like. This means that, for this politician, there is no choice, with this probability. Voters and politicians discount with a factor <code>\(\beta\)</code>.</p>
+<p>The timing is as follows:</p>
+<ol>
+<li>
+<p>Nature determines the state of the world and the type of politician if the politician is new.</p>
+</li>
+<li>
+<p>The incumbent politician then picks his chosen action.</p>
+</li>
+<li>
+<p>Voters observe their payoff and decide whether or not to reelect the incumbent. Once fired, the politician cannot resume office in the future.</p>
+</li>
+</ol>
+<p>If the term in office is <code>\(j \in \{ 1, 2 \}\)</code>, an action of a politician at time <code>\(t\)</code> is denoted by <code>\(e_t (s, i, j)\)</code> with <code>\(s \in \{ 0, 1\}\)</code>, <code>\(i \in \{ c, d \}\)</code> and <code>\(j \in \{1, 2 \}\)</code>.</p>
+
+
+
+
+<h2 id="equilibrium">Equilibrium
+  <a href="#equilibrium"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>The study focuses on time-invariant (Markov Perfect) equilibria.</p>
+<p>Congruent politicians always pick the policy in accordance with the state of the world for all times <code>\(t\)</code> and periods <code>\(j\)</code>.</p>
+<p>The dissonant politicians&rsquo; problem can be solved by backward induction. In the second period, there is no retention, so they will always pick policy <code>\((1-s)\)</code>.</p>
+<p>In the first period, with probability <code>\((1-q)\)</code>, he picks <code>\((1-s)\)</code> because there is no decision. With probability <code>\(q\)</code>, he might choose to do what the voters like. Suppose by doing so, he is re-elected. By doing so, he will achieve a pay-off of <code>\(\beta [\mu + E]\)</code> in the second period, while foregoing <code>\(r_1\)</code>. Hence:</p>
+<p>\begin{equation}
+e (s, d, 1) = \begin{cases}
+s &amp;\text{ if } r_1 \leq \beta [ \mu + E ] \newline
+(1-s) &amp;\text{ otherwise }
+\end{cases}
+\end{equation}</p>
+<p>From the viewpoints of the voters, the ex ante probability that a dissonant politician does what voters like is <code>\(q G(\beta [\mu + E]) \hat{=} \lambda (E)\)</code>.</p>
+<p>We have to check whether this is consistent with voters behaving optimally. Let <code>\(V^N (\pi, E)\)</code> be the value to the voter of starting over with a new politician and let <code>\(\Pi (\pi, E)\)</code> be the probability that the incumbent is congruent given that a benefit <code>\(\Delta\)</code> was generated (i.e. a congruent politicy) in the first term.</p>
+<p>Using Bayes&rsquo; rule:</p>
+<p>$$
+\Pi (\pi, E) = \frac{ \pi }{\pi + (1-\pi) \lambda (E)}
+$$
+Denote the denominator by <code>\(\phi (\pi, E)= \pi + (1-\pi) \lambda (E)\)</code>, which is the probability of a congruent action in the first period. Then, the value of a newly elected politician satisfies the following recursion:</p>
+<p>$$
+V^N (\pi, E) = \phi (\pi, E) \cdot [\Delta + \beta \cdot \Pi (\pi, E) \cdot \Delta + \beta^2 V^N (\pi, E)]  + (1 - \phi (\pi, E)) [\beta V^N (\pi, E)]
+$$
+This corresponds to the probability of a congruent action in the first period, after which a reward of <code>\(\Delta\)</code> is accrued, following which the updated probability of a congruent politician after observing a congruent action, which gives again <code>\(\Delta\)</code>, following which the politician cannot be re-elected, hence the new value starts. The other term reflects the probability that a non-congruent action is observed, 0 pay-off is realized, and in the next period, the new value starts.</p>
+<p>Rearranging this and solving for <code>\(V^N (\pi, E)\)</code> gives:</p>
+<p>$$
+V^N (\pi, E) = \frac{ \Delta }{1 - \beta} \cdot \frac{ \phi (\pi, E) + \pi \beta}{[1+\beta \phi (\pi, E)]}
+$$
+Using this, we can verify whether re-electing an incumbent after congruent policy is optimal for voters:</p>
+<p>$$
+\underbrace { \Pi (\pi, E) \cdot \Delta + \beta V^N (\pi, E)}_\text{Expected payoff from retain} \geq \underbrace{V^N (\pi, E)}_\text{Payoff from dismiss}
+$$</p>
+<p>This simplifies to <code>\(\pi \geq (\pi + (1-\pi)\lambda (E))^2\)</code>. In fact, proposition 1 in the paper is a stricter, sufficient condition of this inequality. The condition in the paper is also the condition I implement in the computational part for a valid parameter setting. Hence, under this parameter setting, the following equilibrium prevails:</p>
+<ul>
+<li>Consonant politicians always do what the voter wants</li>
+<li>Dissonant politicians act according to equation (1)</li>
+<li>Voters retain politicians if they observe a consonant outcome</li>
+</ul>
+
+
+
+
+<h3 id="comparative-statics">Comparative Statics
+  <a href="#comparative-statics"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h3>
+<p>We then look at the comparative statics of changing <code>\(E\)</code>, the politician&rsquo;s wage. In predictions 1 and 2, we look at:</p>
+<ul>
+<li>
+<p><code>\(\phi (\pi, E)\)</code>, dubbed the discipline effect, which is the probability that politicians do the good thing in period 1. This is increasing in <code>\(E\)</code>.</p>
+</li>
+<li>
+<p>the ratio <code>\(\pi\)</code> to <code>\(\phi(\pi, E)\)</code>, which is the fraction of politicians who take a congruent decision in the second-term (all congruent politicians are re-elected, on a total of <code>\(\phi(\pi, E)\)</code> politicians).</p>
+</li>
+<li>
+<p>This ratio is decreasing in <code>\(E\)</code>, meaning the difference between first and second terms is decreasing. This effect is dubbed the ex-post selection effect.</p>
+</li>
+<li>
+<p>Proposition 3 is about the effect on voter welfare, which can be proven by taken the derivative of the value function <code>\(V^N (\pi, E)\)</code> with respect to <code>\(E\)</code>.</p>
+</li>
+</ul>
+
+
+
+
+<h3 id="endogenous-selection">Endogenous Selection
+  <a href="#endogenous-selection"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h3>
+<p>The remainder of the paper focuses on the ex-ante selection effects of the wage. For this, the study supposes that there is a continuum of potential politicians with outside wages <code>\(w \in [0, W^i]\)</code> for <code>\(i \in \{c, d \}\)</code>. These wages are uniformly distributed, but over a different range for congruent and dissonant politicians. The probability that a random candidate is of the congruent type is <code>\(\gamma\)</code>.</p>
+<p>For congruent politicians, a first period implies a second period. A politician will stay in office if <code>\(E \geq w\)</code>. They will also enter a first term if <code>\(E \geq w\)</code>. The fraction of congruent citizens willing to enter politics is <code>\(\frac{E}{W^c}\)</code>.</p>
+<p>For dissonant politicians, the retention decision is now:</p>
+<p>$$
+e (s, d, 1, w) = \begin{cases}
+s &amp;\text{ if } r_1 \leq \beta([\mu + E] - w) \newline
+(1-s) &amp;\text{ otherwise }
+\end{cases}
+$$
+If <code>\(\bar{w}\)</code> is the maximum wage that dissonant politicians will forego, the probability of congruent behavior is now:</p>
+<p>$$
+\Lambda (E, \bar{w}) = \int_0^{\bar{w}} G(\beta([\mu + E] - w)) \frac{dw}{\bar{w}}
+$$</p>
+<p>(The mass coming from integrating over <code>\(G\)</code> should be scaled by the maximum).</p>
+<p>The private sector stream of utility is <code>\(v(w) = w/(1-\beta)\)</code>. The value from entering politics when the private sector option is <code>\(w\)</code> is therefore:</p>
+<p>$$
+P(E+\mu, w) = E + (\int_{\beta [(E+\mu) - w]}^R (r + \beta v(w) d G(r)) + G(\beta[E+\mu] - w)(\beta (\mu + E) + \beta^2 v(w))
+$$</p>
+<ul>
+<li>The first reward from politics is E.</li>
+<li>The second term inside the integral represents realizing a high <code>\(r_1\)</code>, serve 1 period and be dissonant, and then go private.</li>
+<li>The third term represents realizing a high <code>\(r_1\)</code>, complying first period, and pursuing the second period opportunistically, and then returning to the private sector.</li>
+</ul>
+<p>The politicians who participate in politics are those for which <code>\(v(w) \leq P(w)\)</code>. Solving the equality yields the critical reservation wage <code>\(\bar{w}\)</code>, defined implicitly by:</p>
+<p>$$
+\bar{w} (E, \mu) = (E + \mu) + \psi (E + \mu - \bar{w}(E, \mu))
+$$</p>
+<p>where <code>\(\Psi(x) = - \int_0^{\beta x} r dG(r) / [1 + G(\beta x) \beta]\)</code>.</p>
+<p>The fraction of dissonant politicians is then <code>\(\frac{\bar{w}(E, \mu)}{W^d}\)</code>.</p>
+<p>Then, the fraction of congruent politicians in the pool of candidates available is:</p>
+<p>\begin{equation}
+\pi (E) = \frac{\gamma \cdot \frac{E}{W^c}}{\gamma \cdot \frac{E}{W^c} + (1-\gamma) \cdot (\frac{\bar{w}}{W^d})}
+\end{equation}</p>
+<p>which is equivalent to the formulation in the paper.</p>
+<p>The comparative statics on this expression with respect to E are summarized in the following prediction:</p>
+<blockquote>
+<p>(Prediction 4) Paying higher wages will lead to the increase in the fraction of congruant politicians who will put themselves forward for office</p>
+</blockquote>
+
+
+
+
+<h2 id="computational-implementation">Computational Implementation
+  <a href="#computational-implementation"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>I now implement the model in Python. I first start by importing several libraries.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#000;font-weight:bold">import</span> <span style="color:#555">pandas</span> <span style="color:#000;font-weight:bold">as</span> <span style="color:#555">pd</span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">import</span> <span style="color:#555">numpy</span> <span style="color:#000;font-weight:bold">as</span> <span style="color:#555">np</span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">import</span> <span style="color:#555">scipy.stats</span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">from</span> <span style="color:#555">matplotlib</span> <span style="color:#000;font-weight:bold">import</span> pyplot <span style="color:#000;font-weight:bold">as</span> plt
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">import</span> <span style="color:#555">scipy.integrate</span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">from</span> <span style="color:#555">scipy.optimize</span> <span style="color:#000;font-weight:bold">import</span> fsolve
+</span></span></code></pre></div><p>Then, I construct a class using several of the equations above:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#000;font-weight:bold">class</span> <span style="color:#458;font-weight:bold">BesleyModel</span>:
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">def</span> __init__(<span style="color:#999">self</span>, beta <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">0.8</span>, pi <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">0.5</span>, delta <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">0.7</span>, r_min <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">0</span>, E <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">0.2</span>, q <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">0.2</span>, R_max <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">1</span>):
+</span></span><span style="display:flex;"><span>        <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>beta, <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>pi <span style="color:#000;font-weight:bold">=</span> beta, pi
+</span></span><span style="display:flex;"><span>        <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>delta, <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>r_min, <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>R_max <span style="color:#000;font-weight:bold">=</span> delta, r_min, R_max
+</span></span><span style="display:flex;"><span>        <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>E, <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>q <span style="color:#000;font-weight:bold">=</span> E, q
+</span></span><span style="display:flex;"><span>          
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">def</span> <span style="color:#900;font-weight:bold">G</span>(<span style="color:#999">self</span>, x):
+</span></span><span style="display:flex;"><span>        R_max, r_min <span style="color:#000;font-weight:bold">=</span> <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>R_max, <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>r_min
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">return</span> scipy<span style="color:#000;font-weight:bold">.</span>stats<span style="color:#000;font-weight:bold">.</span>uniform<span style="color:#000;font-weight:bold">.</span>cdf(x, loc <span style="color:#000;font-weight:bold">=</span> r_min, scale <span style="color:#000;font-weight:bold">=</span> R_max)
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">def</span> <span style="color:#900;font-weight:bold">g</span>(<span style="color:#999">self</span>, x):
+</span></span><span style="display:flex;"><span>        R_max, r_min <span style="color:#000;font-weight:bold">=</span> <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>R_max, <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>r_min
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">return</span> scipy<span style="color:#000;font-weight:bold">.</span>stats<span style="color:#000;font-weight:bold">.</span>uniform<span style="color:#000;font-weight:bold">.</span>pdf(x, loc <span style="color:#000;font-weight:bold">=</span> r_min, scale <span style="color:#000;font-weight:bold">=</span> R_max)
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">def</span> <span style="color:#900;font-weight:bold">lbda</span>(<span style="color:#999">self</span>, E):
+</span></span><span style="display:flex;"><span>        <span style="color:#d14">&#34;&#34;&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">        Probability that dissonant politician does what the electorate wants
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">        &#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>        G <span style="color:#000;font-weight:bold">=</span> <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>G
+</span></span><span style="display:flex;"><span>        q, beta <span style="color:#000;font-weight:bold">=</span> <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>q, <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>beta
+</span></span><span style="display:flex;"><span>        mu <span style="color:#000;font-weight:bold">=</span> (<span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>R_max <span style="color:#000;font-weight:bold">-</span> <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>r_min)<span style="color:#000;font-weight:bold">/</span><span style="color:#099">2</span>
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">return</span> q<span style="color:#000;font-weight:bold">*</span>G(beta<span style="color:#000;font-weight:bold">*</span>(mu<span style="color:#000;font-weight:bold">+</span>E))
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">def</span> <span style="color:#900;font-weight:bold">phi</span>(<span style="color:#999">self</span>, E):
+</span></span><span style="display:flex;"><span>        <span style="color:#d14">&#34;&#34;&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">        Probability that firm term incumbent generates the good action for voters
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">        &#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>        pi <span style="color:#000;font-weight:bold">=</span> <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>pi
+</span></span><span style="display:flex;"><span>        lbda <span style="color:#000;font-weight:bold">=</span> <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>lbda
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">return</span> pi <span style="color:#000;font-weight:bold">+</span> (<span style="color:#099">1</span><span style="color:#000;font-weight:bold">-</span>pi)<span style="color:#000;font-weight:bold">*</span>lbda(E)
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">def</span> <span style="color:#900;font-weight:bold">Pi</span>(<span style="color:#999">self</span>, E):
+</span></span><span style="display:flex;"><span>        <span style="color:#d14">&#34;&#34;&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">        Updated probability that incumbent in congruent instead of dissonant
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">        conditional on generating a delta benefit in the first period
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">        &#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>        phi <span style="color:#000;font-weight:bold">=</span> <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>phi
+</span></span><span style="display:flex;"><span>        pi <span style="color:#000;font-weight:bold">=</span> <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>pi
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">return</span> pi<span style="color:#000;font-weight:bold">/</span>phi(E)
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">def</span> <span style="color:#900;font-weight:bold">v</span>(<span style="color:#999">self</span>, E):
+</span></span><span style="display:flex;"><span>        <span style="color:#d14">&#34;&#34;&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">        Voter welfare viewed from the first period
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">        &#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>        delta, beta, pi <span style="color:#000;font-weight:bold">=</span> <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>delta, <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>beta, <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>pi
+</span></span><span style="display:flex;"><span>        phi <span style="color:#000;font-weight:bold">=</span> <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>phi
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">return</span> delta<span style="color:#000;font-weight:bold">/</span>(<span style="color:#099">1</span><span style="color:#000;font-weight:bold">-</span>beta) <span style="color:#000;font-weight:bold">*</span> (phi(E) <span style="color:#000;font-weight:bold">+</span> pi<span style="color:#000;font-weight:bold">*</span>beta)<span style="color:#000;font-weight:bold">/</span>(<span style="color:#099">1</span><span style="color:#000;font-weight:bold">+</span>beta<span style="color:#000;font-weight:bold">*</span>phi(E))
+</span></span><span style="display:flex;"><span>        
+</span></span></code></pre></div><p>Then, I verify the predictions:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>possible_E <span style="color:#000;font-weight:bold">=</span> np<span style="color:#000;font-weight:bold">.</span>linspace(<span style="color:#099">0</span>, <span style="color:#099">0.9</span>, num<span style="color:#000;font-weight:bold">=</span><span style="color:#099">100</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic">#matrix for different pi&#39;s, beta&#39;s, whatever</span>
+</span></span><span style="display:flex;"><span>possible_pi <span style="color:#000;font-weight:bold">=</span> [<span style="color:#099">0.4</span>, <span style="color:#099">0.5</span>, <span style="color:#099">0.6</span>, <span style="color:#099">0.7</span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>prob_congruence <span style="color:#000;font-weight:bold">=</span> np<span style="color:#000;font-weight:bold">.</span>empty([<span style="color:#0086b3">len</span>(possible_E), <span style="color:#0086b3">len</span>(possible_pi)])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">def</span> <span style="color:#900;font-weight:bold">compute_prob</span>(possible_E, possible_pi):
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">for</span> num, pi <span style="color:#000;font-weight:bold">in</span> <span style="color:#0086b3">enumerate</span>(possible_pi):
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">for</span> num2, e <span style="color:#000;font-weight:bold">in</span> <span style="color:#0086b3">enumerate</span>(possible_E):
+</span></span><span style="display:flex;"><span>            
+</span></span><span style="display:flex;"><span>            model<span style="color:#000;font-weight:bold">=</span>BesleyModel(beta <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">0.7</span>, pi <span style="color:#000;font-weight:bold">=</span> pi)
+</span></span><span style="display:flex;"><span>            prob_congruence[num2, num] <span style="color:#000;font-weight:bold">=</span> model<span style="color:#000;font-weight:bold">.</span>phi(E<span style="color:#000;font-weight:bold">=</span>e)
+</span></span><span style="display:flex;"><span>            
+</span></span><span style="display:flex;"><span>compute_prob(possible_E, possible_pi)
+</span></span></code></pre></div><blockquote>
+<p>(Prediction 1) An increase in wages increases the probability of congruence between voter preferences and policy outcomes. As a consequence, it reduces turnover among first-term incumbents.</p>
+</blockquote>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>fig, ax <span style="color:#000;font-weight:bold">=</span> plt<span style="color:#000;font-weight:bold">.</span>subplots()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">for</span> i <span style="color:#000;font-weight:bold">in</span> <span style="color:#0086b3">range</span>(prob_congruence<span style="color:#000;font-weight:bold">.</span>shape[<span style="color:#099">1</span>]):
+</span></span><span style="display:flex;"><span>    ax<span style="color:#000;font-weight:bold">.</span>plot(possible_E, prob_congruence[:,i], label <span style="color:#000;font-weight:bold">=</span> <span style="color:#d14">f</span><span style="color:#d14">&#39;$\pi=$</span><span style="color:#d14">{</span>possible_pi[i]<span style="color:#d14">}</span><span style="color:#d14">&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>ax<span style="color:#000;font-weight:bold">.</span>set_xlabel(<span style="color:#d14">&#34;In-office reward $E$&#34;</span>)
+</span></span><span style="display:flex;"><span>ax<span style="color:#000;font-weight:bold">.</span>set_ylabel(<span style="color:#d14">&#34;$\mathbb</span><span style="color:#d14">{P}</span><span style="color:#d14">$[Congruence]&#34;</span>)
+</span></span><span style="display:flex;"><span>ax<span style="color:#000;font-weight:bold">.</span>legend()
+</span></span></code></pre></div><img src="/blog/2022-08-09-a-computational-implementation-of-the-besley-2004-model/index_files/figure-html/unnamed-chunk-4-1.png" width="672" />
+<blockquote>
+<p>(Prediction 2) Conditional on electing a dissonant politician, behavior deteriorates over time. But politicians in their second term in office behave better on average than those in their first term. The difference between second-term and first-term incumbents is smaller the larger the politician&rsquo;s wage.</p>
+</blockquote>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>possible_E <span style="color:#000;font-weight:bold">=</span> np<span style="color:#000;font-weight:bold">.</span>linspace(<span style="color:#099">0</span>, <span style="color:#099">0.9</span>, num<span style="color:#000;font-weight:bold">=</span><span style="color:#099">100</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic">#matrix for different pi&#39;s, beta&#39;s, whatever</span>
+</span></span><span style="display:flex;"><span>possible_pi <span style="color:#000;font-weight:bold">=</span> [<span style="color:#099">0.4</span>, <span style="color:#099">0.5</span>, <span style="color:#099">0.6</span>, <span style="color:#099">0.7</span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>prob_congruence <span style="color:#000;font-weight:bold">=</span> np<span style="color:#000;font-weight:bold">.</span>empty([<span style="color:#0086b3">len</span>(possible_E), <span style="color:#0086b3">len</span>(possible_pi)])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">def</span> <span style="color:#900;font-weight:bold">compute_prob</span>(possible_E, possible_pi):
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">for</span> num, pi <span style="color:#000;font-weight:bold">in</span> <span style="color:#0086b3">enumerate</span>(possible_pi):
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">for</span> num2, e <span style="color:#000;font-weight:bold">in</span> <span style="color:#0086b3">enumerate</span>(possible_E):
+</span></span><span style="display:flex;"><span>            
+</span></span><span style="display:flex;"><span>            model<span style="color:#000;font-weight:bold">=</span>BesleyModel(beta <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">0.7</span>, pi <span style="color:#000;font-weight:bold">=</span> pi)
+</span></span><span style="display:flex;"><span>            prob_congruence[num2, num] <span style="color:#000;font-weight:bold">=</span> (model<span style="color:#000;font-weight:bold">.</span>pi<span style="color:#000;font-weight:bold">/</span>model<span style="color:#000;font-weight:bold">.</span>phi(E<span style="color:#000;font-weight:bold">=</span>e) <span style="color:#000;font-weight:bold">-</span> model<span style="color:#000;font-weight:bold">.</span>phi(E<span style="color:#000;font-weight:bold">=</span>e))
+</span></span><span style="display:flex;"><span>            
+</span></span><span style="display:flex;"><span>compute_prob(possible_E, possible_pi)
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>fig, ax <span style="color:#000;font-weight:bold">=</span> plt<span style="color:#000;font-weight:bold">.</span>subplots()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">for</span> i <span style="color:#000;font-weight:bold">in</span> <span style="color:#0086b3">range</span>(prob_congruence<span style="color:#000;font-weight:bold">.</span>shape[<span style="color:#099">1</span>]):
+</span></span><span style="display:flex;"><span>    ax<span style="color:#000;font-weight:bold">.</span>plot(possible_E, prob_congruence[:,i], label <span style="color:#000;font-weight:bold">=</span> <span style="color:#d14">f</span><span style="color:#d14">&#39;$\pi=$</span><span style="color:#d14">{</span>possible_pi[i]<span style="color:#d14">}</span><span style="color:#d14">&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>ax<span style="color:#000;font-weight:bold">.</span>set_xlabel(<span style="color:#d14">&#34;In-office reward $E$&#34;</span>)
+</span></span><span style="display:flex;"><span>ax<span style="color:#000;font-weight:bold">.</span>set_ylabel(<span style="color:#d14">&#34;Difference $\pi/\phi(E)$ and $\phi (E)$&#34;</span>)
+</span></span><span style="display:flex;"><span>ax<span style="color:#000;font-weight:bold">.</span>legend()
+</span></span></code></pre></div><img src="/blog/2022-08-09-a-computational-implementation-of-the-besley-2004-model/index_files/figure-html/unnamed-chunk-6-3.png" width="672" />
+<blockquote>
+<p>(Prediction 3) Increasing <code>\(E\)</code> increases voter welfare.</p>
+</blockquote>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>possible_E <span style="color:#000;font-weight:bold">=</span> np<span style="color:#000;font-weight:bold">.</span>linspace(<span style="color:#099">0</span>, <span style="color:#099">0.9</span>, num<span style="color:#000;font-weight:bold">=</span><span style="color:#099">100</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic">#matrix for different pi&#39;s, beta&#39;s, whatever</span>
+</span></span><span style="display:flex;"><span>possible_pi <span style="color:#000;font-weight:bold">=</span> [<span style="color:#099">0.4</span>, <span style="color:#099">0.5</span>, <span style="color:#099">0.6</span>, <span style="color:#099">0.7</span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>prob_congruence <span style="color:#000;font-weight:bold">=</span> np<span style="color:#000;font-weight:bold">.</span>empty([<span style="color:#0086b3">len</span>(possible_E), <span style="color:#0086b3">len</span>(possible_pi)])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">def</span> <span style="color:#900;font-weight:bold">compute_prob</span>(possible_E, possible_pi):
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">for</span> num, pi <span style="color:#000;font-weight:bold">in</span> <span style="color:#0086b3">enumerate</span>(possible_pi):
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">for</span> num2, e <span style="color:#000;font-weight:bold">in</span> <span style="color:#0086b3">enumerate</span>(possible_E):
+</span></span><span style="display:flex;"><span>            
+</span></span><span style="display:flex;"><span>            model<span style="color:#000;font-weight:bold">=</span>BesleyModel(beta <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">0.7</span>, pi <span style="color:#000;font-weight:bold">=</span> pi)
+</span></span><span style="display:flex;"><span>            prob_congruence[num2, num] <span style="color:#000;font-weight:bold">=</span> model<span style="color:#000;font-weight:bold">.</span>v(e)
+</span></span><span style="display:flex;"><span>            
+</span></span><span style="display:flex;"><span>compute_prob(possible_E, possible_pi)
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>fig, ax <span style="color:#000;font-weight:bold">=</span> plt<span style="color:#000;font-weight:bold">.</span>subplots()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">for</span> i <span style="color:#000;font-weight:bold">in</span> <span style="color:#0086b3">range</span>(prob_congruence<span style="color:#000;font-weight:bold">.</span>shape[<span style="color:#099">1</span>]):
+</span></span><span style="display:flex;"><span>    ax<span style="color:#000;font-weight:bold">.</span>plot(possible_E, prob_congruence[:,i], label <span style="color:#000;font-weight:bold">=</span> <span style="color:#d14">f</span><span style="color:#d14">&#39;$\pi=$</span><span style="color:#d14">{</span>possible_pi[i]<span style="color:#d14">}</span><span style="color:#d14">&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>ax<span style="color:#000;font-weight:bold">.</span>set_xlabel(<span style="color:#d14">&#34;In-office reward $E$&#34;</span>)
+</span></span><span style="display:flex;"><span>ax<span style="color:#000;font-weight:bold">.</span>set_ylabel(<span style="color:#d14">&#34;Voter Welfare&#34;</span>)
+</span></span><span style="display:flex;"><span>ax<span style="color:#000;font-weight:bold">.</span>legend()
+</span></span></code></pre></div><img src="/blog/2022-08-09-a-computational-implementation-of-the-besley-2004-model/index_files/figure-html/unnamed-chunk-8-5.png" width="672" />
+
+
+
+
+<h3 id="endogenous-selection-1">Endogenous Selection
+  <a href="#endogenous-selection-1"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h3>
+<p>Finally, I verify proposition 4, using a new class for the model with endogenous selection:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#000;font-weight:bold">class</span> <span style="color:#458;font-weight:bold">BesleyModelEndogSel</span>:
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">def</span> __init__(<span style="color:#999">self</span>, 
+</span></span><span style="display:flex;"><span>                 beta <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">0.8</span>, 
+</span></span><span style="display:flex;"><span>                 gamma <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">0.5</span>, 
+</span></span><span style="display:flex;"><span>                 E <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">0.2</span>, 
+</span></span><span style="display:flex;"><span>                 r_min <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">0</span>, R_max <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">1</span>,
+</span></span><span style="display:flex;"><span>                 w_max_c <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">0.8</span>, w_max_d <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">1</span>):
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>beta, <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>gamma <span style="color:#000;font-weight:bold">=</span> beta, gamma
+</span></span><span style="display:flex;"><span>        <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>r_min, <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>R_max <span style="color:#000;font-weight:bold">=</span> r_min, R_max
+</span></span><span style="display:flex;"><span>        <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>mu <span style="color:#000;font-weight:bold">=</span> (<span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>R_max <span style="color:#000;font-weight:bold">-</span> <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>r_min)<span style="color:#000;font-weight:bold">/</span><span style="color:#099">2</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>E <span style="color:#000;font-weight:bold">=</span> E
+</span></span><span style="display:flex;"><span>        <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>w_max_c, <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>w_max_d <span style="color:#000;font-weight:bold">=</span> w_max_c, w_max_d
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">def</span> <span style="color:#900;font-weight:bold">G</span>(<span style="color:#999">self</span>, x):
+</span></span><span style="display:flex;"><span>        R_max, r_min <span style="color:#000;font-weight:bold">=</span> <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>R_max, <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>r_min
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">return</span> scipy<span style="color:#000;font-weight:bold">.</span>stats<span style="color:#000;font-weight:bold">.</span>uniform<span style="color:#000;font-weight:bold">.</span>cdf(x, loc <span style="color:#000;font-weight:bold">=</span> r_min, scale <span style="color:#000;font-weight:bold">=</span> R_max)
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">def</span> <span style="color:#900;font-weight:bold">g</span>(<span style="color:#999">self</span>, x):
+</span></span><span style="display:flex;"><span>        R_max, r_min <span style="color:#000;font-weight:bold">=</span> <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>R_max, <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>r_min
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">return</span> scipy<span style="color:#000;font-weight:bold">.</span>stats<span style="color:#000;font-weight:bold">.</span>uniform<span style="color:#000;font-weight:bold">.</span>pdf(x, loc <span style="color:#000;font-weight:bold">=</span> r_min, scale <span style="color:#000;font-weight:bold">=</span> R_max)
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">def</span> <span style="color:#900;font-weight:bold">Lbda</span>(<span style="color:#999">self</span>, E, w_bar):
+</span></span><span style="display:flex;"><span>        <span style="color:#d14">&#34;&#34;&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">        Probability of congruent behavior by a randomly selected dissonant politician
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">        (the fraction of dissonant politicians willing to serve)
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">        &#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>        G <span style="color:#000;font-weight:bold">=</span> <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>G
+</span></span><span style="display:flex;"><span>        beta <span style="color:#000;font-weight:bold">=</span> <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>beta
+</span></span><span style="display:flex;"><span>        mu <span style="color:#000;font-weight:bold">=</span> (<span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>R_max <span style="color:#000;font-weight:bold">-</span> <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>r_min)<span style="color:#000;font-weight:bold">/</span><span style="color:#099">2</span>
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">def</span> <span style="color:#900;font-weight:bold">integrand</span>(w):
+</span></span><span style="display:flex;"><span>            
+</span></span><span style="display:flex;"><span>            G <span style="color:#000;font-weight:bold">=</span> <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>G
+</span></span><span style="display:flex;"><span>            beta <span style="color:#000;font-weight:bold">=</span> <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>beta
+</span></span><span style="display:flex;"><span>            mu <span style="color:#000;font-weight:bold">=</span> (<span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>R_max <span style="color:#000;font-weight:bold">-</span> <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>r_min)<span style="color:#000;font-weight:bold">/</span><span style="color:#099">2</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#000;font-weight:bold">return</span> G(beta<span style="color:#000;font-weight:bold">*</span>(E<span style="color:#000;font-weight:bold">+</span>mu) <span style="color:#000;font-weight:bold">-</span> w)
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        value <span style="color:#000;font-weight:bold">=</span> scipy<span style="color:#000;font-weight:bold">.</span>integrate<span style="color:#000;font-weight:bold">.</span>quad(integrand, <span style="color:#099">0</span>, w_bar)[<span style="color:#099">0</span>]
+</span></span><span style="display:flex;"><span>        out <span style="color:#000;font-weight:bold">=</span> value <span style="color:#000;font-weight:bold">/</span> w_bar
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">return</span> out
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">def</span> <span style="color:#900;font-weight:bold">Psi</span>(<span style="color:#999">self</span>, x):
+</span></span><span style="display:flex;"><span>        <span style="color:#d14">&#34;&#34;&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">        Helper function to solve functional equation
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">        &#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>        G, g <span style="color:#000;font-weight:bold">=</span> <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>G, <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>g
+</span></span><span style="display:flex;"><span>        beta <span style="color:#000;font-weight:bold">=</span> <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>beta
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">def</span> <span style="color:#900;font-weight:bold">integrand</span>(y, x):
+</span></span><span style="display:flex;"><span>            
+</span></span><span style="display:flex;"><span>            G <span style="color:#000;font-weight:bold">=</span> <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>G
+</span></span><span style="display:flex;"><span>            beta <span style="color:#000;font-weight:bold">=</span> <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>beta
+</span></span><span style="display:flex;"><span>            mu <span style="color:#000;font-weight:bold">=</span> (<span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>R_max <span style="color:#000;font-weight:bold">-</span> <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>r_min)<span style="color:#000;font-weight:bold">/</span><span style="color:#099">2</span>
+</span></span><span style="display:flex;"><span>            
+</span></span><span style="display:flex;"><span>            <span style="color:#000;font-weight:bold">return</span> y<span style="color:#000;font-weight:bold">*</span>g(y)<span style="color:#000;font-weight:bold">/</span>(<span style="color:#099">1</span><span style="color:#000;font-weight:bold">+</span>G(beta<span style="color:#000;font-weight:bold">*</span>x)<span style="color:#000;font-weight:bold">*</span>beta)
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        out <span style="color:#000;font-weight:bold">=</span> <span style="color:#000;font-weight:bold">-</span> scipy<span style="color:#000;font-weight:bold">.</span>integrate<span style="color:#000;font-weight:bold">.</span>quad(integrand, <span style="color:#099">0</span>, beta<span style="color:#000;font-weight:bold">*</span>x, args <span style="color:#000;font-weight:bold">=</span> (x,))[<span style="color:#099">0</span>]
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">return</span> out
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">def</span> <span style="color:#900;font-weight:bold">solve_wbar</span>(<span style="color:#999">self</span>):
+</span></span><span style="display:flex;"><span>        <span style="color:#d14">&#34;&#34;&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">        Solve for the reservation wage among dissonant politicians
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">        &#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>        Psi <span style="color:#000;font-weight:bold">=</span> <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>Psi
+</span></span><span style="display:flex;"><span>        E <span style="color:#000;font-weight:bold">=</span> <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>E
+</span></span><span style="display:flex;"><span>        mu <span style="color:#000;font-weight:bold">=</span> <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>mu
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">def</span> <span style="color:#900;font-weight:bold">tosolve</span>(w_bar, Psi, E, mu):
+</span></span><span style="display:flex;"><span>            
+</span></span><span style="display:flex;"><span>            <span style="color:#000;font-weight:bold">return</span> w_bar <span style="color:#000;font-weight:bold">-</span> E <span style="color:#000;font-weight:bold">-</span> mu <span style="color:#000;font-weight:bold">-</span> Psi(E <span style="color:#000;font-weight:bold">+</span> mu <span style="color:#000;font-weight:bold">-</span> w_bar)
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        out <span style="color:#000;font-weight:bold">=</span> fsolve(tosolve, <span style="color:#099">1e-5</span>, args<span style="color:#000;font-weight:bold">=</span>(Psi, E, mu))
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">return</span> out[<span style="color:#099">0</span>]
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">def</span> <span style="color:#900;font-weight:bold">share_dissonant</span>(<span style="color:#999">self</span>):
+</span></span><span style="display:flex;"><span>        <span style="color:#d14">&#34;&#34;&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">        The share of dissonant politicians who are willing to become politicians
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">        &#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        solve_wbar <span style="color:#000;font-weight:bold">=</span> <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>solve_wbar
+</span></span><span style="display:flex;"><span>        w_max_d <span style="color:#000;font-weight:bold">=</span> <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>w_max_d
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">return</span>(solve_wbar()<span style="color:#000;font-weight:bold">/</span>w_max_d)
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">def</span> <span style="color:#900;font-weight:bold">pi</span>(<span style="color:#999">self</span>):
+</span></span><span style="display:flex;"><span>        <span style="color:#d14">&#34;&#34;&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">        Compute the share of consonant politicians in the pool of people willing to become politicians
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">        &#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>        E <span style="color:#000;font-weight:bold">=</span> <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>E
+</span></span><span style="display:flex;"><span>        gamma <span style="color:#000;font-weight:bold">=</span> <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>gamma
+</span></span><span style="display:flex;"><span>        solve_wbar <span style="color:#000;font-weight:bold">=</span> <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>solve_wbar
+</span></span><span style="display:flex;"><span>        w_max_c, w_max_d <span style="color:#000;font-weight:bold">=</span> <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>w_max_c, <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>w_max_d
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        w_bar <span style="color:#000;font-weight:bold">=</span> solve_wbar()
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">return</span> gamma<span style="color:#000;font-weight:bold">*</span>(E<span style="color:#000;font-weight:bold">/</span>w_max_c)<span style="color:#000;font-weight:bold">/</span>(gamma<span style="color:#000;font-weight:bold">*</span>(E<span style="color:#000;font-weight:bold">/</span>w_max_c) <span style="color:#000;font-weight:bold">+</span> (<span style="color:#099">1</span><span style="color:#000;font-weight:bold">-</span>gamma)<span style="color:#000;font-weight:bold">*</span>(w_bar<span style="color:#000;font-weight:bold">/</span>w_max_d))
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        
+</span></span></code></pre></div><blockquote>
+<p>(Prediction 4) Paying higher wages will lead to the increase in the fraction of congruant politicians who will put themselves forward for office</p>
+</blockquote>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>possible_E <span style="color:#000;font-weight:bold">=</span> np<span style="color:#000;font-weight:bold">.</span>linspace(<span style="color:#099">0</span>, <span style="color:#099">0.9</span>, num<span style="color:#000;font-weight:bold">=</span><span style="color:#099">50</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic">#matrix for different pi&#39;s, beta&#39;s, whatever</span>
+</span></span><span style="display:flex;"><span>possible_gamma <span style="color:#000;font-weight:bold">=</span> [<span style="color:#099">0.4</span>, <span style="color:#099">0.5</span>, <span style="color:#099">0.6</span>, <span style="color:#099">0.7</span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>prob_congruence <span style="color:#000;font-weight:bold">=</span> np<span style="color:#000;font-weight:bold">.</span>empty([<span style="color:#0086b3">len</span>(possible_E), <span style="color:#0086b3">len</span>(possible_gamma)])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">def</span> <span style="color:#900;font-weight:bold">compute_prob</span>(possible_E, possible_gamma):
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">for</span> num, gamma <span style="color:#000;font-weight:bold">in</span> <span style="color:#0086b3">enumerate</span>(possible_gamma):
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">for</span> num2, e <span style="color:#000;font-weight:bold">in</span> <span style="color:#0086b3">enumerate</span>(possible_E):
+</span></span><span style="display:flex;"><span>            
+</span></span><span style="display:flex;"><span>            model<span style="color:#000;font-weight:bold">=</span>BesleyModelEndogSel(beta <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">0.7</span>, E <span style="color:#000;font-weight:bold">=</span> e, gamma <span style="color:#000;font-weight:bold">=</span> gamma)
+</span></span><span style="display:flex;"><span>            prob_congruence[num2, num] <span style="color:#000;font-weight:bold">=</span> model<span style="color:#000;font-weight:bold">.</span>pi()
+</span></span><span style="display:flex;"><span>            
+</span></span><span style="display:flex;"><span>compute_prob(possible_E, possible_gamma)
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>fig, ax <span style="color:#000;font-weight:bold">=</span> plt<span style="color:#000;font-weight:bold">.</span>subplots()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">for</span> i <span style="color:#000;font-weight:bold">in</span> <span style="color:#0086b3">range</span>(prob_congruence<span style="color:#000;font-weight:bold">.</span>shape[<span style="color:#099">1</span>]):
+</span></span><span style="display:flex;"><span>    ax<span style="color:#000;font-weight:bold">.</span>plot(possible_E, prob_congruence[:,i], label <span style="color:#000;font-weight:bold">=</span> <span style="color:#d14">f</span><span style="color:#d14">&#39;$\gamma=$</span><span style="color:#d14">{</span>possible_gamma[i]<span style="color:#d14">}</span><span style="color:#d14">&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>ax<span style="color:#000;font-weight:bold">.</span>set_xlabel(<span style="color:#d14">&#34;In-office reward $E$&#34;</span>)
+</span></span><span style="display:flex;"><span>ax<span style="color:#000;font-weight:bold">.</span>set_ylabel(<span style="color:#d14">&#34;Fraction of Congruent Politicians&#34;</span>)
+</span></span><span style="display:flex;"><span>ax<span style="color:#000;font-weight:bold">.</span>legend()
+</span></span></code></pre></div><img src="/blog/2022-08-09-a-computational-implementation-of-the-besley-2004-model/index_files/figure-html/unnamed-chunk-11-7.png" width="672" />
+
+
+
+
+<h2 id="conclusion">Conclusion
+  <a href="#conclusion"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>All the propositions are verified graphically in the blog post. This illustrates the dynamics in the Besley model. I hope I have done a good job distinguishing the three mechanisms, and I hope I have provided a tangible computational implementation of the model. Thank you for reading!</p>
+
+        
+        <details closed class="f6 fw7 input-reset">
+  <dl class="f6 lh-copy">
+    <dt class="fw7">Posted on:</dt>
+    <dd class="fw5 ml0">June 15, 2022</dd>
+  </dl>
+  <dl class="f6 lh-copy">
+    <dt class="fw7">Length:</dt>
+    <dd class="fw5 ml0">12 minute read, 2556 words</dd>
+  </dl>
+  
+  
+  
+  <dl class="f6 lh-copy">
+    <dt class="fw7">See Also:</dt>
+    
+  </dl>
+</details>
+
+      </section>
+      <footer class="post-footer">
+        <div class="post-pagination dt w-100 mt4 mb2">
+  
+  
+    <a class="prev dtc pr2 tl v-top fw6"
+    href="/blog/2022-08-08-bayesian-equilibria-in-several-interesting-games/">&larr; Bayesian Equilibria in Several Interesting Games</a>
+  
+  
+  
+    <a class="next dtc pl2 tr v-top fw6"
+    href="/blog/2022-08-03-equilibrium-in-the-besley-case-1995-model/">Equilibrium in the Besley-Case (1995) Model &rarr;</a>
+  
+</div>
+
+      </footer>
+    </article>
+    
+      
+<div class="post-comments pa0 pa4-l mt4">
+  
+  <script src="https://utteranc.es/client.js"
+          repo="basm92/new_website"
+          issue-term="pathname"
+          theme="boxy-light"
+          label="comments :crystal_ball:"
+          crossorigin="anonymous"
+          async
+          type="text/javascript">
+  </script>
+  
+</div>
+
+    
+  </section>
+</main>
+<footer class="site-footer pv4 bt b--transparent ph5" role="contentinfo">
+  <nav class="db dt-l w-100">
+    <p class="site-copyright f7 db dtc-l v-mid w-100 w-33-l tc tl-l pv2 pv0-l mv0 lh-copy">
+      &copy; 2022 Bas Machielsen
+      <span class="middot-divider"></span>
+      Made with <span xmlns:dct="http://purl.org/dc/terms/" property="dct:title"><a xmlns:dct="http://purl.org/dc/terms/" href="https://github.com/hugo-apero/" rel="dct:source">Hugo Apéro</a></span>.
+      <br />
+      
+Based on <span xmlns:dct="http://purl.org/dc/terms/" property="dct:title"><a xmlns:dct="http://purl.org/dc/terms/" href="https://github.com/formspree/blogophonic-hugo" rel="dct:source">Blogophonic</a></span> by <a xmlns:cc="http://creativecommons.org/ns#" href="https://formspree.io" property="cc:attributionName" rel="cc:attributionURL">Formspree</a>.
+    </p>
+    
+    <div class="site-social-links db dtc-l v-mid w-100 w-33-l tc pv2 pv0-l mv0">
+      <div class="social-icon-links" aria-hidden="true">
+  
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://github.com/basm92" title="github" target="_blank" rel="noopener">
+      <i class="fab fa-github fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://scholar.google.com/citations?user=bS8uo44AAAAJ" title="google" target="_blank" rel="noopener">
+      <i class="fab fa-google fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://twitter.com/basm92" title="twitter" target="_blank" rel="noopener">
+      <i class="fab fa-twitter fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="mailto:a.h.machielsen@uu.nl" title="envelope" >
+      <i class="fas fa-envelope fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="mailto:basmachielsen@live.nl" title="envelope" >
+      <i class="far fa-envelope fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://orcid.org/0000-0002-9692-0615" title="orcid" target="_blank" rel="noopener">
+      <i class="ai ai-orcid fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="/blog/index.xml" title="rss" >
+      <i class="fas fa-rss fa-lg fa-fw"></i>
+    </a>
+  
+</div>
+
+    </div>
+    
+    <div class="site-links f6 db dtc-l v-mid w-100 w-67-l tc tr-l pv2 pv0-l mv0">
+      
+      <a class="dib pv1 ph2 link" href="/license/" title="License">License</a>
+      
+      <a class="dib pv1 ph2 link" href="/contact/" title="Contact form">Contact</a>
+      
+      <a class="dib pv1 ph2 link" href="/contributors/" title="Contributors">Contributors</a>
+      
+    </div>
+  </nav>
+  
+    <script>
+
+    var i, text, code, codes = document.getElementsByTagName('code');
+    for (let i = 0; i < codes.length;) {
+      code = codes[i];
+      if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+        text = code.textContent;
+        if (/^\$[^$]/.test(text) && /[^$]\$$/.test(text)) {
+          text = text.replace(/^\$/, '\\(').replace(/\$$/, '\\)');
+          code.textContent = text;
+        }
+        if (/^\\\((.|\s)+\\\)$/.test(text) ||
+            /^\\\[(.|\s)+\\\]$/.test(text) ||
+            /^\$(.|\s)+\$$/.test(text) ||
+            /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+          code.outerHTML = code.innerHTML;  
+          continue;
+        }
+      }
+      i++;
+    }
+</script>
+
+  
+    
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.css" integrity="sha384-RZU/ijkSsFbcmivfdRBQDtwuwVqK7GMOw6IMvKyeWL2K5UAlyp6WonmB8m7Jd0Hn" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.js" integrity="sha384-pK1WpvzWVBQiP0/GjnvRxV4mOb0oxFuyRxJlk6vVw146n3egcN5C925NCP7a7BY8" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/contrib/auto-render.min.js" integrity="sha384-vZTG03m+2yp6N6BNi5iM4rW4oIwk5DfcNdFfxkk9ZWpDriOkXX8voJBFrAO7MpVl" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
+
+
+
+    
+  
+  
+</footer>
+
+      </div>
+    </body>
+</html>

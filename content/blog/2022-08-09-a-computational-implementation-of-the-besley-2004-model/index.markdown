@@ -3,7 +3,7 @@ title: A computational implementation of the Besley (2004) model
 author: Bas Machielsen
 date: '2022-06-15'
 draft: false
-excerpt: A post about how to solve for a Bayesian Perfect Equilibrium in a simple setting, serving as a reminder of the central mathematical aspects to it.
+excerpt: A post about the model of the influence of political wages by Besley (2004), and a computational implementation in Python. 
 layout: single
 series: null
 subtitle: ""
@@ -161,7 +161,8 @@ The comparative statics on this expression with respect to E are summarized in t
 
 I now implement the model in Python. I first start by importing several libraries. 
 
-```{}
+
+```python
 import pandas as pd
 import numpy as np
 import scipy.stats
@@ -169,12 +170,12 @@ from matplotlib import pyplot as plt
 
 import scipy.integrate
 from scipy.optimize import fsolve
-
 ```
 
 Then, I construct a class using several of the equations above:
 
-```{}
+
+```python
 class BesleyModel:
     
     def __init__(self, beta = 0.8, pi = 0.5, delta = 0.7, r_min = 0, E = 0.2, q = 0.2, R_max = 1):
@@ -234,7 +235,8 @@ class BesleyModel:
 
 Then, I verify the predictions:
 
-```{}
+
+```python
 possible_E = np.linspace(0, 0.9, num=100)
 
 #matrix for different pi's, beta's, whatever
@@ -257,7 +259,8 @@ compute_prob(possible_E, possible_pi)
 
 > (Prediction 1) An increase in wages increases the probability of congruence between voter preferences and policy outcomes. As a consequence, it reduces turnover among first-term incumbents. 
 
-```{}
+
+```python
 fig, ax = plt.subplots()
 
 for i in range(prob_congruence.shape[1]):
@@ -269,9 +272,12 @@ ax.set_ylabel("$\mathbb{P}$[Congruence]")
 ax.legend()
 ```
 
+<img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-4-1.png" width="672" />
+
 > (Prediction 2) Conditional on electing a dissonant politician, behavior deteriorates over time. But politicians in their second term in office behave better on average than those in their first term. The difference between second-term and first-term incumbents is smaller the larger the politician's wage. 
 
-```{}
+
+```python
 possible_E = np.linspace(0, 0.9, num=100)
 
 #matrix for different pi's, beta's, whatever
@@ -292,7 +298,8 @@ def compute_prob(possible_E, possible_pi):
 compute_prob(possible_E, possible_pi)
 ```
 
-```{}
+
+```python
 fig, ax = plt.subplots()
 
 for i in range(prob_congruence.shape[1]):
@@ -304,9 +311,12 @@ ax.set_ylabel("Difference $\pi/\phi(E)$ and $\phi (E)$")
 ax.legend()
 ```
 
+<img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-6-3.png" width="672" />
+
 > (Prediction 3) Increasing `\(E\)` increases voter welfare. 
 
-```{}
+
+```python
 possible_E = np.linspace(0, 0.9, num=100)
 
 #matrix for different pi's, beta's, whatever
@@ -327,7 +337,8 @@ def compute_prob(possible_E, possible_pi):
 compute_prob(possible_E, possible_pi)
 ```
 
-```{}
+
+```python
 fig, ax = plt.subplots()
 
 for i in range(prob_congruence.shape[1]):
@@ -337,8 +348,9 @@ for i in range(prob_congruence.shape[1]):
 ax.set_xlabel("In-office reward $E$")
 ax.set_ylabel("Voter Welfare")
 ax.legend()
-
 ```
+
+<img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-8-5.png" width="672" />
 
 
 ### Endogenous Selection
@@ -346,7 +358,8 @@ ax.legend()
 Finally, I verify proposition 4, using a new class for the model with endogenous selection:
 
 
-```{}
+
+```python
 class BesleyModelEndogSel:
     
     def __init__(self, 
@@ -458,7 +471,8 @@ class BesleyModelEndogSel:
 
 > (Prediction 4) Paying higher wages will lead to the increase in the fraction of congruant politicians who will put themselves forward for office
 
-```{}
+
+```python
 possible_E = np.linspace(0, 0.9, num=50)
 
 #matrix for different pi's, beta's, whatever
@@ -479,7 +493,8 @@ def compute_prob(possible_E, possible_gamma):
 compute_prob(possible_E, possible_gamma)
 ```
 
-```{}
+
+```python
 fig, ax = plt.subplots()
 
 for i in range(prob_congruence.shape[1]):
@@ -490,6 +505,8 @@ ax.set_xlabel("In-office reward $E$")
 ax.set_ylabel("Fraction of Congruent Politicians")
 ax.legend()
 ```
+
+<img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-11-7.png" width="672" />
 
 ## Conclusion
 
