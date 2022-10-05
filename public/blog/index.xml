@@ -6,7 +6,16 @@
     <description>Recent content in Blog on Bas Machielsen</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Mon, 08 Aug 2022 00:00:00 +0000</lastBuildDate><atom:link href="/blog/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 05 Oct 2022 00:00:00 +0000</lastBuildDate><atom:link href="/blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Non-Negative Matrix Factorization</title>
+      <link>/blog/2022-10-05-non-negative-matrix-factorization/</link>
+      <pubDate>Wed, 05 Oct 2022 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2022-10-05-non-negative-matrix-factorization/</guid>
+      <description>Introduction For a course I am teaching in, the syllabus includes an alternative to Principal Component Analysis, called non-negative matrix factorization. The method was introduced in an article by Lee and Seung (1999) with a subsequent elaboration on the algorithm to implement the method in 2001. The method is described in the Elements of Statistical Learning, p. 553, but there is very little elaboration on the meaning and logic behind the updating rule.</description>
+    </item>
+    
     <item>
       <title>Bayesian Equilibria in Several Interesting Games</title>
       <link>/blog/2022-08-08-bayesian-equilibria-in-several-interesting-games/</link>
