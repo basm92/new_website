@@ -6,9 +6,10 @@ use_featured: false # if false, use most recent by date
 number_categories: 1 # set to zero to exclude
 show_intro: true
 intro: |
-  My PhD research attempts to combine archival research, econometric methods, historical insights and economic theory to investigate the influence of personal wealth on the voting behavior of the Dutch political elite in the late 19th and early 20th centuries. It also focuses on the personal financial returns to politics, and the drivers of democratization of the Netherlands. 
+  My research attempts to combine archival research, econometric methods, historical insights and economic theory to investigate the influence of personal wealth on the voting behavior of the Dutch political elite in the late 19th and early 20th centuries. It also focuses on the personal financial returns to politics, and the drivers of democratization of the Netherlands. 
   
-  In addition, I work on the effects of workers’ mobilization on politicians and electorates in the Netherlands, the dynamics of wealth and inequality in the Netherlands, and I investigate the long-term effects of Dutch firms in Indonesia. I also work part-time at Erasmus University (the Netherlands), where I supervise theses in various areas of Finance.
+  In addition, I work on the effects of workers’ mobilization on politicians and electorates in the Netherlands, the dynamics of wealth and inequality in the Netherlands, and I investigate the long-term effects of Dutch firms in Indonesia. I also work on the drivers of political selection and the effect of religious schools in the Netherlands. 
+  
   
   ### Research Interests
 
