@@ -6,7 +6,7 @@
     <description>Recent content on Bas Machielsen</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Wed, 05 Oct 2022 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 23 Nov 2022 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Clio</title>
       <link>/collection/clio/</link>
@@ -23,6 +23,15 @@
       
       <guid>/collection/hdng/</guid>
       <description>hdng is a package facilitating the use of the HDNG Database, a database containing quantative information in various aspects of Dutch municipalities from about 1800 to the 1980&amp;rsquo;s. This package aids the user in finding their way through the database, allowing them to search for wanted variables, browse within categories, and finally, make a query to extract the wanted data.</description>
+    </item>
+    
+    <item>
+      <title>Short Note on Ridge Regression</title>
+      <link>/blog/2022-11-23-short-note-on-ridge-regression/</link>
+      <pubDate>Wed, 23 Nov 2022 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2022-11-23-short-note-on-ridge-regression/</guid>
+      <description>Introduction I am doing a couple of assignments involving penalized estimators such as Ridge regression, and I wanted to do a short derivation of its asymptotic covariance. In comparison to the existing resources which I could find, some details are left out, which I wanted to recapitulate more clearly. I&amp;rsquo;ll also contrast the variance of the Ridge estimator to the variance of the OLS estimator, illustrating a fact that also comes to the surface in many other resources, namely that the variance of the Ridge estimator is smaller than that of the OLS estimator.</description>
     </item>
     
     <item>

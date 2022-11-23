@@ -9,7 +9,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="generator" content="Hugo 0.101.0" />
-<title>Non-Negative Matrix Factorization | Bas Machielsen</title>
+<title>Short Note on Ridge Regression | Bas Machielsen</title>
 
 
 <meta property="twitter:site" content="@basss92">
@@ -24,29 +24,29 @@
   
     
   
-<meta name="description" content="A short post about how to interpret the algorithm leading to non-negative matrix factorization.">
+<meta name="description" content="Personal website of Bas Machielsen, Economics &amp; Economic History.">
 
 
 <meta property="og:site_name" content="Bas Machielsen">
-<meta property="og:title" content="Non-Negative Matrix Factorization | Bas Machielsen">
-<meta property="og:description" content="A short post about how to interpret the algorithm leading to non-negative matrix factorization." />
+<meta property="og:title" content="Short Note on Ridge Regression | Bas Machielsen">
+<meta property="og:description" content="Personal website of Bas Machielsen, Economics &amp; Economic History." />
 <meta property="og:type" content="page" />
-<meta property="og:url" content="/blog/2022-10-05-non-negative-matrix-factorization/" />
+<meta property="og:url" content="/blog/2022-11-23-short-note-on-ridge-regression/" />
 <meta property="og:locale" content="en">
 
 
 
 
     
-        <meta property="og:image" content="/blog/2022-10-05-non-negative-matrix-factorization/featured.png" >
+        <meta property="og:image" content="/blog/2022-11-23-short-note-on-ridge-regression/featured.png" >
         <meta property="twitter:card" content="summary_large_image">
-        <meta name="twitter:image" content="/blog/2022-10-05-non-negative-matrix-factorization/featured.png" >
+        <meta name="twitter:image" content="/blog/2022-11-23-short-note-on-ridge-regression/featured.png" >
     
     
-  <meta itemprop="name" content="Non-Negative Matrix Factorization">
-<meta itemprop="description" content="Introduction For a course I am teaching in, the syllabus includes an alternative to Principal Component Analysis, called non-negative matrix factorization. The method was introduced in an article by Lee and Seung (1999) with a subsequent elaboration on the algorithm to implement the method in 2001. The method is described in the Elements of Statistical Learning, p. 553, but there is very little elaboration on the meaning and logic behind the updating rule."><meta itemprop="datePublished" content="2022-10-05T00:00:00+00:00" />
-<meta itemprop="dateModified" content="2022-10-05T00:00:00+00:00" />
-<meta itemprop="wordCount" content="659"><meta itemprop="image" content="/blog/2022-10-05-non-negative-matrix-factorization/featured.png">
+  <meta itemprop="name" content="Short Note on Ridge Regression">
+<meta itemprop="description" content="Introduction I am doing a couple of assignments involving penalized estimators such as Ridge regression, and I wanted to do a short derivation of its asymptotic covariance. In comparison to the existing resources which I could find, some details are left out, which I wanted to recapitulate more clearly. I&rsquo;ll also contrast the variance of the Ridge estimator to the variance of the OLS estimator, illustrating a fact that also comes to the surface in many other resources, namely that the variance of the Ridge estimator is smaller than that of the OLS estimator."><meta itemprop="datePublished" content="2022-11-23T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2022-11-23T00:00:00+00:00" />
+<meta itemprop="wordCount" content="745"><meta itemprop="image" content="/blog/2022-11-23-short-note-on-ridge-regression/featured.png">
 <meta itemprop="keywords" content="" />
   
   
@@ -64,7 +64,7 @@
   <script src="/main.min.11d2df4163a7df9fb9d31f699461f02d84700b160cd42fa951b0982fc4d468bc.js" type="text/javascript"></script>
 </head>
 <body>
-      <div class="grid-container single">
+      <div class="grid-container">
 <header class="site-header pt4 pb2 mb4 bb b--transparent ph5 headroom z-max" role="banner">
   <nav class="site-nav db dt-l w-100" role="navigation">
     <a class="site-brand db dtc-l v-mid link no-underline w-100 w-33-l tc tl-l" href="/" title="Home">
@@ -116,10 +116,10 @@
   <section class="page-content mw7 center">
     <article class="post-content pa0 ph4-l">
       <header class="post-header">
-        <h1 class="f1 lh-solid measure-narrow mb3 fw4">Non-Negative Matrix Factorization</h1>
+        <h1 class="f1 lh-solid measure-narrow mb3 fw4">Short Note on Ridge Regression</h1>
         
         <p class="f6 measure lh-copy mv1">By Bas Machielsen</p>
-        <p class="f7 db mv0 ttu">October 5, 2022</p>
+        <p class="f7 db mv0 ttu">November 23, 2022</p>
 
       
 
@@ -135,58 +135,109 @@
       <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
     </svg></a>
 </h2>
-<p>For a course I am teaching in, the syllabus includes an alternative to Principal Component Analysis, called non-negative matrix factorization. The method was introduced in an article by Lee and Seung (1999) with a subsequent elaboration on the algorithm to implement the method in 2001. The method is described in the <em>Elements of Statistical Learning</em>, p. 553, but there is very little elaboration on the meaning and logic behind the updating rule. I also searched the internet, and except the original 2001 article, there is very little information. The article itself takes a very formal view and proves that the algorithm converges to a (local) maximum, but does not focus on the intuition why. Hence this blog post.</p>
+<p>I am doing a couple of assignments involving penalized estimators such as Ridge regression, and I wanted to do a short derivation of its asymptotic covariance. In comparison to the existing resources which I could find, some details are left out, which I wanted to recapitulate more clearly. I&rsquo;ll also contrast the variance of the Ridge estimator to the variance of the OLS estimator, illustrating a fact that also comes to the surface in many other resources, namely that the variance of the Ridge estimator is smaller than that of the OLS estimator.</p>
 
 
 
 
-<h2 id="non-negative-matrix-factorization">Non-Negative Matrix Factorization
-  <a href="#non-negative-matrix-factorization"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+<h2 id="setting">Setting
+  <a href="#setting"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
       <path d="M0 0h24v24H0z" fill="currentColor"></path>
       <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
     </svg></a>
 </h2>
-<p>Non-negative matrix factorization is meant to be applied to any non-negative matrix <code>\(\mathbf{X}\)</code>, of size <code>\(N \times p\)</code>, which is approximated as:</p>
+<p>I assume non-stochastic regressors \(X\), and a model with \(Y = X\beta + \epsilon\), \(\epsilon \sim \mathcal{N}(0, \sigma^2 I)\) with \( \mathbb{E}[X^T \epsilon] = 0 \).</p>
+<p>The ridge estimator can be expressed as:</p>
 <p>$$
-X \approx W H
+\hat{\beta}_{R} = (X^T X + \lambda I)^{-1} X^T y
 $$</p>
-<p>with <code>\(\mathbb{W}\)</code> being <code>\(N \times r\)</code> and <code>\(\mathbb{H}\)</code> being <code>\(r \times p\)</code>, and all <code>\(x_{ij}\)</code>, <code>\(w_{ij}\)</code> and <code>\(h_{ij}\)</code> greater than zero. Similar to PCA, <code>\(W\)</code> can be interpreted as a lower dimensional basis (and <code>\(r\)</code> is picked by the user), and <code>\(H\)</code> the corresponding weights that map this basis to back to <code>\(X\)</code>. The objective for non-negative matrix factorization is to maximize the likelihood for a model in which <code>\(x_{ij}\)</code> has a Poisson distribution with mean <code>\(\mathbf{WH}_{ij}\)</code>.</p>
+<p>It is easy to show that the Ridge estimator is biased for \(\lambda \neq 0\) by evaluating the expected value.</p>
 
 
 
 
-<h2 id="interpretation-of-algorithm">Interpretation of Algorithm
-  <a href="#interpretation-of-algorithm"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+<h2 id="consistency-of-the-ridge-estimator">Consistency of the Ridge Estimator
+  <a href="#consistency-of-the-ridge-estimator"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
       <path d="M0 0h24v24H0z" fill="currentColor"></path>
       <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
     </svg></a>
 </h2>
-<p>Lee and Seung (2001) propose to initialize the <code>\(W\)</code> and <code>\(H\)</code> matrices with random positive numbers, and then use the following update rules:</p>
+<p>Doing so also allows us to express \( \hat{\beta}_{R} \) as:</p>
 <p>$$
-w^{n+1}_{ik} \leftarrow w^{n}_{ik} \cdot \frac{\sum_{j=1}^{p}h_{kj} \cdot x_{ij}/(\mathbf{WH}_{ij})}{\sum_{j=1}^{p}h_{kj}}
+\hat{\beta}_R = (X^T X + \lambda I)^{-1} X^T X \beta
 $$</p>
-<p>and</p>
+<p>Taking the \( \text{plim} \) of this expression and applying Slutsky&rsquo;s theorem then gives:</p>
 <p>$$
-h^{n+1}_{kj} \leftarrow h^{n}_{kj} \cdot \frac{\sum_{i=1}^{N}w_{ik} \cdot x_{ij}/(\mathbf{WH}_{ij})}{\sum_{i=1}^{n}w_{ik}}
+\text{plim} \left((X^T X + \lambda I)^{-1} X^T X \beta \right) = \text{plim} (\frac{1}{n} X^T X + \frac{1}{n} \lambda I)^{-1} \cdot \text{plim} (\frac{1}{n} X^T X) \beta
 $$</p>
-<p>First, we note that the updating rules consist of <em>two</em> terms. The previous value and a factor. The factor can be intepreted as an <em>updating factor</em>, meaning that it is a <em>scaled</em> <code>\(h^n_{kj}\)</code> and <code>\(w^{n}_{ik}\)</code> respectively.</p>
-<p>Second, we should notice that both update rules contain terms like <code>\(x_{ij}/ \mathbf{WH}_{ij}\)</code>. <code>\(\mathbf{WH}_{ij}\)</code> is the <em>approximation</em> for that particular <code>\(x_{ij}\)</code> in the data matrix <code>\(\mathbf{X}\)</code>.  If the approximation is too high, <code>\(\mathbf{WH}_{ij}\)</code> is greater than <code>\(x_{ij}\)</code> and the next value corresponding to iteration <code>\(n+1\)</code> is scaled <em>down</em> compared to its value in iteration <code>\(n\)</code>, everything else equal. Vice versa, if the approximation is too low, than the previous value is scaled <em>up</em>.</p>
-<p>The rest of this updating algorithm essentially consists of a normalized weighted updating of all the errors between <code>\(X_{ij}\)</code> and <code>\(WH_{ij}\)</code> which involve a particular element of <code>\(W\)</code> and <code>\(H\)</code> respectively. To see this, let&rsquo;s take the updating rule for <code>\(w_{11}\)</code>. This logic also extrapolates to other cells in <code>\(W\)</code>, and also to all cells in <code>\(H\)</code>. Now, when is <code>\(w_{11}\)</code> used? <code>\(w_{11}\)</code> is used to approximate all the entries in the <em>first</em> row of <code>\(X\)</code>. Those entries are generated by multiplying the first row of <code>\(W\)</code> with all columns of <code>\(h\)</code>, where the <code>\(h_{1j}\)</code>&lsquo;th weight is always multiplied with <code>\(w_{11}\)</code>. Knowing this, it is easy to see that the algorithm is then essentially computing a weighted average of all those approximations in the first row, and then normalizing them by dividing over the sum of all of those weights.  See the below illustration:</p>
+<p>After realizing that</p>
 <p>$$
-\begin{bmatrix}
-\mathbf{x_{11}} &amp; \dots &amp; \mathbf{x_{1p}} \newline
-\dots &amp; \ddots &amp; \dots \newline
-x_{n1} &amp; \dots &amp; x_{np}  \end{bmatrix} =
-\begin{bmatrix}
-\mathbf{w_{11}} &amp; \dots &amp; w_{1r} \newline
-\dots &amp; \ddots &amp; \dots \newline
-w_{n1} &amp; \dots &amp; w_{nr} \end{bmatrix}
-\begin{bmatrix}
-\mathbf{h_{11}} &amp; \mathbf{h_{12}} &amp; \dots &amp; \mathbf{h_{1p}} \newline
-\dots &amp; \ddots &amp; \ddots &amp; \dots \newline
-h_{r1} &amp; \dots &amp; \dots &amp;  h_{rp} \end{bmatrix}
+\text{plim} ( \frac{1}{n} \lambda I) = 0
 $$</p>
-<p>(The cells in bold face are the cells that involve <code>\(w_{11}\)</code>, as in the example.)</p>
+<p>the above expression simplifies to \(\beta\), thus showing consistency.</p>
+
+
+
+
+<h2 id="asymptotic-variance-of-the-ridge-estimator">Asymptotic Variance of the Ridge Estimator
+  <a href="#asymptotic-variance-of-the-ridge-estimator"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>The asymptotic variance variance of the Ridge regression around its \(\text{plim}\) can be obtained by rewriting the estimator in the following form:</p>
+<p>$$
+\hat{\beta}_R = (X^T X + \lambda I)^{-1} X^T y
+$$</p>
+<p>$$
+= (X^TX + \lambda I)^{-1} X^T (X\beta + \epsilon)
+$$</p>
+<p>$$
+= (X^TX + \lambda I)^{-1} X^T \beta + (X^T X + \lambda I)^{-1} X^T \epsilon
+$$</p>
+<p>Which by the CLT converges to its \(\text{plim}\). The variance is then determined by its second part, since the first part is stochastic.</p>
+<ul>
+<li>First, then, according to the (a) CLT, \( X^T \epsilon \) converges to its \(\text{plim}\) , which is zero by assumption, with a variance being equal to \(\sigma^2 X^T X\). Then, by the product limit normal rule (Cameron &amp; Trivedi, 2005, Theorem A.17),  the variance of \(\hat{\beta}_R\) is then equal to:</li>
+</ul>
+<p>$$
+\text{Var} (\hat{\beta}_R) = \sigma^2 (X^T X + \lambda I)^{-1} X^T X (X^T X + \lambda I)^{-1}
+$$</p>
+<p>which can also be expressed as:</p>
+<p>$$
+\text{Var} (\hat{\beta}_R) = \sigma^2 (X^T X + \lambda I)^{-1} X^T X  (X^T X)^{-1} X^T X (X^T X + \lambda I)^{-1}
+$$</p>
+
+
+
+
+<h2 id="comparison-of-variance-with-ols-estimator">Comparison of Variance with OLS Estimator
+  <a href="#comparison-of-variance-with-ols-estimator"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>Now, I show the positive semidefiniteness of the matrix Var \( \beta_{OLS} \) - Var \( \beta_{R} \):</p>
+<ul>
+<li>Taking the previous expression, and defining \( W = X^T X (X^T X + \lambda I )^{-1}\), we can rewrite Var \( \hat{\beta}_{R}\) in a simple form:</li>
+</ul>
+<p>$$
+\text{Var} ( \hat{\beta}_{R} ) = \sigma^2 W^T (X^T X)^{-1} W
+$$</p>
+<p>The difference between Var \( \beta_{OLS} \) - Var \( \beta_{R} \) is then:</p>
+<p>$$
+\text{Var} (\hat{\beta_{OLS}}) - \text{Var} (\hat{\beta}_{R}) = \sigma^2 (X^T X)^{-1} - \sigma^2 W^T (X^T X)^{-1} W \newline
+= \sigma^2 \left( (X^T X)^{-1} - W^T (X^T X)^{-1} W \right)
+$$</p>
+<p>It remains to show that</p>
+<p>$$
+\left( (X^T X)^{-1} - W^T (X^T X)^{-1} W \right)
+$$</p>
+<p>is a positive semi-definite matrix. First, since \( X^T X \) is p.s.d., \( (X^T X)^{-1}\) is also p.s.d. (A short proof is comparing the eigenvalues of a matrix and its inverse). Also, if you add \( \lambda I \) to a matrix, its eigenvalues increase with \( \lambda \). Hence with \( \lambda &gt; 0 \), we increase the already positive eigenvalues, and \( W \) is also p.s.d.</p>
+<p>After some derivation, we can show that the different in variances is equal to the following quadratic form:</p>
+<p>$$
+\sigma^2 (X^T X + \lambda I)^{-1} \left[ 2 \lambda I + \lambda^2 (X^T X)^{-1} \right] (X^T X + \lambda I)^{-1}
+$$</p>
+<p>Since, by the preceding discussion, all matrices here are p.s.d., the final variance is positive semi-definite and the variance of the OLS estimator is larger than the variance of the Ridge estimator.</p>
 
 
 
@@ -197,17 +248,17 @@ $$</p>
       <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
     </svg></a>
 </h2>
-<p>This short post attempted to intuitively explain the logic behind the updating rules used in non-negative matrix factorization. I personally think this intuitive understanding also makes clear why the algorithm is sensible and ultimately converges, even without reading through the proof. I hope this was useful, and I thank you for reading!</p>
+<p>In this post, I have set out some properties of the Ridge estimator, arguably the easiest to understand shrinkage estimator. I have focused on some standard theoretical results, and try to explain this in a way that works for me. Thank you for reading!</p>
 
         
         <details closed class="f6 fw7 input-reset">
   <dl class="f6 lh-copy">
     <dt class="fw7">Posted on:</dt>
-    <dd class="fw5 ml0">October 5, 2022</dd>
+    <dd class="fw5 ml0">November 23, 2022</dd>
   </dl>
   <dl class="f6 lh-copy">
     <dt class="fw7">Length:</dt>
-    <dd class="fw5 ml0">4 minute read, 659 words</dd>
+    <dd class="fw5 ml0">4 minute read, 745 words</dd>
   </dl>
   
   
@@ -223,13 +274,10 @@ $$</p>
         <div class="post-pagination dt w-100 mt4 mb2">
   
   
-    <a class="prev dtc pr2 tl v-top fw6"
-    href="/blog/2022-11-23-short-note-on-ridge-regression/">&larr; Short Note on Ridge Regression</a>
-  
   
   
     <a class="next dtc pl2 tr v-top fw6"
-    href="/blog/2022-08-08-bayesian-equilibria-in-several-interesting-games/">Bayesian Equilibria in Several Interesting Games &rarr;</a>
+    href="/blog/2022-10-05-non-negative-matrix-factorization/">Non-Negative Matrix Factorization &rarr;</a>
   
 </div>
 
