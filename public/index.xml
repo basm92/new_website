@@ -6,7 +6,7 @@
     <description>Recent content on Bas Machielsen</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Mon, 28 Nov 2022 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 06 Dec 2022 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Clio</title>
       <link>/collection/clio/</link>
@@ -23,6 +23,16 @@
       
       <guid>/collection/hdng/</guid>
       <description>hdng is a package facilitating the use of the HDNG Database, a database containing quantative information in various aspects of Dutch municipalities from about 1800 to the 1980&amp;rsquo;s. This package aids the user in finding their way through the database, allowing them to search for wanted variables, browse within categories, and finally, make a query to extract the wanted data.</description>
+    </item>
+    
+    <item>
+      <title>Overview of Economic History Datasets and Databases</title>
+      <link>/blog/2022-12-06-overview-of-economic-history-datasets-and-databases/</link>
+      <pubDate>Tue, 06 Dec 2022 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2022-12-06-overview-of-economic-history-datasets-and-databases/</guid>
+      <description>Introduction In this post, I&amp;rsquo;ll give an overview and short description of various commonly-used and mostly publicly available data sources in Economic History. I am planning to update this repository as soon as I find new data sources, so if you find something is missing or if you have any suggestions, please contact me or write a comment below! Here&amp;rsquo;s the current overview:
+World Values Survey Demographics and Health Survey Global Climate Database National Centers for Environmental Information Clio Infra Scholarly Measures of Politics Correlates of War Eurostat Pew Polls Political Protests IISG Datasets D-place Labor conflicts World Bank, IMF, PWT UCDP Conflict Data Statistical Agencies, Parliaments GIS Databases World Values Survey Available at https://www.</description>
     </item>
     
     <item>

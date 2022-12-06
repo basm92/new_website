@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr"><head>
+  
+                           
+     
+
+
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="generator" content="Hugo 0.101.0" />
+<title>Overview of Economic History Datasets and Databases | Bas Machielsen</title>
+
+
+<meta property="twitter:site" content="@basss92">
+<meta property="twitter:creator" content="@basss92">
+
+
+
+
+
+
+
+  
+    
+  
+<meta name="description" content="Personal website of Bas Machielsen, Economics &amp; Economic History.">
+
+
+<meta property="og:site_name" content="Bas Machielsen">
+<meta property="og:title" content="Overview of Economic History Datasets and Databases | Bas Machielsen">
+<meta property="og:description" content="Personal website of Bas Machielsen, Economics &amp; Economic History." />
+<meta property="og:type" content="page" />
+<meta property="og:url" content="/blog/2022-12-06-overview-of-economic-history-datasets-and-databases/" />
+<meta property="og:locale" content="en">
+
+
+
+
+    
+        <meta property="og:image" content="/blog/sidebar-listing.png" >
+        <meta property="twitter:card" content="summary_large_image">
+        <meta name="twitter:image" content="/blog/sidebar-listing.png" >
+    
+    
+  <meta itemprop="name" content="Overview of Economic History Datasets and Databases">
+<meta itemprop="description" content="Introduction In this post, I&rsquo;ll give an overview and short description of various commonly-used and mostly publicly available data sources in Economic History. I am planning to update this repository as soon as I find new data sources, so if you find something is missing or if you have any suggestions, please contact me or write a comment below! Here&rsquo;s the current overview:
+World Values Survey Demographics and Health Survey Global Climate Database National Centers for Environmental Information Clio Infra Scholarly Measures of Politics Correlates of War Eurostat Pew Polls Political Protests IISG Datasets D-place Labor conflicts World Bank, IMF, PWT UCDP Conflict Data Statistical Agencies, Parliaments GIS Databases World Values Survey Available at https://www."><meta itemprop="datePublished" content="2022-12-06T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2022-12-06T00:00:00+00:00" />
+<meta itemprop="wordCount" content="1103">
+<meta itemprop="keywords" content="" />
+  
+  
+  <!--[if IE]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  <link rel="shortcut icon" href="favicon_new.ico" type="image/x-icon">
+  <link rel="icon" href="favicon_new.ico" type="image/x-icon">
+  
+  
+  <link rel="stylesheet" href="/style.main.min.7aee66b22ae3b19895932b9cf4d37da828ca65fc6cd45cfdee1b36b98f4b0ae0.css" integrity="sha256-eu5msirjsZiVkyuc9NN9qCjKZfxs1Fz97hs2uY9LCuA=" media="screen">
+  
+  
+  <script src="/panelset.min.dca42702d7daf6fd31dc352efd2bcf0e4ac8c05ccaa58d9293f6177462de5d5f.js" type="text/javascript"></script>
+  
+  
+  <script src="/main.min.11d2df4163a7df9fb9d31f699461f02d84700b160cd42fa951b0982fc4d468bc.js" type="text/javascript"></script>
+</head>
+<body>
+      <div class="grid-container single">
+<header class="site-header pt4 pb2 mb4 bb b--transparent ph5 headroom z-max" role="banner">
+  <nav class="site-nav db dt-l w-100" role="navigation">
+    <a class="site-brand db dtc-l v-mid link no-underline w-100 w-33-l tc tl-l" href="/" title="Home">
+      <img src="/website_logo.png" class="dib db-l h2 w-auto" alt="Bas Machielsen">
+    </a>
+    <div class="site-links db dtc-l v-mid w-100 w-47-l tc tr-l mt3 mt0-l ttu tracked">
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/" title="Home">Home</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/about/" title="About">About</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 active" href="/blog/" title="Blog">Blog</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/project/" title="Teaching Overview &amp; Repository">Teaching</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/resume/" title="Resume">Resume</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/articles/" title="Articles">Articles</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/collection/" title="Software">Software</a>
+      
+      
+    </div>
+  </nav>
+</header>
+
+<main class="page-main pa4" role="main">
+  <section class="page-content mw7 center">
+    <article class="post-content pa0 ph4-l">
+      <header class="post-header">
+        <h1 class="f1 lh-solid measure-narrow mb3 fw4">Overview of Economic History Datasets and Databases</h1>
+        
+        <p class="f6 measure lh-copy mv1">By Bas Machielsen</p>
+        <p class="f7 db mv0 ttu">December 6, 2022</p>
+
+      
+
+      </header>
+      <section class="post-body pt5 pb4">
+        
+
+
+
+<h2 id="introduction">Introduction
+  <a href="#introduction"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>In this post, I&rsquo;ll give an overview and short description of various commonly-used and mostly publicly available data sources in Economic History. I am planning to update this repository as soon as I find new data sources, so if you find something is missing or if you have any suggestions, please contact me or write a comment below! Here&rsquo;s the current overview:</p>
+<ol>
+<li>
+<a href="#world-values-survey">World Values Survey</a></li>
+<li>
+<a href="#demographics-and-health-survey">Demographics and Health Survey</a></li>
+<li>
+<a href="#global-climate-database">Global Climate Database</a></li>
+<li>
+<a href="#national-centers-for-environmental-information">National Centers for Environmental Information</a></li>
+<li>
+<a href="#clio-infra">Clio Infra</a></li>
+<li>
+<a href="#scholarly-measures-of-politics">Scholarly Measures of Politics</a></li>
+<li>
+<a href="#correlates-of-war">Correlates of War</a></li>
+<li>
+<a href="#eurostat">Eurostat</a></li>
+<li>
+<a href="#pew-polls">Pew Polls</a></li>
+<li>
+<a href="#political-protests">Political Protests</a></li>
+<li>
+<a href="#iisg-datasets">IISG Datasets</a></li>
+<li>
+<a href="#d-place">D-place</a></li>
+<li>
+<a href="#labor-conflicts">Labor conflicts</a></li>
+<li>
+<a href="#world-bank-imf-pwt">World Bank, IMF, PWT</a></li>
+<li>
+<a href="#ucdp-conflict-data">UCDP Conflict Data</a></li>
+<li>
+<a href="#statistical-agencies-parliaments">Statistical Agencies, Parliaments</a></li>
+<li>
+<a href="#gis-databases">GIS Databases</a></li>
+</ol>
+
+
+
+
+<h2 id="world-values-survey">World Values Survey
+  <a href="#world-values-survey"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>Available at 
+<a href="https://www.worldvaluessurvey.org" target="_blank" rel="noopener">https://www.worldvaluessurvey.org</a>. The data contains geographically coded outcomes for individual surveys on a broad range of questions related to values. The latest wave is available 
+<a href="https://www.worldvaluessurvey.org/WVSDocumentationWV7.jsp" target="_blank" rel="noopener">here</a> and can be downloaded in various formats.</p>
+
+
+
+
+<h2 id="demographics-and-health-survey">Demographics and Health Survey
+  <a href="#demographics-and-health-survey"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>Available at 
+<a href="https://dhsprogram.com/data" target="_blank" rel="noopener">https://dhsprogram.com/data</a>. This is also geographically coded data and contains information on characteristics of the household population, and their dwelling conditions, as well as describing eligible respondents and indicators of women&rsquo;s status and their situation, on fertility, fertility preferences, determinants of fertility, family planning, childhood mortality, maternal and child health and nutrition, and diseases. The survey is effectuated in a great number of African, Central Asian, Asian and Latin American countries, as well as some European and Oceanian ones. You need to make a (free) account to access the data.</p>
+
+
+
+
+<h2 id="global-climate-database">Global Climate Database
+  <a href="#global-climate-database"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>A website containing climate data for the world on a number of spatial frequencies from 1970 to 2000. Available at 
+<a href="http://www.worldclim.org/" target="_blank" rel="noopener">http://www.worldclim.org/</a>.</p>
+
+
+
+
+<h2 id="national-centers-for-environmental-information">National Centers for Environmental Information
+  <a href="#national-centers-for-environmental-information"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>Another website containing historical (from 1763) to present climate information. Available at 
+<a href="https://www.ncei.noaa.gov/access/search/index" target="_blank" rel="noopener">https://www.ncei.noaa.gov/access/search/index</a>. Updates are applied daily. An example dataset can be found 
+<a href="https://www.ncei.noaa.gov/metadata/geoportal/rest/metadata/item/gov.noaa.ncdc:C00946/html" target="_blank" rel="noopener">here</a>.</p>
+
+
+
+
+<h2 id="clio-infra">Clio Infra
+  <a href="#clio-infra"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>A repository of various economic history datasets assembled by various researchers in the discipline. It is available at 
+<a href="http://clio-infra.eu" target="_blank" rel="noopener">http://clio-infra.eu</a>. I also created an R package to access these data, available 
+<a href="www.github.com/basm92/Clio">here</a>.</p>
+
+
+
+
+<h2 id="scholarly-measures-of-politics">Scholarly Measures of Politics
+  <a href="#scholarly-measures-of-politics"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>This is not a database, but rather an R package that aggregates some widely used datasets. It is available at 
+<a href="https://github.com/xmarquez/democracyData" target="_blank" rel="noopener">https://github.com/xmarquez/democracyData</a>. You can use it to access some widely used datasets, including Polity5, Freedom House, Geddes, Wright, and Frantz’ autocratic regimes dataset, the Lexical Index of Electoral Democracy, the DD/ACLP/PACL/CGV dataset, the main indexes of the V-Dem dataset, and many others. The datasets can be looked at by running <code>democracyData::democracy_info</code> inside R.</p>
+
+
+
+
+<h2 id="correlates-of-war">Correlates of War
+  <a href="#correlates-of-war"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>Various datasets related to war, alliances and other geopolitical measures can be downloaded at 
+<a href="https://correlatesofwar.org/data-sets/" target="_blank" rel="noopener">https://correlatesofwar.org/data-sets/</a>. 
+<a href="https://rforpoliticalscience.com/2020/06/03/add-correlates-of-war-codes-in-r-with-countrycode-package/" target="_blank" rel="noopener">Here</a> is also a short tutorial on how to harmonize country codes. This dataset is also available in the <code>peacesciencer</code> package in R. This, in turn, is available 
+<a href="https://rdrr.io/cran/peacesciencer" target="_blank" rel="noopener">here</a>.</p>
+
+
+
+
+<h2 id="eurostat">Eurostat
+  <a href="#eurostat"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>European statistical agency: contains a lot of demographic, economic and other indicators at different levels (country, region, municipality). Available at 
+<a href="https://ec.europa.eu/eurostat/web/main/data/database" target="_blank" rel="noopener">https://ec.europa.eu/eurostat/web/main/data/database</a>. There is also an unofficial R package which you can use to access most of the data. A tutorial is available 
+<a href="https://ropengov.github.io/eurostat/articles/eurostat_tutorial.html" target="_blank" rel="noopener">here</a>.</p>
+
+
+
+
+<h2 id="pew-polls">Pew polls
+  <a href="#pew-polls"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>Pew Research Center makes most of its survey data available for free online at 
+<a href="https://www.pewresearch.org/tools-and-resources/" target="_blank" rel="noopener">https://www.pewresearch.org/tools-and-resources/</a>. Then, one can download datasetes by research area. This includes datasets from the annual Global Attitudes Survey, a poll that asks adults in many countries about issues ranging from politics to economic conditions. 
+<a href="https://medium.com/pew-research-center-decoded/analyzing-international-survey-data-with-the-pewmethods-r-package-3b0b21cba607" target="_blank" rel="noopener">Here</a> is a blog providing a short introduction to the data.</p>
+
+
+
+
+<h2 id="political-protests">Political Protests
+  <a href="#political-protests"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>
+<a href="https://acleddata.com" target="_blank" rel="noopener">ACLED</a> provides data on political protests. You need to make a (free) account to access the data. This can be done by clicking the Register link at the bottom of the page (somewhat hidden).</p>
+<p>In addition, there are datasets on a per-country basis available 
+<a href="https://data.world/datasets/protests" target="_blank" rel="noopener">here</a>. You also need an account for that.</p>
+
+
+
+
+<h2 id="iisg-datasets">IISG Datasets
+  <a href="#iisg-datasets"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>The Dutch <em>International Institute of Social History</em> has a 
+<a href="https://iisg.amsterdam/en/data/datasets" target="_blank" rel="noopener">data repository</a> containing a wide-array of (arguably) very specific datasets, coming from a large number of countries. One potentially interesting dataset here is the RISTAT (РИСТАТ) project, containing lots of historical statistical at the Guberniya (province) level in the Russian empire and beyond. These data are available 
+<a href="https://ristat.org/" target="_blank" rel="noopener">here</a>.</p>
+
+
+
+
+<h2 id="d-place">D-Place
+  <a href="#d-place"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>D-PLACE is an open-source repository containing many data regarding cultures and environments. The famous Murdock Ethnographic Atlas is also available through this repository. In its own words, it &ldquo;..is an attempt to bring together the dispersed corpus of information describing human cultural diversity. It aims to make it easy for individuals to contrast their own cultural practices with those of other societies, and to consider the factors that may underlie cultural similarities and differences.&rdquo; It can be accessed 
+<a href="https://d-place.org/contributions" target="_blank" rel="noopener">here</a> and the datasets can be downloaded 
+<a href="https://github.com/D-PLACE/dplace-data/tree/master/datasets" target="_blank" rel="noopener">here</a>. There is also an R package as an inferface to this package, downloadable from 
+<a href="https://github.com/matthewgthomas/dplacer" target="_blank" rel="noopener">https://github.com/matthewgthomas/dplacer</a>.</p>
+
+
+
+
+<h2 id="labor-conflicts">Labor Conflicts
+  <a href="#labor-conflicts"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>The International Institute of Social History (IISH) has made datasets regarding labor conflicts publicly available. This features datasets for several countries all over the world throughout history. It can be accessed 
+<a href="https://datasets.iisg.amsterdam/dataverse/labourconflicts" target="_blank" rel="noopener">here</a>.</p>
+
+
+
+
+<h2 id="world-bank-imf-pwt">World Bank, IMF, PWT
+  <a href="#world-bank-imf-pwt"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>The World Bank, IMF and Penn World Tables also contain many variables on the country and sometimes sub-country levels. I assume the reader to be familiar with these data sources, so it suffices to mention the URLs and potentially useful R packages here:</p>
+<ul>
+<li>World Bank: 
+<a href="">Here</a> and the R package <code>wbstats</code> (
+<a href="https://github.com/gshs-ornl/wbstats" target="_blank" rel="noopener">Small tutorial</a>)</li>
+<li>IMF: 
+<a href="https://data.imf.org/?sk=388dfa60-1d26-4ade-b505-a05a558d9a42" target="_blank" rel="noopener">Here</a></li>
+<li>Penn World Tables: 
+<a href="https://www.rug.nl/ggdc/productivity/pwt/?lang=en" target="_blank" rel="noopener">Here</a>, legend inside data file</li>
+</ul>
+
+
+
+
+<h2 id="ucdp-conflict-data">UCDP Conflict Data
+  <a href="#ucdp-conflict-data"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>The UCDP data is a repository containing a lot of dataset regarding conflicts, foreign policy, external support, candidate events, dyadic datasets, battle-related deaths and other indicators regarding conflicts. In their own words, &ldquo;the Uppsala Conflict Data Program (UCDP) is the world’s main provider of data on organized violence and the oldest ongoing data collection project for civil war, with a history of almost 40 years. Its definition of armed conflict has become the global standard of how conflicts are systematically defined and studied. UCDP produces high-quality data, which are systematically collected, have global coverage, are comparable across cases and countries, and have long time series which are updated annually.&rdquo; Some databases are geo-referenced in a very granular way. They can be accessed 
+<a href="https://ucdp.uu.se/downloads/index.html" target="_blank" rel="noopener">here</a>.</p>
+
+
+
+
+<h2 id="statistical-agencies-parliaments">Statistical Agencies, Parliaments
+  <a href="#statistical-agencies-parliaments"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>This entry should serve as a repository for databases detailing countries, the data portal of their statistical agency (and package), and the data portal of their parliament, and other open data portals.</p>
+<table>
+<thead>
+<tr>
+<th>Country</th>
+<th>Description</th>
+<th>Link</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Netherlands</td>
+<td>CBS Statistics Data Portal</td>
+<td>
+<a href="https://cran.r-project.org/web/packages/cbsodataR/index.html" target="_blank" rel="noopener">R Package</a>, 
+<a href="https://pypi.org/project/cbsodata/" target="_blank" rel="noopener">Python package</a>, 
+<a href="https://www.cbs.nl/en-gb/our-services/open-data/statline-as-open-data/quick-start-guide" target="_blank" rel="noopener">Documentation</a></td>
+</tr>
+<tr>
+<td>Kazakhstan</td>
+<td>Open Data Portal</td>
+<td>
+<a href="https://data.egov.kz/" target="_blank" rel="noopener">Link</a></td>
+</tr>
+</tbody>
+</table>
+
+
+
+
+<h2 id="historical-gis-databases">Historical GIS Databases
+  <a href="#historical-gis-databases"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>This entry should serve as a repository for historical GIS databases. To be updated more extensively.</p>
+<table>
+<thead>
+<tr>
+<th>Country</th>
+<th>Description</th>
+<th>Link</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Netherlands</td>
+<td>Netherlands Historical Municipalities (1812-2020)</td>
+<td>
+<a href="https://datasets.iisg.amsterdam/dataset.xhtml?persistentId=hdl:10622/URI8O2" target="_blank" rel="noopener">Link</a></td>
+</tr>
+<tr>
+<td>France</td>
+<td>France Administrative Divisions, Other Divisions (1870-1940)</td>
+<td>
+<a href="https://www.data.gouv.fr/fr/datasets/systeme-dinformation-geographique-de-la-france-de-la-troisieme-republique-1870-1940/#resources" target="_blank" rel="noopener">Link</a></td>
+</tr>
+<tr>
+<td>Russia</td>
+<td>Russian Empire (1897), Guberniya and District Boundaries</td>
+<td>
+<a href="https://datasets.iisg.amsterdam/dataset.xhtml?persistentId=hdl:10622/DN9QDM" target="_blank" rel="noopener">Link</a></td>
+</tr>
+<tr>
+<td>Germany</td>
+<td>Various Territorial Entities, Various Levels</td>
+<td>
+<a href="http://www.digihist.de/html/hgisg/index.htm" target="_blank" rel="noopener">Link</a></td>
+</tr>
+</tbody>
+</table>
+
+        
+        <details closed class="f6 fw7 input-reset">
+  <dl class="f6 lh-copy">
+    <dt class="fw7">Posted on:</dt>
+    <dd class="fw5 ml0">December 6, 2022</dd>
+  </dl>
+  <dl class="f6 lh-copy">
+    <dt class="fw7">Length:</dt>
+    <dd class="fw5 ml0">6 minute read, 1103 words</dd>
+  </dl>
+  
+  
+  
+  <dl class="f6 lh-copy">
+    <dt class="fw7">See Also:</dt>
+    
+  </dl>
+</details>
+
+      </section>
+      <footer class="post-footer">
+        <div class="post-pagination dt w-100 mt4 mb2">
+  
+  
+  
+  
+    <a class="next dtc pl2 tr v-top fw6"
+    href="/blog/2022-11-23-short-note-on-ridge-regression/">Short Note on Ridge Regression &rarr;</a>
+  
+</div>
+
+      </footer>
+    </article>
+    
+      
+<div class="post-comments pa0 pa4-l mt4">
+  
+  <script src="https://utteranc.es/client.js"
+          repo="basm92/new_website"
+          issue-term="pathname"
+          theme="boxy-light"
+          label="comments :crystal_ball:"
+          crossorigin="anonymous"
+          async
+          type="text/javascript">
+  </script>
+  
+</div>
+
+    
+  </section>
+</main>
+<footer class="site-footer pv4 bt b--transparent ph5" role="contentinfo">
+  <nav class="db dt-l w-100">
+    <p class="site-copyright f7 db dtc-l v-mid w-100 w-33-l tc tl-l pv2 pv0-l mv0 lh-copy">
+      &copy; 2022 Bas Machielsen
+      <span class="middot-divider"></span>
+      Made with <span xmlns:dct="http://purl.org/dc/terms/" property="dct:title"><a xmlns:dct="http://purl.org/dc/terms/" href="https://github.com/hugo-apero/" rel="dct:source">Hugo Apéro</a></span>.
+      <br />
+      
+Based on <span xmlns:dct="http://purl.org/dc/terms/" property="dct:title"><a xmlns:dct="http://purl.org/dc/terms/" href="https://github.com/formspree/blogophonic-hugo" rel="dct:source">Blogophonic</a></span> by <a xmlns:cc="http://creativecommons.org/ns#" href="https://formspree.io" property="cc:attributionName" rel="cc:attributionURL">Formspree</a>.
+    </p>
+    
+    <div class="site-social-links db dtc-l v-mid w-100 w-33-l tc pv2 pv0-l mv0">
+      <div class="social-icon-links" aria-hidden="true">
+  
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://github.com/basm92" title="github" target="_blank" rel="noopener">
+      <i class="fab fa-github fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://scholar.google.com/citations?user=bS8uo44AAAAJ" title="google" target="_blank" rel="noopener">
+      <i class="fab fa-google fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://twitter.com/basm92" title="twitter" target="_blank" rel="noopener">
+      <i class="fab fa-twitter fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="mailto:a.h.machielsen@uu.nl" title="envelope" >
+      <i class="fas fa-envelope fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="mailto:basmachielsen@live.nl" title="envelope" >
+      <i class="far fa-envelope fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://orcid.org/0000-0002-9692-0615" title="orcid" target="_blank" rel="noopener">
+      <i class="ai ai-orcid fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="/blog/index.xml" title="rss" >
+      <i class="fas fa-rss fa-lg fa-fw"></i>
+    </a>
+  
+</div>
+
+    </div>
+    
+    <div class="site-links f6 db dtc-l v-mid w-100 w-67-l tc tr-l pv2 pv0-l mv0">
+      
+      <a class="dib pv1 ph2 link" href="/license/" title="License">License</a>
+      
+      <a class="dib pv1 ph2 link" href="/contact/" title="Contact form">Contact</a>
+      
+      <a class="dib pv1 ph2 link" href="/contributors/" title="Contributors">Contributors</a>
+      
+    </div>
+  </nav>
+  
+    <script>
+
+    var i, text, code, codes = document.getElementsByTagName('code');
+    for (let i = 0; i < codes.length;) {
+      code = codes[i];
+      if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+        text = code.textContent;
+        if (/^\$[^$]/.test(text) && /[^$]\$$/.test(text)) {
+          text = text.replace(/^\$/, '\\(').replace(/\$$/, '\\)');
+          code.textContent = text;
+        }
+        if (/^\\\((.|\s)+\\\)$/.test(text) ||
+            /^\\\[(.|\s)+\\\]$/.test(text) ||
+            /^\$(.|\s)+\$$/.test(text) ||
+            /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+          code.outerHTML = code.innerHTML;  
+          continue;
+        }
+      }
+      i++;
+    }
+</script>
+
+  
+    
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.css" integrity="sha384-RZU/ijkSsFbcmivfdRBQDtwuwVqK7GMOw6IMvKyeWL2K5UAlyp6WonmB8m7Jd0Hn" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.js" integrity="sha384-pK1WpvzWVBQiP0/GjnvRxV4mOb0oxFuyRxJlk6vVw146n3egcN5C925NCP7a7BY8" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/contrib/auto-render.min.js" integrity="sha384-vZTG03m+2yp6N6BNi5iM4rW4oIwk5DfcNdFfxkk9ZWpDriOkXX8voJBFrAO7MpVl" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
+
+
+
+    
+  
+  
+</footer>
+
+      </div>
+    </body>
+</html>
