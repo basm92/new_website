@@ -6,6 +6,7 @@ slug: []
 categories: []
 tags: []
 layout: single
+description: "In this post, I'll give an overview and short description of various commonly-used and mostly publicly available data sources in Economic History."
 ---
 
 
