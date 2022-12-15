@@ -11,7 +11,7 @@ links:
 - icon: door-open
   icon_pack: fas
   name: pdf document
-  url: https://www.link.com/
+  url: https://bas-m.netlify.app/phd_thesis.pdf
 - icon: github
   icon_pack: fab
   name: replication package
@@ -24,7 +24,7 @@ title: PhD Thesis
 
 ### My PhD Thesis
 
-My PhD Thesis is available in two parts. First, the actual thesis, which is downloadable via [this link](www.link.com).
+My PhD Thesis is available in two parts. First, the actual thesis, which is downloadable via [this link](http://bas-m.netlify.app/phd_thesis.pdf).
 
 ---
 

@@ -98,6 +98,30 @@ The World Bank, IMF and Penn World Tables also contain many variables on the cou
 
 The UCDP data is a repository containing a lot of dataset regarding conflicts, foreign policy, external support, candidate events, dyadic datasets, battle-related deaths and other indicators regarding conflicts. In their own words, "the Uppsala Conflict Data Program (UCDP) is the world’s main provider of data on organized violence and the oldest ongoing data collection project for civil war, with a history of almost 40 years. Its definition of armed conflict has become the global standard of how conflicts are systematically defined and studied. UCDP produces high-quality data, which are systematically collected, have global coverage, are comparable across cases and countries, and have long time series which are updated annually." Some databases are geo-referenced in a very granular way. They can be accessed [here](https://ucdp.uu.se/downloads/index.html). 
 
+## Regional GDP
+
+The [Roses-Wolf](https://cepr.org/node/424487) database contains estimates of regional GDP (NUTS-2 level) for select European countries from about 1900-2015. 
+
+## Rates of Return
+
+
+## EH.net Repostiory
+
+The [EH.net repository](https://eh.net/databases/) contains various databases, mostly focused on the United States and finances. There are also a few datasets focusing on the UK. 
+
+## Macrohistory Database
+
+A database ([accessible here](https://www.macrohistory.net/database/)) with rates of returns per asset class per country, and balance sheets for the macroeconomy per country per year. 
+
+## NBER Macrohistory Database
+
+The [NBER Macrohistory Database](https://www.nber.org/research/data/nber-macrohistory-database) contains extensive data set that covers all aspects of the pre-WWI and interwar economies, including production, construction, employment, money, prices, asset market transactions, foreign trade, and government activity. Many series are highly disaggregated, and many exist at the monthly or quarterly frequency.
+
+
+## OECD Database
+
+The OECD has detailed data on various country-level indicators of OECD countries. For example, there are decomposed measures of social expenditures, globalisation, finance, the environment, ICT, labor, etc. An R package is available [here](https://cran.r-project.org/web/packages/OECD/). [Here](https://github.com/expersso/OECD) is a short readme. In my experience, the package is still a little buggy, which may change in the future. Up until then, it might be best to [just go to the web interface](https://stats.oecd.org/). 
+
 ## Statistical Agencies, Parliaments
 
 This entry should serve as a repository for databases detailing countries, the data portal of their statistical agency (and package), and the data portal of their parliament, and other open data portals.
@@ -118,8 +142,17 @@ This entry should serve as a repository for historical GIS databases. To be upda
 | Russia | Russian Empire (1897), Guberniya and District Boundaries | [Link](https://datasets.iisg.amsterdam/dataset.xhtml?persistentId=hdl:10622/DN9QDM) |
 | Germany | Various Territorial Entities, Various Levels | [Link](http://www.digihist.de/html/hgisg/index.htm) |
 
+## To add:
 
-
-
-
-
+- www.worldeconomichistory.org/datasets/our-datasets/
+- NBER Macrohistory database (https://www.nber.org/research/data/nber-macrohistory-database)
+- http://hgis.org.uk/resources.htm Historical GIS network
+- Ethnic groups of the world (https://icr.ethz.ch/data/greg/) Atlas Narodov Mira
+- Cshapes: https://icr.ethz.ch/data/cshapes/
+- Side: https://icr.ethz.ch/data/side/
+- Ethnic Power Relations: https://icr.ethz.ch/data/epr/
+- Grow: Geographical Research on war: https://growup.ethz.ch/
+- Soviet (including republics) and Russian censuses: http://www.demoscope.ru/weekly/ssp/census.php
+- Global preferences survey: https://www.briq-institute.org/global-preferences/downloads
+- Global Gallup Datasets: https://www.gallup.com/analytics/318923/world-poll-public-datasets.aspx
+- Comparative Political Dataset: https://www.cpds-data.org/
