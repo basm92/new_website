@@ -102,9 +102,6 @@ The UCDP data is a repository containing a lot of dataset regarding conflicts, f
 
 The [Roses-Wolf](https://cepr.org/node/424487) database contains estimates of regional GDP (NUTS-2 level) for select European countries from about 1900-2015. 
 
-## Rates of Return
-
-
 ## EH.net Repostiory
 
 The [EH.net repository](https://eh.net/databases/) contains various databases, mostly focused on the United States and finances. There are also a few datasets focusing on the UK. 
@@ -117,10 +114,40 @@ A database ([accessible here](https://www.macrohistory.net/database/)) with rate
 
 The [NBER Macrohistory Database](https://www.nber.org/research/data/nber-macrohistory-database) contains extensive data set that covers all aspects of the pre-WWI and interwar economies, including production, construction, employment, money, prices, asset market transactions, foreign trade, and government activity. Many series are highly disaggregated, and many exist at the monthly or quarterly frequency.
 
-
 ## OECD Database
 
 The OECD has detailed data on various country-level indicators of OECD countries. For example, there are decomposed measures of social expenditures, globalisation, finance, the environment, ICT, labor, etc. An R package is available [here](https://cran.r-project.org/web/packages/OECD/). [Here](https://github.com/expersso/OECD) is a short readme. In my experience, the package is still a little buggy, which may change in the future. Up until then, it might be best to [just go to the web interface](https://stats.oecd.org/). 
+
+## World Economic History Datasets
+
+Several miscallaneous datasets are available on the [world economic history website](http://www.worldeconomichistory.org/datasets/our-datasets/). Most of the datasets concern China and Indonesia. 
+
+## International Conflict Research Databases
+
+The ICR Databses, set up by researchers from UTH Zurich, have assembled many extensive datasets concerning ethnic and linguistic groups all over the world. Here I list a couple of these and give a short description:
+
+  - Greg (Geo-Referencing of Ethnic Groups): [https://icr.ethz.ch/data/greg/](https://icr.ethz.ch/data/greg/). Contains information based on the Soviet Atlas Narodov Mira, and supplemented by ETH Zurich researchers. 
+  - Geo-Epr: [https://icr.ethz.ch/data/epr/geoepr/](https://icr.ethz.ch/data/epr/geoepr/). Similar to Greg, but slightly more condensed. Contains only groups that are relevant for ethnic power relations. 
+  - C-shapes: [https://icr.ethz.ch/data/cshapes/](https://icr.ethz.ch/data/cshapes/). Maps the borders and capitals as they shift over more than a century, from 1886 to 2019. Also directly accessible via R: `install.packages("cshapes", dependencies = TRUE)`. 
+  - Side: [https://icr.ethz.ch/data/side/](https://icr.ethz.ch/data/side/)The Spatially Interpolated Data on Ethnicity (SIDE) dataset is a collection of 253 near-continuous maps of local ethno-linguistic, religious, and ethno-religious settlement patterns in 47 low- and middle-income countries. These data are a generalization of ethnicity-related information in the geo-coded Demographic and Health Surveys (DHS). There is also an R package, see the web page for details. 
+  - Grow (Geographical Research On War): [https://growup.ethz.ch/](https://growup.ethz.ch/). Data that can be linked with the geographical data above. This data contains several sets of variables about Conflict Data (UCDP ACD, ACD2EPR), Group Hierarchy Data, Settlement Area Data (GeoEPR variables), Raster Aggregated Data (GRUMPv1 Population, DMSP Stable Nightlights, G-ECON GCP, GTOPO30 Elevation), Transnational Ethnic Kin (TEK) Data, and Ethnic Dimensions Data. 
+  - Ethnic Power Relations: [https://icr.ethz.ch/data/epr/](https://icr.ethz.ch/data/epr/). A family of datasets all related to conflict, civil wars and ethnic and ethnolinguistic cleavages. 
+  
+## Soviet Historical Census
+
+A collection of historical Soviet censuses (including other republics than the RSFSR), decomposed in a number of ways, including ethnicity, on a region-level. Available [here (Russian)](http://www.demoscope.ru/weekly/ssp/census.php). 
+
+## Global Preferences Survey
+
+A survey containing individual and country-level data on economic, risk and social preferences based on the 2018 QJE Article "Global evidence on economic preferences". Available [here](https://www.briq-institute.org/global-preferences/downloads). A short registration is required before the data can be accessed. 
+
+## Global Gallup Datasets
+
+Gallup has a couple of global datasets, sometimes geographically coded, on a number of topics, including risk, finance, food security, and urbanisation. Available [here](https://www.gallup.com/analytics/318923/world-poll-public-datasets.aspx). 
+
+## Comparitive Political Dataset
+
+The "Comparative Political Data Set" (CPDS) is a collection of political and institutional country-level data provided by Klaus Armingeon, Sarah Engler and Lucas Leemann at the University of Zurich (Switzerland) and the Leuphana Universität (Germany). It contains data on the nature of governments and elections, and when which government was in power. Available [here](https://www.cpds-data.org). 
 
 ## Statistical Agencies, Parliaments
 
@@ -141,18 +168,7 @@ This entry should serve as a repository for historical GIS databases. To be upda
 | France | France Administrative Divisions, Other Divisions (1870-1940) | [Link](https://www.data.gouv.fr/fr/datasets/systeme-dinformation-geographique-de-la-france-de-la-troisieme-republique-1870-1940/#resources) |
 | Russia | Russian Empire (1897), Guberniya and District Boundaries | [Link](https://datasets.iisg.amsterdam/dataset.xhtml?persistentId=hdl:10622/DN9QDM) |
 | Germany | Various Territorial Entities, Various Levels | [Link](http://www.digihist.de/html/hgisg/index.htm) |
+| China | Various snapshots (1820-1990) of historical China | [Link](https://chgis.fairbank.fas.harvard.edu/) |
 
-## To add:
+There are also several other sources on the [Historical GIS Network Website](http://hgis.org.uk/resources.htm), but most of the links are defunct. 
 
-- www.worldeconomichistory.org/datasets/our-datasets/
-- NBER Macrohistory database (https://www.nber.org/research/data/nber-macrohistory-database)
-- http://hgis.org.uk/resources.htm Historical GIS network
-- Ethnic groups of the world (https://icr.ethz.ch/data/greg/) Atlas Narodov Mira
-- Cshapes: https://icr.ethz.ch/data/cshapes/
-- Side: https://icr.ethz.ch/data/side/
-- Ethnic Power Relations: https://icr.ethz.ch/data/epr/
-- Grow: Geographical Research on war: https://growup.ethz.ch/
-- Soviet (including republics) and Russian censuses: http://www.demoscope.ru/weekly/ssp/census.php
-- Global preferences survey: https://www.briq-institute.org/global-preferences/downloads
-- Global Gallup Datasets: https://www.gallup.com/analytics/318923/world-poll-public-datasets.aspx
-- Comparative Political Dataset: https://www.cpds-data.org/
