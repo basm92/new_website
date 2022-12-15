@@ -102,7 +102,7 @@ $$
 
 is a positive semi-definite matrix. First, since \\( X^T X \\) is p.s.d., \\( (X^T X)^{-1}\\) is also p.s.d. (A short proof is comparing the eigenvalues of a matrix and its inverse). Also, if you add \\( \lambda I \\) to a matrix, its eigenvalues increase with \\( \lambda \\). Hence with \\( \lambda > 0 \\), we increase the already positive eigenvalues, and \\( W \\) is also p.s.d. 
 
-After some derivation, we can show that the different in variances is equal to the following quadratic form:
+After some derivation, we can show that the difference in variances is equal to the following quadratic form:
 
 $$
 \sigma^2 (X^T X + \lambda I)^{-1} \left[ 2 \lambda I + \lambda^2 (X^T X)^{-1} \right] (X^T X + \lambda I)^{-1}

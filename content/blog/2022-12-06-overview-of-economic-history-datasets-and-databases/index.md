@@ -29,8 +29,18 @@ In this post, I'll give an overview and short description of various commonly-us
 13. [Labor conflicts](#labor-conflicts)
 14. [World Bank, IMF, PWT](#world-bank-imf-pwt)
 15. [UCDP Conflict Data](#ucdp-conflict-data)
-15. [Statistical Agencies, Parliaments](#statistical-agencies-parliaments)
-16. [GIS Databases](#gis-databases)
+16. [Regional GDP](#regional-gdp)
+17. [EH.net Repository](#eh.net-repository)
+18. [Macrohistory Database](#macrohistory-database)
+19. [OECD Database](#oecd-database)
+20. [World Economic History Datasets](#world-economic-history-datasets)
+21. [International Conflict Research Databases](#international-conflict-research-databases)
+22. [Soviet Historical Census](#soviet-historical-census)
+23. [Global Preferences Survey](#global-preferences-survey)
+24. [Global Gallup Datasets](#global-gallup-datasets)
+25. [Comparative Political Dataset](#comparative-political-datasets)
+26. [Statistical Agencies, Parliaments](#statistical-agencies-parliaments)
+27. [GIS Databases](#historical-gis-databases)
 
 ## World Values Survey
 
