@@ -12,7 +12,7 @@ excerpt: "In this post, I'll give an overview and short description of various c
 
 ## Introduction
 
-In this post, I'll give an overview and short description of various commonly-used and mostly publicly available data sources in Economic History. I am planning to update this repository as soon as I find new data sources, so if you find something is missing or if you have any suggestions, please contact me or write a comment below! Here's the current overview:
+In this post, I'll give an overview and short description of various commonly-used and mostly publicly available data sources in Economic History. I am planning to update this repository as soon as I find new data sources, so if you find something is missing or if you have any suggestions, please contact me or write a comment below! Thanks to Giacomo Domini and Ruben Peeters for suggesting several of these sources. Here's the current overview:
 
 1. [World Values Survey](#world-values-survey)
 2. [Demographics and Health Survey](#demographics-and-health-survey)
@@ -39,8 +39,14 @@ In this post, I'll give an overview and short description of various commonly-us
 23. [Global Preferences Survey](#global-preferences-survey)
 24. [Global Gallup Datasets](#global-gallup-datasets)
 25. [Comparative Political Dataset](#comparative-political-datasets)
-26. [Statistical Agencies, Parliaments](#statistical-agencies-parliaments)
-27. [GIS Databases](#historical-gis-databases)
+26. [World Inequality Database](#world-inequality-database)
+27. [COMTRADE](#comtrade)
+28. [Observatory of Economic Complexity](#observatory-of-economic-complexity)
+29. [Atlas of Economic Complexity](#atlas-of-economic-complexity)
+30. [Ricardo Database](#ricardo-database)
+31. [Federico-Tena World Trade Historical Database](#federico-tena-world-trade-historical-database)
+32. [Statistical Agencies, Parliaments](#statistical-agencies-parliaments)
+33. [GIS Databases](#historical-gis-databases)
 
 ## World Values Survey
 
@@ -158,6 +164,30 @@ Gallup has a couple of global datasets, sometimes geographically coded, on a num
 ## Comparitive Political Dataset
 
 The "Comparative Political Data Set" (CPDS) is a collection of political and institutional country-level data provided by Klaus Armingeon, Sarah Engler and Lucas Leemann at the University of Zurich (Switzerland) and the Leuphana Universität (Germany). It contains data on the nature of governments and elections, and when which government was in power. Available [here](https://www.cpds-data.org). 
+
+## World Inequality Database
+
+Data on income and wealth inequality throughout the ages for various countries. Available [here](https://wid.world/). 
+
+## COMTRADE
+
+The United Nations Comtrade database aggregates detailed global annual and monthly trade statistics by product and trading partner for use by governments, academia, research institutes, and enterprises. Data compiled by the United Nations Statistics Division covers approximately 200 countries and represents more than 99% of the world's merchandise trade. Available using various API tools as well as [here](https://comtrade.un.org). 
+
+## Observatory of Economic Complexity
+
+Based on COMTRADE data, available [here](https://oec.world/). Unfortunately no longer free. 
+
+## Atlas of Economic Complexity
+
+The Atlas of Economic Complexity is an award-winning data visualization tool that allows people to explore global trade flows across markets, track these dynamics over time and discover new growth opportunities for every country. Available [here](https://atlas.cid.harvard.edu). 
+
+## Ricardo Database
+
+The RICardo project is a comprehensive trade database that collects total and bilateral trade statistics of all countries in the world from the early nineteenth century (first data go back to 1787) until 1938. Available [here](http://ricardo.medialab.sciences-po.fr). 
+
+## Federico-Tena World Trade Historical Database
+
+A database which contains annual series of trade by politics from 1800 to 1938 which sum up as series for continent and world. Available [here](https://www.uc3m.es/ss/Satellite/UC3MInstitucional/es/TextoMixta/1371246237481/Federico-Tena_World_Trade_Historical_Database). 
 
 ## Statistical Agencies, Parliaments
 
