@@ -6,7 +6,7 @@
     <description>Recent content on Bas Machielsen</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Tue, 06 Dec 2022 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 20 Jan 2023 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Clio</title>
       <link>/collection/clio/</link>
@@ -23,6 +23,15 @@
       
       <guid>/collection/hdng/</guid>
       <description>hdng is a package facilitating the use of the HDNG Database, a database containing quantative information in various aspects of Dutch municipalities from about 1800 to the 1980&amp;rsquo;s. This package aids the user in finding their way through the database, allowing them to search for wanted variables, browse within categories, and finally, make a query to extract the wanted data.</description>
+    </item>
+    
+    <item>
+      <title>Radio broadcast about my PhD Thesis</title>
+      <link>/blog/2023-01-20-radio-broadcast-about-my-phd-thesis/</link>
+      <pubDate>Fri, 20 Jan 2023 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2023-01-20-radio-broadcast-about-my-phd-thesis/</guid>
+      <description>Radio Broadcast I was invited to the Dutch radio program Spraakmakers to talk about my PhD thesis. You can listen to the recording here. The part where I show up is roughly from 1:11:25 to 1:27:00. I am discussing with political historian Remieg Aerts and presenter Carl-Johan de Zwart about the Dutch political system in the 19th century in light of the findings in my PhD dissertation.</description>
     </item>
     
     <item>
