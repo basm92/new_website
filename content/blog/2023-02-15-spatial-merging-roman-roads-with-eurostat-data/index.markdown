@@ -92,12 +92,69 @@ fr_gr <- st_intersection(lau, square)
 
 
 ```r
-lau |> ggplot() + geom_sf()
+fr_gr |> ggplot() + geom_sf()
 ```
 
 <img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-8-1.png" width="672" />
 
-## Merging of different shapefiles
+## Merging the data together
 
-I will focus on a slightly different spatial operation, which is the merging of different shapefiles together. As it is difficult to use the Roman Empire map for this, I will use more contemporary data from the `eurostat` package. 
+Since the data should be in the same projection:
 
+
+```r
+st_crs(fr_gr) == st_crs(roads)
+```
+
+```
+## [1] TRUE
+```
+
+.. it should be possible to merge the datasets together. This can be done by `bind_rows`, but we want to make sure that the geometry variables are under one variable:
+
+
+```r
+lau_roads <- bind_rows(fr_gr |> rename(geometry = `_ogr_geometry_`), roads)
+```
+
+
+```r
+ggplot() + geom_sf(data = lau_roads |> filter(!is.na(id))) +
+  geom_sf(data = lau_roads |> filter(!is.na(OBJECTID)), color = 'blue')
+```
+
+<img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-11-1.png" width="672" />
+
+In the roads `data.frame`, we might also want to focus on France and Germany, rather than on all roads in the former Roman empire. 
+
+
+```r
+roads_in_fr_gr <- st_intersects(roads, fr_gr)|> 
+  as.data.frame() |> 
+  select(row.id) |> 
+  pull() |> 
+  unique()
+
+roads2 <- roads |> filter(is.element(row_number(), roads_in_fr_gr))
+
+lau_roads2 <- bind_rows(fr_gr |> rename(geometry = `_ogr_geometry_`), roads2)
+```
+
+
+```r
+ggplot() + geom_sf(data = lau_roads2 |> filter(!is.na(id))) +
+  geom_sf(data = lau_roads2 |> filter(!is.na(OBJECTID)), color = 'blue')
+```
+
+<img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-13-1.png" width="672" />
+
+Now we have obtained a nice map of Roman roads in Germany and France, and we can do some spatial data manipulation to calculated the minimum distances of the centroid of each of these communes to the Roman roads. This can be the basis of a regression design attempting to investigate the persistent impact of these roads. 
+
+
+
+Finish: 
+  - Doing this
+  - Also do this with cities and compute distances from city centroids
+  - Also show graphically how it works with cities 
+  - Use eurostat data to get some other variables
+  - Control for region-specific dummies in regressions!
