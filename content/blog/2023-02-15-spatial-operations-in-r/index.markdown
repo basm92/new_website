@@ -371,6 +371,7 @@ df <- df |>
 
 df |> ggplot(aes(fill = as.numeric(distance))) + 
   geom_sf() + 
+  geom_sf(data = df |> filter(areaname == 'border'), color = 'orange') +
   scale_fill_continuous(type='viridis')
 ```
 
