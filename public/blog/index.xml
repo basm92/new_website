@@ -8,6 +8,17 @@
     <language>en</language>
     <lastBuildDate>Wed, 15 Feb 2023 00:00:00 +0000</lastBuildDate><atom:link href="/blog/index.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>Spatial Merging Roman Roads with Eurostat Data</title>
+      <link>/blog/2023-02-15-spatial-merging-roman-roads-with-eurostat-data/</link>
+      <pubDate>Wed, 15 Feb 2023 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2023-02-15-spatial-merging-roman-roads-with-eurostat-data/</guid>
+      <description>Introduction In this short blog post, I focus on combining several European municipal (LAU, Local Urban Areas) shapefiles, combined with data on roads and cities in the Roman Empire, to find relationships between present-day outcomes and deep-routed interventions as far as more than 2000 years ago.
+Let us first load the libraries we need to perform operations.
+library(tidyverse) library(giscoR) library(sf) library(cawd) For robustness, and out of curiosity, I will use two roads files.</description>
+    </item>
+    
+    <item>
       <title>Spatial Operations in R</title>
       <link>/blog/2023-02-15-spatial-operations-in-r/</link>
       <pubDate>Wed, 15 Feb 2023 00:00:00 +0000</pubDate>
