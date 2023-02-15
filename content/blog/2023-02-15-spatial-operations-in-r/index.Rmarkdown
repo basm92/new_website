@@ -16,7 +16,7 @@ I will confine myself to these things in this post:
   - Combining a map of the Roman Empire (around 200AD) with a contemporary map of Dutch municipalities, thereby tracking which contemporary municipalities fell within the border of the Roman Empire about 2000 years ago. 
   - Extracting a border
   - Making the border potentially more precise and reliable.
-  - Finally, I will focus on a slightly different spatial operation, which is the merging of different shapefiles together.
+  - Calculating the distance to the border
 
 In another blog post, I'll also detail how to digitize and customize historical maps, as I found the available online resources to be insufficiently clear. One good reference article for this type of task is [Giuliano and Matranga (2020)](https://www.nber.org/system/files/working_papers/w27967/w27967.pdf), but even that is far from a self-contained guide, and is focused on ArcGIS, a paid piece of software. 
 
@@ -27,7 +27,6 @@ library(tidyverse)
 library(rgeos)
 library(sf)
 library(spatialrisk)
-library(eurostat)
 ```
 
 ## Merging a map 
@@ -65,7 +64,7 @@ You can find interesting projections on, for example [https://epsg.io/map](https
 
 Now, let's load in a map containing municipalities. For brevity, I'll use the 2018 Dutch municipalities from the `spatialrisk` package. 
 
-```{r}
+```{r warning = FALSE, message = FALSE}
 gem <- spatialrisk::nl_gemeente
 sf::sf_use_s2(FALSE)
 
@@ -84,7 +83,7 @@ The st_contains() function is one of several functions in sf that can be used to
   
 `st_intersects` checks whether there is any intersection at all, so that is the least strict function. 
 
-```{r}
+```{r message = FALSE, warning = FALSE}
 overlap <- st_contains(rom, gem)
 ```
 
@@ -105,7 +104,7 @@ gem2 |> ggplot(aes(fill = as.factor(rom))) + geom_sf()
 
 We can also do this in a slightly different way. A disadvantage of the preceding approach is that we might also include municipalities with only a 10% overlap, whereas we want to include only municipalities that have a substantial, say, 50% overlap. We might want to compute the intersection between the two `data.frame`s and then calculate the area of overlap:
 
-```{r}
+```{r, warning = FALSE, message = FALSE}
 crude <- st_intersects(rom, gem)
 crude_nos <- map(crude, function(x) {x}) |> reduce(c)
 
@@ -117,7 +116,7 @@ gem3 |> ggplot(aes(fill = as.factor(rom))) + geom_sf()
 
 Finally, maybe the one is a little bit too conservative whereas the other is a little bit too crude. We might want to decide explicitly based on the _area of overlap_. The way in which we could do that is as follows:
 
-```{r}
+```{r warning = FALSE, message = FALSE}
 # Make the intersection and cutoff the data.frame at the borders
 intersect <- st_intersection(rom, gem)
 intersect <- intersect |> select(id, code, areaname, geometry)
@@ -128,7 +127,7 @@ gem_ar <- gem |>
   rename(geometry_large = geometry) |>
   mutate(area_large = st_area(geometry_large))
 
-gem_ar
+gem_ar |> head(5)
 
 # Calculate the areas of all municipalities in the intersected data.frame
 intersect <- intersect |>
@@ -164,8 +163,8 @@ This seems near-perfect, as we can now:
 
 Now, let's use `final` with the condition that `ratio` > 0.2 and find the border:
 
-```{r}
-boundary <- st_union(final %>% filter(as.numeric(ratio) > 0.2)) %>% st_boundary()
+```{r message = FALSE, warning = FALSE}
+boundary <- st_union(final |> filter(as.numeric(ratio) > 0.2)) |> st_boundary()
 ```
 
 We did this by first merging all polygons of municipalities together based on the condition that ratio be greater than 0.2, and then extracting the outer boundary of that polygon:
@@ -185,7 +184,7 @@ final_dist |> ggplot(aes(fill = distance < 10000)) + geom_sf()
 
 Of course, we only want to consider the distance from the northern border, as the other borders are not actually borders of the former Roman empire. We therefore have to make the border a little bit more precise. 
 
-## Making the border more precise
+## Making the border more precise (I)
 
 We can do this by only considering the northern part of the border and by iterating through the latitudes from a start to an end point. Then, we can extract only the relevant part of the border based on an interpolation:
 
@@ -247,7 +246,33 @@ ggplot() +
 
 ```
 
-Calculating the distance can then be done as follows:
+## Making the border more precise (II)
+
+We can also make the border more precise in a different way. We can just manually define a polygon that encapsulates the border in a nice and specific way. Then, we capture the border in this polygon, and then ask `sf` to return us the intersection of the polygon and the relevant piece of the border. I think this is generally the nicest way. 
+
+```{r, message = FALSE, warning = FALSE}
+point1 <- c(4.5, 52.5)
+point2 <- c(4.5, 53)
+point3 <- c(6.3, 53)
+point4 <- c(6.3, 51.5)
+point5 <- c(4.5, 52.5)
+
+coords <- list(rbind(point1, point2, point3, point4, point5))
+poly_coords <- st_polygon(coords)
+
+poly_c <- st_sfc(poly_coords, crs = st_crs(4326))
+poly_l <- st_sf(poly_c) |> rename(geometry = poly_c)
+
+boundary <- st_sf(boundary) |> rename(geometry = boundary)
+
+new_boundary <- st_intersection(boundary, poly_l)
+
+new_boundary |> ggplot() + geom_sf()
+```
+
+## Calculating the distance
+
+Calculating the distance can then be done as follows. With the first border:
 
 ```{r}
 df <- df |>
@@ -258,11 +283,27 @@ df |> ggplot(aes(fill = as.numeric(distance))) +
   scale_fill_continuous(type='viridis')
 ```
 
+And with the second border: 
+
+```{r}
+final |> 
+  mutate(distance = st_distance(final, new_boundary)) |>
+  ggplot() + geom_sf(aes(fill = as.numeric(distance))) +
+  geom_sf(data = new_boundary, color = 'orange')
+
+```
+
 This object can then be used to determine the distance from the border, as a cut-off point or as auxiliary variable to the cut-off point. 
 
-## Merging of different shapefiles
+  - For example, you can take the municipalities that are closest to the border, but inside the Roman empire, and use that to define the distance of all other municipalities to one of their centroids. That could then be used as a running variable. 
+  - You could also just naively use the border as the running variable.
+  - Or you could fine-tune the interpolation so that the border overlaps precisely with the municipal boundaries. 
+  
+## Conclusion
 
-Finally, I will focus on a slightly different spatial operation, which is the merging of different shapefiles together. As it is difficult to use the Roman Empire map for this, I will use more contemporary data from the `eurostat` package. 
+Hopefully, I have demonstrated how to create variables that map to the distance to a certain border, used in spatial regression discontinuity designs. If you have any questions, feel free to contact me. Thanks for reading! 
+
+
 
 
  

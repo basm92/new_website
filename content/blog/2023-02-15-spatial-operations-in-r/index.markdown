@@ -16,7 +16,7 @@ I will confine myself to these things in this post:
   - Combining a map of the Roman Empire (around 200AD) with a contemporary map of Dutch municipalities, thereby tracking which contemporary municipalities fell within the border of the Roman Empire about 2000 years ago. 
   - Extracting a border
   - Making the border potentially more precise and reliable.
-  - Finally, I will focus on a slightly different spatial operation, which is the merging of different shapefiles together.
+  - Calculating the distance to the border
 
 In another blog post, I'll also detail how to digitize and customize historical maps, as I found the available online resources to be insufficiently clear. One good reference article for this type of task is [Giuliano and Matranga (2020)](https://www.nber.org/system/files/working_papers/w27967/w27967.pdf), but even that is far from a self-contained guide, and is focused on ArcGIS, a paid piece of software. 
 
@@ -28,7 +28,6 @@ library(tidyverse)
 library(rgeos)
 library(sf)
 library(spatialrisk)
-library(eurostat)
 ```
 
 ## Merging a map 
@@ -82,13 +81,7 @@ Now, let's load in a map containing municipalities. For brevity, I'll use the 20
 ```r
 gem <- spatialrisk::nl_gemeente
 sf::sf_use_s2(FALSE)
-```
 
-```
-## Spherical geometry (s2) switched off
-```
-
-```r
 gem |> ggplot() + geom_sf()
 ```
 
@@ -109,11 +102,6 @@ The st_contains() function is one of several functions in sf that can be used to
 
 ```r
 overlap <- st_contains(rom, gem)
-```
-
-```
-## although coordinates are longitude/latitude, st_contains assumes that they are
-## planar
 ```
 
 The output of `st_overlaps`, saved in `overlap`, contains 112 elements. For each of the 112 polygons in `rom`, it tells us with which of the `352` partially or entirely overlap with one of the geometries in `rom`. Let us now extract all of those numbers:
@@ -140,14 +128,6 @@ We can also do this in a slightly different way. A disadvantage of the preceding
 
 ```r
 crude <- st_intersects(rom, gem)
-```
-
-```
-## although coordinates are longitude/latitude, st_intersects assumes that they
-## are planar
-```
-
-```r
 crude_nos <- map(crude, function(x) {x}) |> reduce(c)
 
 gem3 <- gem |>
@@ -164,19 +144,6 @@ Finally, maybe the one is a little bit too conservative whereas the other is a l
 ```r
 # Make the intersection and cutoff the data.frame at the borders
 intersect <- st_intersection(rom, gem)
-```
-
-```
-## although coordinates are longitude/latitude, st_intersection assumes that they
-## are planar
-```
-
-```
-## Warning: attribute variables are assumed to be spatially constant throughout all
-## geometries
-```
-
-```r
 intersect <- intersect |> select(id, code, areaname, geometry)
 
 # Calculate the areas of all municipalities in the gem data.frame
@@ -185,27 +152,21 @@ gem_ar <- gem |>
   rename(geometry_large = geometry) |>
   mutate(area_large = st_area(geometry_large))
 
-gem_ar
+gem_ar |> head(5)
 ```
 
 ```
-## Simple feature collection with 352 features and 4 fields
+## Simple feature collection with 5 features and 4 fields
 ## Geometry type: MULTIPOLYGON
 ## Dimension:     XY
-## Bounding box:  xmin: 3.358378 ymin: 50.75136 xmax: 7.217623 ymax: 53.55362
+## Bounding box:  xmin: 5.124677 ymin: 52.25261 xmax: 7.100014 ymax: 53.31012
 ## Geodetic CRS:  WGS 84
-## First 10 features:
-##    id   code      areaname                 geometry_large      area_large
-## 1   1 GM0014     Groningen MULTIPOLYGON (((6.772527 53... 193756466 [m^2]
-## 2   2 GM0034        Almere MULTIPOLYGON (((5.350772 52... 141345387 [m^2]
-## 3   3 GM0037   Stadskanaal MULTIPOLYGON (((7.015446 53... 121754152 [m^2]
-## 4   4 GM0047       Veendam MULTIPOLYGON (((6.961735 53...  78299593 [m^2]
-## 5   5 GM0050      Zeewolde MULTIPOLYGON (((5.58907 52.... 253523368 [m^2]
-## 6   6 GM0059 Achtkarspelen MULTIPOLYGON (((6.232173 53... 103826992 [m^2]
-## 7   7 GM0060       Ameland MULTIPOLYGON (((5.731096 53...  58647166 [m^2]
-## 8   8 GM0072     Harlingen MULTIPOLYGON (((5.472192 53...  26158524 [m^2]
-## 9   9 GM0074    Heerenveen MULTIPOLYGON (((5.927581 53... 200849936 [m^2]
-## 10 10 GM0080    Leeuwarden MULTIPOLYGON (((5.838649 53... 258209492 [m^2]
+##   id   code    areaname                 geometry_large      area_large
+## 1  1 GM0014   Groningen MULTIPOLYGON (((6.772527 53... 193756466 [m^2]
+## 2  2 GM0034      Almere MULTIPOLYGON (((5.350772 52... 141345387 [m^2]
+## 3  3 GM0037 Stadskanaal MULTIPOLYGON (((7.015446 53... 121754152 [m^2]
+## 4  4 GM0047     Veendam MULTIPOLYGON (((6.961735 53...  78299593 [m^2]
+## 5  5 GM0050    Zeewolde MULTIPOLYGON (((5.58907 52.... 253523368 [m^2]
 ```
 
 ```r
@@ -231,10 +192,6 @@ intersect |> head(5)
 # in the intersect and gem data.frames
 final <- gem_ar |> left_join(intersect) |>
   mutate(ratio = area_small / area_large)
-```
-
-```
-## Joining, by = c("id", "code", "areaname")
 ```
 Then we could plot which municipalities we include based on a certain threshold, e.g. 20%:
 
@@ -262,12 +219,7 @@ Now, let's use `final` with the condition that `ratio` > 0.2 and find the border
 
 
 ```r
-boundary <- st_union(final %>% filter(as.numeric(ratio) > 0.2)) %>% st_boundary()
-```
-
-```
-## although coordinates are longitude/latitude, st_union assumes that they are
-## planar
+boundary <- st_union(final |> filter(as.numeric(ratio) > 0.2)) |> st_boundary()
 ```
 
 We did this by first merging all polygons of municipalities together based on the condition that ratio be greater than 0.2, and then extracting the outer boundary of that polygon:
@@ -293,7 +245,7 @@ final_dist |> ggplot(aes(fill = distance < 10000)) + geom_sf()
 
 Of course, we only want to consider the distance from the northern border, as the other borders are not actually borders of the former Roman empire. We therefore have to make the border a little bit more precise. 
 
-## Making the border more precise
+## Making the border more precise (I)
 
 We can do this by only considering the northern part of the border and by iterating through the latitudes from a start to an end point. Then, we can extract only the relevant part of the border based on an interpolation:
 
@@ -381,7 +333,36 @@ ggplot() +
 
 <img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-20-1.png" width="672" />
 
-Calculating the distance can then be done as follows:
+## Making the border more precise (II)
+
+We can also make the border more precise in a different way. We can just manually define a polygon that encapsulates the border in a nice and specific way. Then, we capture the border in this polygon, and then ask `sf` to return us the intersection of the polygon and the relevant piece of the border. I think this is generally the nicest way. 
+
+
+```r
+point1 <- c(4.5, 52.5)
+point2 <- c(4.5, 53)
+point3 <- c(6.3, 53)
+point4 <- c(6.3, 51.5)
+point5 <- c(4.5, 52.5)
+
+coords <- list(rbind(point1, point2, point3, point4, point5))
+poly_coords <- st_polygon(coords)
+
+poly_c <- st_sfc(poly_coords, crs = st_crs(4326))
+poly_l <- st_sf(poly_c) |> rename(geometry = poly_c)
+
+boundary <- st_sf(boundary) |> rename(geometry = boundary)
+
+new_boundary <- st_intersection(boundary, poly_l)
+
+new_boundary |> ggplot() + geom_sf()
+```
+
+<img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-21-1.png" width="672" />
+
+## Calculating the distance
+
+Calculating the distance can then be done as follows. With the first border:
 
 
 ```r
@@ -393,13 +374,31 @@ df |> ggplot(aes(fill = as.numeric(distance))) +
   scale_fill_continuous(type='viridis')
 ```
 
-<img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-21-1.png" width="672" />
+<img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-22-1.png" width="672" />
+
+And with the second border: 
+
+
+```r
+final |> 
+  mutate(distance = st_distance(final, new_boundary)) |>
+  ggplot() + geom_sf(aes(fill = as.numeric(distance))) +
+  geom_sf(data = new_boundary, color = 'orange')
+```
+
+<img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-23-1.png" width="672" />
 
 This object can then be used to determine the distance from the border, as a cut-off point or as auxiliary variable to the cut-off point. 
 
-## Merging of different shapefiles
+  - For example, you can take the municipalities that are closest to the border, but inside the Roman empire, and use that to define the distance of all other municipalities to one of their centroids. That could then be used as a running variable. 
+  - You could also just naively use the border as the running variable.
+  - Or you could fine-tune the interpolation so that the border overlaps precisely with the municipal boundaries. 
+  
+## Conclusion
 
-Finally, I will focus on a slightly different spatial operation, which is the merging of different shapefiles together. As it is difficult to use the Roman Empire map for this, I will use more contemporary data from the `eurostat` package. 
+Hopefully, I have demonstrated how to create variables that map to the distance to a certain border, used in spatial regression discontinuity designs. If you have any questions, feel free to contact me. Thanks for reading! 
+
+
 
 
  
