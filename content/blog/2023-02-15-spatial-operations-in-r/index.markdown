@@ -395,8 +395,12 @@ df |> ggplot(aes(fill = as.numeric(distance))) +
 
 <img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-21-1.png" width="672" />
 
+This object can then be used to determine the distance from the border, as a cut-off point or as auxiliary variable to the cut-off point. 
+
 ## Merging of different shapefiles
 
 Finally, I will focus on a slightly different spatial operation, which is the merging of different shapefiles together. As it is difficult to use the Roman Empire map for this, I will use more contemporary data from the `eurostat` package. 
+
+
  
  
