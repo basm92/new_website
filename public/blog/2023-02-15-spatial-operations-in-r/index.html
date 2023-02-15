@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr"><head>
+  
+                           
+     
+
+
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="generator" content="Hugo 0.101.0" />
+<title>Spatial Operations in R | Bas Machielsen</title>
+
+
+<meta property="twitter:site" content="@basss92">
+<meta property="twitter:creator" content="@basss92">
+
+
+
+
+
+
+
+  
+    
+  
+<meta name="description" content="A post on how to do some often-used spatial operations in R.">
+
+
+<meta property="og:site_name" content="Bas Machielsen">
+<meta property="og:title" content="Spatial Operations in R | Bas Machielsen">
+<meta property="og:description" content="A post on how to do some often-used spatial operations in R." />
+<meta property="og:type" content="page" />
+<meta property="og:url" content="/blog/2023-02-15-spatial-operations-in-r/" />
+<meta property="og:locale" content="en">
+
+
+
+
+    
+        <meta property="og:image" content="/blog/2023-02-15-spatial-operations-in-r/featured.png" >
+        <meta property="twitter:card" content="summary_large_image">
+        <meta name="twitter:image" content="/blog/2023-02-15-spatial-operations-in-r/featured.png" >
+    
+    
+  <meta itemprop="name" content="Spatial Operations in R">
+<meta itemprop="description" content="Introduction In this post, I will demonstrate some useful spatial operations in R. In particular, I want to do some spatial data wrangling to generate a border between two areas on a particular map, and afterwards, compute the distance of each polygon (area) to that border. This is something that is often featured in spatial regression discontinuity designs, where the &ldquo;running&rdquo; variable is the distance (positive or negative) from the border, the border being, for example, ancient borders, an area of exploitation, some territory impacted by some event, or some seized territory."><meta itemprop="datePublished" content="2023-02-15T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2023-02-15T00:00:00+00:00" />
+<meta itemprop="wordCount" content="1820"><meta itemprop="image" content="/blog/2023-02-15-spatial-operations-in-r/featured.png">
+<meta itemprop="keywords" content="" />
+  
+  
+  <!--[if IE]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  <link rel="shortcut icon" href="favicon_new.ico" type="image/x-icon">
+  <link rel="icon" href="favicon_new.ico" type="image/x-icon">
+  
+  
+  <link rel="stylesheet" href="/style.main.min.7aee66b22ae3b19895932b9cf4d37da828ca65fc6cd45cfdee1b36b98f4b0ae0.css" integrity="sha256-eu5msirjsZiVkyuc9NN9qCjKZfxs1Fz97hs2uY9LCuA=" media="screen">
+  
+  
+  <script src="/panelset.min.dca42702d7daf6fd31dc352efd2bcf0e4ac8c05ccaa58d9293f6177462de5d5f.js" type="text/javascript"></script>
+  
+  
+  <script src="/main.min.11d2df4163a7df9fb9d31f699461f02d84700b160cd42fa951b0982fc4d468bc.js" type="text/javascript"></script>
+</head>
+<body>
+      <div class="grid-container">
+<header class="site-header pt4 pb2 mb4 bb b--transparent ph5 headroom z-max" role="banner">
+  <nav class="site-nav db dt-l w-100" role="navigation">
+    <a class="site-brand db dtc-l v-mid link no-underline w-100 w-33-l tc tl-l" href="/" title="Home">
+      <img src="/website_logo.png" class="dib db-l h2 w-auto" alt="Bas Machielsen">
+    </a>
+    <div class="site-links db dtc-l v-mid w-100 w-47-l tc tr-l mt3 mt0-l ttu tracked">
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/" title="Home">Home</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/about/" title="About">About</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 active" href="/blog/" title="Blog">Blog</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/project/" title="Teaching Overview &amp; Repository">Teaching</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/resume/" title="Resume">Resume</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/articles/" title="Articles">Articles</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/collection/" title="Software">Software</a>
+      
+      
+    </div>
+  </nav>
+</header>
+
+<main class="page-main pa4" role="main">
+  <section class="page-content mw7 center">
+    <article class="post-content pa0 ph4-l">
+      <header class="post-header">
+        <h1 class="f1 lh-solid measure-narrow mb3 fw4">Spatial Operations in R</h1>
+        
+        <p class="f6 measure lh-copy mv1">By Bas Machielsen</p>
+        <p class="f7 db mv0 ttu">February 15, 2023</p>
+
+      
+
+      </header>
+      <section class="post-body pt5 pb4">
+        
+
+
+
+<h2 id="introduction">Introduction
+  <a href="#introduction"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>In this post, I will demonstrate some useful spatial operations in R. In particular, I want to do some spatial data wrangling to generate a border between two areas on a particular map, and afterwards, compute the distance of each polygon (area) to that border. This is something that is often featured in spatial regression discontinuity designs, where the &ldquo;running&rdquo; variable is the distance (positive or negative) from the border, the border being, for example, ancient borders, an area of exploitation, some territory impacted by some event, or some seized territory.</p>
+<p>I will confine myself to these things in this post:</p>
+<ul>
+<li>Combining a map of the Roman Empire (around 200AD) with a contemporary map of Dutch municipalities, thereby tracking which contemporary municipalities fell within the border of the Roman Empire about 2000 years ago.</li>
+<li>Extracting a border</li>
+<li>Making the border potentially more precise and reliable.</li>
+<li>Finally, I will focus on a slightly different spatial operation, which is the merging of different shapefiles together.</li>
+</ul>
+<p>In another blog post, I&rsquo;ll also detail how to digitize and customize historical maps, as I found the available online resources to be insufficiently clear. One good reference article for this type of task is 
+<a href="https://www.nber.org/system/files/working_papers/w27967/w27967.pdf" target="_blank" rel="noopener">Giuliano and Matranga (2020)</a>, but even that is far from a self-contained guide, and is focused on ArcGIS, a paid piece of software.</p>
+<p>To start off, we load the libraries we need during this session:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#900;font-weight:bold">library</span>(tidyverse)
+</span></span><span style="display:flex;"><span><span style="color:#900;font-weight:bold">library</span>(rgeos)
+</span></span><span style="display:flex;"><span><span style="color:#900;font-weight:bold">library</span>(sf)
+</span></span><span style="display:flex;"><span><span style="color:#900;font-weight:bold">library</span>(spatialrisk)
+</span></span><span style="display:flex;"><span><span style="color:#900;font-weight:bold">library</span>(eurostat)
+</span></span></code></pre></div>
+
+
+
+<h2 id="merging-a-map">Merging a map
+  <a href="#merging-a-map"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>First, we load in the map of the Roman Empire. The <code>cawd</code> package, courtesy of the Ancient World Mappign Center, features several maps of the ancient world, among which is the Roman Empire and its borders in several years. It provides the maps in <code>SpatialPolygons</code> objects, whereas we are going to work with the <code>sf</code> package and <code>spatialFeatures</code>. Hence we first transform it:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>rom <span style="color:#000;font-weight:bold">&lt;-</span> cawd<span style="color:#000;font-weight:bold">::</span>awmc.roman.empire.200.sp
+</span></span><span style="display:flex;"><span>rom <span style="color:#000;font-weight:bold">&lt;-</span> sf<span style="color:#000;font-weight:bold">::</span><span style="color:#900;font-weight:bold">st_as_sf</span>(rom)
+</span></span></code></pre></div><p>The map looks as follows:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>rom <span style="color:#000;font-weight:bold">|&gt;</span> 
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">ggplot</span>() <span style="color:#000;font-weight:bold">+</span> <span style="color:#900;font-weight:bold">geom_sf</span>()
+</span></span></code></pre></div><img src="/blog/2023-02-15-spatial-operations-in-r/index_files/figure-html/unnamed-chunk-3-1.png" width="672" />
+<p>We can find out what projection is used:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>sf<span style="color:#000;font-weight:bold">::</span><span style="color:#900;font-weight:bold">st_crs</span>(rom)<span style="color:#000;font-weight:bold">$</span>input
+</span></span></code></pre></div><pre tabindex="0"><code>## [1] &#34;+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0&#34;
+</code></pre><p>.. which is a standard WGS84 projection. For our purposes, it is important that the maps use the same projection, otherwise it is not possible to do operations on them jointly.</p>
+<p>Changing a projection is possible by, for example:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#900;font-weight:bold">st_transform</span>(rom, <span style="color:#099">32119</span>) <span style="color:#000;font-weight:bold">|&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">ggplot</span>() <span style="color:#000;font-weight:bold">+</span> <span style="color:#900;font-weight:bold">geom_sf</span>()
+</span></span></code></pre></div><img src="/blog/2023-02-15-spatial-operations-in-r/index_files/figure-html/unnamed-chunk-5-1.png" width="672" />
+<p>You can find interesting projections on, for example 
+<a href="https://epsg.io/map" target="_blank" rel="noopener">https://epsg.io/map</a>, searching and leaving the search bar empty. This will give you a list of possible projection. You can of course also search. Two similar websites are 
+<a href="https://SpatialReference.org" target="_blank" rel="noopener">SpatialReference.org</a> and 
+<a href="https://PROJ.org" target="_blank" rel="noopener">PROJ.org</a>.</p>
+<p>Now, let&rsquo;s load in a map containing municipalities. For brevity, I&rsquo;ll use the 2018 Dutch municipalities from the <code>spatialrisk</code> package.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>gem <span style="color:#000;font-weight:bold">&lt;-</span> spatialrisk<span style="color:#000;font-weight:bold">::</span>nl_gemeente
+</span></span><span style="display:flex;"><span>sf<span style="color:#000;font-weight:bold">::</span><span style="color:#900;font-weight:bold">sf_use_s2</span>(<span style="color:#000;font-weight:bold">FALSE</span>)
+</span></span></code></pre></div><pre tabindex="0"><code>## Spherical geometry (s2) switched off
+</code></pre><div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>gem <span style="color:#000;font-weight:bold">|&gt;</span> <span style="color:#900;font-weight:bold">ggplot</span>() <span style="color:#000;font-weight:bold">+</span> <span style="color:#900;font-weight:bold">geom_sf</span>()
+</span></span></code></pre></div><img src="/blog/2023-02-15-spatial-operations-in-r/index_files/figure-html/unnamed-chunk-6-1.png" width="672" />
+<p>Then, I use the <code>st_contains</code> function to find out which of the municipalities are contained in the Roman Empire. <code>st_contains</code> tests whether each geometry in a set of query geometries is contained within any of a set of target geometries.</p>
+<p>The difference between <code>st_contains()</code> and <code>st_within()</code> is that <code>st_contains()</code> checks whether one geometry is completely contained within another, while <code>st_within()</code> checks whether one geometry is completely within the interior of another (i.e., inside the other geometry, with no points on the boundary).</p>
+<p>The st_contains() function is one of several functions in sf that can be used to test spatial relationships between geometries. Other similar functions include:</p>
+<ul>
+<li><code>st_intersects()</code>: Tests whether two sets of geometries intersect.</li>
+<li><code>st_touches()</code>: Tests whether two sets of geometries touch at any point, but do not intersect.</li>
+<li><code>st_within()</code>: Tests whether each geometry in a set is within another set of geometries.</li>
+<li><code>st_overlaps()</code>: Tests whether two sets of geometries overlap each other.</li>
+</ul>
+<p><code>st_intersects</code> checks whether there is any intersection at all, so that is the least strict function.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>overlap <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">st_contains</span>(rom, gem)
+</span></span></code></pre></div><pre tabindex="0"><code>## although coordinates are longitude/latitude, st_contains assumes that they are
+## planar
+</code></pre><p>The output of <code>st_overlaps</code>, saved in <code>overlap</code>, contains 112 elements. For each of the 112 polygons in <code>rom</code>, it tells us with which of the <code>352</code> partially or entirely overlap with one of the geometries in <code>rom</code>. Let us now extract all of those numbers:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>numbers <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">map</span>(overlap, <span style="color:#900;font-weight:bold">function</span>(x) {x}) <span style="color:#000;font-weight:bold">|&gt;</span> <span style="color:#900;font-weight:bold">reduce</span>(c)
+</span></span></code></pre></div><p>From which we find that 189 municipalities overlap with the former Roman Empire. To find out which ones, we can integrate that into the <code>gem</code> data.frame as follows:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>gem2 <span style="color:#000;font-weight:bold">&lt;-</span> gem <span style="color:#000;font-weight:bold">|&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">mutate</span>(rom <span style="color:#000;font-weight:bold">=</span> <span style="color:#900;font-weight:bold">if_else</span>(<span style="color:#900;font-weight:bold">is.element</span>(id, numbers), <span style="color:#099">1</span>, <span style="color:#099">0</span>))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>gem2 <span style="color:#000;font-weight:bold">|&gt;</span> <span style="color:#900;font-weight:bold">ggplot</span>(<span style="color:#900;font-weight:bold">aes</span>(fill <span style="color:#000;font-weight:bold">=</span> <span style="color:#900;font-weight:bold">as.factor</span>(rom))) <span style="color:#000;font-weight:bold">+</span> <span style="color:#900;font-weight:bold">geom_sf</span>()
+</span></span></code></pre></div><img src="/blog/2023-02-15-spatial-operations-in-r/index_files/figure-html/unnamed-chunk-9-1.png" width="672" />
+<p>We can also do this in a slightly different way. A disadvantage of the preceding approach is that we might also include municipalities with only a 10% overlap, whereas we want to include only municipalities that have a substantial, say, 50% overlap. We might want to compute the intersection between the two <code>data.frame</code>s and then calculate the area of overlap:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>crude <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">st_intersects</span>(rom, gem)
+</span></span></code></pre></div><pre tabindex="0"><code>## although coordinates are longitude/latitude, st_intersects assumes that they
+## are planar
+</code></pre><div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>crude_nos <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">map</span>(crude, <span style="color:#900;font-weight:bold">function</span>(x) {x}) <span style="color:#000;font-weight:bold">|&gt;</span> <span style="color:#900;font-weight:bold">reduce</span>(c)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>gem3 <span style="color:#000;font-weight:bold">&lt;-</span> gem <span style="color:#000;font-weight:bold">|&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">mutate</span>(rom <span style="color:#000;font-weight:bold">=</span> <span style="color:#900;font-weight:bold">if_else</span>(<span style="color:#900;font-weight:bold">is.element</span>(id, crude_nos), <span style="color:#099">1</span>, <span style="color:#099">0</span>))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>gem3 <span style="color:#000;font-weight:bold">|&gt;</span> <span style="color:#900;font-weight:bold">ggplot</span>(<span style="color:#900;font-weight:bold">aes</span>(fill <span style="color:#000;font-weight:bold">=</span> <span style="color:#900;font-weight:bold">as.factor</span>(rom))) <span style="color:#000;font-weight:bold">+</span> <span style="color:#900;font-weight:bold">geom_sf</span>()
+</span></span></code></pre></div><img src="/blog/2023-02-15-spatial-operations-in-r/index_files/figure-html/unnamed-chunk-10-1.png" width="672" />
+<p>Finally, maybe the one is a little bit too conservative whereas the other is a little bit too crude. We might want to decide explicitly based on the <em>area of overlap</em>. The way in which we could do that is as follows:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Make the intersection and cutoff the data.frame at the borders</span>
+</span></span><span style="display:flex;"><span>intersect <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">st_intersection</span>(rom, gem)
+</span></span></code></pre></div><pre tabindex="0"><code>## although coordinates are longitude/latitude, st_intersection assumes that they
+## are planar
+</code></pre><pre tabindex="0"><code>## Warning: attribute variables are assumed to be spatially constant throughout all
+## geometries
+</code></pre><div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>intersect <span style="color:#000;font-weight:bold">&lt;-</span> intersect <span style="color:#000;font-weight:bold">|&gt;</span> <span style="color:#900;font-weight:bold">select</span>(id, code, areaname, geometry)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Calculate the areas of all municipalities in the gem data.frame</span>
+</span></span><span style="display:flex;"><span>gem_ar <span style="color:#000;font-weight:bold">&lt;-</span> gem <span style="color:#000;font-weight:bold">|&gt;</span> 
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">select</span>(id, code, areaname, geometry) <span style="color:#000;font-weight:bold">|&gt;</span> 
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">rename</span>(geometry_large <span style="color:#000;font-weight:bold">=</span> geometry) <span style="color:#000;font-weight:bold">|&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">mutate</span>(area_large <span style="color:#000;font-weight:bold">=</span> <span style="color:#900;font-weight:bold">st_area</span>(geometry_large))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>gem_ar
+</span></span></code></pre></div><pre tabindex="0"><code>## Simple feature collection with 352 features and 4 fields
+## Geometry type: MULTIPOLYGON
+## Dimension:     XY
+## Bounding box:  xmin: 3.358378 ymin: 50.75136 xmax: 7.217623 ymax: 53.55362
+## Geodetic CRS:  WGS 84
+## First 10 features:
+##    id   code      areaname                 geometry_large      area_large
+## 1   1 GM0014     Groningen MULTIPOLYGON (((6.772527 53... 193756466 [m^2]
+## 2   2 GM0034        Almere MULTIPOLYGON (((5.350772 52... 141345387 [m^2]
+## 3   3 GM0037   Stadskanaal MULTIPOLYGON (((7.015446 53... 121754152 [m^2]
+## 4   4 GM0047       Veendam MULTIPOLYGON (((6.961735 53...  78299593 [m^2]
+## 5   5 GM0050      Zeewolde MULTIPOLYGON (((5.58907 52.... 253523368 [m^2]
+## 6   6 GM0059 Achtkarspelen MULTIPOLYGON (((6.232173 53... 103826992 [m^2]
+## 7   7 GM0060       Ameland MULTIPOLYGON (((5.731096 53...  58647166 [m^2]
+## 8   8 GM0072     Harlingen MULTIPOLYGON (((5.472192 53...  26158524 [m^2]
+## 9   9 GM0074    Heerenveen MULTIPOLYGON (((5.927581 53... 200849936 [m^2]
+## 10 10 GM0080    Leeuwarden MULTIPOLYGON (((5.838649 53... 258209492 [m^2]
+</code></pre><div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Calculate the areas of all municipalities in the intersected data.frame</span>
+</span></span><span style="display:flex;"><span>intersect <span style="color:#000;font-weight:bold">&lt;-</span> intersect <span style="color:#000;font-weight:bold">|&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">mutate</span>(area_small <span style="color:#000;font-weight:bold">=</span> <span style="color:#900;font-weight:bold">st_area</span>(geometry)) <span style="color:#000;font-weight:bold">|&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">st_drop_geometry</span>()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>intersect <span style="color:#000;font-weight:bold">|&gt;</span> <span style="color:#900;font-weight:bold">head</span>(<span style="color:#099">5</span>)
+</span></span></code></pre></div><pre tabindex="0"><code>##     id   code  areaname      area_small
+## 6    2 GM0034    Almere   2418600 [m^2]
+## 6.1  5 GM0050  Zeewolde   1986671 [m^2]
+## 6.2 45 GM0202    Arnhem  33664091 [m^2]
+## 6.3 46 GM0203 Barneveld 103850548 [m^2]
+## 6.4 47 GM0209 Beuningen  47523926 [m^2]
+</code></pre><div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Filter the observations based on the ratio between the areas</span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># in the intersect and gem data.frames</span>
+</span></span><span style="display:flex;"><span>final <span style="color:#000;font-weight:bold">&lt;-</span> gem_ar <span style="color:#000;font-weight:bold">|&gt;</span> <span style="color:#900;font-weight:bold">left_join</span>(intersect) <span style="color:#000;font-weight:bold">|&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">mutate</span>(ratio <span style="color:#000;font-weight:bold">=</span> area_small <span style="color:#000;font-weight:bold">/</span> area_large)
+</span></span></code></pre></div><pre tabindex="0"><code>## Joining, by = c(&#34;id&#34;, &#34;code&#34;, &#34;areaname&#34;)
+</code></pre><p>Then we could plot which municipalities we include based on a certain threshold, e.g. 20%:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>final <span style="color:#000;font-weight:bold">&lt;-</span> final <span style="color:#000;font-weight:bold">|&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">mutate</span>(include <span style="color:#000;font-weight:bold">=</span> <span style="color:#900;font-weight:bold">if_else</span>(<span style="color:#900;font-weight:bold">as.numeric</span>(ratio) <span style="color:#000;font-weight:bold">&gt;</span> <span style="color:#099">0.2</span>, <span style="color:#099">1</span>, <span style="color:#099">0</span>)) 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>final <span style="color:#000;font-weight:bold">|&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">ggplot</span>(<span style="color:#900;font-weight:bold">aes</span>(fill <span style="color:#000;font-weight:bold">=</span> include)) <span style="color:#000;font-weight:bold">+</span> <span style="color:#900;font-weight:bold">geom_sf</span>()
+</span></span></code></pre></div><img src="/blog/2023-02-15-spatial-operations-in-r/index_files/figure-html/unnamed-chunk-12-1.png" width="672" />
+<p>This seems near-perfect, as we can now:</p>
+<ul>
+<li>Distinguish between &ldquo;fuzzy&rdquo; and &ldquo;absolute&rdquo; municipalities.</li>
+<li>Control the threshold ourselves</li>
+<li>Decide which municipalities to include based on this threshold</li>
+<li>Consider that some municipalities didn&rsquo;t actually exist in 200AD because of the creation of new land (those are some of the dark blue areas!)</li>
+</ul>
+
+
+
+
+<h2 id="extracting-a-border">Extracting a border
+  <a href="#extracting-a-border"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>Now, let&rsquo;s use <code>final</code> with the condition that <code>ratio</code> &gt; 0.2 and find the border:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>boundary <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">st_union</span>(final <span style="color:#000;font-weight:bold">%&gt;%</span> <span style="color:#900;font-weight:bold">filter</span>(<span style="color:#900;font-weight:bold">as.numeric</span>(ratio) <span style="color:#000;font-weight:bold">&gt;</span> <span style="color:#099">0.2</span>)) <span style="color:#000;font-weight:bold">%&gt;%</span> <span style="color:#900;font-weight:bold">st_boundary</span>()
+</span></span></code></pre></div><pre tabindex="0"><code>## although coordinates are longitude/latitude, st_union assumes that they are
+## planar
+</code></pre><p>We did this by first merging all polygons of municipalities together based on the condition that ratio be greater than 0.2, and then extracting the outer boundary of that polygon:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>boundary <span style="color:#000;font-weight:bold">|&gt;</span> <span style="color:#900;font-weight:bold">ggplot</span>() <span style="color:#000;font-weight:bold">+</span> <span style="color:#900;font-weight:bold">geom_sf</span>()
+</span></span></code></pre></div><img src="/blog/2023-02-15-spatial-operations-in-r/index_files/figure-html/unnamed-chunk-14-1.png" width="672" />
+<p>One way now to find the distance to the border is to naively use the entire border:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>final_dist <span style="color:#000;font-weight:bold">&lt;-</span> final <span style="color:#000;font-weight:bold">%&gt;%</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">mutate</span>(distance <span style="color:#000;font-weight:bold">=</span> <span style="color:#900;font-weight:bold">as.numeric</span>(<span style="color:#900;font-weight:bold">st_distance</span>(boundary, final)))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>final_dist <span style="color:#000;font-weight:bold">|&gt;</span> <span style="color:#900;font-weight:bold">ggplot</span>(<span style="color:#900;font-weight:bold">aes</span>(fill <span style="color:#000;font-weight:bold">=</span> distance <span style="color:#000;font-weight:bold">&lt;</span> <span style="color:#099">10000</span>)) <span style="color:#000;font-weight:bold">+</span> <span style="color:#900;font-weight:bold">geom_sf</span>()
+</span></span></code></pre></div><img src="/blog/2023-02-15-spatial-operations-in-r/index_files/figure-html/unnamed-chunk-15-1.png" width="672" />
+<p>Of course, we only want to consider the distance from the northern border, as the other borders are not actually borders of the former Roman empire. We therefore have to make the border a little bit more precise.</p>
+
+
+
+
+<h2 id="making-the-border-more-precise">Making the border more precise
+  <a href="#making-the-border-more-precise"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>We can do this by only considering the northern part of the border and by iterating through the latitudes from a start to an end point. Then, we can extract only the relevant part of the border based on an interpolation:</p>
+<ul>
+<li>First, we extract the boundary and group and find the northern-most coordinate:</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>spl <span style="color:#000;font-weight:bold">&lt;-</span> boundary <span style="color:#000;font-weight:bold">%&gt;%</span> 
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">st_cast</span>(<span style="color:#d14">&#34;POINT&#34;</span>) <span style="color:#000;font-weight:bold">%&gt;%</span> 
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">as</span>(<span style="color:#d14">&#34;Spatial&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>spl_grouped <span style="color:#000;font-weight:bold">&lt;-</span> spl<span style="color:#000;font-weight:bold">@</span>coords <span style="color:#000;font-weight:bold">%&gt;%</span> 
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">as.data.frame</span>() <span style="color:#000;font-weight:bold">%&gt;%</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">group_by</span>(coords.x1) <span style="color:#000;font-weight:bold">%&gt;%</span> 
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">arrange</span>(coords.x1) <span style="color:#000;font-weight:bold">%&gt;%</span> 
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">slice_max</span>(coords.x2)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>spl_grouped
+</span></span></code></pre></div><pre tabindex="0"><code>## # A tibble: 557 × 2
+## # Groups:   coords.x1 [546]
+##    coords.x1 coords.x2
+##        &lt;dbl&gt;     &lt;dbl&gt;
+##  1      3.36      51.3
+##  2      3.37      51.4
+##  3      3.37      51.3
+##  4      3.37      51.3
+##  5      3.38      51.3
+##  6      3.39      51.3
+##  7      3.41      51.3
+##  8      3.43      51.4
+##  9      3.43      51.5
+## 10      3.44      51.4
+## # … with 547 more rows
+</code></pre><ul>
+<li>Secondly, we can start from a given latitude, and find the maximum longitude for that point to only extract the northern border. I introduce two parameters, the one for interpolating between the <code>param</code> highest points, and the other <code>param2</code> for the granularity of selecting points throughout the loop.</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>latitudes <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">seq</span>(<span style="color:#099">4.4</span>, <span style="color:#099">6.3</span>, by <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">0.03</span>)
+</span></span><span style="display:flex;"><span>param <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#099">3</span>
+</span></span><span style="display:flex;"><span>param2 <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#099">0.1</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>interpolation <span style="color:#000;font-weight:bold">&lt;-</span> latitudes <span style="color:#000;font-weight:bold">%&gt;%</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">map_dbl</span>(<span style="color:#900;font-weight:bold">function</span>(x) { 
+</span></span><span style="display:flex;"><span>    spl_grouped <span style="color:#000;font-weight:bold">%&gt;%</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#900;font-weight:bold">ungroup</span>() <span style="color:#000;font-weight:bold">%&gt;%</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#900;font-weight:bold">filter</span>(<span style="color:#900;font-weight:bold">between</span>(coords.x1, x <span style="color:#000;font-weight:bold">-</span> param2, x <span style="color:#000;font-weight:bold">+</span> param2)) <span style="color:#000;font-weight:bold">%&gt;%</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#900;font-weight:bold">slice_max</span>(coords.x2, n <span style="color:#000;font-weight:bold">=</span> param) <span style="color:#000;font-weight:bold">%&gt;%</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#900;font-weight:bold">pull</span>(coords.x2) <span style="color:#000;font-weight:bold">%&gt;%</span> 
+</span></span><span style="display:flex;"><span>      <span style="color:#900;font-weight:bold">mean</span>()
+</span></span><span style="display:flex;"><span>    })
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>line <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">st_linestring</span>(<span style="color:#900;font-weight:bold">matrix</span>(<span style="color:#900;font-weight:bold">c</span>(latitudes, interpolation), ncol <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">2</span>))
+</span></span><span style="display:flex;"><span>line_sfc <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">st_sfc</span>(line, crs <span style="color:#000;font-weight:bold">=</span> <span style="color:#900;font-weight:bold">st_crs</span>(<span style="color:#099">4326</span>))
+</span></span><span style="display:flex;"><span>line_sf <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">st_sf</span>(geometry <span style="color:#000;font-weight:bold">=</span> line_sfc)
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>line_sf <span style="color:#000;font-weight:bold">|&gt;</span> <span style="color:#900;font-weight:bold">ggplot</span>() <span style="color:#000;font-weight:bold">+</span> <span style="color:#900;font-weight:bold">geom_sf</span>()
+</span></span></code></pre></div><img src="/blog/2023-02-15-spatial-operations-in-r/index_files/figure-html/unnamed-chunk-18-1.png" width="672" />
+<p>Now, we can integrate this new line into our original <code>gem2</code> data.frame and calculate the distance to it:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>df <span style="color:#000;font-weight:bold">&lt;-</span> line_sf <span style="color:#000;font-weight:bold">%&gt;%</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">rename</span>(geometry_large <span style="color:#000;font-weight:bold">=</span> geometry) <span style="color:#000;font-weight:bold">|&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">mutate</span>(id <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">1000</span>, code <span style="color:#000;font-weight:bold">=</span> <span style="color:#000;font-weight:bold">NA</span>, areaname <span style="color:#000;font-weight:bold">=</span> <span style="color:#d14">&#39;border&#39;</span>, area_large <span style="color:#000;font-weight:bold">=</span> <span style="color:#000;font-weight:bold">NA</span>, area_small <span style="color:#000;font-weight:bold">=</span> <span style="color:#000;font-weight:bold">NA</span>) <span style="color:#000;font-weight:bold">%&gt;%</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">bind_rows</span>(final)
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#900;font-weight:bold">ggplot</span>() <span style="color:#000;font-weight:bold">+</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">geom_sf</span>(data <span style="color:#000;font-weight:bold">=</span> df <span style="color:#000;font-weight:bold">%&gt;%</span> <span style="color:#900;font-weight:bold">filter</span>(areaname <span style="color:#000;font-weight:bold">!=</span> <span style="color:#d14">&#39;border&#39;</span>), <span style="color:#900;font-weight:bold">aes</span>(fill <span style="color:#000;font-weight:bold">=</span> <span style="color:#900;font-weight:bold">as.numeric</span>(ratio) <span style="color:#000;font-weight:bold">&gt;</span> <span style="color:#099">0.2</span>)) <span style="color:#000;font-weight:bold">+</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">geom_sf</span>(data <span style="color:#000;font-weight:bold">=</span> df <span style="color:#000;font-weight:bold">%&gt;%</span> <span style="color:#900;font-weight:bold">filter</span>(areaname <span style="color:#000;font-weight:bold">==</span> <span style="color:#d14">&#39;border&#39;</span>), color <span style="color:#000;font-weight:bold">=</span> <span style="color:#d14">&#39;blue&#39;</span>, size <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">1</span>)
+</span></span></code></pre></div><img src="/blog/2023-02-15-spatial-operations-in-r/index_files/figure-html/unnamed-chunk-20-1.png" width="672" />
+<p>Calculating the distance can then be done as follows:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>df <span style="color:#000;font-weight:bold">&lt;-</span> df <span style="color:#000;font-weight:bold">|&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">mutate</span>(distance <span style="color:#000;font-weight:bold">=</span> <span style="color:#900;font-weight:bold">st_distance</span>(df, line_sf))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>df <span style="color:#000;font-weight:bold">|&gt;</span> <span style="color:#900;font-weight:bold">ggplot</span>(<span style="color:#900;font-weight:bold">aes</span>(fill <span style="color:#000;font-weight:bold">=</span> <span style="color:#900;font-weight:bold">as.numeric</span>(distance))) <span style="color:#000;font-weight:bold">+</span> 
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">geom_sf</span>() <span style="color:#000;font-weight:bold">+</span> 
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">scale_fill_continuous</span>(type<span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#39;viridis&#39;</span>)
+</span></span></code></pre></div><img src="/blog/2023-02-15-spatial-operations-in-r/index_files/figure-html/unnamed-chunk-21-1.png" width="672" />
+
+
+
+
+<h2 id="merging-of-different-shapefiles">Merging of different shapefiles
+  <a href="#merging-of-different-shapefiles"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>Finally, I will focus on a slightly different spatial operation, which is the merging of different shapefiles together. As it is difficult to use the Roman Empire map for this, I will use more contemporary data from the <code>eurostat</code> package.</p>
+
+        
+        <details closed class="f6 fw7 input-reset">
+  <dl class="f6 lh-copy">
+    <dt class="fw7">Posted on:</dt>
+    <dd class="fw5 ml0">February 15, 2023</dd>
+  </dl>
+  <dl class="f6 lh-copy">
+    <dt class="fw7">Length:</dt>
+    <dd class="fw5 ml0">9 minute read, 1820 words</dd>
+  </dl>
+  
+  
+  
+  <dl class="f6 lh-copy">
+    <dt class="fw7">See Also:</dt>
+    
+  </dl>
+</details>
+
+      </section>
+      <footer class="post-footer">
+        <div class="post-pagination dt w-100 mt4 mb2">
+  
+  
+  
+  
+    <a class="next dtc pl2 tr v-top fw6"
+    href="/blog/2023-01-20-radio-broadcast-about-my-phd-thesis/">Radio broadcast about my PhD Thesis &rarr;</a>
+  
+</div>
+
+      </footer>
+    </article>
+    
+      
+<div class="post-comments pa0 pa4-l mt4">
+  
+  <script src="https://utteranc.es/client.js"
+          repo="basm92/new_website"
+          issue-term="pathname"
+          theme="boxy-light"
+          label="comments :crystal_ball:"
+          crossorigin="anonymous"
+          async
+          type="text/javascript">
+  </script>
+  
+</div>
+
+    
+  </section>
+</main>
+<footer class="site-footer pv4 bt b--transparent ph5" role="contentinfo">
+  <nav class="db dt-l w-100">
+    <p class="site-copyright f7 db dtc-l v-mid w-100 w-33-l tc tl-l pv2 pv0-l mv0 lh-copy">
+      &copy; 2023 Bas Machielsen
+      <span class="middot-divider"></span>
+      Made with <span xmlns:dct="http://purl.org/dc/terms/" property="dct:title"><a xmlns:dct="http://purl.org/dc/terms/" href="https://github.com/hugo-apero/" rel="dct:source">Hugo Apéro</a></span>.
+      <br />
+      
+Based on <span xmlns:dct="http://purl.org/dc/terms/" property="dct:title"><a xmlns:dct="http://purl.org/dc/terms/" href="https://github.com/formspree/blogophonic-hugo" rel="dct:source">Blogophonic</a></span> by <a xmlns:cc="http://creativecommons.org/ns#" href="https://formspree.io" property="cc:attributionName" rel="cc:attributionURL">Formspree</a>.
+    </p>
+    
+    <div class="site-social-links db dtc-l v-mid w-100 w-33-l tc pv2 pv0-l mv0">
+      <div class="social-icon-links" aria-hidden="true">
+  
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://github.com/basm92" title="github" target="_blank" rel="noopener">
+      <i class="fab fa-github fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://scholar.google.com/citations?user=bS8uo44AAAAJ" title="google" target="_blank" rel="noopener">
+      <i class="fab fa-google fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://twitter.com/basss92" title="twitter" target="_blank" rel="noopener">
+      <i class="fab fa-twitter fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="mailto:a.h.machielsen@uu.nl" title="envelope" >
+      <i class="fas fa-envelope fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="mailto:basmachielsen@live.nl" title="envelope" >
+      <i class="far fa-envelope fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://orcid.org/0000-0002-9692-0615" title="orcid" target="_blank" rel="noopener">
+      <i class="ai ai-orcid fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="/blog/index.xml" title="rss" >
+      <i class="fas fa-rss fa-lg fa-fw"></i>
+    </a>
+  
+</div>
+
+    </div>
+    
+    <div class="site-links f6 db dtc-l v-mid w-100 w-67-l tc tr-l pv2 pv0-l mv0">
+      
+      <a class="dib pv1 ph2 link" href="/license/" title="License">License</a>
+      
+      <a class="dib pv1 ph2 link" href="/contact/" title="Contact form">Contact</a>
+      
+      <a class="dib pv1 ph2 link" href="/contributors/" title="Contributors">Contributors</a>
+      
+    </div>
+  </nav>
+  
+    <script>
+
+    var i, text, code, codes = document.getElementsByTagName('code');
+    for (let i = 0; i < codes.length;) {
+      code = codes[i];
+      if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+        text = code.textContent;
+        if (/^\$[^$]/.test(text) && /[^$]\$$/.test(text)) {
+          text = text.replace(/^\$/, '\\(').replace(/\$$/, '\\)');
+          code.textContent = text;
+        }
+        if (/^\\\((.|\s)+\\\)$/.test(text) ||
+            /^\\\[(.|\s)+\\\]$/.test(text) ||
+            /^\$(.|\s)+\$$/.test(text) ||
+            /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+          code.outerHTML = code.innerHTML;  
+          continue;
+        }
+      }
+      i++;
+    }
+</script>
+
+  
+    
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.css" integrity="sha384-RZU/ijkSsFbcmivfdRBQDtwuwVqK7GMOw6IMvKyeWL2K5UAlyp6WonmB8m7Jd0Hn" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.js" integrity="sha384-pK1WpvzWVBQiP0/GjnvRxV4mOb0oxFuyRxJlk6vVw146n3egcN5C925NCP7a7BY8" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/contrib/auto-render.min.js" integrity="sha384-vZTG03m+2yp6N6BNi5iM4rW4oIwk5DfcNdFfxkk9ZWpDriOkXX8voJBFrAO7MpVl" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
+
+
+
+    
+  
+  
+</footer>
+
+      </div>
+    </body>
+</html>

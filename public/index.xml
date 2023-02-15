@@ -6,7 +6,7 @@
     <description>Recent content on Bas Machielsen</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Fri, 20 Jan 2023 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 15 Feb 2023 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Clio</title>
       <link>/collection/clio/</link>
@@ -23,6 +23,15 @@
       
       <guid>/collection/hdng/</guid>
       <description>hdng is a package facilitating the use of the HDNG Database, a database containing quantative information in various aspects of Dutch municipalities from about 1800 to the 1980&amp;rsquo;s. This package aids the user in finding their way through the database, allowing them to search for wanted variables, browse within categories, and finally, make a query to extract the wanted data.</description>
+    </item>
+    
+    <item>
+      <title>Spatial Operations in R</title>
+      <link>/blog/2023-02-15-spatial-operations-in-r/</link>
+      <pubDate>Wed, 15 Feb 2023 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2023-02-15-spatial-operations-in-r/</guid>
+      <description>Introduction In this post, I will demonstrate some useful spatial operations in R. In particular, I want to do some spatial data wrangling to generate a border between two areas on a particular map, and afterwards, compute the distance of each polygon (area) to that border. This is something that is often featured in spatial regression discontinuity designs, where the &amp;ldquo;running&amp;rdquo; variable is the distance (positive or negative) from the border, the border being, for example, ancient borders, an area of exploitation, some territory impacted by some event, or some seized territory.</description>
     </item>
     
     <item>
