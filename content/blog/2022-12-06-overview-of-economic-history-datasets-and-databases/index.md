@@ -229,4 +229,11 @@ https://www.insee.fr/fr/statistiques?debut=0&categorie=3
 | Netherlands | Volkstellingen (Censuses) | [Link](http://www.volkstellingen.nl/) |
 | Netherlands | Historical Database of Dutch Municipalities | [Link](https://datasets.iisg.amsterdam/dataverse/HDNG?q=&types=dataverses%3Adatasets&sort=dateSort&order=desc&page=1) | 
 
+**Netherlands:** You can also access to miscellaneous datasets from CBS Open Data in the following way:
 
+```{r eval = FALSE}
+library(cbsodataR)
+
+toc <- cbsodataR::cbs_get_toc()
+gem_dat <- toc |> filter(stringr::str_detect(Title, 'gemeente')) 
+```
