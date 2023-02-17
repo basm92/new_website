@@ -47,6 +47,7 @@ In this post, I'll give an overview and short description of various commonly-us
 31. [Federico-Tena World Trade Historical Database](#federico-tena-world-trade-historical-database)
 32. [Statistical Agencies, Parliaments](#statistical-agencies-parliaments)
 33. [GIS Databases](#historical-gis-databases)
+34. [Municipal Data](#municipal-data)
 
 ## World Values Survey
 
@@ -198,6 +199,7 @@ This entry should serve as a repository for databases detailing countries, the d
 |Netherlands | CBS Statistics Data Portal | [R Package](https://cran.r-project.org/web/packages/cbsodataR/index.html), [Python package](https://pypi.org/project/cbsodata/), [Documentation](https://www.cbs.nl/en-gb/our-services/open-data/statline-as-open-data/quick-start-guide) |
 | Kazakhstan | Open Data Portal | [Link](https://data.egov.kz/) |
 
+
 ## Historical GIS Databases
 
 This entry should serve as a repository for historical GIS databases. To be updated more extensively. 
@@ -211,4 +213,20 @@ This entry should serve as a repository for historical GIS databases. To be upda
 | China | Various snapshots (1820-1990) of historical China | [Link](https://chgis.fairbank.fas.harvard.edu/) |
 
 There are also several other sources on the [Historical GIS Network Website](http://hgis.org.uk/resources.htm), but most of the links are defunct. 
+
+## Municipal Data
+
+https://www.insee.fr/fr/statistiques?debut=0&categorie=3
+
+| Country | Description | Link |
+| --- | ---| --- |
+| France | Municipal (_Commune_) Statistics | [Link](https://statistiques-locales.insee.fr/#c=home) |
+| France | INSEE (Communal/Regional) Statistics | [Link](https://www.insee.fr/fr/statistiques?debut=0&categorie=3) |
+| Germany | Statistikportal Deutschland | [Link](https://www.statistikportal.de/de/datenbanken) |
+| Germany | Regionaldatenbank Deutschland | [Link](https://www.regionalstatistik.de/genesis/online/) |
+| Germany | Forschungsdatenzentrum | [Link](https://www.forschungsdatenzentrum.de) |
+| Netherlands | Waar Staat Je Gemeente | [Link](https://www.waarstaatjegemeente.nl/jive) |
+| Netherlands | Volkstellingen (Censuses) | [Link](http://www.volkstellingen.nl/) |
+| Netherlands | Historical Database of Dutch Municipalities | [Link](https://datasets.iisg.amsterdam/dataverse/HDNG?q=&types=dataverses%3Adatasets&sort=dateSort&order=desc&page=1) | 
+
 

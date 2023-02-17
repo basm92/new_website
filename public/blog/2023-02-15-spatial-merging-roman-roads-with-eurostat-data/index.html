@@ -46,9 +46,9 @@
   <meta itemprop="name" content="Spatial Merging Roman Roads with Eurostat Data">
 <meta itemprop="description" content="Introduction In this short blog post, I focus on combining several European municipal (LAU, Local Urban Areas) shapefiles, combined with data on roads and cities in the Roman Empire, to find relationships between present-day outcomes and deep-routed interventions as far as more than 2000 years ago.
 Let us first load the libraries we need to perform operations.
-library(tidyverse) library(giscoR) library(sf) library(cawd) For robustness, and out of curiosity, I will use two roads files."><meta itemprop="datePublished" content="2023-02-15T00:00:00+00:00" />
+library(tidyverse) library(giscoR) library(sf) library(cawd) library(regions) For robustness, and out of curiosity, I will use two roads files."><meta itemprop="datePublished" content="2023-02-15T00:00:00+00:00" />
 <meta itemprop="dateModified" content="2023-02-15T00:00:00+00:00" />
-<meta itemprop="wordCount" content="541"><meta itemprop="image" content="/blog/2023-02-15-spatial-merging-roman-roads-with-eurostat-data/featured.png">
+<meta itemprop="wordCount" content="2037"><meta itemprop="image" content="/blog/2023-02-15-spatial-merging-roman-roads-with-eurostat-data/featured.png">
 <meta itemprop="keywords" content="" />
   
   
@@ -127,7 +127,11 @@ library(tidyverse) library(giscoR) library(sf) library(cawd) For robustness, and
 
       </header>
       <section class="post-body pt5 pb4">
-        
+        <script src="/blog/2023-02-15-spatial-merging-roman-roads-with-eurostat-data/index_files/kePrint/kePrint.js"></script>
+<link href="/blog/2023-02-15-spatial-merging-roman-roads-with-eurostat-data/index_files/lightable/lightable.css" rel="stylesheet" />
+<script src="/blog/2023-02-15-spatial-merging-roman-roads-with-eurostat-data/index_files/kePrint/kePrint.js"></script>
+<link href="/blog/2023-02-15-spatial-merging-roman-roads-with-eurostat-data/index_files/lightable/lightable.css" rel="stylesheet" />
+
 
 
 
@@ -143,10 +147,10 @@ library(tidyverse) library(giscoR) library(sf) library(cawd) For robustness, and
 </span></span><span style="display:flex;"><span><span style="color:#900;font-weight:bold">library</span>(giscoR)
 </span></span><span style="display:flex;"><span><span style="color:#900;font-weight:bold">library</span>(sf)
 </span></span><span style="display:flex;"><span><span style="color:#900;font-weight:bold">library</span>(cawd)
+</span></span><span style="display:flex;"><span><span style="color:#900;font-weight:bold">library</span>(regions)
 </span></span></code></pre></div><p>For robustness, and out of curiosity, I will use two roads files. One of them is in the <code>cawd</code> package, and contains roads that existed at about 200AD:</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>roads <span style="color:#000;font-weight:bold">&lt;-</span> cawd<span style="color:#000;font-weight:bold">::</span>darmc.roman.roads.major.sp <span style="color:#000;font-weight:bold">|&gt;</span> <span style="color:#900;font-weight:bold">st_as_sf</span>()
-</span></span></code></pre></div><pre tabindex="0"><code>## Loading required package: sp
-</code></pre><p>The other is found 
+</span></span></code></pre></div><p>The other is found 
 <a href="http://awmc.unc.edu/awmc/map_data/shapefiles/ba_roads/" target="_blank" rel="noopener">here</a>, which is derived from the <em>Barrington Atlas of the Greek and Roman World</em>.</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>roads_alt <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">read_sf</span>(<span style="color:#d14">&#34;~/Downloads/shp_roads/ba_roads.shp&#34;</span>)
 </span></span></code></pre></div><p>I&rsquo;ll also use data on Roman cities, from 
@@ -155,18 +159,34 @@ library(tidyverse) library(giscoR) library(sf) library(cawd) For robustness, and
 </span></span><span style="display:flex;"><span><span style="color:#900;font-weight:bold">download.file</span>(url, destfile <span style="color:#000;font-weight:bold">=</span> <span style="color:#d14">&#39;roman_cities.csv&#39;</span>)
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>cities <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">read_csv</span>(<span style="color:#d14">&#39;roman_cities.csv&#39;</span>)
-</span></span></code></pre></div><pre tabindex="0"><code>## Rows: 1388 Columns: 12
-## ── Column specification ────────────────────────────────────────────────────────
-## Delimiter: &#34;,&#34;
-## chr (9): Primary Key, Ancient Toponym, Modern Toponym, Province, Country, Ba...
-## dbl (3): Start Date, Longitude (X), Latitude (Y)
-## 
-## ℹ Use `spec()` to retrieve the full column specification for this data.
-## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-</code></pre><p>The shapefiles at the LAU level can be downloaded with the help of the <code>giscoR</code> package, an interface to the API of Eurostat. Alternatively, it is available 
+</span></span></code></pre></div><p>For the contemporary regional data, we first have to know what the NUTS system is.</p>
+<p>The Nomenclature of Territorial Units for Statistics (NUTS) is a classification system developed by Eurostat, the statistical office of the European Union. It provides a hierarchical system of administrative units for statistical purposes, based on a harmonized division of the European territory. The NUTS classification is used for the collection, development, and harmonization of European regional statistics, and it is the standard for reporting regional data to the European Union.</p>
+<p>The NUTS classification consists of three hierarchical levels:</p>
+<ul>
+<li>NUTS 1: major socio-economic regions</li>
+<li>NUTS 2: basic regions for the application of regional policies</li>
+<li>NUTS 3: small regions for specific diagnoses and analyses</li>
+</ul>
+<p>Each level is defined based on a combination of administrative and geographical criteria, and the classification is regularly updated to reflect changes in the administrative boundaries of European countries.</p>
+<p>Beyond the lowest NUTS level, there are also yet smaller subdivisions. The LAU classification system consists of two levels:</p>
+<ul>
+<li>LAU 1: level of the larger administrative units, which can be either a municipality or a group of municipalities that form a joint authority</li>
+<li>LAU 2: level of the smaller administrative units, which correspond to individual municipalities or local authorities</li>
+</ul>
+<p>In this blog, I&rsquo;ll be using shapefiles at the LAU1 level. The shapefiles at the LAU level can be downloaded with the help of the <code>giscoR</code> package, an interface to the API of Eurostat. Alternatively, it is available 
 <a href="https://ec.europa.eu/eurostat/web/gisco/geodata/reference-data/administrative-units-statistical-units/lau" target="_blank" rel="noopener">here</a>. Let us first focus on France and Germany, for simplicity.</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>lau <span style="color:#000;font-weight:bold">&lt;-</span> giscoR<span style="color:#000;font-weight:bold">::</span><span style="color:#900;font-weight:bold">gisco_get_lau</span>(year <span style="color:#000;font-weight:bold">=</span> <span style="color:#d14">&#39;2020&#39;</span>, country <span style="color:#000;font-weight:bold">=</span> <span style="color:#900;font-weight:bold">c</span>(<span style="color:#d14">&#34;Germany&#34;</span> , <span style="color:#d14">&#34;France&#34;</span>))
-</span></span></code></pre></div><p>We need to exclude the overseas territories of France. Let us do that:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>lau <span style="color:#000;font-weight:bold">&lt;-</span> giscoR<span style="color:#000;font-weight:bold">::</span><span style="color:#900;font-weight:bold">gisco_get_lau</span>(year <span style="color:#000;font-weight:bold">=</span> <span style="color:#d14">&#39;2019&#39;</span>, country <span style="color:#000;font-weight:bold">=</span> <span style="color:#900;font-weight:bold">c</span>(<span style="color:#d14">&#34;Germany&#34;</span> , <span style="color:#d14">&#34;France&#34;</span>))
+</span></span></code></pre></div>
+
+
+
+<h2 id="cleaning-the-maps">Cleaning the maps
+  <a href="#cleaning-the-maps"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>We need to exclude the overseas territories of France. Let us do that:</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>xmin <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#099">-10</span>
 </span></span><span style="display:flex;"><span>xmax <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#099">20</span>
 </span></span><span style="display:flex;"><span>ymin <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#099">40</span>
@@ -175,24 +195,22 @@ library(tidyverse) library(giscoR) library(sf) library(cawd) For robustness, and
 </span></span><span style="display:flex;"><span>square <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">st_sf</span>(<span style="color:#900;font-weight:bold">st_as_sfc</span>(box))
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>fr_gr <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">st_intersection</span>(lau, square) 
-</span></span></code></pre></div><pre tabindex="0"><code>## Warning: attribute variables are assumed to be spatially constant throughout all
-## geometries
-</code></pre><div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>fr_gr <span style="color:#000;font-weight:bold">|&gt;</span> <span style="color:#900;font-weight:bold">ggplot</span>() <span style="color:#000;font-weight:bold">+</span> <span style="color:#900;font-weight:bold">geom_sf</span>()
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>fr_gr <span style="color:#000;font-weight:bold">|&gt;</span> <span style="color:#900;font-weight:bold">ggplot</span>() <span style="color:#000;font-weight:bold">+</span> <span style="color:#900;font-weight:bold">geom_sf</span>()
 </span></span></code></pre></div><img src="/blog/2023-02-15-spatial-merging-roman-roads-with-eurostat-data/index_files/figure-html/unnamed-chunk-8-1.png" width="672" />
 
 
 
 
-<h2 id="merging-the-data-together">Merging the data together
-  <a href="#merging-the-data-together"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+<h2 id="bringing-the-data-together">Bringing the data together
+  <a href="#bringing-the-data-together"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
       <path d="M0 0h24v24H0z" fill="currentColor"></path>
       <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
     </svg></a>
 </h2>
-<p>Since the data should be in the same projection:</p>
+<p>Since the data should be in the same projection, we should check that:</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#900;font-weight:bold">st_crs</span>(fr_gr) <span style="color:#000;font-weight:bold">==</span> <span style="color:#900;font-weight:bold">st_crs</span>(roads)
 </span></span></code></pre></div><pre tabindex="0"><code>## [1] TRUE
-</code></pre><p>.. it should be possible to merge the datasets together. This can be done by <code>bind_rows</code>, but we want to make sure that the geometry variables are under one variable:</p>
+</code></pre><p>.. and it should be possible to merge the datasets together. This can be done by <code>bind_rows</code>, but we want to make sure that the geometry variables are under one variable:</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>lau_roads <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">bind_rows</span>(fr_gr <span style="color:#000;font-weight:bold">|&gt;</span> <span style="color:#900;font-weight:bold">rename</span>(geometry <span style="color:#000;font-weight:bold">=</span> `_ogr_geometry_`), roads)
 </span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#900;font-weight:bold">ggplot</span>() <span style="color:#000;font-weight:bold">+</span> <span style="color:#900;font-weight:bold">geom_sf</span>(data <span style="color:#000;font-weight:bold">=</span> lau_roads <span style="color:#000;font-weight:bold">|&gt;</span> <span style="color:#900;font-weight:bold">filter</span>(<span style="color:#000;font-weight:bold">!</span><span style="color:#900;font-weight:bold">is.na</span>(id))) <span style="color:#000;font-weight:bold">+</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">geom_sf</span>(data <span style="color:#000;font-weight:bold">=</span> lau_roads <span style="color:#000;font-weight:bold">|&gt;</span> <span style="color:#900;font-weight:bold">filter</span>(<span style="color:#000;font-weight:bold">!</span><span style="color:#900;font-weight:bold">is.na</span>(OBJECTID)), color <span style="color:#000;font-weight:bold">=</span> <span style="color:#d14">&#39;blue&#39;</span>)
@@ -211,14 +229,545 @@ library(tidyverse) library(giscoR) library(sf) library(cawd) For robustness, and
 </span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">geom_sf</span>(data <span style="color:#000;font-weight:bold">=</span> lau_roads2 <span style="color:#000;font-weight:bold">|&gt;</span> <span style="color:#900;font-weight:bold">filter</span>(<span style="color:#000;font-weight:bold">!</span><span style="color:#900;font-weight:bold">is.na</span>(OBJECTID)), color <span style="color:#000;font-weight:bold">=</span> <span style="color:#d14">&#39;blue&#39;</span>)
 </span></span></code></pre></div><img src="/blog/2023-02-15-spatial-merging-roman-roads-with-eurostat-data/index_files/figure-html/unnamed-chunk-13-1.png" width="672" />
 <p>Now we have obtained a nice map of Roman roads in Germany and France, and we can do some spatial data manipulation to calculated the minimum distances of the centroid of each of these communes to the Roman roads. This can be the basis of a regression design attempting to investigate the persistent impact of these roads.</p>
-<p>Finish:</p>
-<ul>
-<li>Doing this</li>
-<li>Also do this with cities and compute distances from city centroids</li>
-<li>Also show graphically how it works with cities</li>
-<li>Use eurostat data to get some other variables</li>
-<li>Control for region-specific dummies in regressions!</li>
-</ul>
+<p>We also might want to use NUTS or higher-level classifications of areas, for which we need a table that goes from LAU to NUTS3. We can use the <code>region</code> package to get access to such a table:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>nuts_lau_table <span style="color:#000;font-weight:bold">&lt;-</span> regions<span style="color:#000;font-weight:bold">::</span>nuts_lau_2019 <span style="color:#000;font-weight:bold">|&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">filter</span>(<span style="color:#900;font-weight:bold">is.element</span>(country, <span style="color:#900;font-weight:bold">c</span>(<span style="color:#d14">&#34;DE&#34;</span>, <span style="color:#d14">&#34;FR&#34;</span>))) <span style="color:#000;font-weight:bold">|&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">select</span>(code_2016, lau_code)
+</span></span></code></pre></div><p>And possibly, from NUTS3 to NUTS, where we&rsquo;ll be using that a NUTS3 area should be <code>within</code> a NUTS2 area. In the end, we thus expect to have a data.frame with 497 observations (the no. of observations in the NUTS3 data.frame), with each observation being linked to one NUTS2 area in which it is located:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>countries <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">data.frame</span>(country <span style="color:#000;font-weight:bold">=</span> <span style="color:#900;font-weight:bold">c</span>(<span style="color:#d14">&#34;Germany&#34;</span>, <span style="color:#d14">&#34;France&#34;</span>), year <span style="color:#000;font-weight:bold">=</span> <span style="color:#900;font-weight:bold">rep</span>(<span style="color:#099">2019</span>, <span style="color:#099">2</span>), geo <span style="color:#000;font-weight:bold">=</span> <span style="color:#900;font-weight:bold">c</span>(<span style="color:#d14">&#34;DE&#34;</span>, <span style="color:#d14">&#34;FR&#34;</span>), values <span style="color:#000;font-weight:bold">=</span> <span style="color:#900;font-weight:bold">c</span>(<span style="color:#099">1</span>,<span style="color:#099">99</span>))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>nuts_table <span style="color:#000;font-weight:bold">&lt;-</span> regions<span style="color:#000;font-weight:bold">::</span><span style="color:#900;font-weight:bold">impute_down_nuts</span>(countries) <span style="color:#000;font-weight:bold">|&gt;</span> 
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">filter</span>(typology <span style="color:#000;font-weight:bold">==</span> <span style="color:#d14">&#39;nuts_level_2&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>nuts_2_3_conversion_table <span style="color:#000;font-weight:bold">&lt;-</span> regions<span style="color:#000;font-weight:bold">::</span><span style="color:#900;font-weight:bold">impute_down_nuts</span>(nuts_table)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>nuts_2_3_conversion_table <span style="color:#000;font-weight:bold">&lt;-</span> nuts_2_3_conversion_table <span style="color:#000;font-weight:bold">|&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">filter</span>(typology <span style="color:#000;font-weight:bold">==</span> <span style="color:#d14">&#39;nuts_level_3&#39;</span>) <span style="color:#000;font-weight:bold">|&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">mutate</span>(method <span style="color:#000;font-weight:bold">=</span> <span style="color:#900;font-weight:bold">str_extract</span>(pattern <span style="color:#000;font-weight:bold">=</span> <span style="color:#d14">&#39;\\b\\w+\\b$&#39;</span>, method)) <span style="color:#000;font-weight:bold">|&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">rename</span>(nuts_2 <span style="color:#000;font-weight:bold">=</span> method, nuts_3 <span style="color:#000;font-weight:bold">=</span> geo) <span style="color:#000;font-weight:bold">|&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">select</span>(nuts_3, nuts_2)
+</span></span></code></pre></div><p>And finally, we merge them together with the <code>nuts_lau_table</code> key, so we know for every LAU-area, the corresponding NUTS2 and NUTS3 levels. We then only need the conversion table, to display the map at different NUTS/LAU levels: we can again display the shapefile by merging all the polygons within a certain NUTS3 or NUTS2 area.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>nuts_lau_table <span style="color:#000;font-weight:bold">&lt;-</span> nuts_lau_table <span style="color:#000;font-weight:bold">|&gt;</span> 
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">left_join</span>(nuts_2_3_conversion_table, by <span style="color:#000;font-weight:bold">=</span> <span style="color:#900;font-weight:bold">c</span>(<span style="color:#d14">&#39;code_2016&#39;</span> <span style="color:#000;font-weight:bold">=</span> <span style="color:#d14">&#39;nuts_3&#39;</span>)) <span style="color:#000;font-weight:bold">|&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">rename</span>(nuts_3 <span style="color:#000;font-weight:bold">=</span> code_2016)
+</span></span></code></pre></div><p>After merging with the <code>lau_roads2</code> dataset, we can subsequent restrict our analysis to the NUTS2 or NUTS3 areas that have any roads in it at all (or alternatively, that were part of the Roman Empire):</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>lau_roads2 <span style="color:#000;font-weight:bold">&lt;-</span> lau_roads2 <span style="color:#000;font-weight:bold">|&gt;</span> <span style="color:#900;font-weight:bold">left_join</span>(nuts_lau_table, by <span style="color:#000;font-weight:bold">=</span> <span style="color:#900;font-weight:bold">c</span>(<span style="color:#d14">&#34;LAU_ID&#34;</span> <span style="color:#000;font-weight:bold">=</span> <span style="color:#d14">&#34;lau_code&#34;</span>))
+</span></span></code></pre></div><p>Now, we can plot on either LAU, NUTS3, or NUTS2 level. I&rsquo;ll opt for the NUTS3 option here to illustrate:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>lau_roads2 <span style="color:#000;font-weight:bold">|&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">filter</span>(<span style="color:#000;font-weight:bold">!</span><span style="color:#900;font-weight:bold">is.na</span>(LAU_ID)) <span style="color:#000;font-weight:bold">|&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">group_by</span>(nuts_2) <span style="color:#000;font-weight:bold">|&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">summarize</span>(geometry <span style="color:#000;font-weight:bold">=</span> <span style="color:#900;font-weight:bold">st_union</span>(geometry)) <span style="color:#000;font-weight:bold">|&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">ggplot</span>() <span style="color:#000;font-weight:bold">+</span> <span style="color:#900;font-weight:bold">geom_sf</span>()
+</span></span></code></pre></div><img src="/blog/2023-02-15-spatial-merging-roman-roads-with-eurostat-data/index_files/figure-html/unnamed-chunk-19-1.png" width="672" />
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#998;font-style:italic">#nuts_2 |&gt; ggplot() + geom_sf()</span>
+</span></span></code></pre></div><p>Bar a couple of small inaccuracies, everything seems to be consistent between the indices at these levels.</p>
+
+
+
+
+<h2 id="alternative-way">Alternative way
+  <a href="#alternative-way"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>An alternative way is to use a manual approach based on geographical intersections between municipalities of higher and lower levels. It turns out that the NUTS-administration way as described above is best for Germany, while the more manual geographical intersections approach is best for France. Let me therefore do Germany and France separately. Germany is already done above, and France follows below:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>germany <span style="color:#000;font-weight:bold">&lt;-</span> lau_roads2 <span style="color:#000;font-weight:bold">|&gt;</span> <span style="color:#900;font-weight:bold">filter</span>(CNTR_CODE <span style="color:#000;font-weight:bold">==</span> <span style="color:#d14">&#34;DE&#34;</span>) <span style="color:#000;font-weight:bold">|&gt;</span> <span style="color:#900;font-weight:bold">select</span>(<span style="color:#000;font-weight:bold">-</span><span style="color:#900;font-weight:bold">c</span>(OBJECTID<span style="color:#000;font-weight:bold">:</span>Shape_Leng))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Unselect the LAU-NUTS3-NUTS2 table as constructed above, and get one manually</span>
+</span></span><span style="display:flex;"><span>france_lau <span style="color:#000;font-weight:bold">&lt;-</span> lau_roads2 <span style="color:#000;font-weight:bold">|&gt;</span> <span style="color:#900;font-weight:bold">filter</span>(CNTR_CODE <span style="color:#000;font-weight:bold">==</span> <span style="color:#d14">&#34;FR&#34;</span>) <span style="color:#000;font-weight:bold">|&gt;</span> <span style="color:#900;font-weight:bold">select</span>(<span style="color:#000;font-weight:bold">-</span><span style="color:#900;font-weight:bold">c</span>(nuts_2, nuts_3), <span style="color:#000;font-weight:bold">-</span><span style="color:#900;font-weight:bold">c</span>(OBJECTID<span style="color:#000;font-weight:bold">:</span>Shape_Leng))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Retrieve the map on a NUTS 3 level</span>
+</span></span><span style="display:flex;"><span>fr_nuts_3 <span style="color:#000;font-weight:bold">&lt;-</span> giscoR<span style="color:#000;font-weight:bold">::</span><span style="color:#900;font-weight:bold">gisco_get_nuts</span>(year <span style="color:#000;font-weight:bold">=</span> <span style="color:#d14">&#34;2016&#34;</span>, country <span style="color:#000;font-weight:bold">=</span> <span style="color:#d14">&#34;France&#34;</span>, nuts_level <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">3</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Spatial merge the two</span>
+</span></span><span style="display:flex;"><span>fr_lau_and_3 <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">st_join</span>(france_lau, fr_nuts_3) <span style="color:#000;font-weight:bold">|&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">group_by</span>(LAU_ID) <span style="color:#000;font-weight:bold">|&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">slice</span>(<span style="color:#099">1</span>)
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>fr_lau_and_3 <span style="color:#000;font-weight:bold">|&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">group_by</span>(NUTS_ID) <span style="color:#000;font-weight:bold">|&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">summarize</span>(geometry <span style="color:#000;font-weight:bold">=</span> <span style="color:#900;font-weight:bold">st_union</span>(geometry)) <span style="color:#000;font-weight:bold">|&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">ggplot</span>() <span style="color:#000;font-weight:bold">+</span> <span style="color:#900;font-weight:bold">geom_sf</span>()
+</span></span></code></pre></div><img src="/blog/2023-02-15-spatial-merging-roman-roads-with-eurostat-data/index_files/figure-html/unnamed-chunk-21-1.png" width="672" />
+<p>And now we could repeat the trick again, but simply using the table also gets us to NUTS2 easily and without loss of accuracy:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>france <span style="color:#000;font-weight:bold">&lt;-</span> fr_lau_and_3 <span style="color:#000;font-weight:bold">|&gt;</span> 
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">left_join</span>(nuts_2_3_conversion_table, by <span style="color:#000;font-weight:bold">=</span> <span style="color:#900;font-weight:bold">c</span>(<span style="color:#d14">&#34;NUTS_ID&#34;</span> <span style="color:#000;font-weight:bold">=</span> <span style="color:#d14">&#34;nuts_3&#34;</span>)) <span style="color:#000;font-weight:bold">|&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">rename</span>(nuts_3 <span style="color:#000;font-weight:bold">=</span> NUTS_ID, CNTR_CODE <span style="color:#000;font-weight:bold">=</span> CNTR_CODE.y, FID <span style="color:#000;font-weight:bold">=</span> FID.y)
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>france <span style="color:#000;font-weight:bold">|&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">group_by</span>(nuts_2) <span style="color:#000;font-weight:bold">|&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">summarize</span>(geometry <span style="color:#000;font-weight:bold">=</span> <span style="color:#900;font-weight:bold">st_union</span>(geometry)) <span style="color:#000;font-weight:bold">|&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">ggplot</span>() <span style="color:#000;font-weight:bold">+</span> <span style="color:#900;font-weight:bold">geom_sf</span>()
+</span></span></code></pre></div><img src="/blog/2023-02-15-spatial-merging-roman-roads-with-eurostat-data/index_files/figure-html/unnamed-chunk-23-1.png" width="672" />
+<p>Nice! Now we can put France and Germany back together again:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>cols <span style="color:#000;font-weight:bold">&lt;-</span> germany <span style="color:#000;font-weight:bold">|&gt;</span> <span style="color:#900;font-weight:bold">colnames</span>()
+</span></span><span style="display:flex;"><span>france <span style="color:#000;font-weight:bold">&lt;-</span> france <span style="color:#000;font-weight:bold">|&gt;</span> <span style="color:#900;font-weight:bold">select</span>(cols)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>fr_gr <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">bind_rows</span>(france, germany)
+</span></span></code></pre></div>
+
+
+
+<h2 id="filter-the-map">Filter the map
+  <a href="#filter-the-map"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>For the analysis, we might only want to include LAU&rsquo;s in NUTS2-areas that contain a road at all. Let&rsquo;s try to do that first.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>frgrn2 <span style="color:#000;font-weight:bold">&lt;-</span> fr_gr <span style="color:#000;font-weight:bold">|&gt;</span> 
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">group_by</span>(nuts_2) <span style="color:#000;font-weight:bold">|&gt;</span> 
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">summarize</span>(geometry <span style="color:#000;font-weight:bold">=</span> <span style="color:#900;font-weight:bold">st_union</span>(geometry))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>nos <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">st_intersects</span>(frgrn2, roads2) <span style="color:#000;font-weight:bold">|&gt;</span> 
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">as.data.frame</span>() <span style="color:#000;font-weight:bold">|&gt;</span> 
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">select</span>(row.id) <span style="color:#000;font-weight:bold">|&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">pull</span>() <span style="color:#000;font-weight:bold">|&gt;</span> 
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">unique</span>()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>include <span style="color:#000;font-weight:bold">&lt;-</span> frgrn2<span style="color:#000;font-weight:bold">$</span>nuts_2[nos]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>final <span style="color:#000;font-weight:bold">&lt;-</span> fr_gr <span style="color:#000;font-weight:bold">|&gt;</span> 
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">filter</span>(<span style="color:#900;font-weight:bold">is.element</span>(nuts_2, include))
+</span></span></code></pre></div><p>Now, we have a data.frame with only the NUTS2 regions that actually have roads. This way, we only compare regions that are &ldquo;fairly close&rdquo; to wherever the Roman empire&rsquo;s borders stretched. Now it&rsquo;s time to do some computation and analysis!</p>
+<!--
+Finish: 
+  - Doing this
+  - Also do this with cities and compute distances from city centroids
+  - Also show graphically how it works with cities 
+  - Use eurostat data to get some other variables
+  - Control for region-specific dummies in regressions!
+  
+  also: 
+	try to integrate NUTS-3 province data for fixed effects
+	try to find out whether it is possible to select all bordering municipalities as "controls"
+	check to see if you can integrate elevation data
+	contemporary road data (only 1 country)?
+	
+-->
+
+
+
+
+<h2 id="analysis">Analysis
+  <a href="#analysis"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>Suppose we want to know whether the distance of a present-day LAU (municipality, say) exhibits persistent effects of being close to a Roman road. I will present two ways in which you can analyze the question. Firstly, I will use all possible municipalities and find out if the distance to a road is related to economic development in terms of present-day population density.</p>
+<p>Secondly, I will use a &ldquo;treatment&rdquo; and &ldquo;control&rdquo; group, the first consisting of municipalities in which an ancient Roman road stretched, the other consist of municipalities <em>bordering</em> this municipalities, but in which no road was built. This makes sure you compare very similar municipalities, where you compare places in which the Roman built roads to places in which the Romans could have built roads, but didn&rsquo;t.</p>
+
+
+
+
+<h3 id="first-way">First way
+  <a href="#first-way"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h3>
+<p>We simply compute the closest distance to a Roman road for each of the observations in <code>final</code>.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>distance_matrix <span style="color:#000;font-weight:bold">&lt;-</span> final<span style="color:#000;font-weight:bold">|&gt;</span> 
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">st_distance</span>(roads2) 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>distance_matrix <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">st_distance</span>(<span style="color:#900;font-weight:bold">st_centroid</span>(final), roads2)
+</span></span><span style="display:flex;"><span>minimum_distances <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">apply</span>(distance_matrix, <span style="color:#099">1</span>, min)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>final <span style="color:#000;font-weight:bold">&lt;-</span> final <span style="color:#000;font-weight:bold">|&gt;</span> 
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">mutate</span>(min_dist_to_road <span style="color:#000;font-weight:bold">=</span> minimum_distances)
+</span></span></code></pre></div><p>Let us plot this in conjunction with the roads to see if it&rsquo;s correct:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#900;font-weight:bold">ggplot</span>() <span style="color:#000;font-weight:bold">+</span> <span style="color:#900;font-weight:bold">geom_sf</span>(data <span style="color:#000;font-weight:bold">=</span> final, <span style="color:#900;font-weight:bold">aes</span>(fill <span style="color:#000;font-weight:bold">=</span> min_dist_to_road), size <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">0.01</span>) <span style="color:#000;font-weight:bold">+</span> <span style="color:#900;font-weight:bold">geom_sf</span>() <span style="color:#000;font-weight:bold">+</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">geom_sf</span>(data <span style="color:#000;font-weight:bold">=</span> roads2, color <span style="color:#000;font-weight:bold">=</span> <span style="color:#d14">&#39;orange&#39;</span>)
+</span></span></code></pre></div><img src="/blog/2023-02-15-spatial-merging-roman-roads-with-eurostat-data/index_files/figure-html/unnamed-chunk-28-1.png" width="672" />
+<p>Let&rsquo;s now do a small analysis on the variable of population density, a variable readily available in the dataset.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#900;font-weight:bold">library</span>(modelsummary)
+</span></span><span style="display:flex;"><span><span style="color:#900;font-weight:bold">library</span>(fixest)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>model1 <span style="color:#000;font-weight:bold">&lt;-</span> fixest<span style="color:#000;font-weight:bold">::</span><span style="color:#900;font-weight:bold">feols</span>(POP_DENS_2019 <span style="color:#000;font-weight:bold">~</span> min_dist_to_road, final)
+</span></span><span style="display:flex;"><span>model2 <span style="color:#000;font-weight:bold">&lt;-</span> fixest<span style="color:#000;font-weight:bold">::</span><span style="color:#900;font-weight:bold">feols</span>(POP_DENS_2019 <span style="color:#000;font-weight:bold">~</span> min_dist_to_road <span style="color:#000;font-weight:bold">|</span> nuts_3, final)
+</span></span><span style="display:flex;"><span>model3 <span style="color:#000;font-weight:bold">&lt;-</span> fixest<span style="color:#000;font-weight:bold">::</span><span style="color:#900;font-weight:bold">feols</span>(POP_DENS_2019 <span style="color:#000;font-weight:bold">~</span> min_dist_to_road <span style="color:#000;font-weight:bold">|</span> nuts_3 <span style="color:#000;font-weight:bold">+</span> nuts_2, final)
+</span></span><span style="display:flex;"><span>model4 <span style="color:#000;font-weight:bold">&lt;-</span> fixest<span style="color:#000;font-weight:bold">::</span><span style="color:#900;font-weight:bold">feols</span>(POP_DENS_2019 <span style="color:#000;font-weight:bold">~</span> min_dist_to_road <span style="color:#000;font-weight:bold">|</span> nuts_3 <span style="color:#000;font-weight:bold">+</span> nuts_2 <span style="color:#000;font-weight:bold">+</span> CNTR_CODE, final)
+</span></span><span style="display:flex;"><span>model5 <span style="color:#000;font-weight:bold">&lt;-</span> fixest<span style="color:#000;font-weight:bold">::</span><span style="color:#900;font-weight:bold">feols</span>(POP_DENS_2019 <span style="color:#000;font-weight:bold">~</span> min_dist_to_road <span style="color:#000;font-weight:bold">|</span> nuts_3^nuts_2, final)
+</span></span><span style="display:flex;"><span>model6 <span style="color:#000;font-weight:bold">&lt;-</span> fixest<span style="color:#000;font-weight:bold">::</span><span style="color:#900;font-weight:bold">feols</span>(POP_DENS_2019 <span style="color:#000;font-weight:bold">~</span> min_dist_to_road <span style="color:#000;font-weight:bold">|</span> nuts_3^nuts_2^CNTR_CODE, final)
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#900;font-weight:bold">modelsummary</span>(<span style="color:#900;font-weight:bold">list</span>(model1, model2,
+</span></span><span style="display:flex;"><span>                  model3, model4,
+</span></span><span style="display:flex;"><span>                  model5, model6), stars <span style="color:#000;font-weight:bold">=</span> <span style="color:#999">T</span>)
+</span></span></code></pre></div><table style="NAborder-bottom: 0; width: auto !important; margin-left: auto; margin-right: auto;" class="table">
+ <thead>
+  <tr>
+   <th style="text-align:left;">   </th>
+   <th style="text-align:center;"> Model 1 </th>
+   <th style="text-align:center;"> Model 2 </th>
+   <th style="text-align:center;"> Model 3 </th>
+   <th style="text-align:center;"> Model 4 </th>
+   <th style="text-align:center;"> Model 5 </th>
+   <th style="text-align:center;"> Model 6 </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> (Intercept) </td>
+   <td style="text-align:center;"> 232.232*** </td>
+   <td style="text-align:center;">  </td>
+   <td style="text-align:center;">  </td>
+   <td style="text-align:center;">  </td>
+   <td style="text-align:center;">  </td>
+   <td style="text-align:center;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:center;"> (5.025) </td>
+   <td style="text-align:center;">  </td>
+   <td style="text-align:center;">  </td>
+   <td style="text-align:center;">  </td>
+   <td style="text-align:center;">  </td>
+   <td style="text-align:center;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> min_dist_to_road </td>
+   <td style="text-align:center;"> −0.004*** </td>
+   <td style="text-align:center;"> −0.003*** </td>
+   <td style="text-align:center;"> −0.003*** </td>
+   <td style="text-align:center;"> −0.003*** </td>
+   <td style="text-align:center;"> −0.003*** </td>
+   <td style="text-align:center;"> −0.003*** </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;box-shadow: 0px 1px">  </td>
+   <td style="text-align:center;box-shadow: 0px 1px"> (0.000) </td>
+   <td style="text-align:center;box-shadow: 0px 1px"> (0.001) </td>
+   <td style="text-align:center;box-shadow: 0px 1px"> (0.001) </td>
+   <td style="text-align:center;box-shadow: 0px 1px"> (0.001) </td>
+   <td style="text-align:center;box-shadow: 0px 1px"> (0.001) </td>
+   <td style="text-align:center;box-shadow: 0px 1px"> (0.001) </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Num.Obs. </td>
+   <td style="text-align:center;"> 39973 </td>
+   <td style="text-align:center;"> 39906 </td>
+   <td style="text-align:center;"> 39906 </td>
+   <td style="text-align:center;"> 39906 </td>
+   <td style="text-align:center;"> 39906 </td>
+   <td style="text-align:center;"> 39906 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> R2 </td>
+   <td style="text-align:center;"> 0.007 </td>
+   <td style="text-align:center;"> 0.580 </td>
+   <td style="text-align:center;"> 0.580 </td>
+   <td style="text-align:center;"> 0.580 </td>
+   <td style="text-align:center;"> 0.580 </td>
+   <td style="text-align:center;"> 0.580 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> R2 Adj. </td>
+   <td style="text-align:center;"> 0.007 </td>
+   <td style="text-align:center;"> 0.577 </td>
+   <td style="text-align:center;"> 0.577 </td>
+   <td style="text-align:center;"> 0.577 </td>
+   <td style="text-align:center;"> 0.577 </td>
+   <td style="text-align:center;"> 0.577 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> R2 Within </td>
+   <td style="text-align:center;">  </td>
+   <td style="text-align:center;"> 0.005 </td>
+   <td style="text-align:center;"> 0.005 </td>
+   <td style="text-align:center;"> 0.005 </td>
+   <td style="text-align:center;"> 0.005 </td>
+   <td style="text-align:center;"> 0.005 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> R2 Within Adj. </td>
+   <td style="text-align:center;">  </td>
+   <td style="text-align:center;"> 0.005 </td>
+   <td style="text-align:center;"> 0.005 </td>
+   <td style="text-align:center;"> 0.005 </td>
+   <td style="text-align:center;"> 0.005 </td>
+   <td style="text-align:center;"> 0.005 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> RMSE </td>
+   <td style="text-align:center;"> 692.67 </td>
+   <td style="text-align:center;"> 450.45 </td>
+   <td style="text-align:center;"> 450.45 </td>
+   <td style="text-align:center;"> 450.45 </td>
+   <td style="text-align:center;"> 450.45 </td>
+   <td style="text-align:center;"> 450.45 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Std.Errors </td>
+   <td style="text-align:center;"> IID </td>
+   <td style="text-align:center;"> by: nuts_3 </td>
+   <td style="text-align:center;"> by: nuts_3 </td>
+   <td style="text-align:center;"> by: nuts_3 </td>
+   <td style="text-align:center;"> by: nuts_3^nuts_2 </td>
+   <td style="text-align:center;"> by: nuts_3^nuts_2^CNTR_CODE </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> FE: CNTR_CODE </td>
+   <td style="text-align:center;">  </td>
+   <td style="text-align:center;">  </td>
+   <td style="text-align:center;">  </td>
+   <td style="text-align:center;"> X </td>
+   <td style="text-align:center;">  </td>
+   <td style="text-align:center;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> FE: nuts_3 </td>
+   <td style="text-align:center;">  </td>
+   <td style="text-align:center;"> X </td>
+   <td style="text-align:center;"> X </td>
+   <td style="text-align:center;"> X </td>
+   <td style="text-align:center;">  </td>
+   <td style="text-align:center;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> FE: nuts_3^nuts_2 </td>
+   <td style="text-align:center;">  </td>
+   <td style="text-align:center;">  </td>
+   <td style="text-align:center;">  </td>
+   <td style="text-align:center;">  </td>
+   <td style="text-align:center;"> X </td>
+   <td style="text-align:center;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> FE: nuts_2 </td>
+   <td style="text-align:center;">  </td>
+   <td style="text-align:center;">  </td>
+   <td style="text-align:center;"> X </td>
+   <td style="text-align:center;"> X </td>
+   <td style="text-align:center;">  </td>
+   <td style="text-align:center;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> FE: nuts_3^nuts_2^CNTR_CODE </td>
+   <td style="text-align:center;">  </td>
+   <td style="text-align:center;">  </td>
+   <td style="text-align:center;">  </td>
+   <td style="text-align:center;">  </td>
+   <td style="text-align:center;">  </td>
+   <td style="text-align:center;"> X </td>
+  </tr>
+</tbody>
+<tfoot><tr><td style="padding: 0; " colspan="100%">
+<sup></sup> + p </td></tr></tfoot>
+</table>
+
+
+
+
+<h3 id="second-way">Second way
+  <a href="#second-way"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h3>
+<p>First, we find all municipalities through which a road stretches:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>numbers <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">st_intersects</span>(final, roads2) <span style="color:#000;font-weight:bold">|&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">as.data.frame</span>() <span style="color:#000;font-weight:bold">|&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">select</span>(row.id) <span style="color:#000;font-weight:bold">|&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">pull</span>() <span style="color:#000;font-weight:bold">|&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">unique</span>()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>road_municipalities <span style="color:#000;font-weight:bold">&lt;-</span> final <span style="color:#000;font-weight:bold">|&gt;</span> <span style="color:#900;font-weight:bold">filter</span>(<span style="color:#900;font-weight:bold">is.element</span>(<span style="color:#900;font-weight:bold">row_number</span>(), numbers))
+</span></span></code></pre></div><p>Then we find out what their neighbours are, required that they do not themselves have a road..</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>numbers2 <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">st_touches</span>(final, road_municipalities) <span style="color:#000;font-weight:bold">|&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">as.data.frame</span>() <span style="color:#000;font-weight:bold">|&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">select</span>(row.id) <span style="color:#000;font-weight:bold">|&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">pull</span>() <span style="color:#000;font-weight:bold">|&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">unique</span>()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>neighbors_of_rm <span style="color:#000;font-weight:bold">&lt;-</span> final <span style="color:#000;font-weight:bold">|&gt;</span> <span style="color:#900;font-weight:bold">filter</span>(<span style="color:#900;font-weight:bold">is.element</span>(<span style="color:#900;font-weight:bold">row_number</span>(), numbers2) <span style="color:#000;font-weight:bold">&amp;</span> <span style="color:#000;font-weight:bold">!</span><span style="color:#900;font-weight:bold">is.element</span>(<span style="color:#900;font-weight:bold">row_number</span>(), numbers))
+</span></span></code></pre></div><p>.. and create a &ldquo;treatment&rdquo; variable based on this:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>final_experiment <span style="color:#000;font-weight:bold">&lt;-</span> final <span style="color:#000;font-weight:bold">|&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">mutate</span>(treatment <span style="color:#000;font-weight:bold">=</span> <span style="color:#900;font-weight:bold">if_else</span>(<span style="color:#900;font-weight:bold">is.element</span>(LAU_ID, road_municipalities<span style="color:#000;font-weight:bold">$</span>LAU_ID), <span style="color:#099">1</span>,
+</span></span><span style="display:flex;"><span>                             <span style="color:#900;font-weight:bold">if_else</span>(<span style="color:#900;font-weight:bold">is.element</span>(LAU_ID, neighbors_of_rm<span style="color:#000;font-weight:bold">$</span>LAU_ID), <span style="color:#099">0</span>,
+</span></span><span style="display:flex;"><span>                                     <span style="color:#000;font-weight:bold">NA_real_</span>)))
+</span></span></code></pre></div><p>Let&rsquo;s now analyze and see whether there is a difference in population density between treatment and control groups:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>model1 <span style="color:#000;font-weight:bold">&lt;-</span> fixest<span style="color:#000;font-weight:bold">::</span><span style="color:#900;font-weight:bold">feols</span>(POP_DENS_2019 <span style="color:#000;font-weight:bold">~</span> treatment, final_experiment)
+</span></span><span style="display:flex;"><span>model2 <span style="color:#000;font-weight:bold">&lt;-</span> fixest<span style="color:#000;font-weight:bold">::</span><span style="color:#900;font-weight:bold">feols</span>(POP_DENS_2019 <span style="color:#000;font-weight:bold">~</span> treatment <span style="color:#000;font-weight:bold">|</span> nuts_3, final_experiment)
+</span></span><span style="display:flex;"><span>model3 <span style="color:#000;font-weight:bold">&lt;-</span> fixest<span style="color:#000;font-weight:bold">::</span><span style="color:#900;font-weight:bold">feols</span>(POP_DENS_2019 <span style="color:#000;font-weight:bold">~</span> treatment <span style="color:#000;font-weight:bold">|</span> nuts_3 <span style="color:#000;font-weight:bold">+</span> nuts_2, final_experiment)
+</span></span><span style="display:flex;"><span>model4 <span style="color:#000;font-weight:bold">&lt;-</span> fixest<span style="color:#000;font-weight:bold">::</span><span style="color:#900;font-weight:bold">feols</span>(POP_DENS_2019 <span style="color:#000;font-weight:bold">~</span> treatment <span style="color:#000;font-weight:bold">|</span> nuts_3 <span style="color:#000;font-weight:bold">+</span> nuts_2 <span style="color:#000;font-weight:bold">+</span> CNTR_CODE, final_experiment)
+</span></span><span style="display:flex;"><span>model5 <span style="color:#000;font-weight:bold">&lt;-</span> fixest<span style="color:#000;font-weight:bold">::</span><span style="color:#900;font-weight:bold">feols</span>(POP_DENS_2019 <span style="color:#000;font-weight:bold">~</span> treatment <span style="color:#000;font-weight:bold">|</span> nuts_3^nuts_2, final_experiment)
+</span></span><span style="display:flex;"><span>model6 <span style="color:#000;font-weight:bold">&lt;-</span> fixest<span style="color:#000;font-weight:bold">::</span><span style="color:#900;font-weight:bold">feols</span>(POP_DENS_2019 <span style="color:#000;font-weight:bold">~</span> treatment <span style="color:#000;font-weight:bold">|</span> nuts_3^nuts_2^CNTR_CODE, final_experiment)
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#900;font-weight:bold">modelsummary</span>(<span style="color:#900;font-weight:bold">list</span>(model1, model2,
+</span></span><span style="display:flex;"><span>                  model3, model4,
+</span></span><span style="display:flex;"><span>                  model5, model6), stars <span style="color:#000;font-weight:bold">=</span> <span style="color:#999">T</span>)
+</span></span></code></pre></div><table style="NAborder-bottom: 0; width: auto !important; margin-left: auto; margin-right: auto;" class="table">
+ <thead>
+  <tr>
+   <th style="text-align:left;">   </th>
+   <th style="text-align:center;"> Model 1 </th>
+   <th style="text-align:center;"> Model 2 </th>
+   <th style="text-align:center;"> Model 3 </th>
+   <th style="text-align:center;"> Model 4 </th>
+   <th style="text-align:center;"> Model 5 </th>
+   <th style="text-align:center;"> Model 6 </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> (Intercept) </td>
+   <td style="text-align:center;"> 241.407*** </td>
+   <td style="text-align:center;">  </td>
+   <td style="text-align:center;">  </td>
+   <td style="text-align:center;">  </td>
+   <td style="text-align:center;">  </td>
+   <td style="text-align:center;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:center;"> (11.343) </td>
+   <td style="text-align:center;">  </td>
+   <td style="text-align:center;">  </td>
+   <td style="text-align:center;">  </td>
+   <td style="text-align:center;">  </td>
+   <td style="text-align:center;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> treatment </td>
+   <td style="text-align:center;"> 49.451** </td>
+   <td style="text-align:center;"> 60.412*** </td>
+   <td style="text-align:center;"> 60.412*** </td>
+   <td style="text-align:center;"> 60.412*** </td>
+   <td style="text-align:center;"> 60.412*** </td>
+   <td style="text-align:center;"> 60.412*** </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;box-shadow: 0px 1px">  </td>
+   <td style="text-align:center;box-shadow: 0px 1px"> (18.414) </td>
+   <td style="text-align:center;box-shadow: 0px 1px"> (12.715) </td>
+   <td style="text-align:center;box-shadow: 0px 1px"> (12.731) </td>
+   <td style="text-align:center;box-shadow: 0px 1px"> (12.731) </td>
+   <td style="text-align:center;box-shadow: 0px 1px"> (12.715) </td>
+   <td style="text-align:center;box-shadow: 0px 1px"> (12.715) </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Num.Obs. </td>
+   <td style="text-align:center;"> 13415 </td>
+   <td style="text-align:center;"> 13410 </td>
+   <td style="text-align:center;"> 13410 </td>
+   <td style="text-align:center;"> 13410 </td>
+   <td style="text-align:center;"> 13410 </td>
+   <td style="text-align:center;"> 13410 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> R2 </td>
+   <td style="text-align:center;"> 0.001 </td>
+   <td style="text-align:center;"> 0.664 </td>
+   <td style="text-align:center;"> 0.664 </td>
+   <td style="text-align:center;"> 0.664 </td>
+   <td style="text-align:center;"> 0.664 </td>
+   <td style="text-align:center;"> 0.664 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> R2 Adj. </td>
+   <td style="text-align:center;"> 0.000 </td>
+   <td style="text-align:center;"> 0.658 </td>
+   <td style="text-align:center;"> 0.658 </td>
+   <td style="text-align:center;"> 0.658 </td>
+   <td style="text-align:center;"> 0.658 </td>
+   <td style="text-align:center;"> 0.658 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> R2 Within </td>
+   <td style="text-align:center;">  </td>
+   <td style="text-align:center;"> 0.002 </td>
+   <td style="text-align:center;"> 0.002 </td>
+   <td style="text-align:center;"> 0.002 </td>
+   <td style="text-align:center;"> 0.002 </td>
+   <td style="text-align:center;"> 0.002 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> R2 Within Adj. </td>
+   <td style="text-align:center;">  </td>
+   <td style="text-align:center;"> 0.002 </td>
+   <td style="text-align:center;"> 0.002 </td>
+   <td style="text-align:center;"> 0.002 </td>
+   <td style="text-align:center;"> 0.002 </td>
+   <td style="text-align:center;"> 0.002 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> RMSE </td>
+   <td style="text-align:center;"> 1034.85 </td>
+   <td style="text-align:center;"> 599.63 </td>
+   <td style="text-align:center;"> 599.63 </td>
+   <td style="text-align:center;"> 599.63 </td>
+   <td style="text-align:center;"> 599.63 </td>
+   <td style="text-align:center;"> 599.63 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Std.Errors </td>
+   <td style="text-align:center;"> IID </td>
+   <td style="text-align:center;"> by: nuts_3 </td>
+   <td style="text-align:center;"> by: nuts_3 </td>
+   <td style="text-align:center;"> by: nuts_3 </td>
+   <td style="text-align:center;"> by: nuts_3^nuts_2 </td>
+   <td style="text-align:center;"> by: nuts_3^nuts_2^CNTR_CODE </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> FE: CNTR_CODE </td>
+   <td style="text-align:center;">  </td>
+   <td style="text-align:center;">  </td>
+   <td style="text-align:center;">  </td>
+   <td style="text-align:center;"> X </td>
+   <td style="text-align:center;">  </td>
+   <td style="text-align:center;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> FE: nuts_3 </td>
+   <td style="text-align:center;">  </td>
+   <td style="text-align:center;"> X </td>
+   <td style="text-align:center;"> X </td>
+   <td style="text-align:center;"> X </td>
+   <td style="text-align:center;">  </td>
+   <td style="text-align:center;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> FE: nuts_3^nuts_2 </td>
+   <td style="text-align:center;">  </td>
+   <td style="text-align:center;">  </td>
+   <td style="text-align:center;">  </td>
+   <td style="text-align:center;">  </td>
+   <td style="text-align:center;"> X </td>
+   <td style="text-align:center;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> FE: nuts_2 </td>
+   <td style="text-align:center;">  </td>
+   <td style="text-align:center;">  </td>
+   <td style="text-align:center;"> X </td>
+   <td style="text-align:center;"> X </td>
+   <td style="text-align:center;">  </td>
+   <td style="text-align:center;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> FE: nuts_3^nuts_2^CNTR_CODE </td>
+   <td style="text-align:center;">  </td>
+   <td style="text-align:center;">  </td>
+   <td style="text-align:center;">  </td>
+   <td style="text-align:center;">  </td>
+   <td style="text-align:center;">  </td>
+   <td style="text-align:center;"> X </td>
+  </tr>
+</tbody>
+<tfoot><tr><td style="padding: 0; " colspan="100%">
+<sup></sup> + p </td></tr></tfoot>
+</table>
+
+
+
+
+<h2 id="conclusion">Conclusion
+  <a href="#conclusion"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>It seems the Roman Empire&rsquo;s heritage lasts until this day. Areas in which the Romans built roads are still more densely populated almost 2000 years after their construction, indicating an extreme path dependency. Of course, there is a lot of omitted variable bias, but arguably, a lot of it is taken away by conditioning on pretty granular NUTS-3 levels already. In the future I should probably look at this more seriously, and probably also read a book on Roman and, possibly, Medieval history. :) Thanks for reading!</p>
 
         
         <details closed class="f6 fw7 input-reset">
@@ -228,7 +777,7 @@ library(tidyverse) library(giscoR) library(sf) library(cawd) For robustness, and
   </dl>
   <dl class="f6 lh-copy">
     <dt class="fw7">Length:</dt>
-    <dd class="fw5 ml0">3 minute read, 541 words</dd>
+    <dd class="fw5 ml0">10 minute read, 2037 words</dd>
   </dl>
   
   

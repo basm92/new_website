@@ -33,7 +33,7 @@
       <guid>/blog/2023-02-15-spatial-merging-roman-roads-with-eurostat-data/</guid>
       <description>Introduction In this short blog post, I focus on combining several European municipal (LAU, Local Urban Areas) shapefiles, combined with data on roads and cities in the Roman Empire, to find relationships between present-day outcomes and deep-routed interventions as far as more than 2000 years ago.
 Let us first load the libraries we need to perform operations.
-library(tidyverse) library(giscoR) library(sf) library(cawd) For robustness, and out of curiosity, I will use two roads files.</description>
+library(tidyverse) library(giscoR) library(sf) library(cawd) library(regions) For robustness, and out of curiosity, I will use two roads files.</description>
     </item>
     
     <item>
