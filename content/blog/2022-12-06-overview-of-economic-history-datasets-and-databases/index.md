@@ -211,6 +211,7 @@ This entry should serve as a repository for historical GIS databases. To be upda
 | Russia | Russian Empire (1897), Guberniya and District Boundaries | [Link](https://datasets.iisg.amsterdam/dataset.xhtml?persistentId=hdl:10622/DN9QDM) |
 | Germany | Various Territorial Entities, Various Levels | [Link](http://www.digihist.de/html/hgisg/index.htm) |
 | China | Various snapshots (1820-1990) of historical China | [Link](https://chgis.fairbank.fas.harvard.edu/) |
+| Austro-Hungarian Empire | Including some German principalities, from abt. 1850 to WWI | [Link](https://histogis.acdh.oeaw.ac.at/shapes/sources/) |
 
 There are also several other sources on the [Historical GIS Network Website](http://hgis.org.uk/resources.htm), but most of the links are defunct. 
 
