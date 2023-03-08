@@ -198,7 +198,7 @@ This entry should serve as a repository for databases detailing countries, the d
 | --- | ---| --- |
 |Netherlands | CBS Statistics Data Portal | [R Package](https://cran.r-project.org/web/packages/cbsodataR/index.html), [Python package](https://pypi.org/project/cbsodata/), [Documentation](https://www.cbs.nl/en-gb/our-services/open-data/statline-as-open-data/quick-start-guide) |
 | Kazakhstan | Open Data Portal | [Link](https://data.egov.kz/) |
-
+| Spain | Spanish Electoral Archive | [Link](https://dataverse.harvard.edu/dataverse/SEA) |
 
 ## Historical GIS Databases
 
