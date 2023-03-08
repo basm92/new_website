@@ -6,7 +6,7 @@
     <description>Recent content on Bas Machielsen</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Wed, 15 Feb 2023 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 27 Feb 2023 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Clio</title>
       <link>/collection/clio/</link>
@@ -23,6 +23,15 @@
       
       <guid>/collection/hdng/</guid>
       <description>hdng is a package facilitating the use of the HDNG Database, a database containing quantative information in various aspects of Dutch municipalities from about 1800 to the 1980&amp;rsquo;s. This package aids the user in finding their way through the database, allowing them to search for wanted variables, browse within categories, and finally, make a query to extract the wanted data.</description>
+    </item>
+    
+    <item>
+      <title>Democracy and peace</title>
+      <link>/blog/2023-02-27-democracy-and-peace/</link>
+      <pubDate>Mon, 27 Feb 2023 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2023-02-27-democracy-and-peace/</guid>
+      <description>Introduction I wanted to write a short post on democratic peace theory to simply explore the correlation between democracy and peace. It is sometimes believed that democratic countries are less likely to wage war on each other than autocratic countries, and furthermore, that democratic countries are less likely to wage war in general (either against autocratic or democratic countries). In this blog post, I want to explore the data to see to which extent this holds true.</description>
     </item>
     
     <item>

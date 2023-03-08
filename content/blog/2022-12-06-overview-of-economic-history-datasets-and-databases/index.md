@@ -229,6 +229,7 @@ https://www.insee.fr/fr/statistiques?debut=0&categorie=3
 | Netherlands | Waar Staat Je Gemeente | [Link](https://www.waarstaatjegemeente.nl/jive) |
 | Netherlands | Volkstellingen (Censuses) | [Link](http://www.volkstellingen.nl/) |
 | Netherlands | Historical Database of Dutch Municipalities | [Link](https://datasets.iisg.amsterdam/dataverse/HDNG?q=&types=dataverses%3Adatasets&sort=dateSort&order=desc&page=1) | 
+| Spain | Instituto Nacional de Estadistica | [Link](https://www.ine.es/en/index.htm) |
 
 **Netherlands:** You can also access to miscellaneous datasets from CBS Open Data in the following way:
 
