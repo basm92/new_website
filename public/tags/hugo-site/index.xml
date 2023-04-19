@@ -6,7 +6,16 @@
     <description>Recent content in hugo-site on Bas Machielsen</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Mon, 28 Nov 2022 00:00:00 +0000</lastBuildDate><atom:link href="/tags/hugo-site/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 19 Apr 2023 00:00:00 +0000</lastBuildDate><atom:link href="/tags/hugo-site/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Historical Persistence</title>
+      <link>/project/hist_pers_2023/</link>
+      <pubDate>Wed, 19 Apr 2023 00:00:00 +0000</pubDate>
+      
+      <guid>/project/hist_pers_2023/</guid>
+      <description>Introduction The link above contains the lecture slides for an introduction session for the applied economics research course, which can be found here:</description>
+    </item>
+    
     <item>
       <title>MSc Thesis Economic Policy</title>
       <link>/project/thesis2023ep/</link>
