@@ -154,7 +154,7 @@ Indonesia
 
 - Then, we can estimate $\alpha_1$ by:
 
-  - $\mathbb{E}[\text{Development|RomanRoad & P[RomanRoad]}]$ - $\mathbb{E}[\text{Development|NoRomanRoad & P[RomanRoad]}]$ 
+  - $\mathbb{E}[Y | \text{RomanRoad & P[RomanRoad]}]$ - $\mathbb{E}[Y | \text{NoRomanRoad & P[RomanRoad]}]$ 
 
 - This is what we attempt to do in a spatial regression discontinuity design: compare two arguably identical places with the same probability of treatment, where only one of them actually gets the treatment
 
@@ -188,7 +188,7 @@ class: inverse, center, middle
 
 # Demonstration
 
-```{r demonstration, cache=TRUE, fig.width=4, fig.height=4}
+```{r demonstration, cache=TRUE}
 library(cawd); library(giscoR)
 roads <- cawd::darmc.roman.roads.major.sp |> st_as_sf()
 lau <- giscoR::gisco_get_lau(year = '2019', country = c("France"))
@@ -249,7 +249,7 @@ fr <- fr |>
 
 # Plot the result
 
-```{r plot_rds, cache=T, fig.width=7, fig.height=7}
+```{r plot_rds, cache=T}
 ggplot() + geom_sf(data = fr, aes(fill = min_dist_to_road), size = 0.0001) + scale_fill_viridis_c() +
   geom_sf(data = roads_in_fr, color = 'orange')
 ```

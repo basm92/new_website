@@ -15,7 +15,7 @@ links:
 subtitle: ""
 tags:
 - hugo-site
-title: MSc Thesis Economic Policy
+title: Historical Persistence
 ---
 
 ## Introduction

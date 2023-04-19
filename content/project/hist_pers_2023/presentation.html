@@ -154,7 +154,7 @@ Indonesia</li>
 <li><p>According to the equations on the previous slide, this means two places with the same environment (take the expected value of <span class="math inline">\(Y_i\)</span> conditional on Environment to see that)</p></li>
 <li><p>Then, we can estimate <span class="math inline">\(\alpha_1\)</span> by:</p>
 <ul>
-<li><span class="math inline">\(\mathbb{E}[\text{Development|RomanRoad &amp; P[RomanRoad]}]\)</span> - <span class="math inline">\(\mathbb{E}[\text{Development|NoRomanRoad &amp; P[RomanRoad]}]\)</span></li>
+<li><span class="math inline">\(\mathbb{E}[Y | \text{RomanRoad &amp; P[RomanRoad]}]\)</span> - <span class="math inline">\(\mathbb{E}[Y | \text{NoRomanRoad &amp; P[RomanRoad]}]\)</span></li>
 </ul></li>
 <li><p>This is what we attempt to do in a spatial regression discontinuity design: compare two arguably identical places with the same probability of treatment, where only one of them actually gets the treatment</p></li>
 </ul>
@@ -197,7 +197,7 @@ fr &lt;- st_intersection(lau, square)
 
 fr |&gt; ggplot() + geom_sf()</code></pre>
 <div id="section" class="section level2">
-<h2><img src="/project/hist_pers_2023/presentation_files/figure-html/demonstration-1.png" width="384" style="display: block; margin: auto;" /></h2>
+<h2><img src="/project/hist_pers_2023/presentation_files/figure-html/demonstration-1.png" width="768" style="display: block; margin: auto;" /></h2>
 </div>
 </div>
 <div id="what-does-this-data.frame-look-like" class="section level1">
@@ -251,7 +251,7 @@ roads_in_fr &lt;- roads |&gt; filter(is.element(row_number(), numbers))</code></
 <h1>Plot the result</h1>
 <pre class="r"><code>ggplot() + geom_sf(data = fr, aes(fill = min_dist_to_road), size = 0.0001) + scale_fill_viridis_c() +
   geom_sf(data = roads_in_fr, color = &#39;orange&#39;)</code></pre>
-<p><img src="/project/hist_pers_2023/presentation_files/figure-html/plot_rds-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="/project/hist_pers_2023/presentation_files/figure-html/plot_rds-1.png" width="768" style="display: block; margin: auto;" /></p>
 <hr />
 </div>
 <div id="a-small-analysis" class="section level1">
