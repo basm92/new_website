@@ -20,9 +20,7 @@ title: Historical Persistence
 
 ## Introduction
 
-The link above contains:
-  
-- The lecture slides for an introduction session for the applied economics research course can be found here:
+The link above contains the lecture slides for an introduction session for the applied economics research course, which can be found here:
 
 ```{r echo=FALSE}
 knitr::include_url("https://bas-m.netlify.app/project/hist_pers_2023/presentation.html")
