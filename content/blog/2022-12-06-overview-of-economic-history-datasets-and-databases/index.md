@@ -45,9 +45,10 @@ In this post, I'll give an overview and short description of various commonly-us
 29. [Atlas of Economic Complexity](#atlas-of-economic-complexity)
 30. [Ricardo Database](#ricardo-database)
 31. [Federico-Tena World Trade Historical Database](#federico-tena-world-trade-historical-database)
-32. [Statistical Agencies, Parliaments](#statistical-agencies-parliaments)
-33. [GIS Databases](#historical-gis-databases)
-34. [Municipal Data](#municipal-data)
+32. [GRIP Global Roads Database](#grip-global-roads-database)
+33. [Statistical Agencies, Parliaments](#statistical-agencies-parliaments)
+34. [GIS Databases](#historical-gis-databases)
+35. [Municipal Data](#municipal-data)
 
 ## World Values Survey
 
@@ -189,6 +190,10 @@ The RICardo project is a comprehensive trade database that collects total and bi
 ## Federico-Tena World Trade Historical Database
 
 A database which contains annual series of trade by politics from 1800 to 1938 which sum up as series for continent and world. Available [here](https://www.uc3m.es/ss/Satellite/UC3MInstitucional/es/TextoMixta/1371246237481/Federico-Tena_World_Trade_Historical_Database). 
+
+## GRIP Global Roads Database
+
+A database with vector and raster shapefiles detailing all global roads, accessible [here](https://www.globio.info/download-grip-dataset). 
 
 ## Statistical Agencies, Parliaments
 
