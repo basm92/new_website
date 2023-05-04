@@ -1,9 +1,9 @@
 ---
-title: Inference with Raster Spatial Data with R
-author: Bas Machielsen
-date: '2023-05-03'
+title: Inference with Raster Spatial Data in R
+author: ''
+date: '2023-05-04'
+excerpt: An introduction to spatial raster data in R, replicating (to an extent) a paper by Dalgaard et al. (2021)
 slug: []
-excerpt: An example demonstration of working with raster data in R. 
 categories: []
 tags: []
 ---
@@ -17,8 +17,12 @@ In this blog post, I want to demonstrate how to work with spatial raster data in
 
 First, I load the necessary libraries:
 
-```{r setup, echo=FALSE}
-library(tidyverse); library(sf); library(raster); library(rgdal); library(terra)
+```{r setup, results='hide', message=F}
+library(tidyverse)
+library(sf)
+library(raster)
+library(rgdal)
+library(terra)
 ```
 
 
@@ -51,16 +55,15 @@ I'll also be using a variety of data sources. Here, I want to give a short overv
 - [The `climateR` package](https://rpubs.com/ials2un/trrclmt): Package with access to climate data
 - [The `climatrends` package](https://agrdatasci.github.io/climatrends/): Alternative package with access to climate data
 
-
 ## Get the roads and the borders
 
-The borders can be found on [this repository](https://github.com/AWMC/geodata/blob/master/Cultural-Data/political_shading/roman_empire_ce_117_extent/roman_empire_ce_117_extent.geojson). I'll be using only a small subset of the data to keep down computational and memory load. 
+The borders of the Roman Empire around 117AD can be found on [this repository](https://github.com/AWMC/geodata/blob/master/Cultural-Data/political_shading/roman_empire_ce_117_extent/roman_empire_ce_117_extent.geojson). I'll be using only a small subset of the data to keep down computational and memory load. 
 
-```{r message=FALSE, warning=FALSE, include=FALSE}
+```{r message=FALSE, warning=FALSE}
 links <- 'https://raw.githubusercontent.com/AWMC/geodata/master/Cultural-Data/political_shading/roman_empire_ce_117_extent/roman_empire_ce_117_extent.geojson'
 download.file(links, destfile='roman_empire.geojson')
 
-borders <- sf::st_read('./roman_empire.geojson')|> st_as_sf()
+borders <- sf::st_read('./roman_empire.geojson', quiet=T)|> st_as_sf()
 
 # filtered version to make the data computable
 borders <- borders |> filter(OBJECTID < 18)
@@ -82,7 +85,7 @@ ggplot() + geom_sf(data=borders) +
 
 ## Import and filter nightlight density
 
-- The following has to be run only once to recreate the nightlights data. 
+- The following has to be run only once to recreate the nightlights data. The nightlights file is from the VNL dataset as linked to above, and saved locally. 
 
 ```{r nightlights_edit, eval=FALSE, message=F, warning=F}
 # load the raster dataset
@@ -155,11 +158,11 @@ plot(raster_mean_raster_nl$value)
 ```
 
 
-## Compute Roman road density per 1x1
+## Compute Roman Road density per piece of area
 
 Our next job is to calculate the road density over these same areas. In order to do so, we have to create a buffer around the roads to make sure it has an area. In line with the paper, we'll pick an area of 5 kilometer: 
 
-```{r}
+```{r cache=TRUE}
 # create a 5km buffer around the vector dataset
 buffer_data <- st_buffer(roads, dist = 5000)
 # convert the buffer to a raster dataset
@@ -176,6 +179,7 @@ buffer_raster <- mask(buffer_raster, mask = raster_data)
 raster_points <- raster::rasterToPoints(buffer_raster)
 ```
 
+
 ```{r remove_2, include=FALSE}
 # Remove unnecessary data
 rm(buffer_data); rm(buffer_raster); rm(raster_data)
@@ -184,7 +188,7 @@ gc()
 
 Now that we have the rasterized buffered roads data, we can aggregate it by 0.5x0.5 latitude x longitude area, and calculate the percentage of area covered by roman road. We reclassified the area such that roads have a value of 1 at a pixel where there is a road, 0 otherwise.  Because of this, we can calculate the density by taking the mean per area. 
 
-```{r}
+```{r cache=TRUE}
 # round the coordinates to the nearest 0.5 degrees
 raster_points[,1:2] <- round(raster_points[,1:2]/resolution)*resolution
 # convert to SpatialPointsDataFrame
@@ -192,8 +196,9 @@ raster_sp <- sp::SpatialPointsDataFrame(raster_points[,1:2],
                                         data.frame(value=raster_points[,3]))
 
 # compute mean value for each cell
-raster_mean <- raster::aggregate(raster_sp, by=list(round(raster_sp@coords[,1]/resolution),
-                                                    round(raster_sp@coords[,2]/resolution)), 
+raster_mean <- raster::aggregate(raster_sp,
+                                 by=list(
+                                   round(raster_sp@coords[,1]/resolution),                                                                                     round(raster_sp@coords[,2]/resolution)), 
                                  FUN=mean)
 ```
 
@@ -205,7 +210,7 @@ gc()
 
 Finally, we put this mean per area back into a raster and plot: 
 
-```{r}
+```{r putback, cache=TRUE}
 # convert back to raster
 raster_mean_raster_roads <- raster::rasterFromXYZ(data.frame(raster_mean),
                                             crs=crs,
@@ -216,7 +221,6 @@ raster_mean_raster_roads <- raster::rasterFromXYZ(data.frame(raster_mean),
 rm(raster_mean)
 gc()
 ```
-
 
 ```{r}
 plot(raster_mean_raster_roads$value)
@@ -238,9 +242,9 @@ Now, we estimate the influence of Roman road density on nightlight activity:
 library(fixest); library(modelsummary)
 
 fixest::feols(nightlights ~ log(1+roads), data = data) |>
-  msummary(stars = T, vcov = 'robust')
+  msummary(stars = T, vcov = 'robust', gof_map = c("adj.r.squared", "nobs"))
 
 ```
 
-The magnitude of the 
+The magnitude of the effect is in the same order as that in the paper, although slightly higher. This is likely due to the omission of country fixed effects, which are some of the most important control variables. This is something that could be implemented by iterating through all pieces of area, and asking whether the area is (strictly) inside a particular country. Anyway, I hope this demonstration was useful in explaining how to deal with rastered satellite (and other) data. Thank you for reading. 
 
