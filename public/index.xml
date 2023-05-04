@@ -6,7 +6,7 @@
     <description>Recent content on Bas Machielsen</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Wed, 19 Apr 2023 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 04 May 2023 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Clio</title>
       <link>/collection/clio/</link>
@@ -23,6 +23,15 @@
       
       <guid>/collection/hdng/</guid>
       <description>hdng is a package facilitating the use of the HDNG Database, a database containing quantative information in various aspects of Dutch municipalities from about 1800 to the 1980&amp;rsquo;s. This package aids the user in finding their way through the database, allowing them to search for wanted variables, browse within categories, and finally, make a query to extract the wanted data.</description>
+    </item>
+    
+    <item>
+      <title>Inference with Raster Spatial Data in R</title>
+      <link>/blog/2023-05-04-inference-with-raster-spatial-data-in-r/</link>
+      <pubDate>Thu, 04 May 2023 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2023-05-04-inference-with-raster-spatial-data-in-r/</guid>
+      <description></description>
     </item>
     
     <item>
