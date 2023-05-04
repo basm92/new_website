@@ -6,7 +6,16 @@
     <description>Recent content in Blog on Bas Machielsen</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Mon, 27 Feb 2023 00:00:00 +0000</lastBuildDate><atom:link href="/blog/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 04 May 2023 00:00:00 +0000</lastBuildDate><atom:link href="/blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Inference with Raster Spatial Data in R</title>
+      <link>/blog/2023-05-04-inference-with-raster-spatial-data-in-r/</link>
+      <pubDate>Thu, 04 May 2023 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2023-05-04-inference-with-raster-spatial-data-in-r/</guid>
+      <description>Introduction In this blog post, I want to demonstrate how to work with spatial raster data in R. I already have a couple of tutorials on vector data, but in this blog post, I want to focus exclusively on raster data. I&amp;rsquo;ll be replicating a paper about Roman Roads by Dalgaard et al. (2021), which attempts to identify the persistent influence of Roman roads (built in the Roman empire) on later economic development.</description>
+    </item>
+    
     <item>
       <title>Democracy and peace</title>
       <link>/blog/2023-02-27-democracy-and-peace/</link>
