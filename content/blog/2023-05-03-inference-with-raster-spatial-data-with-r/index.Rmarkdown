@@ -2,8 +2,8 @@
 title: Inference with Raster Spatial Data with R
 author: 'Bas Machielsen'
 date: '2023-05-03'
-excerpt: An example demonstration of working with raster data in R. 
 slug: []
+excerpt: An example demonstration of working with raster data in R. 
 categories: []
 tags: []
 ---
@@ -17,7 +17,7 @@ In this blog post, I want to demonstrate how to work with spatial raster data in
 
 First, I load the necessary libraries:
 
-```{r setup}
+```{r setup, echo=FALSE}
 library(tidyverse); library(sf); library(raster); library(rgdal); library(terra)
 ```
 
@@ -33,7 +33,7 @@ I'll also be using a variety of data sources. Here, I want to give a short overv
 - [Alternative Nightlights package](https://github.com/JakobMie/nightlightstats)
 - [Website with Graphical User Interface](https://eogdata.mines.edu/products/vnl/#annual_v2)
 - [The Oxford Roman Economy Project](http://oxrep.classics.ox.ac.uk/databases/mines_database/): Data on Settlements in 500AD
-- `osmdata` R package  [Vignette](https://cran.r-project.org/web/packages/osmdata/vignettes/osmdata.html): Data on contemporary roads
+- `osmdata` R package [vignette](https://cran.r-project.org/web/packages/osmdata/vignettes/osmdata.html): Data on contemporary roads
 
 **Miscellaneous data**:
 
@@ -54,9 +54,9 @@ I'll also be using a variety of data sources. Here, I want to give a short overv
 
 ## Get the roads and the borders
 
-- The borders can be found on [this repository](https://github.com/AWMC/geodata/blob/master/Cultural-Data/political_shading/roman_empire_ce_117_extent/roman_empire_ce_117_extent.geojson). I'll be using only a small subset of the data to keep down computational and memory load. 
+The borders can be found on [this repository](https://github.com/AWMC/geodata/blob/master/Cultural-Data/political_shading/roman_empire_ce_117_extent/roman_empire_ce_117_extent.geojson). I'll be using only a small subset of the data to keep down computational and memory load. 
 
-```{r message=FALSE, warning=FALSE}
+```{r message=FALSE, warning=FALSE, include=FALSE}
 links <- 'https://raw.githubusercontent.com/AWMC/geodata/master/Cultural-Data/political_shading/roman_empire_ce_117_extent/roman_empire_ce_117_extent.geojson'
 download.file(links, destfile='roman_empire.geojson')
 
@@ -224,13 +224,15 @@ plot(raster_mean_raster_roads$value)
 
 ## Analysis
 
-The analysis now involves stacking the data from `raster_mean_raster_nl` (the nightlights data) and `raster_mean_raster_roads` involving the roads and regression the one on the other. Let's implement this and then conduct a short analysis. The relevant data is in the fourth column of the raster data. 
+The analysis now involves stacking the data from `raster_mean_raster_nl` (the nightlights data) and `raster_mean_raster_roads` involving the roads and regression the one on the other. Let's implement this and then conduct a short analysis. The relevant data is in the fourth column of the raster data. Potentially, we could also merge the data with other data.frames based on the other columns. 
 
 ```{r create_df}
 data <- data.frame(
   nightlights = raster_mean_raster_nl@data@values[,4],
   roads = raster_mean_raster_roads@data@values[,4])
 ```
+
+Now, we estimate the influence of Roman road density on nightlight activity:
 
 ```{r analysis, warning=FALSE, message=FALSE}
 library(fixest); library(modelsummary)
@@ -239,4 +241,6 @@ fixest::feols(nightlights ~ log(1+roads), data = data) |>
   msummary(stars = T, vcov = 'robust')
 
 ```
+
+The magnitude of the 
 

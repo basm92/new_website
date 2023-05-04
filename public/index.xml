@@ -6,7 +6,7 @@
     <description>Recent content on Bas Machielsen</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Wed, 03 May 2023 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 19 Apr 2023 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Clio</title>
       <link>/collection/clio/</link>
@@ -23,15 +23,6 @@
       
       <guid>/collection/hdng/</guid>
       <description>hdng is a package facilitating the use of the HDNG Database, a database containing quantative information in various aspects of Dutch municipalities from about 1800 to the 1980&amp;rsquo;s. This package aids the user in finding their way through the database, allowing them to search for wanted variables, browse within categories, and finally, make a query to extract the wanted data.</description>
-    </item>
-    
-    <item>
-      <title>Inference with Raster Spatial Data with R</title>
-      <link>/blog/2023-05-03-inference-with-raster-spatial-data-with-r/</link>
-      <pubDate>Wed, 03 May 2023 00:00:00 +0000</pubDate>
-      
-      <guid>/blog/2023-05-03-inference-with-raster-spatial-data-with-r/</guid>
-      <description>Introduction In this blog post, I want to demonstrate how to work with spatial raster data in R. I already have a couple of tutorials on vector data, but in this blog post, I want to focus exclusively on raster data. I’ll be replicating a paper about Roman Roads by Dalgaard et al. (2021), which attempts to identify the persistent influence of Roman roads (built in the Roman empire) on later economic development.</description>
     </item>
     
     <item>
