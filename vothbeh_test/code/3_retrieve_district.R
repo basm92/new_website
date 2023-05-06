@@ -30,7 +30,7 @@ extract_cor <- function(input_string, year) {
 find_district <- function(row){
   date <- row$date
   b1_no <- row$b1_nummer
-  year <- date |> year() |> as.numeric()
+  year <- date |> year() 
   
   if(year <= 1917) {
   
