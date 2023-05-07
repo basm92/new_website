@@ -662,7 +662,7 @@ b1_nummer;politician;vote;law;date;house;pdc_naam;category;district
 01457;van der Vlugt;0;Antistakingswet 1903;1903-04-09;Tweede Kamer;Vlugt;social;Leiden
 01120;Roessingh;0;Antistakingswet 1903;1903-04-09;Tweede Kamer;Roessingh;social;Emmen
 00995;Okma;0;Antistakingswet 1903;1903-04-09;Tweede Kamer;Okma;social;Sneek
-00469;Goeman Borgesius;0;Antistakingswet 1903;1903-04-09;Tweede Kamer;Goeman Borgesius;social;In Zutphen
+00469;Goeman Borgesius;0;Antistakingswet 1903;1903-04-09;Tweede Kamer;Goeman Borgesius;social;Zutphen
 00923;Michiels van Verduynen;0;Antistakingswet 1903;1903-04-09;Tweede Kamer;Michiels van Verduynen;social;Breda
 00849;Lucasse;0;Antistakingswet 1903;1903-04-09;Tweede Kamer;Lucasse;social;Middelburg
 00354;Duymaer van Twist;0;Antistakingswet 1903;1903-04-09;Tweede Kamer;Duymaer van Twist;social;Steenwijk
@@ -904,7 +904,7 @@ b1_nummer;politician;vote;law;date;house;pdc_naam;category;district
 00279;Cremer;1;Hoger Onderwijswet 1904;1904-03-24;Tweede Kamer;Cremer;social;Amsterdam IV
 00325;Dolk;1;Hoger Onderwijswet 1904;1904-03-24;Tweede Kamer;Dolk;social;'s-Gravenhage II
 00175;Bos;1;Hoger Onderwijswet 1904;1904-03-24;Tweede Kamer;Bos;social;Winschoten
-00469;Goeman Borgesius;1;Hoger Onderwijswet 1904;1904-03-24;Tweede Kamer;Goeman Borgesius;social;In Zutphen
+00469;Goeman Borgesius;1;Hoger Onderwijswet 1904;1904-03-24;Tweede Kamer;Goeman Borgesius;social;Zutphen
 01384;Tydeman;1;Hoger Onderwijswet 1904;1904-03-24;Tweede Kamer;Tydeman;social;Tiel
 00562;Hennequin;1;Hoger Onderwijswet 1904;1904-03-24;Tweede Kamer;Hennequin;social;Oostburg
 00613;Hubrecht;1;Hoger Onderwijswet 1904;1904-03-24;Tweede Kamer;Hubrecht;social;Amsterdam I
@@ -1058,7 +1058,7 @@ b1_nummer;politician;vote;law;date;house;pdc_naam;category;district
 01191;Schepel;1;Leerplichtwet 1901;1900-03-30;Tweede Kamer;Schepel;social;Appingedam
 00727;Kolkman;1;Leerplichtwet 1901;1900-03-30;Tweede Kamer;Kolkman;social;Rheden
 00802;Lely;1;Leerplichtwet 1901;1900-03-30;Tweede Kamer;Lely;social;Lochem
-00469;Goeman Borgesius;1;Leerplichtwet 1901;1900-03-30;Tweede Kamer;Goeman Borgesius;social;In Zutphen
+00469;Goeman Borgesius;1;Leerplichtwet 1901;1900-03-30;Tweede Kamer;Goeman Borgesius;social;Zutphen
 00704;De Klerk;1;Leerplichtwet 1901;1900-03-30;Tweede Kamer;Klerk;social;Rotterdam II
 00553;Heldt;1;Leerplichtwet 1901;1900-03-30;Tweede Kamer;Heldt;social;Amsterdam VII
 01391;Veegens;1;Leerplichtwet 1901;1900-03-30;Tweede Kamer;Veegens;social;Hoogezand
@@ -1071,7 +1071,7 @@ b1_nummer;politician;vote;law;date;house;pdc_naam;category;district
 01609;Zijlma;1;Leerplichtwet 1901;1900-03-30;Tweede Kamer;Zijlma;social;Zuidhorn
 01385;Tijdens;1;Leerplichtwet 1901;1900-03-30;Tweede Kamer;Tijdens;social;Winschoten
 01179;Schaafsma;1;Leerplichtwet 1901;1900-03-30;Tweede Kamer;Schaafsma;social;Dokkum
-00609;Houwing;1;Leerplichtwet 1901;1900-03-30;Tweede Kamer;Houwing;social;vanaf Weststellingwerf
+00609;Houwing;1;Leerplichtwet 1901;1900-03-30;Tweede Kamer;Houwing;social;Weststellingwerf
 00348;Drucker;1;Leerplichtwet 1901;1900-03-30;Tweede Kamer;Drucker;social;Groningen
 01180;Schaepman;1;Leerplichtwet 1901;1900-03-30;Tweede Kamer;Schaepman;social;Almelo
 00731;Kool;1;Leerplichtwet 1901;1900-03-30;Tweede Kamer;Kool;social;Enkhuizen
@@ -1092,7 +1092,7 @@ b1_nummer;politician;vote;law;date;house;pdc_naam;category;district
 00983;Nolting;1;Leerplichtwet 1901;1900-03-30;Tweede Kamer;Nolting;social;Amsterdam VIII
 00893;Meesters;1;Leerplichtwet 1901;1900-03-30;Tweede Kamer;Meesters;social;Steenwijk
 00568;Hesselink van Suchtelen;1;Leerplichtwet 1901;1900-03-30;Tweede Kamer;Hesselink van Suchtelen;social;Doetinchem
-00462;Gleichman;1;Leerplichtwet 1901;1900-03-30;Tweede Kamer;Gleichman;social;van Amsterdam IV
+00462;Gleichman;1;Leerplichtwet 1901;1900-03-30;Tweede Kamer;Gleichman;social;Amsterdam IV
 00065;Van Basten Batenburg;0;Leerplichtwet 1901;1900-03-30;Tweede Kamer;Basten Batenburg;social;Elst
 00163;Van der Borch van Verwolde;0;Leerplichtwet 1901;1900-03-30;Tweede Kamer;Borch van Verwolde;social;Ridderkerk
 00763;Van der Kun;0;Leerplichtwet 1901;1900-03-30;Tweede Kamer;Kun;social;Zevenbergen
@@ -1161,7 +1161,7 @@ b1_nummer;politician;vote;law;date;house;pdc_naam;category;district
 00904;Merckelbach;1;Ongevallenwet 1901;1899-12-13;Tweede Kamer;Merckelbach;social;Gulpen
 01604;van der Zwaag;1;Ongevallenwet 1901;1899-12-13;Tweede Kamer;Zwaag;social;Schoterland
 00981;Nolens;1;Ongevallenwet 1901;1899-12-13;Tweede Kamer;Nolens;social;Venlo
-00469;Goeman Borgesius;1;Ongevallenwet 1901;1899-12-13;Tweede Kamer;Goeman Borgesius;social;In Zutphen
+00469;Goeman Borgesius;1;Ongevallenwet 1901;1899-12-13;Tweede Kamer;Goeman Borgesius;social;Zutphen
 00188;Bouman;1;Ongevallenwet 1901;1899-12-13;Tweede Kamer;Bouman;social;Harlingen
 01376;Troelstra;1;Ongevallenwet 1901;1899-12-13;Tweede Kamer;Troelstra;social;Tietjerksteradeel
 00461;van Gilse;1;Ongevallenwet 1901;1899-12-13;Tweede Kamer;Gilse;social;Sneek
@@ -1211,7 +1211,7 @@ b1_nummer;politician;vote;law;date;house;pdc_naam;category;district
 00568;Hesselink van Suchtelen;1;Ongevallenwet 1901;1899-12-13;Tweede Kamer;Hesselink van Suchtelen;social;Doetinchem
 00144;de Boer;1;Ongevallenwet 1901;1899-12-13;Tweede Kamer;Boer;social;Zaandam
 01293;Staalman;1;Ongevallenwet 1901;1899-12-13;Tweede Kamer;Staalman;social;Den Helder
-00609;Houwing;1;Ongevallenwet 1901;1899-12-13;Tweede Kamer;Houwing;social;vanaf Weststellingwerf
+00609;Houwing;1;Ongevallenwet 1901;1899-12-13;Tweede Kamer;Houwing;social;Weststellingwerf
 00731;Kool;1;Ongevallenwet 1901;1899-12-13;Tweede Kamer;Kool;social;Enkhuizen
 00348;Drucker;1;Ongevallenwet 1901;1899-12-13;Tweede Kamer;Drucker;social;Groningen
 01498;de Waal Malefijt;1;Ongevallenwet 1901;1899-12-13;Tweede Kamer;Waal Malefijt;social;Breukelen
@@ -1220,7 +1220,7 @@ b1_nummer;politician;vote;law;date;house;pdc_naam;category;district
 00889;Mees;1;Ongevallenwet 1901;1899-12-13;Tweede Kamer;Mees;social;Rotterdam IV
 01179;Schaafsma;1;Ongevallenwet 1901;1899-12-13;Tweede Kamer;Schaafsma;social;Dokkum
 01238;Seret;1;Ongevallenwet 1901;1899-12-13;Tweede Kamer;Seret;social;Gorinchem
-00462;Gleichman;1;Ongevallenwet 1901;1899-12-13;Tweede Kamer;Gleichman;social;van Amsterdam IV
+00462;Gleichman;1;Ongevallenwet 1901;1899-12-13;Tweede Kamer;Gleichman;social;Amsterdam IV
 00684;van Kerkwijk;0;Ongevallenwet 1901;1899-12-13;Tweede Kamer;Kerkwijk;social;Zierikzee
 01446;de Visser;0;Ongevallenwet 1901;1899-12-13;Tweede Kamer;Visser;social;Rotterdam I
 00087;van den Berch van Heemstede;0;Ongevallenwet 1901;1899-12-13;Tweede Kamer;Berch van Heemstede;social;Oosterhout
@@ -1456,7 +1456,7 @@ b1_nummer;politician;vote;law;date;house;pdc_naam;category;district
 00461;van Gilse;1;Woningwet 1901;1901-04-19;Tweede Kamer;Gilse;social;Sneek
 00500;van Gijn;1;Woningwet 1901;1901-04-19;Tweede Kamer;Gijn;social;Dordrecht
 00543;S. baron van Heemstra;1;Woningwet 1901;1901-04-19;Tweede Kamer;Heemstra;social;Hilversum
-00469;Goeman Borgesius;1;Woningwet 1901;1901-04-19;Tweede Kamer;Goeman Borgesius;social;In Zutphen
+00469;Goeman Borgesius;1;Woningwet 1901;1901-04-19;Tweede Kamer;Goeman Borgesius;social;Zutphen
 00684;van Kerkwijk;1;Woningwet 1901;1901-04-19;Tweede Kamer;Kerkwijk;social;Zierikzee
 00802;Lely;1;Woningwet 1901;1901-04-19;Tweede Kamer;Lely;social;Lochem
 00087;van den Berch van Heemstede;1;Woningwet 1901;1901-04-19;Tweede Kamer;Berch van Heemstede;social;Oosterhout
@@ -1474,13 +1474,13 @@ b1_nummer;politician;vote;law;date;house;pdc_naam;category;district
 01391;Veegens;1;Woningwet 1901;1901-04-19;Tweede Kamer;Veegens;social;Hoogezand
 01385;Tijdens;1;Woningwet 1901;1901-04-19;Tweede Kamer;Tijdens;social;Winschoten
 00862;Mackay;1;Woningwet 1901;1901-04-19;Tweede Kamer;Mackay;social;Kampen
-00609;Houwing;1;Woningwet 1901;1901-04-19;Tweede Kamer;Houwing;social;vanaf Weststellingwerf
+00609;Houwing;1;Woningwet 1901;1901-04-19;Tweede Kamer;Houwing;social;Weststellingwerf
 00951;Mutsaers;1;Woningwet 1901;1901-04-19;Tweede Kamer;Mutsaers;social;Waalwijk
 00731;Kool;1;Woningwet 1901;1901-04-19;Tweede Kamer;Kool;social;Enkhuizen
 01376;Troelstra;1;Woningwet 1901;1901-04-19;Tweede Kamer;Troelstra;social;Tietjerksteradeel
 00574;van den Heuvel;1;Woningwet 1901;1901-04-19;Tweede Kamer;Heuvel;social;Eindhoven
 01498;de Waal Malefijt;1;Woningwet 1901;1901-04-19;Tweede Kamer;Waal Malefijt;social;Breukelen
-00462;Gleichman;1;Woningwet 1901;1901-04-19;Tweede Kamer;Gleichman;social;van Amsterdam IV
+00462;Gleichman;1;Woningwet 1901;1901-04-19;Tweede Kamer;Gleichman;social;Amsterdam IV
 00245;W.K.F.P. van Bylandt;0;Woningwet 1901;1901-04-19;Tweede Kamer;Bylandt;social;Apeldoorn
 01199;Schimmelpenninck;0;Woningwet 1901;1901-04-19;Tweede Kamer;Schimmelpenninck;social;Amersfoort
 01177;de Savornin Lohman;0;Woningwet 1901;1901-04-19;Tweede Kamer;Savornin Lohman;social;Goes

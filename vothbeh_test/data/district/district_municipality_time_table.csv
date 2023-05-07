@@ -4116,7 +4116,7 @@ Breda,Terheijden,1850,0
 Breda,Terheijden,1888,1
 Breda,Terheijden,1897,1
 Zevenbergen,'s-Gravenmoer,1848,1
-Zevenbergen,'s-Gravenmoer,1850,0
+Zevenbergen,'s-Gravenmoer,1850,1
 Zevenbergen,'s-Gravenmoer,1888,0
 Zevenbergen,'s-Gravenmoer,1897,0
 Zevenbergen,Dinteloord,1848,0
@@ -4128,19 +4128,19 @@ Zevenbergen,Dongen,1850,0
 Zevenbergen,Dongen,1888,0
 Zevenbergen,Dongen,1897,0
 Zevenbergen,Fijnaart,1848,1
-Zevenbergen,Fijnaart,1850,0
+Zevenbergen,Fijnaart,1850,1
 Zevenbergen,Fijnaart,1888,1
 Zevenbergen,Fijnaart,1897,1
 Zevenbergen,Geertruidenberg,1848,1
-Zevenbergen,Geertruidenberg,1850,0
+Zevenbergen,Geertruidenberg,1850,1
 Zevenbergen,Geertruidenberg,1888,1
 Zevenbergen,Geertruidenberg,1897,1
 Zevenbergen,Klundert,1848,1
-Zevenbergen,Klundert,1850,0
+Zevenbergen,Klundert,1850,1
 Zevenbergen,Klundert,1888,1
 Zevenbergen,Klundert,1897,1
 Zevenbergen,Made,1848,1
-Zevenbergen,Made,1850,0
+Zevenbergen,Made,1850,1
 Zevenbergen,Made,1888,1
 Zevenbergen,Made,1897,1
 Zevenbergen,Oosterhout,1848,1
@@ -4156,7 +4156,7 @@ Zevenbergen,Oudenbosch,1850,0
 Zevenbergen,Oudenbosch,1888,1
 Zevenbergen,Oudenbosch,1897,1
 Zevenbergen,Raamsdonk,1848,1
-Zevenbergen,Raamsdonk,1850,0
+Zevenbergen,Raamsdonk,1850,1
 Zevenbergen,Raamsdonk,1888,1
 Zevenbergen,Raamsdonk,1897,1
 Zevenbergen,Standdaarbuiten,1848,1
@@ -4172,11 +4172,11 @@ Zevenbergen,Willemstad,1850,0
 Zevenbergen,Willemstad,1888,1
 Zevenbergen,Willemstad,1897,1
 Zevenbergen,Zevenbergen,1848,1
-Zevenbergen,Zevenbergen,1850,0
+Zevenbergen,Zevenbergen,1850,1
 Zevenbergen,Zevenbergen,1888,1
 Zevenbergen,Zevenbergen,1897,1
 Zevenbergen,Zwaluwe (Hooge- en Lage-),1848,1
-Zevenbergen,Zwaluwe (Hooge- en Lage-),1850,0
+Zevenbergen,Zwaluwe (Hooge- en Lage-),1850,1
 Zevenbergen,Zwaluwe (Hooge- en Lage-),1888,1
 Zevenbergen,Zwaluwe (Hooge- en Lage-),1897,1
 Tilburg,'s-Gravenmoer,1848,0
@@ -5548,15 +5548,15 @@ Hilversum,'s Graveland,1850,0
 Hilversum,'s Graveland,1888,1
 Hilversum,'s Graveland,1897,1
 Hilversum,Ankeveen,1848,0
-Hilversum,Ankeveen,1850,0
+Hilversum,Ankeveen,1850,1
 Hilversum,Ankeveen,1888,1
 Hilversum,Ankeveen,1897,1
 Hilversum,Blaricum,1848,0
-Hilversum,Blaricum,1850,0
+Hilversum,Blaricum,1850,1
 Hilversum,Blaricum,1888,1
 Hilversum,Blaricum,1897,1
 Hilversum,Bussum,1848,0
-Hilversum,Bussum,1850,0
+Hilversum,Bussum,1850,1
 Hilversum,Bussum,1888,1
 Hilversum,Bussum,1897,1
 Hilversum,Diemen,1848,0
@@ -5564,11 +5564,11 @@ Hilversum,Diemen,1850,0
 Hilversum,Diemen,1888,1
 Hilversum,Diemen,1897,1
 Hilversum,Hilversum,1848,0
-Hilversum,Hilversum,1850,0
+Hilversum,Hilversum,1850,1
 Hilversum,Hilversum,1888,1
 Hilversum,Hilversum,1897,1
 Hilversum,Huizen,1848,0
-Hilversum,Huizen,1850,0
+Hilversum,Huizen,1850,1
 Hilversum,Huizen,1888,1
 Hilversum,Huizen,1897,1
 Hilversum,Kortenhoef,1848,0
@@ -5576,7 +5576,7 @@ Hilversum,Kortenhoef,1850,0
 Hilversum,Kortenhoef,1888,1
 Hilversum,Kortenhoef,1897,1
 Hilversum,Laren,1848,0
-Hilversum,Laren,1850,0
+Hilversum,Laren,1850,1
 Hilversum,Laren,1888,1
 Hilversum,Laren,1897,1
 Hilversum,Muiden,1848,0
@@ -5584,11 +5584,11 @@ Hilversum,Muiden,1850,0
 Hilversum,Muiden,1888,1
 Hilversum,Muiden,1897,1
 Hilversum,Naarden,1848,0
-Hilversum,Naarden,1850,0
+Hilversum,Naarden,1850,1
 Hilversum,Naarden,1888,1
 Hilversum,Naarden,1897,1
 Hilversum,Nederhorst den Berg,1848,0
-Hilversum,Nederhorst den Berg,1850,0
+Hilversum,Nederhorst den Berg,1850,1
 Hilversum,Nederhorst den Berg,1888,1
 Hilversum,Nederhorst den Berg,1897,1
 Hilversum,Nigtevecht,1848,0

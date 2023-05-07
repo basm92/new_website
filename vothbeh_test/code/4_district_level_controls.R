@@ -24,6 +24,11 @@ data <- read_delim('../data/voting/voting_behavior_b1_nummer_district.csv')
 
 find_district_vars <- function(row){
   
+  if (is.na(row$district)) {
+    # Return default values or skip processing
+    return(data.frame(dis = NA))
+  }
+  
   year <- row$date |> year()
   distr <- row$district |> strip_roman()
   municipalities <- find_municipalities(distr, year)
@@ -37,7 +42,6 @@ find_district_vars <- function(row){
   services <- extract_lf_data(limited_hdng, hdng_target_year, 'services')
   agriculture <- extract_lf_data(limited_hdng, hdng_target_year, 'agriculture')
   # get the labor force data
-  print(distr)
   df <- bind_cols(industry, services, agriculture) |> 
     rowwise() |> 
     mutate(industry = sum_industry/sum(across(everything())),
@@ -59,7 +63,7 @@ find_district_vars <- function(row){
     summarize(income_tax = sum(value, na.rm=TRUE))
   
   # get the religious decomposition
-  years <- c(1869, 1879, 1889, 1899, 1909, 1920, 1930)
+  years <- c(1869, 1879, 1899, 1909, 1920, 1930)
   target_year_hdng <- years[which.min(abs(year-years))]
   df5 <- get_religious_decomposition(limited_hdng, target_year_hdng)
   
@@ -68,7 +72,14 @@ find_district_vars <- function(row){
 
 
 # now, do it for all observations (tomorrow)
-test <- data[1:20, ] |>
+out <- data |>
   rowwise() |> 
   mutate(dis = list(find_district_vars(cur_data())))
   
+out <- out |> unnest_wider(dis)
+
+# write to csv
+out <- out |>
+  select(-dis)
+
+write_csv2(out, '../data/voting/vot_beh_b1_district_data.csv')

@@ -83,7 +83,12 @@ data <- data |>
 # do some short post-processing to finalize:
 data <- data |>
   rename(district = test) |>
-  mutate(district = str_remove(district, "\\d{4}-?(\\d{0,4})?") |> str_remove('september 1918') |> str_squish())
+  mutate(district = str_remove(district, "\\d{4}-?(\\d{0,4})?") |> 
+           str_remove('september 1918') |>
+           str_squish() |>
+           str_replace("In Zutphen", "Zutphen") |>
+           str_replace("van Amsterdam IV", "Amsterdam IV") |>
+           str_replace("vanaf Weststellingwerf", "Weststellingwerf"))
 
 # write to csv
 write_csv2(data, '../data/voting/voting_behavior_b1_nummer_district.csv')

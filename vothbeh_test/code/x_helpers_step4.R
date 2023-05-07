@@ -69,8 +69,21 @@ extract_tax_data <- function(df, y){
 
 get_religious_decomposition <- function(df, y){
   
-  df |>
-    filter(description == 'Aantal gelovigen', year == y) |>
+  interim <- df |>
+    filter(description == 'Aantal gelovigen', year == y) 
+  if(is.element(y, c(1899, 1909))) {
+    interim |>
+      filter(sex == "_T") |> 
+    summarize(catholics = sum(value[information == 'Rooms-Katholieken'], na.rm=T),
+              geref = sum(value[str_detect(information, "Gereformeerd")], na.rm=T),
+              hervormd = sum(value[information == 'Nederlands Hervormden'], na.rm=T)) |>
+      rowwise() |>
+      mutate(catholic_pct = catholics/sum(catholics, geref, hervormd, na.rm=T),
+             geref_pct = geref/sum(catholics, geref, hervormd, na.rm=T),
+             hervormd_pct = hervormd/sum(catholics, geref, hervormd, na.rm=T))
+  } else {
+  
+  interim |>
     filter(is.element(sex, c("M", "V"))) |>
     summarize(catholics = sum(value[information == 'Rooms-Katholieken'], na.rm=T),
               geref = sum(value[str_detect(information, "Gereformeerd")], na.rm=T),
@@ -79,4 +92,5 @@ get_religious_decomposition <- function(df, y){
     mutate(catholic_pct = catholics/sum(catholics, geref, hervormd, na.rm=T),
            geref_pct = geref/sum(catholics, geref, hervormd, na.rm=T),
            hervormd_pct = hervormd/sum(catholics, geref, hervormd, na.rm=T))
+  }
 }
