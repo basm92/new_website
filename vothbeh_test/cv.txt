@@ -1,0 +1,4 @@
+feols(vote ~  turnout + soc_share + log(income_tax) | law + party_granular | log(wealth_defl) ~ expected_inheritance, data = test|> filter(category=='fiscal'),  vcov=~b1_nummer)
+feols(vote ~  turnout + soc_share + log(income_tax) + log(vermogen_tax) + catholic_pct + hervormd_pct | law + party_granular | log(wealth_defl) ~ expected_inheritance, data = test|> filter(category=='fiscal'),  vcov=~b1_nummer)
+feols(vote ~ turnout + soc_share + soc_dum + log(income_tax) + log(vermogen_tax) + industry + catholic_pct + hervormd_pct | law + party_granular | ihs(wealth_defl) ~ expected_inheritance, data = test|> filter(category=='fiscal'),  vcov=~b1_nummer)
+
