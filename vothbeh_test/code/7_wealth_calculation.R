@@ -183,7 +183,7 @@ data <- data |>
   mutate(defw_rb = list(calculate_back_deflate_assets_rebalance(cur_data())))
 
 data <- data |> 
-  unnest(defw)
+  unnest(c(defw, defw_rb))
 
 # write to csv
 write_csv2(data, './vothbeh_test/data/voting/voth_wealth.csv')
