@@ -17,6 +17,8 @@ In this post, I'll give an overview and short description of various commonly-us
 1. [World Values Survey](#world-values-survey)
 2. [Demographics and Health Survey](#demographics-and-health-survey)
 3. [Global Climate Database](#global-climate-database)
+4. [Global Agro-Ecological Zones](#global-agro-ecological-zones)
+5. [GISS Surface Temperature Data](#giss-surface-temperature-data)
 4. [National Centers for Environmental Information](#national-centers-for-environmental-information)
 4. [Clio Infra](#clio-infra)
 5. [Scholarly Measures of Politics](#scholarly-measures-of-politics)
@@ -61,6 +63,14 @@ Available at [https://dhsprogram.com/data](https://dhsprogram.com/data). This is
 ## Global Climate Database
 
 A website containing climate data for the world on a number of spatial frequencies from 1970 to 2000. Available at [http://www.worldclim.org/](http://www.worldclim.org/). 
+
+## Global Agro-Ecological Zones
+
+The Food and Agriculture Organization of the United Nations (FAO) and the International Institute for Applied Systems Analysis (IIASA) have cooperated over several decades to develop and implement the Agro-Ecological Zones (AEZ) modelling framework and databases. AEZ relies on well-established land evaluation principles to assess natural resources for finding suitable agricultural land utilization options. It identifies resource limitations and opportunities based on plant eco-physiological characteristics, climatic and edaphic requirements of crops and it uses these to evaluate suitability and production potentials for individual crop types under specific input and management conditions. Available [here](https://gaez.fao.org/)
+
+## GISS Surface Temperature Data
+
+The GISS Surface Temperature Analysis version 4 (GISTEMP v4) is an estimate of global surface temperature change. Graphs and tables are updated around the middle of every month using current data files from NOAA GHCN v4 (meteorological stations) and ERSST v5 (ocean areas). Available [here](https://data.giss.nasa.gov/gistemp/). 
 
 ## National Centers for Environmental Information
 
