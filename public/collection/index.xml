@@ -6,7 +6,16 @@
     <description>Recent content in Software on Bas Machielsen</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Fri, 01 Jan 2021 00:00:00 +0000</lastBuildDate><atom:link href="/collection/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 22 Aug 2023 00:00:00 +0000</lastBuildDate><atom:link href="/collection/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>cbs_historisch_downloader</title>
+      <link>/collection/cbs_historisch_downloader/</link>
+      <pubDate>Tue, 22 Aug 2023 00:00:00 +0000</pubDate>
+      
+      <guid>/collection/cbs_historisch_downloader/</guid>
+      <description>BS Historisch contains digitalized images of various books, serving as useful data sources. The website is quite slow and tedious to use. This Python-based tools allows users to download the images to their hard drives and inspect/read them there. It is also available on PyPI here.</description>
+    </item>
+    
     <item>
       <title>Clio</title>
       <link>/collection/clio/</link>
