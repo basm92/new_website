@@ -245,6 +245,7 @@ https://www.insee.fr/fr/statistiques?debut=0&categorie=3
 | Netherlands | Volkstellingen (Censuses) | [Link](http://www.volkstellingen.nl/) |
 | Netherlands | Historical Database of Dutch Municipalities | [Link](https://datasets.iisg.amsterdam/dataverse/HDNG?q=&types=dataverses%3Adatasets&sort=dateSort&order=desc&page=1) | 
 | Spain | Instituto Nacional de Estadistica | [Link](https://www.ine.es/en/index.htm) |
+| Spain | Historical Municipalities Database | [Paper](https://www.ehvalencia.es/wp-content/uploads/2023/05/DT_EHV_2023_01.pdf) and [E-mail](ehvalencia@uv.es) (Chapter 4 in the Paper) 
 | Austria | Ein Blick auf die Gemeinde | [Link](https://www.statistik.at/blickgem/index) |
 | Belgium | Statbel | [Link](https://statbel.fgov.be/fr/open-data)
 
