@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr"><head>
+  
+                           
+     
+
+
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="generator" content="Hugo 0.101.0" />
+<title>The Performance of Probabilistic Latent Semantic Analysis | Bas Machielsen</title>
+
+
+<meta property="twitter:site" content="@basss92">
+<meta property="twitter:creator" content="@basss92">
+
+
+
+
+
+
+
+  
+    
+  
+<meta name="description" content="Personal website of Bas Machielsen, Economics &amp; Economic History.">
+
+
+<meta property="og:site_name" content="Bas Machielsen">
+<meta property="og:title" content="The Performance of Probabilistic Latent Semantic Analysis | Bas Machielsen">
+<meta property="og:description" content="Personal website of Bas Machielsen, Economics &amp; Economic History." />
+<meta property="og:type" content="page" />
+<meta property="og:url" content="/blog/2023-10-05-the-performance-of-probabilistic-latent-semantic-analysis/" />
+<meta property="og:locale" content="en">
+
+
+
+
+    
+        <meta property="og:image" content="/blog/sidebar-listing.png" >
+        <meta property="twitter:card" content="summary_large_image">
+        <meta name="twitter:image" content="/blog/sidebar-listing.png" >
+    
+    
+  <meta itemprop="name" content="The Performance of Probabilistic Latent Semantic Analysis">
+<meta itemprop="description" content="Introduction In this blog post, I want to investigate the performance of probabilistic latent semantic analysis: a subject I have been teaching (but also studying) for a course. Probabilistic latent semantic analysis proceeds from a document-term matrix, a standard data matrix in the field of text mining. It should look something like this, where the rows of the matrix represent \(n\) documents and the columns \(p\) terms (words). Usually, \(p &gt; n\)."><meta itemprop="datePublished" content="2023-10-05T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2023-10-05T00:00:00+00:00" />
+<meta itemprop="wordCount" content="868">
+<meta itemprop="keywords" content="" />
+  
+  
+  <!--[if IE]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  <link rel="shortcut icon" href="favicon_new.ico" type="image/x-icon">
+  <link rel="icon" href="favicon_new.ico" type="image/x-icon">
+  
+  
+  <link rel="stylesheet" href="/style.main.min.7aee66b22ae3b19895932b9cf4d37da828ca65fc6cd45cfdee1b36b98f4b0ae0.css" integrity="sha256-eu5msirjsZiVkyuc9NN9qCjKZfxs1Fz97hs2uY9LCuA=" media="screen">
+  
+  
+  <script src="/panelset.min.dca42702d7daf6fd31dc352efd2bcf0e4ac8c05ccaa58d9293f6177462de5d5f.js" type="text/javascript"></script>
+  
+  
+  <script src="/main.min.d7e4e8181380eb79c579f1573ca10b3aeb727c619c43ff775fec0b0d1624b24d.js" type="text/javascript"></script>
+</head>
+<body>
+      <div class="grid-container">
+<header class="site-header pt4 pb2 mb4 bb b--transparent ph5 headroom z-max" role="banner">
+  <nav class="site-nav db dt-l w-100" role="navigation">
+    <a class="site-brand db dtc-l v-mid link no-underline w-100 w-33-l tc tl-l" href="/" title="Home">
+      <img src="/website_logo.png" class="dib db-l h2 w-auto" alt="Bas Machielsen">
+    </a>
+    <div class="site-links db dtc-l v-mid w-100 w-47-l tc tr-l mt3 mt0-l ttu tracked">
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/" title="Home">Home</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/about/" title="About">About</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 active" href="/blog/" title="Blog">Blog</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/project/" title="Teaching Overview &amp; Repository">Teaching</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/resume/" title="Resume">Resume</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/articles/" title="Articles">Articles</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/collection/" title="Software">Software</a>
+      
+      
+    </div>
+  </nav>
+</header>
+
+<main class="page-main pa4" role="main">
+  <section class="page-content mw7 center">
+    <article class="post-content pa0 ph4-l">
+      <header class="post-header">
+        <h1 class="f1 lh-solid measure-narrow mb3 fw4">The Performance of Probabilistic Latent Semantic Analysis</h1>
+        
+        <p class="f6 measure lh-copy mv1">By Bas Machielsen</p>
+        <p class="f7 db mv0 ttu">October 5, 2023</p>
+
+      
+
+      </header>
+      <section class="post-body pt5 pb4">
+        
+
+
+
+<h2 id="introduction">Introduction
+  <a href="#introduction"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>In this blog post, I want to investigate the performance of probabilistic latent semantic analysis: a subject I have been teaching (but also studying) for a course. Probabilistic latent semantic analysis proceeds from a <em>document-term</em> matrix, a standard data matrix in the field of text mining. It should look something like this, where the rows of the matrix represent <code>\(n\)</code> documents and the columns <code>\(p\)</code> terms (words). Usually, <code>\(p &gt; n\)</code>.</p>
+<p>$$
+A = \begin{pmatrix}
+doc_1,term_1 &amp; doc_1, term_2 &amp; \dots &amp; doc_1, term_p \
+\vdots &amp; \dots &amp; \ddots &amp; \vdots \
+doc_n, term_1 &amp; \dots &amp; \dots &amp; doc_n, term_p \end{pmatrix}
+$$
+The standard maximum likelihood estimator for <code>\(Pr(d_i, t_j)\)</code> is <code>\(x_{ij} / m\)</code> where <code>\(m\)</code> is the total word count in all documents. This has a simple interpretation: count of word <code>\(j\)</code> in document <code>\(i\)</code> / total word count in all documents.</p>
+
+
+
+
+<h2 id="plsa">PLSA
+  <a href="#plsa"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>Probabilistic Latent Semantic Analysis (PLSA) is an attempt to decompose this matrix using something similar to a singular value decomposition. In particular, given a probability matrix:</p>
+<p>$$
+P = \begin{pmatrix} p(d_1, t_1) &amp; \dots &amp; p(d_1, t_p) \
+\vdots &amp; \ddots &amp; \vdots \
+p(d_n, t_1)&amp;  \dots &amp; p(d_n, t_p) \end{pmatrix}
+$$</p>
+<p>We can have construct an approximation <code>\(U\Sigma V^T\)</code> with <code>\(U=N \times r\)</code> ($r$ classes):</p>
+<p>$$
+U = \begin{pmatrix} p(d_1 | c_1) &amp; \dots &amp; p(d_1 | c_r) \
+\vdots &amp;  &amp; \vdots \
+p(d_n | c_1) &amp; \dots &amp; p(d_n | c_r) \end{pmatrix}
+$$</p>
+<p><code>\(\Sigma = \text{diag}(P(c_r))\)</code>, and <code>\(V^T\)</code> ($r \times p$) has elements <code>\(V^T_{ij} = P(t_j | c_i)\)</code>. Naturally, the object of interest is usually <code>\(U\)</code>: this represents the probabilities of the document belonging to class <code>\(1\)</code> to <code>\(r\)</code>.</p>
+<p>In R, the package <code>svs</code> can be used to carry out probabilistic latent semantic analysis:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#900;font-weight:bold">library</span>(svs)
+</span></span></code></pre></div><p>In what follows, I&rsquo;ll demonstrate the capacity of PLSA to distinguish two types of documents on its own: I&rsquo;ll scrape and convert into a document text matrix several pages about football, and several pages about tennis, set <code>\(k\)</code> (the number of classes) equal to 2, and investigate the output.</p>
+
+
+
+
+<h2 id="example">Example
+  <a href="#example"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>Here, I first web-scrape the text of eight wikipedia pages:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#900;font-weight:bold">library</span>(rvest); <span style="color:#900;font-weight:bold">library</span>(tidyverse, quietly<span style="color:#000;font-weight:bold">=</span><span style="color:#999">T</span>)
+</span></span></code></pre></div><pre tabindex="0"><code>## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+## ✔ dplyr     1.1.2     ✔ readr     2.1.4
+## ✔ forcats   1.0.0     ✔ stringr   1.5.0
+## ✔ ggplot2   3.4.2     ✔ tibble    3.2.1
+## ✔ lubridate 1.9.2     ✔ tidyr     1.3.0
+## ✔ purrr     1.0.1     
+## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::filter()         masks stats::filter()
+## ✖ readr::guess_encoding() masks rvest::guess_encoding()
+## ✖ dplyr::lag()            masks stats::lag()
+## ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors
+</code></pre><div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>urls <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">c</span>(<span style="color:#d14">&#39;https://en.wikipedia.org/wiki/2022_FIFA_World_Cup&#39;</span>,
+</span></span><span style="display:flex;"><span>          <span style="color:#d14">&#39;https://en.wikipedia.org/wiki/2018_FIFA_World_Cup&#39;</span>,
+</span></span><span style="display:flex;"><span>          <span style="color:#d14">&#39;https://en.wikipedia.org/wiki/2014_FIFA_World_Cup&#39;</span>,
+</span></span><span style="display:flex;"><span>          <span style="color:#d14">&#39;https://en.wikipedia.org/wiki/2010_FIFA_World_Cup&#39;</span>,
+</span></span><span style="display:flex;"><span>          <span style="color:#d14">&#39;https://en.wikipedia.org/wiki/2006_FIFA_World_Cup&#39;</span>,
+</span></span><span style="display:flex;"><span>          <span style="color:#d14">&#39;https://en.wikipedia.org/wiki/2002_FIFA_World_Cup&#39;</span>,
+</span></span><span style="display:flex;"><span>          <span style="color:#d14">&#39;https://en.wikipedia.org/wiki/1998_FIFA_World_Cup&#39;</span>,
+</span></span><span style="display:flex;"><span>          <span style="color:#d14">&#39;https://en.wikipedia.org/wiki/2022_Wimbledon_Championships&#39;</span>,
+</span></span><span style="display:flex;"><span>          <span style="color:#d14">&#39;https://en.wikipedia.org/wiki/2018_Wimbledon_Championships&#39;</span>,
+</span></span><span style="display:flex;"><span>          <span style="color:#d14">&#39;https://en.wikipedia.org/wiki/2014_Wimbledon_Championships&#39;</span>,
+</span></span><span style="display:flex;"><span>          <span style="color:#d14">&#39;https://en.wikipedia.org/wiki/2010_Wimbledon_Championships&#39;</span>,
+</span></span><span style="display:flex;"><span>          <span style="color:#d14">&#39;https://en.wikipedia.org/wiki/2006_Wimbledon_Championships&#39;</span>,
+</span></span><span style="display:flex;"><span>          <span style="color:#d14">&#39;https://en.wikipedia.org/wiki/2002_Wimbledon_Championships&#39;</span>,
+</span></span><span style="display:flex;"><span>          <span style="color:#d14">&#39;https://en.wikipedia.org/wiki/1998_Wimbledon_Championships&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>texts <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">map</span>(urls, <span style="color:#000;font-weight:bold">~</span> <span style="color:#900;font-weight:bold">read_html</span>(.x) <span style="color:#000;font-weight:bold">|&gt;</span> 
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">html_elements</span>(<span style="color:#d14">&#39;div.mw-parser-output p&#39;</span>) <span style="color:#000;font-weight:bold">|&gt;</span> 
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">html_text</span>())
+</span></span></code></pre></div><p>Now, I use the <code>tidytext</code> package to put these into a document-term matrix:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#900;font-weight:bold">library</span>(tidytext)
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Compute the texts into a data.frame</span>
+</span></span><span style="display:flex;"><span>text_df <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">tibble</span>(Text <span style="color:#000;font-weight:bold">=</span> texts) <span style="color:#000;font-weight:bold">|&gt;</span> 
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">rowwise</span>() <span style="color:#000;font-weight:bold">|&gt;</span> 
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">mutate</span>(Text <span style="color:#000;font-weight:bold">=</span> <span style="color:#900;font-weight:bold">paste</span>(Text, collapse<span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;&#34;</span>)) <span style="color:#000;font-weight:bold">|&gt;</span> 
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">ungroup</span>()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Put all words together grouped by document</span>
+</span></span><span style="display:flex;"><span>text_data <span style="color:#000;font-weight:bold">&lt;-</span> text_df <span style="color:#000;font-weight:bold">|&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">group_by</span>(<span style="color:#900;font-weight:bold">row_number</span>()) <span style="color:#000;font-weight:bold">|&gt;</span> 
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">unnest_tokens</span>(word, Text) <span style="color:#000;font-weight:bold">|&gt;</span> 
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">rename</span>(<span style="color:#d14">&#39;document&#39;</span> <span style="color:#000;font-weight:bold">=</span> <span style="color:#d14">&#39;row_number()&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Convert to a document-term matrix</span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Filter out stop_words and numbers</span>
+</span></span><span style="display:flex;"><span>stop_words <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">bind_rows</span>(stop_words, <span style="color:#900;font-weight:bold">data.frame</span>(word <span style="color:#000;font-weight:bold">=</span> <span style="color:#900;font-weight:bold">as.character</span>(<span style="color:#099">0</span><span style="color:#000;font-weight:bold">:</span><span style="color:#099">10000</span>), lexicon<span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;Custom&#34;</span>))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>dtm <span style="color:#000;font-weight:bold">&lt;-</span> text_data <span style="color:#000;font-weight:bold">|&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">count</span>(document, word) <span style="color:#000;font-weight:bold">|&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">filter</span>(<span style="color:#000;font-weight:bold">!</span><span style="color:#900;font-weight:bold">is.element</span>(word, stop_words)) <span style="color:#000;font-weight:bold">|&gt;</span> <span style="color:#998;font-style:italic">#!str_detect(word, paste(as.character(0:10000), collapse=&#34;|&#34;))) |&gt; </span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">cast_dtm</span>(document, word, n)
+</span></span></code></pre></div><p>The document-term matrix (<code>dtm</code>) looks like this:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#900;font-weight:bold">as.data.frame</span>(<span style="color:#900;font-weight:bold">as.matrix</span>(dtm)) <span style="color:#000;font-weight:bold">|&gt;</span> <span style="color:#900;font-weight:bold">dim</span>()
+</span></span></code></pre></div><pre tabindex="0"><code>## [1]   14 6197
+</code></pre><p>Now, let&rsquo;s compute the frequencies and apply LPSA:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#900;font-weight:bold">library</span>(svs)
+</span></span><span style="display:flex;"><span>X <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">as.matrix</span>(dtm)
+</span></span><span style="display:flex;"><span>out <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">fast_plsa</span>(X, k<span style="color:#000;font-weight:bold">=</span><span style="color:#099">2</span>, symmetric<span style="color:#000;font-weight:bold">=</span><span style="color:#999">T</span>)
+</span></span></code></pre></div><p>Now, I want to find out which class each of the documents have been assigned to:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#900;font-weight:bold">apply</span>(
+</span></span><span style="display:flex;"><span>  out<span style="color:#000;font-weight:bold">$</span>prob1, <span style="color:#099">1</span>, which.max
+</span></span><span style="display:flex;"><span>)
+</span></span></code></pre></div><pre tabindex="0"><code>##  1  2  3  4  5  6  7  8  9 10 11 12 13 14 
+##  2  2  1  1  1  1  1  2  2  2  2  2  2  2
+</code></pre><p>.. which means that the majority of the documents is classified in the correct corresponding cluster.</p>
+
+
+
+
+<h2 id="comparison">Comparison
+  <a href="#comparison"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>We can compare the results with a so-called latent semantic analysis, which is just a singular value decomposition.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>out_lsa <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">fast_lsa</span>(X)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>out_lsa<span style="color:#000;font-weight:bold">$</span>pos1[, <span style="color:#d14">&#39;Dim1&#39;</span>]
+</span></span></code></pre></div><pre tabindex="0"><code>##            1            2            3            4            5            6 
+## -0.803081398 -0.338888792 -0.191561592 -0.298909337 -0.271174528 -0.133052909 
+##            7            8            9           10           11           12 
+## -0.146478395 -0.026522482 -0.011199147 -0.008402141 -0.019986480 -0.013202093 
+##           13           14 
+## -0.001734649 -0.001084412
+</code></pre><p>In this case, we can see that the mean of the first dimension already separates the documents perfectly in two classes. The first 7 observations having very low values and the second 7 values having very high values. So we can take this to be an indicator for which class the documents belong to:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#900;font-weight:bold">data.frame</span>(doc_no <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">1</span><span style="color:#000;font-weight:bold">:</span><span style="color:#099">14</span>) <span style="color:#000;font-weight:bold">|&gt;</span> 
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">mutate</span>(class <span style="color:#000;font-weight:bold">=</span> <span style="color:#900;font-weight:bold">if_else</span>(out_lsa<span style="color:#000;font-weight:bold">$</span>pos1[,<span style="color:#d14">&#39;Dim1&#39;</span>][doc_no] <span style="color:#000;font-weight:bold">&gt;</span> <span style="color:#900;font-weight:bold">median</span>(out_lsa<span style="color:#000;font-weight:bold">$</span>pos1[,<span style="color:#d14">&#39;Dim1&#39;</span>]), <span style="color:#099">1</span>, <span style="color:#099">2</span>))
+</span></span></code></pre></div><pre tabindex="0"><code>##    doc_no class
+## 1       1     2
+## 2       2     2
+## 3       3     2
+## 4       4     2
+## 5       5     2
+## 6       6     2
+## 7       7     2
+## 8       8     1
+## 9       9     1
+## 10     10     1
+## 11     11     1
+## 12     12     1
+## 13     13     1
+## 14     14     1
+</code></pre>
+
+
+
+<h2 id="conclusion">Conclusion
+  <a href="#conclusion"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>In this setting, I have demonstrated a simple example of latent probabilistic semantic analysis, and latent semantic analysis, and I would prefer a simpler method to a potentially more complicated method. Thank you for reading!</p>
+
+        
+        <details closed class="f6 fw7 input-reset">
+  <dl class="f6 lh-copy">
+    <dt class="fw7">Posted on:</dt>
+    <dd class="fw5 ml0">October 5, 2023</dd>
+  </dl>
+  <dl class="f6 lh-copy">
+    <dt class="fw7">Length:</dt>
+    <dd class="fw5 ml0">5 minute read, 868 words</dd>
+  </dl>
+  
+  
+  
+  <dl class="f6 lh-copy">
+    <dt class="fw7">See Also:</dt>
+    
+  </dl>
+</details>
+
+      </section>
+      <footer class="post-footer">
+        <div class="post-pagination dt w-100 mt4 mb2">
+  
+  
+  
+  
+    <a class="next dtc pl2 tr v-top fw6"
+    href="/blog/2023-05-04-inference-with-raster-spatial-data-in-r/">Inference with Raster Spatial Data in R &rarr;</a>
+  
+</div>
+
+      </footer>
+    </article>
+    
+      
+<div class="post-comments pa0 pa4-l mt4">
+  
+  <script src="https://utteranc.es/client.js"
+          repo="basm92/new_website"
+          issue-term="pathname"
+          theme="boxy-light"
+          label="comments :crystal_ball:"
+          crossorigin="anonymous"
+          async
+          type="text/javascript">
+  </script>
+  
+</div>
+
+    
+  </section>
+</main>
+<footer class="site-footer pv4 bt b--transparent ph5" role="contentinfo">
+  <nav class="db dt-l w-100">
+    <p class="site-copyright f7 db dtc-l v-mid w-100 w-33-l tc tl-l pv2 pv0-l mv0 lh-copy">
+      &copy; 2023 Bas Machielsen
+      <span class="middot-divider"></span>
+      Made with <span xmlns:dct="http://purl.org/dc/terms/" property="dct:title"><a xmlns:dct="http://purl.org/dc/terms/" href="https://github.com/hugo-apero/" rel="dct:source">Hugo Apéro</a></span>.
+      <br />
+      
+Based on <span xmlns:dct="http://purl.org/dc/terms/" property="dct:title"><a xmlns:dct="http://purl.org/dc/terms/" href="https://github.com/formspree/blogophonic-hugo" rel="dct:source">Blogophonic</a></span> by <a xmlns:cc="http://creativecommons.org/ns#" href="https://formspree.io" property="cc:attributionName" rel="cc:attributionURL">Formspree</a>.
+    </p>
+    
+    <div class="site-social-links db dtc-l v-mid w-100 w-33-l tc pv2 pv0-l mv0">
+      <div class="social-icon-links" aria-hidden="true">
+  
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://github.com/basm92" title="github" target="_blank" rel="noopener">
+      <i class="fab fa-github fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://scholar.google.com/citations?user=bS8uo44AAAAJ" title="google" target="_blank" rel="noopener">
+      <i class="fab fa-google fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://twitter.com/basss92" title="twitter" target="_blank" rel="noopener">
+      <i class="fab fa-twitter fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="mailto:a.h.machielsen@uu.nl" title="envelope" >
+      <i class="fas fa-envelope fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="mailto:basmachielsen@live.nl" title="envelope" >
+      <i class="far fa-envelope fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://orcid.org/0000-0002-9692-0615" title="orcid" target="_blank" rel="noopener">
+      <i class="ai ai-orcid fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="/blog/index.xml" title="rss" >
+      <i class="fas fa-rss fa-lg fa-fw"></i>
+    </a>
+  
+</div>
+
+    </div>
+    
+    <div class="site-links f6 db dtc-l v-mid w-100 w-67-l tc tr-l pv2 pv0-l mv0">
+      
+      <a class="dib pv1 ph2 link" href="/license/" title="License">License</a>
+      
+      <a class="dib pv1 ph2 link" href="/contact/" title="Contact form">Contact</a>
+      
+      <a class="dib pv1 ph2 link" href="/contributors/" title="Contributors">Contributors</a>
+      
+    </div>
+  </nav>
+  
+    <script>
+
+    var i, text, code, codes = document.getElementsByTagName('code');
+    for (let i = 0; i < codes.length;) {
+      code = codes[i];
+      if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+        text = code.textContent;
+        if (/^\$[^$]/.test(text) && /[^$]\$$/.test(text)) {
+          text = text.replace(/^\$/, '\\(').replace(/\$$/, '\\)');
+          code.textContent = text;
+        }
+        if (/^\\\((.|\s)+\\\)$/.test(text) ||
+            /^\\\[(.|\s)+\\\]$/.test(text) ||
+            /^\$(.|\s)+\$$/.test(text) ||
+            /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+          code.outerHTML = code.innerHTML;  
+          continue;
+        }
+      }
+      i++;
+    }
+</script>
+
+  
+    
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.css" integrity="sha384-RZU/ijkSsFbcmivfdRBQDtwuwVqK7GMOw6IMvKyeWL2K5UAlyp6WonmB8m7Jd0Hn" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.js" integrity="sha384-pK1WpvzWVBQiP0/GjnvRxV4mOb0oxFuyRxJlk6vVw146n3egcN5C925NCP7a7BY8" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/contrib/auto-render.min.js" integrity="sha384-vZTG03m+2yp6N6BNi5iM4rW4oIwk5DfcNdFfxkk9ZWpDriOkXX8voJBFrAO7MpVl" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
+
+
+
+    
+  
+  
+</footer>
+
+      </div>
+    </body>
+</html>

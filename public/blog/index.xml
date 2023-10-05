@@ -6,7 +6,16 @@
     <description>Recent content in Blog on Bas Machielsen</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Thu, 04 May 2023 00:00:00 +0000</lastBuildDate><atom:link href="/blog/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 05 Oct 2023 00:00:00 +0000</lastBuildDate><atom:link href="/blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>The Performance of Probabilistic Latent Semantic Analysis</title>
+      <link>/blog/2023-10-05-the-performance-of-probabilistic-latent-semantic-analysis/</link>
+      <pubDate>Thu, 05 Oct 2023 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2023-10-05-the-performance-of-probabilistic-latent-semantic-analysis/</guid>
+      <description>Introduction In this blog post, I want to investigate the performance of probabilistic latent semantic analysis: a subject I have been teaching (but also studying) for a course. Probabilistic latent semantic analysis proceeds from a document-term matrix, a standard data matrix in the field of text mining. It should look something like this, where the rows of the matrix represent \(n\) documents and the columns \(p\) terms (words). Usually, \(p &amp;gt; n\).</description>
+    </item>
+    
     <item>
       <title>Inference with Raster Spatial Data in R</title>
       <link>/blog/2023-05-04-inference-with-raster-spatial-data-in-r/</link>

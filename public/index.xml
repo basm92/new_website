@@ -6,7 +6,7 @@
     <description>Recent content on Bas Machielsen</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Tue, 22 Aug 2023 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 05 Oct 2023 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>cbs_hist_downloader</title>
       <link>/collection/cbs_hist_downloader/</link>
@@ -32,6 +32,15 @@
       
       <guid>/collection/hdng/</guid>
       <description>hdng is a package facilitating the use of the HDNG Database, a database containing quantative information in various aspects of Dutch municipalities from about 1800 to the 1980&amp;rsquo;s. This package aids the user in finding their way through the database, allowing them to search for wanted variables, browse within categories, and finally, make a query to extract the wanted data.</description>
+    </item>
+    
+    <item>
+      <title>The Performance of Probabilistic Latent Semantic Analysis</title>
+      <link>/blog/2023-10-05-the-performance-of-probabilistic-latent-semantic-analysis/</link>
+      <pubDate>Thu, 05 Oct 2023 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2023-10-05-the-performance-of-probabilistic-latent-semantic-analysis/</guid>
+      <description>Introduction In this blog post, I want to investigate the performance of probabilistic latent semantic analysis: a subject I have been teaching (but also studying) for a course. Probabilistic latent semantic analysis proceeds from a document-term matrix, a standard data matrix in the field of text mining. It should look something like this, where the rows of the matrix represent \(n\) documents and the columns \(p\) terms (words). Usually, \(p &amp;gt; n\).</description>
     </item>
     
     <item>
