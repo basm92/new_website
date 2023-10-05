@@ -2,6 +2,7 @@
 title: The Performance of Probabilistic Latent Semantic Analysis
 author: 'Bas Machielsen'
 date: '2023-10-05'
+excerpt: An introduction to Probabilistic Latent Semantic Analysis followed an example
 slug: []
 categories: []
 tags: []
