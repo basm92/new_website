@@ -2,20 +2,22 @@
 title: The Performance of Probabilistic Latent Semantic Analysis
 author: 'Bas Machielsen'
 date: '2023-10-05'
-excerpt: An introduction to Probabilistic Latent Semantic Analysis followed an example
+excerpt: An introduction to Probabilistic Latent Semantic Analysis followed by an example.
 slug: []
 categories: []
 tags: []
 ---
 
+
+
 ## Introduction
 
-In this blog post, I want to investigate the performance of probabilistic latent semantic analysis: a subject I have been teaching (but also studying) for a course. Probabilistic latent semantic analysis proceeds from a _document-term_ matrix, a standard data matrix in the field of text mining. It should look something like this, where the rows of the matrix represent `\(n\)` documents and the columns `\(p\)` terms (words). Usually, `\(p > n\)`. 
+In this blog post, I want to investigate the performance of probabilistic latent semantic analysis: a subject I have been teaching (but also studying) for a course. Probabilistic latent semantic analysis proceeds from a _document-term_ matrix, a standard data matrix in the field of text mining. It should look something like this, where the rows of the matrix represent `\(n\)` documents and the columns `\(p\)` terms (words). Usually, `\(p > n\)`. a
   
 $$
 A = \begin{pmatrix}
-doc_1,term_1 & doc_1, term_2 & \dots & doc_1, term_p \\
-\vdots & \dots & \ddots & \vdots \\
+doc_1,term_1 & doc_1, term_2 & \dots & doc_1, term_p \\\
+\vdots & \dots & \ddots & \vdots \\\
 doc_n, term_1 & \dots & \dots & doc_n, term_p \end{pmatrix}
 $$
 The standard maximum likelihood estimator for `\(Pr(d_i, t_j)\)` is `\(x_{ij} / m\)` where `\(m\)` is the total word count in all documents. This has a simple interpretation: count of word `\(j\)` in document `\(i\)` / total word count in all documents. 
@@ -26,8 +28,8 @@ Probabilistic Latent Semantic Analysis (PLSA) is an attempt to decompose this ma
 
 
 $$
-P = \begin{pmatrix} p(d_1, t_1) & \dots & p(d_1, t_p) \\
-\vdots & \ddots & \vdots \\
+P = \begin{pmatrix} p(d_1, t_1) & \dots & p(d_1, t_p) \\\
+\vdots & \ddots & \vdots \\\
 p(d_n, t_1)&  \dots & p(d_n, t_p) \end{pmatrix}
 $$
 
@@ -35,8 +37,8 @@ $$
 We can have construct an approximation `\(U\Sigma V^T\)` with `\(U=N \times r\)` ($r$ classes):
 
 $$
-U = \begin{pmatrix} p(d_1 | c_1) & \dots & p(d_1 | c_r) \\
-\vdots &  & \vdots \\
+U = \begin{pmatrix} p(d_1 | c_1) & \dots & p(d_1 | c_r) \\\
+\vdots &  & \vdots \\\
 p(d_n | c_1) & \dots & p(d_n | c_r) \end{pmatrix}
 $$
 
@@ -54,47 +56,9 @@ In what follows, I'll demonstrate the capacity of PLSA to distinguish two types 
 
 ## Example
 
-Here, I first web-scrape the text of eight wikipedia pages: 
+Here, I first web-scrape the text of several wikipedia pages: 
 
 
-```r
-library(rvest); library(tidyverse, quietly=T)
-```
-
-```
-## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-## ✔ dplyr     1.1.2     ✔ readr     2.1.4
-## ✔ forcats   1.0.0     ✔ stringr   1.5.0
-## ✔ ggplot2   3.4.2     ✔ tibble    3.2.1
-## ✔ lubridate 1.9.2     ✔ tidyr     1.3.0
-## ✔ purrr     1.0.1     
-## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-## ✖ dplyr::filter()         masks stats::filter()
-## ✖ readr::guess_encoding() masks rvest::guess_encoding()
-## ✖ dplyr::lag()            masks stats::lag()
-## ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
-```
-
-```r
-urls <- c('https://en.wikipedia.org/wiki/2022_FIFA_World_Cup',
-          'https://en.wikipedia.org/wiki/2018_FIFA_World_Cup',
-          'https://en.wikipedia.org/wiki/2014_FIFA_World_Cup',
-          'https://en.wikipedia.org/wiki/2010_FIFA_World_Cup',
-          'https://en.wikipedia.org/wiki/2006_FIFA_World_Cup',
-          'https://en.wikipedia.org/wiki/2002_FIFA_World_Cup',
-          'https://en.wikipedia.org/wiki/1998_FIFA_World_Cup',
-          'https://en.wikipedia.org/wiki/2022_Wimbledon_Championships',
-          'https://en.wikipedia.org/wiki/2018_Wimbledon_Championships',
-          'https://en.wikipedia.org/wiki/2014_Wimbledon_Championships',
-          'https://en.wikipedia.org/wiki/2010_Wimbledon_Championships',
-          'https://en.wikipedia.org/wiki/2006_Wimbledon_Championships',
-          'https://en.wikipedia.org/wiki/2002_Wimbledon_Championships',
-          'https://en.wikipedia.org/wiki/1998_Wimbledon_Championships')
-
-texts <- map(urls, ~ read_html(.x) |> 
-  html_elements('div.mw-parser-output p') |> 
-  html_text())
-```
 
 Now, I use the `tidytext` package to put these into a document-term matrix:
 
@@ -154,7 +118,7 @@ apply(
 
 ```
 ##  1  2  3  4  5  6  7  8  9 10 11 12 13 14 
-##  2  2  1  1  1  1  1  2  2  2  2  2  2  2
+##  1  2  1  1  1  2  2  2  2  2  2  2  2  2
 ```
 
 .. which means that the majority of the documents is classified in the correct corresponding cluster. 
@@ -180,7 +144,7 @@ out_lsa$pos1[, 'Dim1']
 ## -0.001734649 -0.001084412
 ```
 
-In this case, we can see that the mean of the first dimension already separates the documents perfectly in two classes. The first 7 observations having very low values and the second 7 values having very high values. So we can take this to be an indicator for which class the documents belong to:
+In this case, we can see that the median of the first dimension already separates the documents perfectly in two classes. The first 7 observations having very low values and the second 7 values having very high values. So we can take this to be an indicator for which class the documents belong to:
 
 
 ```r

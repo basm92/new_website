@@ -24,12 +24,12 @@
   
     
   
-<meta name="description" content="An introduction to Probabilistic Latent Semantic Analysis followed an example">
+<meta name="description" content="An introduction to Probabilistic Latent Semantic Analysis followed by an example.">
 
 
 <meta property="og:site_name" content="Bas Machielsen">
 <meta property="og:title" content="The Performance of Probabilistic Latent Semantic Analysis | Bas Machielsen">
-<meta property="og:description" content="An introduction to Probabilistic Latent Semantic Analysis followed an example" />
+<meta property="og:description" content="An introduction to Probabilistic Latent Semantic Analysis followed by an example." />
 <meta property="og:type" content="page" />
 <meta property="og:url" content="/blog/2023-10-05-the-performance-of-probabilistic-latent-semantic-analysis/" />
 <meta property="og:locale" content="en">
@@ -38,15 +38,15 @@
 
 
     
-        <meta property="og:image" content="/blog/sidebar-listing.png" >
+        <meta property="og:image" content="/blog/2023-10-05-the-performance-of-probabilistic-latent-semantic-analysis/featured.png" >
         <meta property="twitter:card" content="summary_large_image">
-        <meta name="twitter:image" content="/blog/sidebar-listing.png" >
+        <meta name="twitter:image" content="/blog/2023-10-05-the-performance-of-probabilistic-latent-semantic-analysis/featured.png" >
     
     
   <meta itemprop="name" content="The Performance of Probabilistic Latent Semantic Analysis">
 <meta itemprop="description" content="Introduction In this blog post, I want to investigate the performance of probabilistic latent semantic analysis: a subject I have been teaching (but also studying) for a course. Probabilistic latent semantic analysis proceeds from a document-term matrix, a standard data matrix in the field of text mining. It should look something like this, where the rows of the matrix represent \(n\) documents and the columns \(p\) terms (words). Usually, \(p &gt; n\)."><meta itemprop="datePublished" content="2023-10-05T00:00:00+00:00" />
 <meta itemprop="dateModified" content="2023-10-05T00:00:00+00:00" />
-<meta itemprop="wordCount" content="868">
+<meta itemprop="wordCount" content="763"><meta itemprop="image" content="/blog/2023-10-05-the-performance-of-probabilistic-latent-semantic-analysis/featured.png">
 <meta itemprop="keywords" content="" />
   
   
@@ -135,11 +135,11 @@
       <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
     </svg></a>
 </h2>
-<p>In this blog post, I want to investigate the performance of probabilistic latent semantic analysis: a subject I have been teaching (but also studying) for a course. Probabilistic latent semantic analysis proceeds from a <em>document-term</em> matrix, a standard data matrix in the field of text mining. It should look something like this, where the rows of the matrix represent <code>\(n\)</code> documents and the columns <code>\(p\)</code> terms (words). Usually, <code>\(p &gt; n\)</code>.</p>
+<p>In this blog post, I want to investigate the performance of probabilistic latent semantic analysis: a subject I have been teaching (but also studying) for a course. Probabilistic latent semantic analysis proceeds from a <em>document-term</em> matrix, a standard data matrix in the field of text mining. It should look something like this, where the rows of the matrix represent <code>\(n\)</code> documents and the columns <code>\(p\)</code> terms (words). Usually, <code>\(p &gt; n\)</code>. a</p>
 <p>$$
 A = \begin{pmatrix}
-doc_1,term_1 &amp; doc_1, term_2 &amp; \dots &amp; doc_1, term_p \
-\vdots &amp; \dots &amp; \ddots &amp; \vdots \
+doc_1,term_1 &amp; doc_1, term_2 &amp; \dots &amp; doc_1, term_p \\
+\vdots &amp; \dots &amp; \ddots &amp; \vdots \\
 doc_n, term_1 &amp; \dots &amp; \dots &amp; doc_n, term_p \end{pmatrix}
 $$
 The standard maximum likelihood estimator for <code>\(Pr(d_i, t_j)\)</code> is <code>\(x_{ij} / m\)</code> where <code>\(m\)</code> is the total word count in all documents. This has a simple interpretation: count of word <code>\(j\)</code> in document <code>\(i\)</code> / total word count in all documents.</p>
@@ -155,14 +155,14 @@ The standard maximum likelihood estimator for <code>\(Pr(d_i, t_j)\)</code> is <
 </h2>
 <p>Probabilistic Latent Semantic Analysis (PLSA) is an attempt to decompose this matrix using something similar to a singular value decomposition. In particular, given a probability matrix:</p>
 <p>$$
-P = \begin{pmatrix} p(d_1, t_1) &amp; \dots &amp; p(d_1, t_p) \
-\vdots &amp; \ddots &amp; \vdots \
+P = \begin{pmatrix} p(d_1, t_1) &amp; \dots &amp; p(d_1, t_p) \\
+\vdots &amp; \ddots &amp; \vdots \\
 p(d_n, t_1)&amp;  \dots &amp; p(d_n, t_p) \end{pmatrix}
 $$</p>
 <p>We can have construct an approximation <code>\(U\Sigma V^T\)</code> with <code>\(U=N \times r\)</code> ($r$ classes):</p>
 <p>$$
-U = \begin{pmatrix} p(d_1 | c_1) &amp; \dots &amp; p(d_1 | c_r) \
-\vdots &amp;  &amp; \vdots \
+U = \begin{pmatrix} p(d_1 | c_1) &amp; \dots &amp; p(d_1 | c_r) \\
+\vdots &amp;  &amp; \vdots \\
 p(d_n | c_1) &amp; \dots &amp; p(d_n | c_r) \end{pmatrix}
 $$</p>
 <p><code>\(\Sigma = \text{diag}(P(c_r))\)</code>, and <code>\(V^T\)</code> ($r \times p$) has elements <code>\(V^T_{ij} = P(t_j | c_i)\)</code>. Naturally, the object of interest is usually <code>\(U\)</code>: this represents the probabilities of the document belonging to class <code>\(1\)</code> to <code>\(r\)</code>.</p>
@@ -179,38 +179,8 @@ $$</p>
       <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
     </svg></a>
 </h2>
-<p>Here, I first web-scrape the text of eight wikipedia pages:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#900;font-weight:bold">library</span>(rvest); <span style="color:#900;font-weight:bold">library</span>(tidyverse, quietly<span style="color:#000;font-weight:bold">=</span><span style="color:#999">T</span>)
-</span></span></code></pre></div><pre tabindex="0"><code>## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-## ✔ dplyr     1.1.2     ✔ readr     2.1.4
-## ✔ forcats   1.0.0     ✔ stringr   1.5.0
-## ✔ ggplot2   3.4.2     ✔ tibble    3.2.1
-## ✔ lubridate 1.9.2     ✔ tidyr     1.3.0
-## ✔ purrr     1.0.1     
-## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-## ✖ dplyr::filter()         masks stats::filter()
-## ✖ readr::guess_encoding() masks rvest::guess_encoding()
-## ✖ dplyr::lag()            masks stats::lag()
-## ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors
-</code></pre><div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>urls <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">c</span>(<span style="color:#d14">&#39;https://en.wikipedia.org/wiki/2022_FIFA_World_Cup&#39;</span>,
-</span></span><span style="display:flex;"><span>          <span style="color:#d14">&#39;https://en.wikipedia.org/wiki/2018_FIFA_World_Cup&#39;</span>,
-</span></span><span style="display:flex;"><span>          <span style="color:#d14">&#39;https://en.wikipedia.org/wiki/2014_FIFA_World_Cup&#39;</span>,
-</span></span><span style="display:flex;"><span>          <span style="color:#d14">&#39;https://en.wikipedia.org/wiki/2010_FIFA_World_Cup&#39;</span>,
-</span></span><span style="display:flex;"><span>          <span style="color:#d14">&#39;https://en.wikipedia.org/wiki/2006_FIFA_World_Cup&#39;</span>,
-</span></span><span style="display:flex;"><span>          <span style="color:#d14">&#39;https://en.wikipedia.org/wiki/2002_FIFA_World_Cup&#39;</span>,
-</span></span><span style="display:flex;"><span>          <span style="color:#d14">&#39;https://en.wikipedia.org/wiki/1998_FIFA_World_Cup&#39;</span>,
-</span></span><span style="display:flex;"><span>          <span style="color:#d14">&#39;https://en.wikipedia.org/wiki/2022_Wimbledon_Championships&#39;</span>,
-</span></span><span style="display:flex;"><span>          <span style="color:#d14">&#39;https://en.wikipedia.org/wiki/2018_Wimbledon_Championships&#39;</span>,
-</span></span><span style="display:flex;"><span>          <span style="color:#d14">&#39;https://en.wikipedia.org/wiki/2014_Wimbledon_Championships&#39;</span>,
-</span></span><span style="display:flex;"><span>          <span style="color:#d14">&#39;https://en.wikipedia.org/wiki/2010_Wimbledon_Championships&#39;</span>,
-</span></span><span style="display:flex;"><span>          <span style="color:#d14">&#39;https://en.wikipedia.org/wiki/2006_Wimbledon_Championships&#39;</span>,
-</span></span><span style="display:flex;"><span>          <span style="color:#d14">&#39;https://en.wikipedia.org/wiki/2002_Wimbledon_Championships&#39;</span>,
-</span></span><span style="display:flex;"><span>          <span style="color:#d14">&#39;https://en.wikipedia.org/wiki/1998_Wimbledon_Championships&#39;</span>)
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>texts <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">map</span>(urls, <span style="color:#000;font-weight:bold">~</span> <span style="color:#900;font-weight:bold">read_html</span>(.x) <span style="color:#000;font-weight:bold">|&gt;</span> 
-</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">html_elements</span>(<span style="color:#d14">&#39;div.mw-parser-output p&#39;</span>) <span style="color:#000;font-weight:bold">|&gt;</span> 
-</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">html_text</span>())
-</span></span></code></pre></div><p>Now, I use the <code>tidytext</code> package to put these into a document-term matrix:</p>
+<p>Here, I first web-scrape the text of several wikipedia pages:</p>
+<p>Now, I use the <code>tidytext</code> package to put these into a document-term matrix:</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#900;font-weight:bold">library</span>(tidytext)
 </span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Compute the texts into a data.frame</span>
 </span></span><span style="display:flex;"><span>text_df <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">tibble</span>(Text <span style="color:#000;font-weight:bold">=</span> texts) <span style="color:#000;font-weight:bold">|&gt;</span> 
@@ -244,7 +214,7 @@ $$</p>
 </span></span><span style="display:flex;"><span>  out<span style="color:#000;font-weight:bold">$</span>prob1, <span style="color:#099">1</span>, which.max
 </span></span><span style="display:flex;"><span>)
 </span></span></code></pre></div><pre tabindex="0"><code>##  1  2  3  4  5  6  7  8  9 10 11 12 13 14 
-##  2  2  1  1  1  1  1  2  2  2  2  2  2  2
+##  1  2  1  1  1  2  2  2  2  2  2  2  2  2
 </code></pre><p>.. which means that the majority of the documents is classified in the correct corresponding cluster.</p>
 
 
@@ -266,7 +236,7 @@ $$</p>
 ## -0.146478395 -0.026522482 -0.011199147 -0.008402141 -0.019986480 -0.013202093 
 ##           13           14 
 ## -0.001734649 -0.001084412
-</code></pre><p>In this case, we can see that the mean of the first dimension already separates the documents perfectly in two classes. The first 7 observations having very low values and the second 7 values having very high values. So we can take this to be an indicator for which class the documents belong to:</p>
+</code></pre><p>In this case, we can see that the median of the first dimension already separates the documents perfectly in two classes. The first 7 observations having very low values and the second 7 values having very high values. So we can take this to be an indicator for which class the documents belong to:</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#900;font-weight:bold">data.frame</span>(doc_no <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">1</span><span style="color:#000;font-weight:bold">:</span><span style="color:#099">14</span>) <span style="color:#000;font-weight:bold">|&gt;</span> 
 </span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">mutate</span>(class <span style="color:#000;font-weight:bold">=</span> <span style="color:#900;font-weight:bold">if_else</span>(out_lsa<span style="color:#000;font-weight:bold">$</span>pos1[,<span style="color:#d14">&#39;Dim1&#39;</span>][doc_no] <span style="color:#000;font-weight:bold">&gt;</span> <span style="color:#900;font-weight:bold">median</span>(out_lsa<span style="color:#000;font-weight:bold">$</span>pos1[,<span style="color:#d14">&#39;Dim1&#39;</span>]), <span style="color:#099">1</span>, <span style="color:#099">2</span>))
 </span></span></code></pre></div><pre tabindex="0"><code>##    doc_no class
@@ -304,7 +274,7 @@ $$</p>
   </dl>
   <dl class="f6 lh-copy">
     <dt class="fw7">Length:</dt>
-    <dd class="fw5 ml0">5 minute read, 868 words</dd>
+    <dd class="fw5 ml0">4 minute read, 763 words</dd>
   </dl>
   
   

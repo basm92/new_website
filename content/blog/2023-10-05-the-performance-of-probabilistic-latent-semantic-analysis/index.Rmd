@@ -2,20 +2,25 @@
 title: The Performance of Probabilistic Latent Semantic Analysis
 author: 'Bas Machielsen'
 date: '2023-10-05'
-excerpt: An introduction to Probabilistic Latent Semantic Analysis followed an example
+excerpt: An introduction to Probabilistic Latent Semantic Analysis followed by an example.
 slug: []
 categories: []
 tags: []
 ---
 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+```
+
 ## Introduction
 
-In this blog post, I want to investigate the performance of probabilistic latent semantic analysis: a subject I have been teaching (but also studying) for a course. Probabilistic latent semantic analysis proceeds from a _document-term_ matrix, a standard data matrix in the field of text mining. It should look something like this, where the rows of the matrix represent $n$ documents and the columns $p$ terms (words). Usually, $p > n$. 
+In this blog post, I want to investigate the performance of probabilistic latent semantic analysis: a subject I have been teaching (but also studying) for a course. Probabilistic latent semantic analysis proceeds from a _document-term_ matrix, a standard data matrix in the field of text mining. It should look something like this, where the rows of the matrix represent $n$ documents and the columns $p$ terms (words). Usually, $p > n$. a
   
 $$
 A = \begin{pmatrix}
-doc_1,term_1 & doc_1, term_2 & \dots & doc_1, term_p \\
-\vdots & \dots & \ddots & \vdots \\
+doc_1,term_1 & doc_1, term_2 & \dots & doc_1, term_p \\\
+\vdots & \dots & \ddots & \vdots \\\
 doc_n, term_1 & \dots & \dots & doc_n, term_p \end{pmatrix}
 $$
 The standard maximum likelihood estimator for $Pr(d_i, t_j)$ is $x_{ij} / m$ where $m$ is the total word count in all documents. This has a simple interpretation: count of word $j$ in document $i$ / total word count in all documents. 
@@ -26,8 +31,8 @@ Probabilistic Latent Semantic Analysis (PLSA) is an attempt to decompose this ma
 
 
 $$
-P = \begin{pmatrix} p(d_1, t_1) & \dots & p(d_1, t_p) \\
-\vdots & \ddots & \vdots \\
+P = \begin{pmatrix} p(d_1, t_1) & \dots & p(d_1, t_p) \\\
+\vdots & \ddots & \vdots \\\
 p(d_n, t_1)&  \dots & p(d_n, t_p) \end{pmatrix}
 $$
 
@@ -35,8 +40,8 @@ $$
 We can have construct an approximation $U\Sigma V^T$ with $U=N \times r$ ($r$ classes):
 
 $$
-U = \begin{pmatrix} p(d_1 | c_1) & \dots & p(d_1 | c_r) \\
-\vdots &  & \vdots \\
+U = \begin{pmatrix} p(d_1 | c_1) & \dots & p(d_1 | c_r) \\\
+\vdots &  & \vdots \\\
 p(d_n | c_1) & \dots & p(d_n | c_r) \end{pmatrix}
 $$
 
@@ -53,9 +58,9 @@ In what follows, I'll demonstrate the capacity of PLSA to distinguish two types 
 
 ## Example
 
-Here, I first web-scrape the text of eight wikipedia pages: 
+Here, I first web-scrape the text of several wikipedia pages: 
 
-```{r}
+```{r scrape, cache=TRUE, echo=FALSE}
 library(rvest); library(tidyverse, quietly=T)
 urls <- c('https://en.wikipedia.org/wiki/2022_FIFA_World_Cup',
           'https://en.wikipedia.org/wiki/2018_FIFA_World_Cup',
@@ -112,7 +117,7 @@ as.data.frame(as.matrix(dtm)) |> dim()
 
 Now, let's compute the frequencies and apply LPSA:
 
-```{r}
+```{r analysis, cache=TRUE}
 library(svs)
 X <- as.matrix(dtm)
 out <- fast_plsa(X, k=2, symmetric=T)
@@ -139,7 +144,7 @@ out_lsa <- fast_lsa(X)
 out_lsa$pos1[, 'Dim1']
 ```
 
-In this case, we can see that the mean of the first dimension already separates the documents perfectly in two classes. The first 7 observations having very low values and the second 7 values having very high values. So we can take this to be an indicator for which class the documents belong to:
+In this case, we can see that the median of the first dimension already separates the documents perfectly in two classes. The first 7 observations having very low values and the second 7 values having very high values. So we can take this to be an indicator for which class the documents belong to:
 
 ```{r}
 data.frame(doc_no = 1:14) |> 
