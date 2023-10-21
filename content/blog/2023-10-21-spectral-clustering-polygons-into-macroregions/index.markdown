@@ -2,6 +2,7 @@
 title: Spectral Clustering Polygons into Macroregions
 author: Bas Machielsen
 date: '2023-10-21'
+excerpt: A post about clustering polygons into macroregions
 slug: []
 categories: []
 tags: []
