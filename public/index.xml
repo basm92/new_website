@@ -6,7 +6,7 @@
     <description>Recent content on Bas Machielsen</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Thu, 05 Oct 2023 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 21 Oct 2023 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>cbs_hist_downloader</title>
       <link>/collection/cbs_hist_downloader/</link>
@@ -32,6 +32,15 @@
       
       <guid>/collection/hdng/</guid>
       <description>hdng is a package facilitating the use of the HDNG Database, a database containing quantative information in various aspects of Dutch municipalities from about 1800 to the 1980&amp;rsquo;s. This package aids the user in finding their way through the database, allowing them to search for wanted variables, browse within categories, and finally, make a query to extract the wanted data.</description>
+    </item>
+    
+    <item>
+      <title>Spectral Clustering Polygons into Macroregions</title>
+      <link>/blog/2023-10-21-spectral-clustering-polygons-into-macroregions/</link>
+      <pubDate>Sat, 21 Oct 2023 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2023-10-21-spectral-clustering-polygons-into-macroregions/</guid>
+      <description>Introduction In this blog post, I want to show how to use spectral clustering, an unsupervised machine learning algorithm, to cluster polygons into macroregions. An application of this method of clustering might be to aggregate from the city/municipality level up to a higher level, but not the province level (which is something likely to already be in your shapefile). This gives a researcher the opportunity to combine observations from different, but geographically close cities.</description>
     </item>
     
     <item>

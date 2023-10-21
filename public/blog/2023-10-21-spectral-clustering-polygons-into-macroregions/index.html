@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr"><head>
+  
+                           
+     
+
+
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="generator" content="Hugo 0.101.0" />
+<title>Spectral Clustering Polygons into Macroregions | Bas Machielsen</title>
+
+
+<meta property="twitter:site" content="@basss92">
+<meta property="twitter:creator" content="@basss92">
+
+
+
+
+
+
+
+  
+    
+  
+<meta name="description" content="Personal website of Bas Machielsen, Economics &amp; Economic History.">
+
+
+<meta property="og:site_name" content="Bas Machielsen">
+<meta property="og:title" content="Spectral Clustering Polygons into Macroregions | Bas Machielsen">
+<meta property="og:description" content="Personal website of Bas Machielsen, Economics &amp; Economic History." />
+<meta property="og:type" content="page" />
+<meta property="og:url" content="/blog/2023-10-21-spectral-clustering-polygons-into-macroregions/" />
+<meta property="og:locale" content="en">
+
+
+
+
+    
+        <meta property="og:image" content="/blog/2023-10-21-spectral-clustering-polygons-into-macroregions/featured.png" >
+        <meta property="twitter:card" content="summary_large_image">
+        <meta name="twitter:image" content="/blog/2023-10-21-spectral-clustering-polygons-into-macroregions/featured.png" >
+    
+    
+  <meta itemprop="name" content="Spectral Clustering Polygons into Macroregions">
+<meta itemprop="description" content="Introduction In this blog post, I want to show how to use spectral clustering, an unsupervised machine learning algorithm, to cluster polygons into macroregions. An application of this method of clustering might be to aggregate from the city/municipality level up to a higher level, but not the province level (which is something likely to already be in your shapefile). This gives a researcher the opportunity to combine observations from different, but geographically close cities."><meta itemprop="datePublished" content="2023-10-21T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2023-10-21T00:00:00+00:00" />
+<meta itemprop="wordCount" content="989"><meta itemprop="image" content="/blog/2023-10-21-spectral-clustering-polygons-into-macroregions/featured.png">
+<meta itemprop="keywords" content="" />
+  
+  
+  <!--[if IE]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  <link rel="shortcut icon" href="favicon_new.ico" type="image/x-icon">
+  <link rel="icon" href="favicon_new.ico" type="image/x-icon">
+  
+  
+  <link rel="stylesheet" href="/style.main.min.7aee66b22ae3b19895932b9cf4d37da828ca65fc6cd45cfdee1b36b98f4b0ae0.css" integrity="sha256-eu5msirjsZiVkyuc9NN9qCjKZfxs1Fz97hs2uY9LCuA=" media="screen">
+  
+  
+  <script src="/panelset.min.dca42702d7daf6fd31dc352efd2bcf0e4ac8c05ccaa58d9293f6177462de5d5f.js" type="text/javascript"></script>
+  
+  
+  <script src="/main.min.11d2df4163a7df9fb9d31f699461f02d84700b160cd42fa951b0982fc4d468bc.js" type="text/javascript"></script>
+</head>
+<body>
+      <div class="grid-container">
+<header class="site-header pt4 pb2 mb4 bb b--transparent ph5 headroom z-max" role="banner">
+  <nav class="site-nav db dt-l w-100" role="navigation">
+    <a class="site-brand db dtc-l v-mid link no-underline w-100 w-33-l tc tl-l" href="/" title="Home">
+      <img src="/website_logo.png" class="dib db-l h2 w-auto" alt="Bas Machielsen">
+    </a>
+    <div class="site-links db dtc-l v-mid w-100 w-47-l tc tr-l mt3 mt0-l ttu tracked">
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/" title="Home">Home</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/about/" title="About">About</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 active" href="/blog/" title="Blog">Blog</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/project/" title="Teaching Overview &amp; Repository">Teaching</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/resume/" title="Resume">Resume</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/articles/" title="Articles">Articles</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/collection/" title="Software">Software</a>
+      
+      
+    </div>
+  </nav>
+</header>
+
+<main class="page-main pa4" role="main">
+  <section class="page-content mw7 center">
+    <article class="post-content pa0 ph4-l">
+      <header class="post-header">
+        <h1 class="f1 lh-solid measure-narrow mb3 fw4">Spectral Clustering Polygons into Macroregions</h1>
+        
+        <p class="f6 measure lh-copy mv1">By Bas Machielsen</p>
+        <p class="f7 db mv0 ttu">October 21, 2023</p>
+
+      
+
+      </header>
+      <section class="post-body pt5 pb4">
+        
+
+
+
+<h2 id="introduction">Introduction
+  <a href="#introduction"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>In this blog post, I want to show how to use spectral clustering, an unsupervised machine learning algorithm, to cluster polygons into macroregions. An application of this method of clustering might be to aggregate from the city/municipality level up to a higher level, but not the province level (which is something likely to already be in your shapefile). This gives a researcher the opportunity to combine observations from different, but geographically close cities. This method of clustering has several advantages:</p>
+<ul>
+<li>It can discover clusters of arbitrary shape.</li>
+<li>It&rsquo;s not as sensitive to the initial configuration as some other clustering algorithms.</li>
+<li>It can incorporate additional features or similarity measures into the clustering process, as shown in the previous responses.</li>
+</ul>
+
+
+
+
+<h2 id="formulation-of-the-algorithm">Formulation of the algorithm
+  <a href="#formulation-of-the-algorithm"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p><strong>Step 1:</strong> Compute the Similarity Matrix</p>
+<p>You start by creating a similarity matrix <code>\(S\)</code>, where <code>\(S_{ij}\)</code> represents the similarity between data points <code>\(x_i\)</code> and <code>\(x_j\)</code>. In the setting I will explain below, this similarity matrix is the <em>adjacency matrix</em>:</p>
+<p>$$
+S_{ij} = \begin{cases}
+1 &amp; \text{if Municipality <code>\(i\)</code> borders Municipality <code>\(j\)</code> and Region <code>\(i\)</code> = Region <code>\(j\)</code>} \\
+0 &amp; \text{otherwise}
+\end{cases}
+$$</p>
+<p>However, the similarity can also be defined using various other metrics like Gaussian similarity, <code>\(k\)</code>-nearest neighbors, or other similarity measures. A lot of more nuanced methods come from a good definition of the similarity matrix. For example, in the application that follows, I never want to cluster two municipalities from different provinces together. Hence this definition. In another application, I might want to cluster municipalities together if both of their populations are relatively small, whereas I might want to leave them alone if not.</p>
+<p><strong>Step 2:</strong> Create the Graph Laplacian Matrix</p>
+<p>Next, you construct a graph Laplacian matrix, also called the <em>affinity matrix</em> <code>\(L\)</code>, from the similarity matrix <code>\(S\)</code>. There are different ways to define the Laplacian matrix, but a common choice is the normalized Laplacian, which is defined as:</p>
+<p>$$
+L=I- D^{−1/2} SD^{−1/2}
+$$</p>
+<p>Where:</p>
+<ul>
+<li><code>\(I\)</code> is the identity matrix.</li>
+<li><code>\(D\)</code> is a diagonal matrix with <code>\(D_{ii}=\sum_j S_{ij}\)</code>.</li>
+</ul>
+<p>This matrix is called the affinity matrix since the distance <code>\(\approx\)</code> 1 - affinity, and the diagonal matrices make sure that distances are <em>normalized</em> between 0 and 1.</p>
+<p><strong>Step 3</strong>: Compute the eigendecomposition of the <code>\(L\)</code> Matrix.</p>
+<p><code>\(L\)</code>, an <code>\(n \times n\)</code> matrix, can be decomposed according to the eigencomposition, say in the matrices <code>\(\Gamma \Omega \Gamma\)</code>, where <code>\(\Gamma\)</code> is the matrix of (normalized) eigenvectors of <code>\(L\)</code>.</p>
+<p><strong>Step 4</strong>: Use a clustering algorithm on the eigenvector matrix</p>
+<p>Now, take the first <code>\(k\)</code> eigenvectors (corresponding to the lowest <code>\(k\)</code> eigenvalues). Considering the interpretation of this decomposition as a kind of principal component analysis, this accomplishes that observations are as different as possible for a given number of <code>\(k\)</code> eigenvectors: the last <code>\(n-k\)</code> eigenvectors (corresponding to the largest eigenvalues) are responsible for the main bulk of the variance. On these <code>\(k\)</code> eigenvectors, use a clustering algorithm such as 
+<a href="https://en.wikipedia.org/wiki/K-means_clustering" target="_blank" rel="noopener">k-means</a>.</p>
+
+
+
+
+<h2 id="example-clustering-dutch-municipalities-into-macroregions">Example: clustering Dutch Municipalities into Macroregions
+  <a href="#example-clustering-dutch-municipalities-into-macroregions"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>I will provide an example of spectral clustering in Python. For this, I use a <code>.geojson</code> file of the Netherlands consisting of polygons of all municipalities. It is available 
+<a href="https://datasets.iisg.amsterdam/dataset.xhtml?persistentId=hdl:10622/URI8O2" target="_blank" rel="noopener">here</a>.</p>
+<p>First, I load the relevant packages, after which I make a slight correction to the GeoDataFrame. The most important part is calculating the <code>\(n \times n\)</code> similarity matrix: the elements on the diagonal are naturally 1, since a polygon is similar to itself, and on the off-diagonal, I decide that polygons are similar if they border each other.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#000;font-weight:bold">import</span> <span style="color:#555">geopandas</span> <span style="color:#000;font-weight:bold">as</span> <span style="color:#555">gpd</span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">import</span> <span style="color:#555">numpy</span> <span style="color:#000;font-weight:bold">as</span> <span style="color:#555">np</span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">from</span> <span style="color:#555">sklearn.cluster</span> <span style="color:#000;font-weight:bold">import</span> SpectralClustering
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">import</span> <span style="color:#555">matplotlib.pyplot</span> <span style="color:#000;font-weight:bold">as</span> <span style="color:#555">plt</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Retrieve data with municipal boundaries</span>
+</span></span><span style="display:flex;"><span>gdf <span style="color:#000;font-weight:bold">=</span> gpd<span style="color:#000;font-weight:bold">.</span>read_file(<span style="color:#d14">&#39;nl_2020.geojson&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Fix invalid geometries</span>
+</span></span><span style="display:flex;"><span>gdf[<span style="color:#d14">&#39;geometry&#39;</span>] <span style="color:#000;font-weight:bold">=</span> gdf[<span style="color:#d14">&#39;geometry&#39;</span>]<span style="color:#000;font-weight:bold">.</span>buffer(<span style="color:#099">0</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Calculate pairwise similarity based on the spatial relationship</span>
+</span></span><span style="display:flex;"><span>similarity_matrix <span style="color:#000;font-weight:bold">=</span> np<span style="color:#000;font-weight:bold">.</span>zeros((<span style="color:#0086b3">len</span>(gdf), <span style="color:#0086b3">len</span>(gdf)))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">for</span> i <span style="color:#000;font-weight:bold">in</span> <span style="color:#0086b3">range</span>(<span style="color:#0086b3">len</span>(gdf)):
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">for</span> j <span style="color:#000;font-weight:bold">in</span> <span style="color:#0086b3">range</span>(<span style="color:#0086b3">len</span>(gdf)):
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">if</span> i <span style="color:#000;font-weight:bold">==</span> j:
+</span></span><span style="display:flex;"><span>            similarity_matrix[i][j] <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">1</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">if</span> i <span style="color:#000;font-weight:bold">!=</span> j:
+</span></span><span style="display:flex;"><span>            <span style="color:#998;font-style:italic"># Adjust the similarity matrix entries</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#000;font-weight:bold">if</span> gdf<span style="color:#000;font-weight:bold">.</span>iloc[i]<span style="color:#000;font-weight:bold">.</span>geometry<span style="color:#000;font-weight:bold">.</span>touches(gdf<span style="color:#000;font-weight:bold">.</span>iloc[j]<span style="color:#000;font-weight:bold">.</span>geometry):
+</span></span><span style="display:flex;"><span>                similarity_matrix[i][j] <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">1</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Create an affinity matrix</span>
+</span></span><span style="display:flex;"><span>row_sums <span style="color:#000;font-weight:bold">=</span> similarity_matrix<span style="color:#000;font-weight:bold">.</span>sum(axis<span style="color:#000;font-weight:bold">=</span><span style="color:#099">1</span>)
+</span></span><span style="display:flex;"><span>normalized_matrix <span style="color:#000;font-weight:bold">=</span> similarity_matrix <span style="color:#000;font-weight:bold">/</span> row_sums[:, np<span style="color:#000;font-weight:bold">.</span>newaxis]
+</span></span></code></pre></div><p>Afterwards, I use the similarity matrix to calculate a normalized &ldquo;Laplacian&rdquo;, or affinity matrix (denoted by <code>\(L\)</code> in the above). Similarities here are scaled by the &ldquo;total similarity&rdquo; to other polygons in the data frame.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Perform spectral clustering using the customized affinity matrix</span>
+</span></span><span style="display:flex;"><span>n_clusters <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">12</span>  <span style="color:#998;font-style:italic"># Number of macro polygons</span>
+</span></span><span style="display:flex;"><span>clustering <span style="color:#000;font-weight:bold">=</span> SpectralClustering(n_clusters<span style="color:#000;font-weight:bold">=</span>n_clusters, affinity<span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#39;precomputed&#39;</span>, assign_labels<span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#39;discretize&#39;</span>)<span style="color:#000;font-weight:bold">.</span>fit(normalized_matrix)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Create a new GeoDataFrame to store macro polygons</span>
+</span></span><span style="display:flex;"><span>macro_polygons <span style="color:#000;font-weight:bold">=</span> gpd<span style="color:#000;font-weight:bold">.</span>GeoDataFrame(geometry<span style="color:#000;font-weight:bold">=</span>[])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Iterate through the clusters</span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">for</span> cluster_id <span style="color:#000;font-weight:bold">in</span> <span style="color:#0086b3">range</span>(n_clusters):
+</span></span><span style="display:flex;"><span>    <span style="color:#998;font-style:italic"># Extract polygons in the current cluster</span>
+</span></span><span style="display:flex;"><span>    cluster_mask <span style="color:#000;font-weight:bold">=</span> (clustering<span style="color:#000;font-weight:bold">.</span>labels_ <span style="color:#000;font-weight:bold">==</span> cluster_id)
+</span></span><span style="display:flex;"><span>    cluster_gdf <span style="color:#000;font-weight:bold">=</span> gdf[cluster_mask]
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">if</span> <span style="color:#0086b3">len</span>(cluster_gdf) <span style="color:#000;font-weight:bold">&gt;</span> <span style="color:#099">0</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#998;font-style:italic"># Merge polygons within the cluster</span>
+</span></span><span style="display:flex;"><span>        merged_polygon <span style="color:#000;font-weight:bold">=</span> cluster_gdf<span style="color:#000;font-weight:bold">.</span>unary_union  <span style="color:#998;font-style:italic"># Merge all geometries in the cluster</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#998;font-style:italic"># Add the merged polygon to the GeoDataFrame</span>
+</span></span><span style="display:flex;"><span>        macro_polygons <span style="color:#000;font-weight:bold">=</span> macro_polygons<span style="color:#000;font-weight:bold">.</span>append({<span style="color:#d14">&#39;geometry&#39;</span>: merged_polygon}, ignore_index<span style="color:#000;font-weight:bold">=</span><span style="color:#000;font-weight:bold">True</span>)
+</span></span></code></pre></div><p>Now, after clustering has finished (I require 12 clusters), we create a new GeoDataFrame to store our new macroregions, that is, merge the polygons within each cluster to create macro polygons.</p>
+<p>Finally, in what follows, I plot the new macropolygons next to the original:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Define a colormap with distinct colors</span>
+</span></span><span style="display:flex;"><span>colors <span style="color:#000;font-weight:bold">=</span> [<span style="color:#d14">&#39;red&#39;</span>, <span style="color:#d14">&#39;blue&#39;</span>, <span style="color:#d14">&#39;green&#39;</span>, <span style="color:#d14">&#39;purple&#39;</span>, <span style="color:#d14">&#39;yellow&#39;</span>, <span style="color:#d14">&#39;black&#39;</span>, <span style="color:#d14">&#39;cyan&#39;</span>, <span style="color:#d14">&#39;gold&#39;</span>, <span style="color:#d14">&#39;magenta&#39;</span>, <span style="color:#d14">&#39;brown&#39;</span>, <span style="color:#d14">&#39;orange&#39;</span>, <span style="color:#d14">&#39;grey&#39;</span>]  
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Create a figure with two subplots</span>
+</span></span><span style="display:flex;"><span>fig, axs <span style="color:#000;font-weight:bold">=</span> plt<span style="color:#000;font-weight:bold">.</span>subplots(<span style="color:#099">1</span>, <span style="color:#099">2</span>, figsize<span style="color:#000;font-weight:bold">=</span>(<span style="color:#099">12</span>, <span style="color:#099">6</span>))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Plot the original polygons on the left subplot</span>
+</span></span><span style="display:flex;"><span>gdf<span style="color:#000;font-weight:bold">.</span>plot(ax<span style="color:#000;font-weight:bold">=</span>axs[<span style="color:#099">0</span>], color<span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#39;blue&#39;</span>, edgecolor<span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#39;black&#39;</span>)
+</span></span><span style="display:flex;"><span>axs[<span style="color:#099">0</span>]<span style="color:#000;font-weight:bold">.</span>set_title(<span style="color:#d14">&#39;Original Polygons&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Plot the macro polygons on the right subplot with different colors for each cluster</span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">for</span> cluster_id <span style="color:#000;font-weight:bold">in</span> <span style="color:#0086b3">range</span>(n_clusters):
+</span></span><span style="display:flex;"><span>    cluster_color <span style="color:#000;font-weight:bold">=</span> colors[cluster_id]
+</span></span><span style="display:flex;"><span>    macro_polygons[macro_polygons<span style="color:#000;font-weight:bold">.</span>index <span style="color:#000;font-weight:bold">==</span> cluster_id]<span style="color:#000;font-weight:bold">.</span>plot(ax<span style="color:#000;font-weight:bold">=</span>axs[<span style="color:#099">1</span>], color<span style="color:#000;font-weight:bold">=</span>cluster_color, label<span style="color:#000;font-weight:bold">=</span><span style="color:#d14">f</span><span style="color:#d14">&#39;Cluster </span><span style="color:#d14">{</span>cluster_id<span style="color:#d14">}</span><span style="color:#d14">&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>axs[<span style="color:#099">1</span>]<span style="color:#000;font-weight:bold">.</span>set_title(<span style="color:#d14">&#39;Macro Polygons&#39;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic">#axs[1].legend(loc=&#39;upper right&#39;)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Adjust plot settings</span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">for</span> ax <span style="color:#000;font-weight:bold">in</span> axs:
+</span></span><span style="display:flex;"><span>    ax<span style="color:#000;font-weight:bold">.</span>axis(<span style="color:#d14">&#39;off&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Show the plots side by side</span>
+</span></span><span style="display:flex;"><span>plt<span style="color:#000;font-weight:bold">.</span>tight_layout()
+</span></span><span style="display:flex;"><span>plt<span style="color:#000;font-weight:bold">.</span>show()
+</span></span></code></pre></div><img src="side_by_side_plot.png" width="1800" />
+
+
+
+
+<h2 id="conclusion">Conclusion
+  <a href="#conclusion"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>Spectral Clustering is a powerful clustering method suitable for clustering polygons into macropolygons, pixels into macropixels, etc. By defining the distance matrix ourselves, we have seen that it can be quite powerful and customizable to accomplish the kind of clusters you want. I hope you found this demonstration useful, and thank you for reading!</p>
+
+        
+        <details closed class="f6 fw7 input-reset">
+  <dl class="f6 lh-copy">
+    <dt class="fw7">Posted on:</dt>
+    <dd class="fw5 ml0">October 21, 2023</dd>
+  </dl>
+  <dl class="f6 lh-copy">
+    <dt class="fw7">Length:</dt>
+    <dd class="fw5 ml0">5 minute read, 989 words</dd>
+  </dl>
+  
+  
+  
+  <dl class="f6 lh-copy">
+    <dt class="fw7">See Also:</dt>
+    
+  </dl>
+</details>
+
+      </section>
+      <footer class="post-footer">
+        <div class="post-pagination dt w-100 mt4 mb2">
+  
+  
+  
+  
+    <a class="next dtc pl2 tr v-top fw6"
+    href="/blog/2023-10-05-the-performance-of-probabilistic-latent-semantic-analysis/">The Performance of Probabilistic Latent Semantic Analysis &rarr;</a>
+  
+</div>
+
+      </footer>
+    </article>
+    
+      
+<div class="post-comments pa0 pa4-l mt4">
+  
+  <script src="https://utteranc.es/client.js"
+          repo="basm92/new_website"
+          issue-term="pathname"
+          theme="boxy-light"
+          label="comments :crystal_ball:"
+          crossorigin="anonymous"
+          async
+          type="text/javascript">
+  </script>
+  
+</div>
+
+    
+  </section>
+</main>
+<footer class="site-footer pv4 bt b--transparent ph5" role="contentinfo">
+  <nav class="db dt-l w-100">
+    <p class="site-copyright f7 db dtc-l v-mid w-100 w-33-l tc tl-l pv2 pv0-l mv0 lh-copy">
+      &copy; 2023 Bas Machielsen
+      <span class="middot-divider"></span>
+      Made with <span xmlns:dct="http://purl.org/dc/terms/" property="dct:title"><a xmlns:dct="http://purl.org/dc/terms/" href="https://github.com/hugo-apero/" rel="dct:source">Hugo Apéro</a></span>.
+      <br />
+      
+Based on <span xmlns:dct="http://purl.org/dc/terms/" property="dct:title"><a xmlns:dct="http://purl.org/dc/terms/" href="https://github.com/formspree/blogophonic-hugo" rel="dct:source">Blogophonic</a></span> by <a xmlns:cc="http://creativecommons.org/ns#" href="https://formspree.io" property="cc:attributionName" rel="cc:attributionURL">Formspree</a>.
+    </p>
+    
+    <div class="site-social-links db dtc-l v-mid w-100 w-33-l tc pv2 pv0-l mv0">
+      <div class="social-icon-links" aria-hidden="true">
+  
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://github.com/basm92" title="github" target="_blank" rel="noopener">
+      <i class="fab fa-github fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://scholar.google.com/citations?user=bS8uo44AAAAJ" title="google" target="_blank" rel="noopener">
+      <i class="fab fa-google fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://twitter.com/basss92" title="twitter" target="_blank" rel="noopener">
+      <i class="fab fa-twitter fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="mailto:a.h.machielsen@uu.nl" title="envelope" >
+      <i class="fas fa-envelope fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="mailto:basmachielsen@live.nl" title="envelope" >
+      <i class="far fa-envelope fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://orcid.org/0000-0002-9692-0615" title="orcid" target="_blank" rel="noopener">
+      <i class="ai ai-orcid fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="/blog/index.xml" title="rss" >
+      <i class="fas fa-rss fa-lg fa-fw"></i>
+    </a>
+  
+</div>
+
+    </div>
+    
+    <div class="site-links f6 db dtc-l v-mid w-100 w-67-l tc tr-l pv2 pv0-l mv0">
+      
+      <a class="dib pv1 ph2 link" href="/license/" title="License">License</a>
+      
+      <a class="dib pv1 ph2 link" href="/contact/" title="Contact form">Contact</a>
+      
+      <a class="dib pv1 ph2 link" href="/contributors/" title="Contributors">Contributors</a>
+      
+    </div>
+  </nav>
+  
+    <script>
+
+    var i, text, code, codes = document.getElementsByTagName('code');
+    for (let i = 0; i < codes.length;) {
+      code = codes[i];
+      if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+        text = code.textContent;
+        if (/^\$[^$]/.test(text) && /[^$]\$$/.test(text)) {
+          text = text.replace(/^\$/, '\\(').replace(/\$$/, '\\)');
+          code.textContent = text;
+        }
+        if (/^\\\((.|\s)+\\\)$/.test(text) ||
+            /^\\\[(.|\s)+\\\]$/.test(text) ||
+            /^\$(.|\s)+\$$/.test(text) ||
+            /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+          code.outerHTML = code.innerHTML;  
+          continue;
+        }
+      }
+      i++;
+    }
+</script>
+
+  
+    
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.css" integrity="sha384-RZU/ijkSsFbcmivfdRBQDtwuwVqK7GMOw6IMvKyeWL2K5UAlyp6WonmB8m7Jd0Hn" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.js" integrity="sha384-pK1WpvzWVBQiP0/GjnvRxV4mOb0oxFuyRxJlk6vVw146n3egcN5C925NCP7a7BY8" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/contrib/auto-render.min.js" integrity="sha384-vZTG03m+2yp6N6BNi5iM4rW4oIwk5DfcNdFfxkk9ZWpDriOkXX8voJBFrAO7MpVl" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
+
+
+
+    
+  
+  
+</footer>
+
+      </div>
+    </body>
+</html>
