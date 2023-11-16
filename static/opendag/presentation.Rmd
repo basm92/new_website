@@ -1,0 +1,502 @@
+---
+title: "Minicollege: Economie en Data Science"
+subtitle: "BSc Economie en Bedrijfseconomie"
+author: "Bas Machielsen"
+institute: "Utrecht University"
+date: "18 November 2023"
+output:
+  xaringan::moon_reader:
+    css: [default, metropolis, metropolis-fonts]
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include=FALSE}
+library(tidyverse); library(jsonlite); library(gridExtra); library(sf)
+
+knitr::opts_chunk$set(echo = TRUE, 
+                      message = FALSE,
+                      warning = FALSE,
+                      fig.align='center', 
+                      fig.width=5, 
+                      fig.height=4,
+                      fig.retina = 3)
+
+get_odata <- function(targetUrl) {
+  data <- data.frame()
+  
+  while(!is.null(targetUrl)){
+    response <- fromJSON(url(targetUrl))
+    data <- bind_rows(data,response$value)
+    targetUrl <- response[["@odata.nextLink"]]
+  }
+  return(data)
+}
+
+
+get_data <- function(gemeente, date_string) {
+  
+  # Call buurten
+  gemeentex <- paste0("BU", str_remove(gemeente, "GM"))
+  
+  # Construct query
+  filtered_query <- paste0(
+  "https://dataderden.cbs.nl/ODataApi/odata/47022NED/TypedDataSet?",
+  "$filter=",
+  "startswith(WijkenEnBuurten, '", gemeentex, "') and ",
+  "Perioden eq '", date_string, "' and (SoortMisdrijf eq '1.1.1 ' or SoortMisdrijf eq '1.1.2 ' or SoortMisdrijf eq '1.2.3 ')")
+
+  # Obtain data
+  data <- get_odata(URLencode(filtered_query))
+  
+  return(data)
+}
+
+```
+
+class: inverse, center, middle
+
+# Inleiding
+
+---
+
+# Inleiding
+
+- In de economie lijkt het vaak te gaan om dit:
+
+```{r supply_demand, echo=F}
+library(tidyverse)
+
+ggplot() + 
+  geom_segment(aes(x=0, xend=10, y=0, yend=10), color='blue') + 
+  geom_segment(aes(x=0, xend=10, y=10, yend=0), color='red') +
+  annotate("rect", xmin = -1, xmax = 2, ymin = 9, ymax = 10, fill = "white", color = "black") +
+  annotate("text", x = 0, y = 9.5, label = "Demand", size = 4) +
+  annotate("rect", xmin = 8, xmax = 11, ymin = 9, ymax = 10, fill = "white", color = "black") +
+  annotate("text", x = 9, y = 9.5, label = "Supply", size = 4) +
+  theme(axis.text = element_blank(),
+        axis.ticks = element_blank(),
+        axis.title.x = element_blank(),
+        axis.title.y = element_blank())
+
+```
+
+- Dat klopt!
+- In de media lijken economen vaak te praten over inflatie, economische groei, het bruto nationaal product, de huizenmarkt en overheidsfinancien. 
+- Allemaal traditionele onderwerpen, maar er is veel meer..
+
+---
+
+# Definitie van Economie
+
+- Perloff (2021), _Microeconomics with Calculus_: 
+  
+- Economie is:
+
+> (..) de studie van hoe individuen en bedrijven voor zichzelf **zo goed mogelijk** beslissingen proberen te maken in een wereld van **schaarste**, en de gevolgen van die individuele beslissingen voor markten en de hele economie. Bij het bestuderen van micro-economie onderzoeken we hoe individuele consumenten en bedrijven beslissingen nemen en hoe de interactie van vele individuele beslissingen de markten beïnvloedt.
+
+- Gedurende lange tijd bestudeerden economen de consequenties van individueel gedrag in verschillende markten
+- Dit stelde ze in staat om vragen te beantwoorden over aspecten als de huizenmarkt en de macro-economie
+- Maar sinds een jaar of twintig zijn economen deze definitie steeds breder gaan toepassen
+
+---
+
+# Economisch Imperialisme
+
+
+- Lazaer (2000): _Economic Imperialism_, Quarterly Journal of Economics:
+
+> Economie is niet alleen een sociale wetenschap, het is een echte wetenschap. Net als de natuurwetenschappen maakt economie gebruik van een methodologie die **weerlegbare implicaties** produceert en deze implicaties test met behulp van solide statistische technieken. In het bijzonder benadrukt economie drie factoren die het onderscheiden van andere sociale wetenschappen. Economen gebruiken het concept van **rationele individuen** die streven naar **nutsmaximalisatie**. Economische modellen houden strikt vast aan het belang van **evenwicht** als onderdeel van elke theorie. Tot slot leidt de focus op efficiëntie economen ertoe vragen te stellen die door andere sociale wetenschappen genegeerd worden. Deze elementen hebben economie in staat gesteld om intellectueel terrein te betreden dat eerder buiten het domein van de discipline werd geacht.
+
+- Economen zijn steeds ambitieuzer gaan nadenken over de implicaties van hun theoretische modellen op allerlei aspecten van het dagelijks leven
+
+---
+
+# Wat is economie gaan doen?
+
+- Economische theorie is zich dus steeds meer gaan uitbreiden
+
+- Een paar relevante voorbeelden:
+  - Economen zijn veel meer aandacht gaan besteden aan _ongelijkheid_
+  - Ook op het gebied van (bijv.) onderwijs, gender, gezondheid en ontwikkeling: __Health Economics__, __Economics of Education__
+  - Economen zijn zich gaan interesseren voor _verschillen in ontwikkeling_ tussen landen: __Development Economics__
+  - Economen zijn _politieke processen_ en prikkels in hun modellen gaan opnemen: __Political Economy__, __Institutional Economics__
+  - Economen zijn hun modellen gaan aanpassen als reactie op bewijs uit de psychologie over hoe mensen beslissingen nemen: __Behavioral Economics__
+  
+- Kortom, de tijden waarin economen zich alleen op vraag en aanbod richtten zijn voorbij! 
+- Economen doen _nu_ onderzoek naar vragen die voorheen alleen gesteld werden door sociologen, antropologen, politicologen, of zelfs onderzoekers als geologen en musicologen! 
+
+---
+
+# Van theorie..
+
+- Dat is natuurlijk heel mooi, theorie..
+
+- Van economen wordt vaak ook gezegd dat ze soms los staan van de praktijk 
+  - ..en onnauwkeurige voorspellingen geven
+  
+> Op 4 november 2008 bezocht koningin Elizabeth de London School of Economics voor de opening van een nieuw gebouw. Daar kreeg ze uitleg over de oorsprong en gevolgen van de financiële crisis. Aan het einde van de briefing stelde de koningin slechts één vraag: “Waarom heeft niemand dit opgemerkt?”
+  
+- Daarom zou het wel mooi zijn als economen hun overschot aan theorieen ook testen
+
+- Gelukkig doen ze dat ook!
+   - Het merendeel van de economen (waaronder ik) doet nu voornamelijk _empirisch_ (i.p.v. _theoretisch_) onderzoek 
+   - Empirisch onderzoek richt zich idealiter op het vinden van bewijs voor/tegen verschillende economische theorieen
+   
+
+---
+
+# ..Naar praktijk
+
+- In de praktijk laten economen zich echter minder leiden door theorie, maar meer door wat relevante vragen zijn
+
+- Bijv. vragen waaraan vanuit maatschappelijk perspectief behoefte is
+
+- Economen doen bijv. empirisch onderzoek naar:
+  - De gevolgen van slavernij [(in Afrika](https://www.aeaweb.org/articles?id=10.1257/aer.101.7.3221) en [in Engeland)](https://www.nber.org/papers/w30451)
+  - [Milieuvervuiling](https://academic.oup.com/ej/article/130/626/462/5602598)
+  - [Klimaatverandering](https://www.aeaweb.org/articles?id=10.1257/mac.4.3.66)
+  - [Migratie](https://www.aeaweb.org/articles?id=10.1257/aer.20181518)
+  
+- In Utrecht leren wij jullie veel over theorie, maar kom je ook erg veel in aanraking met empirisch onderzoek
+
+- Binnen de Bacheloropleiding Economie & Bedrijfseconomie is er zelfs een _minor_ Applied Data Science
+  - Hierin wordt specifiek aandacht besteed aan het proces van data verzamelen op allerlei manieren, het creatief structureren en samenbrengen van deze data, en deze vervolgens goed te analyseren
+  
+
+---
+
+class: middle, center, inverse
+
+# Economie & Data Science
+
+
+---
+
+# Databronnen
+
+- Om dit soort onderzoek te begrijpen en te doen, heb je natuurlijk heel veel verschillende databronnen nodig
+
+- En de **vaardigheden** om overweg te kunnen met dit soort databronnen
+
+- Data kan heel erg versatiel zijn en op allerlei verschillende manieren gestructureerd zijn
+  - Of er kan juist een totaal gebrek aan structuur zijn
+  
+- Na het _structureren_ van databronnen, moeten ze bij elkaar gebracht worden
+
+- En vervolgens moet er een statistisch model komen om de data te analyseren
+  - Pas dan kunnen we een idee krijgen over voor welke theorieen / ideeen **bewijs** is, en voor welke niet
+
+---
+
+# Verschillende databronnen
+
+- In de laatste paar jaren is het begrip _"data"_ steeds breder geworden
+
+- Data is nu niet alleen maar een Excel-spreadsheet met aandelenprijzen
+  - _Bijna alles_ kan tegenwoordig data zijn: text, afbeeldingen, cijfers, sensordata, netwerkdata
+
+- Data uit sociale media (X/Twitter, Facebook) of telefoons over vriendschappen, Tweets en locaties kunnen gebruikt worden om de richting en snelheid van informatie te vinden, of om erachter te komen van bepaalde mensen denken en doen
+
+- Economen analyseren tegenwoordig zelfs **satellietdata** om uitspraken te doen over de invloed van klimaatverandering en extreem weer
+
+- **Historische databronnen** worden gedigitaliseerd door middel van kunstmatige intelligentie
+
+- Data uit **labexperimenten** worden gebruikt om te analyseren hoe mensen beslissingen nemen
+
+---
+
+# Omgaan met data
+
+- Wij leren jullie effectief met deze databronnen om te gaan
+
+- Omdat er een grote behoefte is aan data, hebben veel instanties inmiddels gestandaardiseerde manieren ontwikkeld om deze data te downloaden
+  - Dit vereist een paradigmawisseling:
+  - In plaats van te zoeken op Google en vervolgens op websites rond te klikken, contact gaat maken op een directere manier, die computers begrijpen, zogenoemde _API_ eindpunten
+  
+- In plaats van het downloaden van een Excel-spreadsheet, stuur je een verzoek in programmeertalen als **Python** of **R**, en stuur je een stukje code om je dataset te laten
+
+- In de cursussen _Introduction to Applied Data Science_ en _Introduction to R_ maak je kennis met programmeertalen (en R in het bijzonder) en de kunst van het dataverzamelen en ordelijk maken van data
+
+
+---
+
+# Data-analyse
+
+- Het verzamelen van data is meestal het moeilijkste werk, maar het is ook belangrijk om de data zo correct mogelijk te analyseren
+
+- Wij hebben een "standaard" curriculum, dat verschillende vakken in de _econometrie_ omvat:
+  - Methodes in de econometrie zijn nog steeds heel belangrijk, maar veronderstellen een _standaard-definitie_ van data, zoals die gebruikelijk was ca. 20 jaar geleden
+  
+- Maar zoals ik al zei, zijn er nu heel veel verschillende vormen van data, zoals text, geluid en beeld!
+- In cursussen zoals _Applied Data Analysis & Visualization I & II_ leren we het analyseren van deze data 
+  - We leren om de relevante aspecten van de irrelevante te scheiden door gebruik te maken van _machine learning_ en _deep learning_ technieken
+  
+---
+
+# Data-analyse
+
+- Binnen de econometrie proberen we de nadruk te leggen op causale effecten, om een oorzakelijk verband te scheiden van een correlatie:
+
+```{r echo=FALSE, out.width=600}
+knitr::include_graphics('correlation.png')
+```
+
+- En we passen dat toe in vakken zoals de _Applied Economics Research Course_, waarin studenten een onderwerp kiezen dat relevant is binnen hun minor, waarover ze vervolgens hun eigen onderzoek gaan doen
+
+- De nadruk ligt daarbij op de volgende aspecten: 
+  - Verzamelen, structureren, analyseren, en interpreteren van data
+  - Om dit nu eindelijk eens concreet te maken, wil ik graag een voorbeeldje geven..
+
+  
+---
+
+# Voorbeeldje
+
+- Ik zou graag willen demonstreren wat dit allemaal omvat aan de hand van een voorbeeldvraag:
+  - **Wordt criminaliteit beinvloed door het weer?** (geinspireerd door [dit paper](https://www.sciencedirect.com/science/article/pii/S0167268121004698?casa_token=7IlyRGcyN-0AAAAA:wKmOXCGG2OzBNL9dTYX4SebMGbhfYelJrgahcu7II6p3W_MpOh0yNpntzJFeFdl5PrFdL61bnpIT#sec0001))
+
+> We analyze a wide variety of crime types, and find that violent crimes respond to both daily and seasonal variation in temperatures and rainfall, whereas property crimes only respond to seasonal variation.
+
+- Ik heb net beweerd dat er heel veel data is, op verschillende manieren beschikbaar
+- De politie heeft misdaadcijfers _per buurt, per wijk, per gemeente, per maand_ op data.politie.nl
+  - Als je daar naartoe gaat, kun je zien dat de politie dit ook verspreidt via [https://dataderden.cbs.nl/ODataApi/odata/47022NED/](https://dataderden.cbs.nl/ODataApi/odata/47022NED/)
+  - Ik ga in dit voorbeeld criminaliteit in de vorm van inbraak en fietsendiefstal analyseren
+  - Op het gemeenteniveau, dus in verschillende gemeentes over tijd
+
+---
+
+# Voorbeeldje
+
+- De data is ook te downloaden in de programmeertaal R
+
+- Dat ziet er ongeveer zo uit:
+
+```{r get_Data, cache=T}
+library(cbsodataR); library(jsonlite)
+
+table <- 'https://dataderden.cbs.nl/ODataApi/odata/47022NED/WijkenEnBuurten'
+alle_buurten <- get_odata(table) |> 
+  filter(str_detect(Key, "BU"))
+
+alle_gemeenten <- alle_buurten |>
+  select(Municipality) |> 
+  pull(Municipality) |> 
+  unique()
+
+alle_datums <- c("2018MM03", "2018MM04", "2018MM05")
+combinations <- expand_grid(alle_gemeenten, alle_datums)
+
+data <- map2(combinations$alle_gemeenten, combinations$alle_datums,
+       ~ get_data(.x, .y)) |> 
+  reduce(bind_rows)
+
+```
+
+---
+
+# Criminaliteit in Nederland
+
+```{r echo=FALSE}
+data <- data |> 
+  mutate(gemeente = paste0("GM", str_extract(WijkenEnBuurten, "[0-9]{4}")), 
+         wijkbuurt = str_extract(WijkenEnBuurten, "[0-9]{4}$"),
+         wijk = str_extract(wijkbuurt, "[0-9]{2}"),
+         buurt = str_extract(wijkbuurt, "[0-9]{2}$")
+         )
+
+criminaliteit <- data |>
+  group_by(Perioden, gemeente) |>
+  summarize(criminaliteit = sum(GeregistreerdeMisdrijven_1))|>
+  filter(!is.na(criminaliteit))
+```
+
+- Nu ik de criminaliteitdata heb, kan ik laten zien hoe de criminaliteit geografisch verspreid was in Nederland in 2018:
+
+```{r maak_kaart, warning=FALSE, cache=TRUE, fig.width=8, fig.height=4}
+library(sf)
+gemeente_kaart <- sf::read_sf("./gemeente/gemeente_2020_v3.shp") |> filter(H2O == "NEE")
+gemeente_kaart <- gemeente_kaart |> left_join(criminaliteit, by=c('GM_CODE' = 'gemeente')) |> filter(!is.na(Perioden))
+
+gemeente_kaart |> 
+  ggplot(aes(fill=criminaliteit/AANT_INW)) +geom_sf() + facet_wrap(~Perioden) +
+  scale_fill_viridis_c(option = "C")
+```
+
+
+---
+
+# Data verzamelen
+
+- Nu ga ik data over het weer verzamelen
+- Gelukkig is dat ook heel makkelijk: het KNMI heeft ook een _API_ eindpunt ontwikkeld
+  - Dat betekent dat ik de data ook via R kan downloaden:
+  
+```{r knmidata, message=FALSE, warning=FALSE, cache=TRUE, results=FALSE}
+library(spatialrisk)
+weather_data <- knmi_historic_data(2018, 2018)
+weather_data <- weather_data |>
+  rename(Temp = `T`) |>
+  mutate(date = ymd(as.character(date)), month = month(date)) |> 
+  select(station, date, month, FH, RH, Temp, city, lon, lat) |> 
+  filter(is.element(month, c(3, 4, 5)))
+```
+
+```{r}
+# Hier hebben we, per meet station, de windkracht (FH), de temperatuur (T), en de hoeveelheid regen (RH)
+weather_data |> head(3)
+```
+
+---
+
+# Data koppelen
+
+- Nu wil ik de data van de weerstations van het KNMI koppelen met de data van de gemeenten
+  - Voor elke maand en elk weerstation bereken ik de gemiddelde temperatuur, windkracht en regenhoeveelheid
+  - En dan wil ik voor elke gemeente $i$ kijken welk weerstation het dichtste bij is om te weten welk weer het gemiddeld was in maand $t$ in gemeente $i$
+
+```{r weather_calculation, echo=FALSE, cache=TRUE}
+gemeente_kaart <- gemeente_kaart |> st_transform(crs=4326) |> 
+  mutate(centroid = st_centroid(geometry))
+
+# Transform weather data
+weather_data <- st_as_sf(weather_data, coords = c("lon", "lat"), crs = 4326)
+data_points <- weather_data |> select(station, geometry) |> unique()
+weather_data <- weather_data |> 
+  group_by(station, geometry, month) |> 
+  summarize(mean_T = mean(Temp, na.rm=T),
+            mean_FH = mean(FH, na.rm=T),
+            mean_RH = mean(RH, na.rm=T)) |>
+  ungroup()
+
+
+# Calculate distance between each buurt and 
+distance_matrix <- st_distance(gemeente_kaart$centroid, data_points)
+
+get_indices <- function(row) {
+  sorted_row <- sort(row)
+  min_index <- which(row == sorted_row[1])
+  second_min_index <- which(row == sorted_row[2])
+  return(list(min_index, second_min_index))
+}
+
+# Apply the function to each row of the distance matrix
+indices <- apply(distance_matrix, 1, get_indices)
+
+gemeente_kaart <- gemeente_kaart |> 
+  mutate(dichtstbijzijnde_weerstation_1 = imap_dbl(gemeente_kaart$GM_CODE, ~ data_points[indices[[.y]][[1]], ]$station),
+         dichtstbijzijnde_weerstation_2 = imap_dbl(gemeente_kaart$GM_CODE, ~ data_points[indices[[.y]][[2]], ]$station),
+         afstand_1 = imap_dbl(gemeente_kaart$GM_CODE, ~ distance_matrix[.y, indices[[.y]][[1]]]),
+         afstand_2 = imap_dbl(gemeente_kaart$GM_CODE, ~ distance_matrix[.y, indices[[.y]][[2]]]))
+  
+
+compute_weather <- function(row){
+  p <- 1 - row$afstand_1 / (row$afstand_1 + row$afstand_2)
+  periode <- row$Perioden |> str_extract("[0-9]$") |> as.numeric()
+  weather_data |> 
+    filter(station == row$dichtstbijzijnde_weerstation_1, month == periode) |>
+    summarize(temp = mean(mean_T),
+              wind = mean(mean_FH),
+              regen = mean(mean_RH))
+}
+
+uitkomst <- gemeente_kaart |> 
+  rowwise() |> 
+  mutate(w = compute_weather(cur_data())) |>
+  unnest_wider(w, names_sep='station_') |>
+  select(-wstation_geometry, -centroid) |> 
+  st_as_sf(geometry = gemeente_kaart$geometry)
+
+st_geometry(uitkomst) <- uitkomst$geometry
+```
+
+- Wat ik vind is het volgende (ik laat de temperatuur zien in Maart, April en Mei):
+
+```{r show_w, echo=FALSE, fig.width=8, out.height=320}
+temperatuur_mrt <- uitkomst |> filter(Perioden == "2018MM03") |> ggplot() + geom_sf(aes(fill = wstation_temp)) + theme(legend.position = "none")
+temperatuur_apr <- uitkomst |> filter(Perioden == "2018MM04") |> ggplot() + geom_sf(aes(fill = wstation_temp)) + theme(legend.position = "none")
+temperatuur_mei <- uitkomst |> filter(Perioden == "2018MM04") |> ggplot() + geom_sf(aes(fill = wstation_temp)) + theme(legend.position = "none")
+
+grid.arrange(temperatuur_mrt, temperatuur_apr, temperatuur_mei, ncol=3)
+```
+
+---
+
+# Analyseren van de data
+
+- Nu wil ik kijken of er een verband is tussen de temperatuur (en andere weersomstandigheden) in een gemeente en de criminaliteit
+- Dat doe ik door middel van een statistisch model
+  - De details zijn voor later, maar ik maak een grafiekje met op de $x$-as temperatuur, en op de $y$-as criminaliteit, en kijk of de helling positief of negatief is! 
+
+
+```{r graph, echo=F, fig.width=8, out.height=320}
+fe <- uitkomst |> 
+  group_by(GM_CODE) |> 
+  mutate(m_temp = mean(wstation_temp),
+         m_regen = mean(wstation_regen),
+         m_wind = mean(wstation_wind),
+         m_crim = mean(criminaliteit)) |> 
+  ungroup() |> 
+  mutate(d_temp = wstation_temp - m_temp,
+         d_regen = wstation_regen - m_regen,
+         d_wind = wstation_wind - m_wind,
+         d_crim = criminaliteit - m_crim)
+
+
+p1 <- fe |> ggplot(aes(x = d_temp, y = d_crim)) + geom_point() + geom_smooth(method='lm', se=F) + xlab("Temperature") + ylab("Criminaliteit") + theme(axis.text = element_blank())
+p2 <- fe |> ggplot(aes(x = d_wind, y = d_crim)) + geom_point() + geom_smooth(method='lm', se=F) + xlab("Wind") + ylab("Criminaliteit") + theme(axis.text = element_blank())
+p3 <- fe |> ggplot(aes(x = d_regen, y = log(d_crim))) + geom_point() + geom_smooth(method='lm', se=F) + xlab("Regen") + ylab("Criminaliteit") + theme(axis.text = element_blank())
+
+grid.arrange(p1, p2, p3, ncol = 3)
+```
+
+
+  
+  
+---
+
+# De resultaten in tabelvorm
+
+- De conclusie is dus: criminelen laten zich niet afschrikken door wind of lage temperaturen
+- Maar als het regent ben je gelukkig veilig! 
+  
+```{r, echo=FALSE}
+library(fixest); library(modelsummary)
+feols(criminaliteit ~ wstation_temp + wstation_wind + wstation_regen | GM_CODE, data = uitkomst) |>
+  modelsummary(stars=c("*"=0.1, "**"=0.05, "***"=0.1), gof_map = c('nobs', 'r.squared'))
+```
+
+
+---
+
+class: center, middle, inverse
+
+# Loopbaanperspectief
+
+---
+
+
+# Loopbaanperspectief
+
+- Als je kiest voor economie in Utrecht kom je dus in aanraking met heel veel veelzijdige aspecten van de economie
+  - Je wordt dus niet alleen iemand die de aandelenmarkt kan voorspellen, of de inflatiecijfers kan verklaren
+
+- Je kan besluiten om je te verdiepen in veel verschillende aspecten, zoals bijvoorbeeld financiele economie, klimaateconomie, of het pad van _data science_ kiezen
+  - Het laatste hoop ik gedemonstreerd te hebben in deze presentatie
+
+- De vaardigheden die je hier opdoet zijn heel algemeen en komen van pas in heel veel contexten
+
+- Bijvoorbeeld: 
+  - in de financiele sector, bij verschillende Ministeries/overheidsinstanties zoals het CBS/CPB (beleidsevaluatie), denktanken, 
+  - En met data science: in softwareontwikkeling, machine learning engineering, en de academische wereld
+
+---
+
+class: inverse, center, middle
+
+# Dankjewel voor de aandacht!
+
+
