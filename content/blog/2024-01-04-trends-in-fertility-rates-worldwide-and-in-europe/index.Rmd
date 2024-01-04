@@ -2,7 +2,7 @@
 title: Trends in Fertility Rates Worldwide and in Europe
 author: 'Bas Machielsen'
 date: '2024-01-04'
-excerpt: An short analysis hopefully illustrating some factors about worldwide fertility trends.
+excerpt: An short analysis hopefully illustrating some facts about worldwide fertility trends.
 slug: []
 categories: []
 tags: []
