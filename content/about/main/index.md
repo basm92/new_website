@@ -13,7 +13,7 @@ intro: |
   
   ### Research Interests
 
-  My research interests encompass economic history, political economy and institutional economics. I also love methodology, data science, deep learning, statistics, programming and web design. Over time, I created and maintain a number of R packages, which you can access here.
+  My research interests encompass economic history, political economy and institutional economics. I also love methodology, data science, deep learning, statistics, programming and web design. Over time, I created and maintain a number of R and Python packages, which you can access here.
   
   ### This website
 

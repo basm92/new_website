@@ -6,7 +6,7 @@
     <description>Recent content on Bas Machielsen</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sat, 21 Oct 2023 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 04 Jan 2024 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>cbs_hist_downloader</title>
       <link>/collection/cbs_hist_downloader/</link>
@@ -32,6 +32,15 @@
       
       <guid>/collection/hdng/</guid>
       <description>hdng is a package facilitating the use of the HDNG Database, a database containing quantative information in various aspects of Dutch municipalities from about 1800 to the 1980&amp;rsquo;s. This package aids the user in finding their way through the database, allowing them to search for wanted variables, browse within categories, and finally, make a query to extract the wanted data.</description>
+    </item>
+    
+    <item>
+      <title>Trends in Fertility Rates Worldwide and in Europe</title>
+      <link>/blog/2024-01-04-trends-in-fertility-rates-worldwide-and-in-europe/</link>
+      <pubDate>Thu, 04 Jan 2024 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2024-01-04-trends-in-fertility-rates-worldwide-and-in-europe/</guid>
+      <description>Introduction After some discussions I&amp;rsquo;ve had with people, I thought it&amp;rsquo;d be interesting to look at the data to see what trends in fertility rates are visible in a cross-country context. By now, I guess it is well-known that some countries, notably South-Korea and Japan, but also other East Asian countries as well as European countries have been stuck in a very low fertility rate regime (a TFR of about 1, or just slightly higher) for some time, creating demographic problems such as an &amp;ldquo;inverse population pyramid&amp;rdquo; which can in turn entail manifold economic costs.</description>
     </item>
     
     <item>
