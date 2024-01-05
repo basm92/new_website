@@ -6,7 +6,7 @@ cascade:
   show_post_date: true
   sidebar:
     show_sidebar_adunit: true
-    text_link_label: View all projects
+    text_link_label: View all teaching projects
     text_link_url: /projects/
 description: Both to be taught classes, and classes taught in the past
 layout: list-grid
