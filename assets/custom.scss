@@ -4,5 +4,7 @@
   font-style: normal;
   font-weight: 400;
   src: local(''),
-       url('../static/fonts/Ubuntu-Regular.ttf') format('ttf');
+       url('../fonts/Ubuntu-Regular.ttf') format('truetype'),
+       url('../fonts/Ubuntu-Italic.ttf') format('truetype'),
+       url('../fonts/Ubuntu-Bold.ttf') format('truetype');
 }
