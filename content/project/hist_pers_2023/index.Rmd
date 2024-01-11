@@ -24,6 +24,10 @@ links:
   icon_pack: far
   name: Lecture 4
   url: https://bas-m.netlify.app/project/hist_pers_2023/lecture4.pdf
+- icon: newspaper
+  icon_pack: far
+  name: Example Presentation
+  url: https://bas-m.netlify.app/project/hist_pers_2023/example_presentation.pdf
 subtitle: ""
 tags:
 - hugo-site
@@ -38,4 +42,4 @@ The link above contains the lecture slides for three sessions on the theme "Hist
 - Lecture 2: Manipulating and Aggregating Vector and Raster Data
 - Lecture 3: Geographic Regression Discontinuity Designs
 - Lecture 4: Additional Data Wrangling
-
+- Example Presentation
