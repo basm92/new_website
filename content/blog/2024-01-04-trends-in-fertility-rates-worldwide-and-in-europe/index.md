@@ -10,7 +10,7 @@ tags: []
 <script src="{{< blogdown/postref >}}index_files/kePrint/kePrint.js"></script>
 <link href="{{< blogdown/postref >}}index_files/lightable/lightable.css" rel="stylesheet" />
 
-# Introduction
+## Introduction
 
 After some discussions I've had with people, I thought it'd be interesting to look at the data to see what trends in fertility rates are visible in a cross-country context. By now, I guess it is well-known that some countries, notably South-Korea and Japan, but also other East Asian countries as well as European countries have been stuck in a very low fertility rate regime (a TFR of about 1, or just slightly higher) for some time, creating demographic problems such as an "inverse population pyramid" which can in turn entail manifold economic costs. I think there are _a lot_ of theories, and by now, also a lot of empirical case studies, out there investigating what influences fertility rates. There is, for example, a [cool recent study](https://www.sciencedirect.com/science/article/pii/S004727272300110X) relating a recent Dutch pension reform to reduced fertility rates. The argument is that reduced, or more expensive, grandparental child care supply causes mothers to substitute away from child-rearing. This is an obvious example of economic incentives being involved in fertility decisions. On the other hand, [this study](https://www.guillaumeblanc.com/files/theme/Blanc_secularization.pdf) argues that secularization is an important driver of fertility rates. It is not clear a priori if and how economic incentives play a role in secularization. There is a good literature review on the economics of fertility [here](https://www.sciencedirect.com/science/article/abs/pii/S2949835X23000034). 
 
@@ -40,7 +40,7 @@ Broad money supply (M2): Conditional on a particular level of output and a CPI, 
 
 CPI: The Consumer Price Index (CPI) is generally used as a measure of present inflation. This interpretation is strengthened by conditioning on M2 growth, thereby distinguishing between present and expected future inflation. 
 
-# Method
+## Method
 
 Because my objective is to make use of variation in the TFR within countries rather than comparing wildly different countries with different institutions with each other, I estimate within-country (fixed effects) regressions, exploiting differences in the TFR within the same country over time. Also, from a policy perspective, it makes sense to look at to what extent these "economic" factors can explain fertility. I therefore also report the within-country `\(R^2\)`. The regression I estimate looks like this:
 
@@ -52,7 +52,7 @@ For inference, I cluster standard errors at the country level. The `\(TFR\)` is 
 
 [See here for a toy example](https://getinthepicture.org/sites/default/files/resources/11.%20Total%20fertility%20rates.pdf). It reflects the amount of children per mother over a lifetime. This indicator has the example of being normalized and independent of the current population pyramid structure. It is also the most widely used indicator in the literature. The data come from the World Bank with the exception of the CPI, which comes from the IMF.  
 
-# Data
+## Data
 
 I make use of a couple of R packages giving direct access to the World Bank and IMF API's:
 
@@ -156,7 +156,7 @@ data_europe <- data |>
   filter(str_detect(region23, "Europe"))
 ```
 
-# Analysis
+## Analysis
 
 I estimate a couple of regression models. I estimate a model for the world as a whole, for the world with observations starting from 2010, for Europe and for non-Europe. I also want to investigate some heterogeneity within Europe, for example, by contrasting western Europe (focusing on Netherlands, Germany and France) with Eastern Europe (say Russia, Ukraine, Belarus). I drop the money supply from the analysis of Western Europe since it is unavailable:
 
@@ -366,6 +366,6 @@ Focusing on Europe, the relationship between FLFP and TFR is robust. However, th
 Again, when looking either at the within `\(R^2\)` statistics I've reported, or at the coefficients, they should be taken with a grain of salt since unfortunately they come from just correlations: for example, I think it is plausible that FLFP and fertility rate are to some extent simultaneously determined by some third factor. In macroeconomic models, the fundamental exogenous factor that determines these decisions is usually something trivial and of little policy significance, such as the “time preference” embodied in the discount rate in optimal control problems. Newer generational models, presumably, have done a more constructive job in focusing on potentially policy-relevant drivers of fertility, but I have yet to study this literature :) Econometrically, it can be shown that the coefficient estimates are biased (except in special cases) if something like this is the true data generation process.
 
 
-# Conclusion
+## Conclusion
 
 I believe the main finding of this analysis is the lack of a correlation between GDP per capita and fertility after controlling for a number of other factors. This means that we have little reason to believe that rising or falling fertility is a side effect of economic growth. On the other hand, there are studies that focus on comparisons between families rather than countries, which show that, for example, pension reforms reduce fertility by increasing the opportunity costs of infant care for grandparents. The high explanatory power in some of these analyses provides a rationale for thinking that some targeted economic policies could work, but at the country level, and thus on a global scale, the most obvious correlate of fertility is still female labor force participation. Thank you for reading! 
