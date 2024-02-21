@@ -2,7 +2,7 @@
 author: Bas Machielsen
 categories:
   - Articles
-date: "2022-07-30"
+date: "2024-02-21"
 draft: false
 excerpt: The latest working paper version of my article "Returns to Politics Under A Changing Political System"
 featured: true
@@ -19,20 +19,20 @@ links:
 - icon: github
   icon_pack: fab
   name: replication package
-  url: https://github.com/basm92/Retpol
+  url: https://github.com/basm92/retpol_new
 subtitle: ""
 tags:
 - hugo-site
-title: Returns to Politics Under A Changing Political System
+title: Dynamic Returns to Political Tenure
 ---
 
 ### Abstract
 
-Economists frequently assert that politicians derive financial returns from a political career, but it is unclear what allows them to do so. In this paper, I derive estimates of the returns to consecutive Lower House mandates exploiting the repeated treatment assignment resulting from Dutch district-level elections (1860-1917). Based on newly-collected data from probate inventories, I obtain a measure of personal wealth for a sample of just-elected politicians and their losing contenders. Using a dynamic regression discontinuity methodology, I document that politicians' returns to politics are concentrated in the first period of political activity. The results show that politicians who were elected once accumulated wealth with a rate that is about 5 percentage points per annum higher than their nearly-elected counterparts. I also investigate the role of political parties in constraining politicians' ability to benefit financially from their political career. I find that after the establishment of political parties, there is only limited evidence of politicians being able to profit from their political career, suggesting political parties discipline politicians' in-office behavior. 
+Economists frequently assert that politicians derive financial returns from a political career, but these returns can be obscured by the varying duration of political careers. In this study, I estimate the financial returns associated with successive mandates in the Lower House, capitalizing on the repetitive treatment assignment through close elections in the Netherlands from 1848-1917. Employing a dynamic regression discontinuity framework, I establish that the financial benefits accruing to politicians exhibit a distinct "gate-keeping" pattern: no financial gains are observed during the first period of political tenure, but substantial returns emerge during the second term. These findings emphasize that politicians elected for a second term exhibit significantly higher end-of-life wealth than their losing counterparts, equivalent to several years' salaries. I also explore various potential mechanisms, providing evidence for in-office returns.
 
 ---
 
 ### Download
 
-Download the working paper [**here**](www.link.com)
+Download the working paper [**here**](https://bas-m.netlify.app/papers/polrents.pdf)
   
