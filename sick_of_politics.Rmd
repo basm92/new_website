@@ -1,0 +1,58 @@
+---
+title: "Discussion of 'Sick of Politics?'"
+author: "Bas Machielsen (discussant)"
+date: "`r Sys.Date()`"
+output: beamer_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+# Short Summary
+
+## Short Summary
+
+- The paper uncovers the causal effect of political office on (i) income, (ii) general health, and (iii) mental health
+  - Political office: being appointed (!) as a mayor, or being elected into the national Norwegian parliament
+  
+- Study uses administrative data on public health service usage
+
+# Discussion Plan
+
+## Discussion Points
+
+- Is the treatment the right treatment? 
+  - More refined ways of gauging the mental-health related impact of politics? 
+
+- Is the control group the right control group? 
+
+- Reasons for a null effect? 
+  - Mitigating effect of income?
+  
+## More Refined Ways of Gauging Mental-Health Impact
+
+- Naively, we might assume that political sentiment is random and orthogonal to the actions and potential outcomes of politicians
+- In that case, start with the media hits for candidate $i$ 
+  - Naively, perform sentiment analysis on each article associated with the candidate
+  
+  - Two potential treatment effects: one of the campaign (pre-election period) against (in favor of) the candidate
+  - And one of the ex-post media attention
+  
+- Counterfactual: media attention of non-appointed candidates
+
+## More Refined Ways
+
+- NLP-based approach:
+  - Manually classify articles as "good" or "bad" 
+
+- Use e.g. random forest to classify the remaining articles on the basis of:
+  - e.g. a document-term matrix 
+  - Embeddings of the text in a language model (Ash & Hansen, 2023)
+  
+- Use the relationship between media sentiment and mental health in the control group to assess what would have happened to the treatment group if they hadn't received the treatment
+
+
+
+
+
