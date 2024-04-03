@@ -16,7 +16,16 @@ knitr::opts_chunk$set(echo = FALSE)
 - The paper uncovers the causal effect of political office on (i) income, (ii) general health, and (iii) mental health
   - Political office: being appointed (!) as a mayor, or being elected into the national Norwegian parliament
   
-- Study uses administrative data on public health service usage
+- Study uses objective administrative data on public health service usage
+
+- Research Design: (Generalized) difference-in-difference:
+
+$$
+y_{it} = \alpha + \sum_{r=-4}^4 \tau_r I_r + \sum_{r=-4}^4 \beta_r I_r \times \text{Elected}_i + \theta Elected_i + \epsilon_{it}
+$$
+with time $r=-1$ acting as the normalized difference. 
+
+- The treatment is defined as the appointment (as mayor) into political office
 
 # Discussion Plan
 
@@ -27,9 +36,15 @@ knitr::opts_chunk$set(echo = FALSE)
 
 - Is the control group the right control group? 
 
-- Reasons for a null effect? 
-  - Mitigating effect of income?
-  
+
+## Reasons for a null effect?
+
+- No null effect on income: Effect on income well-isolated 
+  - Since you explicitly condition on the control group consisting of individuals being in a certain baseline income quintile
+
+- Mental health: 
+
+
 ## More Refined Ways of Gauging Mental-Health Impact
 
 - Naively, we might assume that political sentiment is random and orthogonal to the actions and potential outcomes of politicians
