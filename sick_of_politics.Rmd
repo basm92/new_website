@@ -1,5 +1,5 @@
 ---
-title: "Discussion of 'Sick of Politics?'"
+title: "Discussion of 'Sick of Politics?' by Jon H. Fiva, Jo Thori Lind, Bjørn-Atle Reme, and Henning Øien"
 author: "Bas Machielsen (discussant)"
 date: "`r Sys.Date()`"
 output: beamer_presentation
@@ -82,10 +82,16 @@ with time $r=-1$ acting as the normalized difference.
 
 - Candidates with the same demographic profile ignores selection (i) into candidacy and (ii) from candidacy into office
 
-- From Dal Bo, Finan, Folke et al. (2017): 
+  - From Dal Bo, Finan, Folke et al. (2017): 
 
 > this positive selection is present even when conditioning on family (and hence social) background, suggesting that individual competence is key for selection
 
 - Maybe a more plausible group (but estimates with less precision): only the candidates
 
-- In case of Lower House treatment: close elections
+- In case of Lower House treatment: why not a (within-party) close elections design?
+
+## Minor Additional Comments
+
+- Other sources for slander: Twitter API, or city Facebook pages (possibly accessible through Selenium)
+
+- The paper you mention in regard to the effect of politics on longevity has been faced with [a lot of criticism from Andrew Gelman](http://www.stat.columbia.edu/~gelman/research/unpublished/causal_paths.pdf)
