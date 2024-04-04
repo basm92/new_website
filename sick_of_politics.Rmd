@@ -16,16 +16,18 @@ knitr::opts_chunk$set(echo = FALSE)
 - The paper uncovers the causal effect of political office on (i) income, (ii) general health, and (iii) mental health
   - Political office: being appointed (!) as a mayor, or being elected into the national Norwegian parliament
   
-- Study uses objective administrative data on public health service usage
+- Study uses objective administrative data on public health service usage to gauge general and mental health
 
 - Research Design: (Generalized) difference-in-difference:
 
 $$
-y_{it} = \alpha + \sum_{r=-4}^4 \tau_r I_r + \sum_{r=-4}^4 \beta_r I_r \times \text{Elected}_i + \theta Elected_i + \epsilon_{it}
+y_{it} = \alpha + \sum_{r=-4, r \neq -1}^4 \tau_r I_r + \sum_{r=-4,r \neq -1}^4 \beta_r I_r \times \text{Elected}_i + \theta Elected_i + \epsilon_{it}
 $$
+
 with time $r=-1$ acting as the normalized difference. 
 
 - The treatment is defined as the appointment (as mayor) into political office
+- Suggested channel: deterioration of mental health through slander in the media
 
 # Discussion Plan
 
@@ -36,38 +38,54 @@ with time $r=-1$ acting as the normalized difference.
 
 - Is the control group the right control group? 
 
+- Ultimately, the answer to these questions might be "yes"
 
-## Reasons for a null effect?
+## Treatment
 
-- No null effect on income: Effect on income well-isolated 
-  - Since you explicitly condition on the control group consisting of individuals being in a certain baseline income quintile
-
-- Mental health: 
-
-
-## More Refined Ways of Gauging Mental-Health Impact
-
-- Naively, we might assume that political sentiment is random and orthogonal to the actions and potential outcomes of politicians
-- In that case, start with the media hits for candidate $i$ 
-  - Naively, perform sentiment analysis on each article associated with the candidate
+- A significant part of the motivation of the paper concerns harassment and slander 
+  - These two are responsible for the potential deterioration of mental health following assumption of political office
+  - But this is left out of the empirical design altogether 
   
-  - Two potential treatment effects: one of the campaign (pre-election period) against (in favor of) the candidate
-  - And one of the ex-post media attention
-  
-- Counterfactual: media attention of non-appointed candidates
+> Using the names and party affiliations of candidates, we have collected the daily appearances in each media outlet for all candidates running for national-level office and all local-level mayoral candidates (i.e., first-ranked candidates).
 
-## More Refined Ways
+- It seems that you do have individual-level data of media appearance
+  - About 30 hits per month: provided this concerns enough unique mayors, you can use this data (how: next slides)
+  - The pooling of mayors subject to slandering with mayors who are "left alone" might also be a principal reason for the null effects you find
+
+## Treatment
+
+- A suggested more refined treatment group would be mayors subjected to slander / disapproval 
+  - With mayors "left alone" serving as a control group
+  
+- Complication: you (presumably) want to isolate the channel: Slander $\rightarrow$ Mental Health from Policies $\rightarrow$ Slander $\rightarrow$ Mental Health
+  - Media hits before they assume office can only be related to slander / approval and is plausibly orthogonal to policies (conditional on covariates like gender)
+  
+
+## Treatment: Text Processing
+
+- How to distinguish mayors subjected to slander/disapproval from mayors subjected to flattering/approval?
 
 - NLP-based approach:
-  - Manually classify articles as "good" or "bad" 
+  - Sentiment analysis
+  - Manually classify articles as "slanderous", "neutral" or "flattering"
 
-- Use e.g. random forest to classify the remaining articles on the basis of:
-  - e.g. a document-term matrix 
-  - Embeddings of the text in a language model (Ash & Hansen, 2023)
-  
-- Use the relationship between media sentiment and mental health in the control group to assess what would have happened to the treatment group if they hadn't received the treatment
+- Use e.g. random forest to classify the remaining articles on the basis of e.g. a document-term matrix, a tf-idf matrix, or embeddings of the text in a language model
+  - Can be transparent and externally validated 
 
-
-
+- Timing issue: effect of past and contemporaneous slander
+  - Pre-election more likely to be exogenous
 
 
+## Control Group
+
+- Taking the treatment definition as given, what is the most plausible control group?
+
+- Candidates with the same demographic profile ignores selection (i) into candidacy and (ii) from candidacy into office
+
+- From Dal Bo, Finan, Folke et al. (2017): 
+
+> this positive selection is present even when conditioning on family (and hence social) background, suggesting that individual competence is key for selection
+
+- Maybe a more plausible group (but estimates with less precision): only the candidates
+
+- In case of Lower House treatment: close elections
