@@ -51,6 +51,7 @@ In this post, I'll give an overview and short description of various commonly-us
 33. [Statistical Agencies, Parliaments](#statistical-agencies-parliaments)
 34. [GIS Databases](#historical-gis-databases)
 35. [Municipal Data](#municipal-data)
+36. [R Spatial Data Packages](#r-spatial-data-packages)
 
 ## World Values Survey
 
@@ -258,3 +259,34 @@ library(cbsodataR)
 toc <- cbsodataR::cbs_get_toc()
 gem_dat <- toc |> filter(stringr::str_detect(Title, 'gemeente')) 
 ```
+
+
+## R Spatial Data Packages
+
+- Based on [Moraga (2022)](https://www.paulamoraga.com/book-spatial/r-packages-to-download-open-spatial-data.html):
+  - The `giscoR` package contains open data at the country (or lower) level for **European Union countries**
+  - The `geodata` package contains **climate data** (temperature, precipitation, wind speed) across time: in particular through the `worldclim_country()` function
+  - The package `chirps` contains daily high-resolution **precipitation**, as well as daily maximum and minimum temperatures from the Climate Hazards Group database.
+  - The `elevatr` package can download **elevation data** from Amazon Web Services (AWS) Terrain Tiles and OpenTopography Global Digital Elevation Models API. Through the `get_elev_raster()` function, it can be used to download elevation at the locations specified in argument locations and with a zoom specified in argument `z`
+  - `osmdata` allows you to download data from **OpenStreetMap**. OpenStreetMap (OSM) is an open world geographic database updated and maintained by a community of volunteers. We can use the osmdata package (Padgham et al. 2023) to retrieve OSM data including rivers roads, shops, railway stations, and other buildings.  
+  - The `rWBclimate` data [available here](https://github.com/ropensci/rWBclimate) provides access to three different classes of climate data at two different spatial scales. 
+- The `spocc` package is an interface to many species occurrence data sources including Global Biodiversity Information Facility (GBIF)
+  - The `wopr` package provides access to the WorldPop Open Population Repository and provides estimates of population sizes for specific geographic areas
+  - The `rdhs` package gives the users the ability to access and analyze the (geocoded) Demographic and Health Survey (DHS) data. 
+  - The `openair` package contains air quality data and other atmospheric composition data.
+  - The `malariaAtlas` package can be used to download global malaria data hosted by the Malaria Atlas Project.
+  - The `GAEZr` package ([Installable here](https://floswald.github.io/GAEZr/)) facilitate downloading and processing of Global Agro-Ecological Zones data in R
+  - The `rnaturalearth` package makes mapping easy by making natural earth map data from [Natural Earth Data](https://www.naturalearthdata.com/) available
+  - The `rWBclimate` package ([here](https://github.com/ropensci/rWBclimate)) is an R interface for the World Bank climate data used in the World Bank climate knowledge portal.
+  - The `climate` package automatizes downloading of in-situ meteorological and hydrological data from publicly available repositories
+
+## Other Data Packages
+
+- `ipumsr` - A package port to the IPUMS database: IPUMS is the world’s largest publicly available population database, providing census and survey data from around the world integrated across time and space. An overview is available [here](https://tech.popdata.org/ipumsr/index.html)
+- `eurostat` R package: A port to [Eurostat](https://ec.europa.eu/eurostat/web/main/data/database). This is a database about European countries on aggregate (country) and more disaggregated levels
+- `idbr`: Instational Data Base package: access to the US Census Bureau's International Data Base (IDB) API, and returns queries as R data frames. The IDB includes historical demographic data, current population estimates, and demographic projections to 2100 for countries of population 5,000 or greater that are recognized by the US Department of State
+- `pewdata`: A package helping to download Pew polls data sets. 
+- `glottospace`: A package allowing for geospatial analysis of linguistic data. Contains a lot of linguistic data. See [here](https://github.com/glottospace/glottospace) for documentation and examples. 
+- `lingtypology`: The lingtypology package connects R with the Glottolog database (v. 4.8) and provides an additional functionality for linguistic typology. The Glottolog database contains a catalogue of the world’s languages. More documentation [here](https://ropensci.github.io/lingtypology/index.html)
+- `WDI`: The WDI package allows users to search and download data from over 40 datasets hosted by the World Bank, including the World Development Indicators ('WDI'), International Debt Statistics, Doing Business, Human Capital Index, and Sub-national Poverty indicators. Available [here](https://github.com/vincentarelbundock/WDI)
+- `countrycode`: countrycode standardizes country names, converts them into ~40 different coding schemes, and assigns region descriptors. Available [here](https://github.com/vincentarelbundock/countrycode)

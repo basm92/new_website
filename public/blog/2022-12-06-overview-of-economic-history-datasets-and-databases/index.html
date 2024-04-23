@@ -46,7 +46,7 @@
   <meta itemprop="name" content="Overview of Economic History Datasets and Databases">
 <meta itemprop="description" content="Introduction In this post, I&rsquo;ll give an overview and short description of various commonly-used and mostly publicly available data sources in Economic History. I am planning to update this repository as soon as I find new data sources, so if you find something is missing or if you have any suggestions, please contact me or write a comment below! Thanks to Giacomo Domini and Ruben Peeters for suggesting several of these sources."><meta itemprop="datePublished" content="2022-12-06T00:00:00+00:00" />
 <meta itemprop="dateModified" content="2022-12-06T00:00:00+00:00" />
-<meta itemprop="wordCount" content="2288"><meta itemprop="image" content="/blog/2022-12-06-overview-of-economic-history-datasets-and-databases/featured.png">
+<meta itemprop="wordCount" content="2865"><meta itemprop="image" content="/blog/2022-12-06-overview-of-economic-history-datasets-and-databases/featured.png">
 <meta itemprop="keywords" content="" />
   
   
@@ -211,6 +211,8 @@
 <a href="#historical-gis-databases">GIS Databases</a></li>
 <li>
 <a href="#municipal-data">Municipal Data</a></li>
+<li>
+<a href="#r-spatial-data-packages">R Spatial Data Packages</a></li>
 </ol>
 
 
@@ -871,6 +873,71 @@
 toc &lt;- cbsodataR::cbs_get_toc()
 gem_dat &lt;- toc |&gt; filter(stringr::str_detect(Title, &#39;gemeente&#39;)) 
 </code></pre>
+
+
+
+<h2 id="r-spatial-data-packages">R Spatial Data Packages
+  <a href="#r-spatial-data-packages"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<ul>
+<li>Based on 
+<a href="https://www.paulamoraga.com/book-spatial/r-packages-to-download-open-spatial-data.html" target="_blank" rel="noopener">Moraga (2022)</a>:
+<ul>
+<li>The <code>giscoR</code> package contains open data at the country (or lower) level for <strong>European Union countries</strong></li>
+<li>The <code>geodata</code> package contains <strong>climate data</strong> (temperature, precipitation, wind speed) across time: in particular through the <code>worldclim_country()</code> function</li>
+<li>The package <code>chirps</code> contains daily high-resolution <strong>precipitation</strong>, as well as daily maximum and minimum temperatures from the Climate Hazards Group database.</li>
+<li>The <code>elevatr</code> package can download <strong>elevation data</strong> from Amazon Web Services (AWS) Terrain Tiles and OpenTopography Global Digital Elevation Models API. Through the <code>get_elev_raster()</code> function, it can be used to download elevation at the locations specified in argument locations and with a zoom specified in argument <code>z</code></li>
+<li><code>osmdata</code> allows you to download data from <strong>OpenStreetMap</strong>. OpenStreetMap (OSM) is an open world geographic database updated and maintained by a community of volunteers. We can use the osmdata package (Padgham et al. 2023) to retrieve OSM data including rivers roads, shops, railway stations, and other buildings.</li>
+<li>The <code>rWBclimate</code> data 
+<a href="https://github.com/ropensci/rWBclimate" target="_blank" rel="noopener">available here</a> provides access to three different classes of climate data at two different spatial scales.</li>
+</ul>
+</li>
+<li>The <code>spocc</code> package is an interface to many species occurrence data sources including Global Biodiversity Information Facility (GBIF)
+<ul>
+<li>The <code>wopr</code> package provides access to the WorldPop Open Population Repository and provides estimates of population sizes for specific geographic areas</li>
+<li>The <code>rdhs</code> package gives the users the ability to access and analyze the (geocoded) Demographic and Health Survey (DHS) data.</li>
+<li>The <code>openair</code> package contains air quality data and other atmospheric composition data.</li>
+<li>The <code>malariaAtlas</code> package can be used to download global malaria data hosted by the Malaria Atlas Project.</li>
+<li>The <code>GAEZr</code> package (
+<a href="https://floswald.github.io/GAEZr/" target="_blank" rel="noopener">Installable here</a>) facilitate downloading and processing of Global Agro-Ecological Zones data in R</li>
+<li>The <code>rnaturalearth</code> package makes mapping easy by making natural earth map data from 
+<a href="https://www.naturalearthdata.com/" target="_blank" rel="noopener">Natural Earth Data</a> available</li>
+<li>The <code>rWBclimate</code> package (
+<a href="https://github.com/ropensci/rWBclimate" target="_blank" rel="noopener">here</a>) is an R interface for the World Bank climate data used in the World Bank climate knowledge portal.</li>
+<li>The <code>climate</code> package automatizes downloading of in-situ meteorological and hydrological data from publicly available repositories</li>
+</ul>
+</li>
+</ul>
+
+
+
+
+<h2 id="other-data-packages">Other Data Packages
+  <a href="#other-data-packages"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<ul>
+<li><code>ipumsr</code> - A package port to the IPUMS database: IPUMS is the world’s largest publicly available population database, providing census and survey data from around the world integrated across time and space. An overview is available 
+<a href="https://tech.popdata.org/ipumsr/index.html" target="_blank" rel="noopener">here</a></li>
+<li><code>eurostat</code> R package: A port to 
+<a href="https://ec.europa.eu/eurostat/web/main/data/database" target="_blank" rel="noopener">Eurostat</a>. This is a database about European countries on aggregate (country) and more disaggregated levels</li>
+<li><code>idbr</code>: Instational Data Base package: access to the US Census Bureau&rsquo;s International Data Base (IDB) API, and returns queries as R data frames. The IDB includes historical demographic data, current population estimates, and demographic projections to 2100 for countries of population 5,000 or greater that are recognized by the US Department of State</li>
+<li><code>pewdata</code>: A package helping to download Pew polls data sets.</li>
+<li><code>glottospace</code>: A package allowing for geospatial analysis of linguistic data. Contains a lot of linguistic data. See 
+<a href="https://github.com/glottospace/glottospace" target="_blank" rel="noopener">here</a> for documentation and examples.</li>
+<li><code>lingtypology</code>: The lingtypology package connects R with the Glottolog database (v. 4.8) and provides an additional functionality for linguistic typology. The Glottolog database contains a catalogue of the world’s languages. More documentation 
+<a href="https://ropensci.github.io/lingtypology/index.html" target="_blank" rel="noopener">here</a></li>
+<li><code>WDI</code>: The WDI package allows users to search and download data from over 40 datasets hosted by the World Bank, including the World Development Indicators (&lsquo;WDI&rsquo;), International Debt Statistics, Doing Business, Human Capital Index, and Sub-national Poverty indicators. Available 
+<a href="https://github.com/vincentarelbundock/WDI" target="_blank" rel="noopener">here</a></li>
+<li><code>countrycode</code>: countrycode standardizes country names, converts them into ~40 different coding schemes, and assigns region descriptors. Available 
+<a href="https://github.com/vincentarelbundock/countrycode" target="_blank" rel="noopener">here</a></li>
+</ul>
+
         
         <details closed class="f6 fw7 input-reset">
   <dl class="f6 lh-copy">
@@ -879,7 +946,7 @@ gem_dat &lt;- toc |&gt; filter(stringr::str_detect(Title, &#39;gemeente&#39;))
   </dl>
   <dl class="f6 lh-copy">
     <dt class="fw7">Length:</dt>
-    <dd class="fw5 ml0">11 minute read, 2288 words</dd>
+    <dd class="fw5 ml0">14 minute read, 2865 words</dd>
   </dl>
   
   
