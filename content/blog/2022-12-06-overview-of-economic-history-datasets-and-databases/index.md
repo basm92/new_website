@@ -1,12 +1,12 @@
 ---
-title: Overview of Economic History Datasets and Databases
+title: Overview of Economics Datasets and Databases
 author: 'Bas Machielsen'
 date: '2022-12-06'
 slug: []
 categories: []
 tags: []
 layout: single
-excerpt: "In this post, I'll give an overview and short description of various commonly-used and mostly publicly available data sources in Economic History."
+excerpt: "In this post, I give an overview and short description of various commonly-used and mostly publicly available data sources in Economics and Economic History."
 ---
 
 
@@ -52,6 +52,10 @@ In this post, I'll give an overview and short description of various commonly-us
 34. [GIS Databases](#historical-gis-databases)
 35. [Municipal Data](#municipal-data)
 36. [R Spatial Data Packages](#r-spatial-data-packages)
+37. [Other Data Packages](#other-data-packages)
+38. [Regional GDP and HDI](#region-gdp-and-hdi)
+39. [Linguistic Data](#linguistic-data)
+
 
 ## World Values Survey
 
@@ -290,3 +294,18 @@ gem_dat <- toc |> filter(stringr::str_detect(Title, 'gemeente'))
 - `lingtypology`: The lingtypology package connects R with the Glottolog database (v. 4.8) and provides an additional functionality for linguistic typology. The Glottolog database contains a catalogue of the world’s languages. More documentation [here](https://ropensci.github.io/lingtypology/index.html)
 - `WDI`: The WDI package allows users to search and download data from over 40 datasets hosted by the World Bank, including the World Development Indicators ('WDI'), International Debt Statistics, Doing Business, Human Capital Index, and Sub-national Poverty indicators. Available [here](https://github.com/vincentarelbundock/WDI)
 - `countrycode`: countrycode standardizes country names, converts them into ~40 different coding schemes, and assigns region descriptors. Available [here](https://github.com/vincentarelbundock/countrycode)
+- `dplacer`: An R package to the [D-Place](https://d-place.org/) database, with cultural and linguistic data including the Murdock ethnographic atlas available [here](https://github.com/matthewgthomas/dplacer)
+- `owidR`: This package acts as an interface to Our World in Data datasets, allowing for an easy way to search through data used in over 3,000 charts and load them into the R environment. Available [here](https://github.com/piersyork/owidR)
+
+## Regional GDP and HDI
+
+Kummu et al. (Nature, 2018) present gap-filled multiannual datasets in gridded form for Gross Domestic Product (GDP) and Human Development Index (HDI). To provide a consistent product over time and space, the sub-national data were only used indirectly, scaling the reported national value and thus, remaining representative of the official statistics. This resulted in annual gridded datasets for GDP per capita (PPP), total GDP (PPP), and HDI, for the whole world at 5 arc-min resolution for the 25-year period of 1990–2015. Additionally, total GDP (PPP) is provided with 30 arc-sec resolution for three time steps (1990, 2000, 2015). Available [here](https://datadryad.org/stash/dataset/doi:10.5061/dryad.dk1j0).
+
+## Linguistic Data
+
+- [WorldGeoDatasets](https://worldgeodatasets.com/language/)
+- [Ethnologue](https://www.ethnologue.com/)
+- [InfoPlease on basis of CIA world factbook](https://www.infoplease.com/countries/languages-spoken-in-each-country-of-the-world)
+- [CIA World Factbook](https://www.cia.gov/the-world-factbook/field/languages/)
+
+

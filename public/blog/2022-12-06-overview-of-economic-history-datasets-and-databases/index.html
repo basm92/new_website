@@ -9,7 +9,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="generator" content="Hugo 0.101.0" />
-<title>Overview of Economic History Datasets and Databases | Bas Machielsen</title>
+<title>Overview of Economics Datasets and Databases | Bas Machielsen</title>
 
 
 <meta property="twitter:site" content="@basss92">
@@ -24,12 +24,12 @@
   
     
   
-<meta name="description" content="In this post, I&#39;ll give an overview and short description of various commonly-used and mostly publicly available data sources in Economic History.">
+<meta name="description" content="In this post, I give an overview and short description of various commonly-used and mostly publicly available data sources in Economics and Economic History.">
 
 
 <meta property="og:site_name" content="Bas Machielsen">
-<meta property="og:title" content="Overview of Economic History Datasets and Databases | Bas Machielsen">
-<meta property="og:description" content="In this post, I&#39;ll give an overview and short description of various commonly-used and mostly publicly available data sources in Economic History." />
+<meta property="og:title" content="Overview of Economics Datasets and Databases | Bas Machielsen">
+<meta property="og:description" content="In this post, I give an overview and short description of various commonly-used and mostly publicly available data sources in Economics and Economic History." />
 <meta property="og:type" content="page" />
 <meta property="og:url" content="/blog/2022-12-06-overview-of-economic-history-datasets-and-databases/" />
 <meta property="og:locale" content="en">
@@ -43,10 +43,10 @@
         <meta name="twitter:image" content="/blog/2022-12-06-overview-of-economic-history-datasets-and-databases/featured.png" >
     
     
-  <meta itemprop="name" content="Overview of Economic History Datasets and Databases">
+  <meta itemprop="name" content="Overview of Economics Datasets and Databases">
 <meta itemprop="description" content="Introduction In this post, I&rsquo;ll give an overview and short description of various commonly-used and mostly publicly available data sources in Economic History. I am planning to update this repository as soon as I find new data sources, so if you find something is missing or if you have any suggestions, please contact me or write a comment below! Thanks to Giacomo Domini and Ruben Peeters for suggesting several of these sources."><meta itemprop="datePublished" content="2022-12-06T00:00:00+00:00" />
 <meta itemprop="dateModified" content="2022-12-06T00:00:00+00:00" />
-<meta itemprop="wordCount" content="2865"><meta itemprop="image" content="/blog/2022-12-06-overview-of-economic-history-datasets-and-databases/featured.png">
+<meta itemprop="wordCount" content="3048"><meta itemprop="image" content="/blog/2022-12-06-overview-of-economic-history-datasets-and-databases/featured.png">
 <meta itemprop="keywords" content="" />
   
   
@@ -116,7 +116,7 @@
   <section class="page-content mw7 center">
     <article class="post-content pa0 ph4-l">
       <header class="post-header">
-        <h1 class="f1 lh-solid measure-narrow mb3 fw4">Overview of Economic History Datasets and Databases</h1>
+        <h1 class="f1 lh-solid measure-narrow mb3 fw4">Overview of Economics Datasets and Databases</h1>
         
         <p class="f6 measure lh-copy mv1">By Bas Machielsen</p>
         <p class="f7 db mv0 ttu">December 6, 2022</p>
@@ -213,6 +213,12 @@
 <a href="#municipal-data">Municipal Data</a></li>
 <li>
 <a href="#r-spatial-data-packages">R Spatial Data Packages</a></li>
+<li>
+<a href="#other-data-packages">Other Data Packages</a></li>
+<li>
+<a href="#region-gdp-and-hdi">Regional GDP and HDI</a></li>
+<li>
+<a href="#linguistic-data">Linguistic Data</a></li>
 </ol>
 
 
@@ -936,6 +942,43 @@ gem_dat &lt;- toc |&gt; filter(stringr::str_detect(Title, &#39;gemeente&#39;))
 <a href="https://github.com/vincentarelbundock/WDI" target="_blank" rel="noopener">here</a></li>
 <li><code>countrycode</code>: countrycode standardizes country names, converts them into ~40 different coding schemes, and assigns region descriptors. Available 
 <a href="https://github.com/vincentarelbundock/countrycode" target="_blank" rel="noopener">here</a></li>
+<li><code>dplacer</code>: An R package to the 
+<a href="https://d-place.org/" target="_blank" rel="noopener">D-Place</a> database, with cultural and linguistic data including the Murdock ethnographic atlas available 
+<a href="https://github.com/matthewgthomas/dplacer" target="_blank" rel="noopener">here</a></li>
+<li><code>owidR</code>: This package acts as an interface to Our World in Data datasets, allowing for an easy way to search through data used in over 3,000 charts and load them into the R environment. Available 
+<a href="https://github.com/piersyork/owidR" target="_blank" rel="noopener">here</a></li>
+</ul>
+
+
+
+
+<h2 id="regional-gdp-and-hdi">Regional GDP and HDI
+  <a href="#regional-gdp-and-hdi"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>Kummu et al. (Nature, 2018) present gap-filled multiannual datasets in gridded form for Gross Domestic Product (GDP) and Human Development Index (HDI). To provide a consistent product over time and space, the sub-national data were only used indirectly, scaling the reported national value and thus, remaining representative of the official statistics. This resulted in annual gridded datasets for GDP per capita (PPP), total GDP (PPP), and HDI, for the whole world at 5 arc-min resolution for the 25-year period of 1990–2015. Additionally, total GDP (PPP) is provided with 30 arc-sec resolution for three time steps (1990, 2000, 2015). Available 
+<a href="https://datadryad.org/stash/dataset/doi:10.5061/dryad.dk1j0" target="_blank" rel="noopener">here</a>.</p>
+
+
+
+
+<h2 id="linguistic-data">Linguistic Data
+  <a href="#linguistic-data"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<ul>
+<li>
+<a href="https://worldgeodatasets.com/language/" target="_blank" rel="noopener">WorldGeoDatasets</a></li>
+<li>
+<a href="https://www.ethnologue.com/" target="_blank" rel="noopener">Ethnologue</a></li>
+<li>
+<a href="https://www.infoplease.com/countries/languages-spoken-in-each-country-of-the-world" target="_blank" rel="noopener">InfoPlease on basis of CIA world factbook</a></li>
+<li>
+<a href="https://www.cia.gov/the-world-factbook/field/languages/" target="_blank" rel="noopener">CIA World Factbook</a></li>
 </ul>
 
         
@@ -946,7 +989,7 @@ gem_dat &lt;- toc |&gt; filter(stringr::str_detect(Title, &#39;gemeente&#39;))
   </dl>
   <dl class="f6 lh-copy">
     <dt class="fw7">Length:</dt>
-    <dd class="fw5 ml0">14 minute read, 2865 words</dd>
+    <dd class="fw5 ml0">15 minute read, 3048 words</dd>
   </dl>
   
   

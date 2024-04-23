@@ -137,7 +137,7 @@ library(tidyverse) library(giscoR) library(sf) library(cawd) library(regions) Fo
     </item>
     
     <item>
-      <title>Overview of Economic History Datasets and Databases</title>
+      <title>Overview of Economics Datasets and Databases</title>
       <link>/blog/2022-12-06-overview-of-economic-history-datasets-and-databases/</link>
       <pubDate>Tue, 06 Dec 2022 00:00:00 +0000</pubDate>
       
