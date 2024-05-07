@@ -301,11 +301,29 @@ gem_dat <- toc |> filter(stringr::str_detect(Title, 'gemeente'))
 
 Kummu et al. (Nature, 2018) present gap-filled multiannual datasets in gridded form for Gross Domestic Product (GDP) and Human Development Index (HDI). To provide a consistent product over time and space, the sub-national data were only used indirectly, scaling the reported national value and thus, remaining representative of the official statistics. This resulted in annual gridded datasets for GDP per capita (PPP), total GDP (PPP), and HDI, for the whole world at 5 arc-min resolution for the 25-year period of 1990–2015. Additionally, total GDP (PPP) is provided with 30 arc-sec resolution for three time steps (1990, 2000, 2015). Available [here](https://datadryad.org/stash/dataset/doi:10.5061/dryad.dk1j0).
 
+Also, DOSE is a substantially extended version of DOSE – the MCC-PIK Database Of Sub-national Economic Output. DOSE v2 contains harmonised data on reported economic output for:
+  - 1,661 sub-national regions
+  - across 83 countries
+  - from 1953 to 2020
+  - with sectoral detail for the agricultural, manufacturing and services sectors.
+  
+Available [here](https://zenodo.org/records/7573249)
+
 ## Linguistic Data
 
 - [WorldGeoDatasets](https://worldgeodatasets.com/language/)
 - [Ethnologue](https://www.ethnologue.com/)
 - [InfoPlease on basis of CIA world factbook](https://www.infoplease.com/countries/languages-spoken-in-each-country-of-the-world)
 - [CIA World Factbook](https://www.cia.gov/the-world-factbook/field/languages/)
+
+## Mining Production
+
+While the extraction of natural resources has been well documented and analysed at the national level, production trends at the level of individual mines are more difficult to uncover, mainly due to poor availability of mining data with sub-national detail. In this paper, we contribute to filling this gap by presenting an open database on global coal and metal mine production on the level of individual mines. It is based on manually gathered information from more than 1900 freely available reports of mining companies, where every data point is linked to its source document, ensuring full transparency. The database covers 1171 individual mines and reports mine-level production for 80 different materials in the period 2000–2021. Available [here](https://www.nature.com/articles/s41597-023-01965-y). 
+
+## Gridded Data Collection GRID PRIO
+
+A whole host of gridded datasets, including nightlights, is available [here](https://grid.prio.org/#/download). The data come in .csv format. These need a grid reference file, which is also available somewhere on the website. Also available through: `devtools::install_github("prio-data/priogrid")`. The actual shapefile which allows you to combine these data is on [this page](https://grid.prio.org/#/extensions).
+
+
 
 
