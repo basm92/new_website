@@ -10,6 +10,11 @@ tags: []
 
 ## Introduction
 
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message=FALSE, warning=FALSE)
+```
+
 In this post, I'll explain, using R code, how to create a distance to the border and an associated running variable often met in geographic regression discontinuity designs. Depending on your data, this can be kind of difficult, so I'll explain this using two examples: 
   - One using _raster data_, computing distance to the border of the Roman Empire, inspired by a teaching project
   - One using _vector data_, computing distance to the Veneto-Lombardo border, inspired by a research project with Giacomo Domini. 
@@ -59,7 +64,6 @@ northernmost_lines <- st_intersection(boundary_re, countries_with_north_border)
 Finally, I have to delete a small part of the non-northern border in Croatia:
 
 ```{r}
-
 # Filter out south border of Croatia
 coords <- matrix(c(
   15, 46,
@@ -124,7 +128,7 @@ ggplot() + geom_stars(data=final_raster_grid[re])
 
 Finally, we'll create a distance to the border variable using the `dist_to_nearest` function and write it as an attribute in the raster:
 
-```{r}
+```{r echo=TRUE, results='hide'}
 # Create distance to the border:
 nearest_feat <- starsExtra::dist_to_nearest(final_raster_grid, northernmost_lines)
 final_raster_grid$distance <- nearest_feat$d

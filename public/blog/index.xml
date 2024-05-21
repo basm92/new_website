@@ -6,7 +6,17 @@
     <description>Recent content in Blog on Bas Machielsen</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Thu, 04 Jan 2024 00:00:00 +0000</lastBuildDate><atom:link href="/blog/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 14 May 2024 00:00:00 +0000</lastBuildDate><atom:link href="/blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>How to create a running variable in a spatial RDD?</title>
+      <link>/blog/2024-05-14-how-to-create-a-running-variable-in-a-spatial-rdd/</link>
+      <pubDate>Tue, 14 May 2024 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2024-05-14-how-to-create-a-running-variable-in-a-spatial-rdd/</guid>
+      <description>Introduction In this post, I&amp;rsquo;ll explain, using R code, how to create a distance to the border and an associated running variable often met in geographic regression discontinuity designs. Depending on your data, this can be kind of difficult, so I&amp;rsquo;ll explain this using two examples:
+One using raster data, computing distance to the border of the Roman Empire, inspired by a teaching project One using vector data, computing distance to the Veneto-Lombardo border, inspired by a research project with Giacomo Domini.</description>
+    </item>
+    
     <item>
       <title>Trends in Fertility Rates Worldwide and in Europe</title>
       <link>/blog/2024-01-04-trends-in-fertility-rates-worldwide-and-in-europe/</link>

@@ -2,13 +2,16 @@
 title: How to create a running variable in a spatial RDD?
 author: 'Bas Machielsen'
 date: '2024-05-14'
-excerpt: 
+excerpt: A demonstration of how to create running variables for spatial RDD designs in different settings
 slug: []
 categories: []
 tags: []
 ---
 
 ## Introduction
+
+
+
 
 In this post, I'll explain, using R code, how to create a distance to the border and an associated running variable often met in geographic regression discontinuity designs. Depending on your data, this can be kind of difficult, so I'll explain this using two examples: 
   - One using _raster data_, computing distance to the border of the Roman Empire, inspired by a teaching project
@@ -27,38 +30,8 @@ For this, I'm using the border of the Roman Empire and combine this with a datas
 library(cawd)
 library(rnaturalearthdata)
 library(tidyverse)
-```
-
-```
-## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-## ✔ dplyr     1.1.4     ✔ readr     2.1.4
-## ✔ forcats   1.0.0     ✔ stringr   1.5.1
-## ✔ ggplot2   3.4.4     ✔ tibble    3.2.1
-## ✔ lubridate 1.9.3     ✔ tidyr     1.3.0
-## ✔ purrr     1.0.2     
-## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-## ✖ dplyr::filter() masks stats::filter()
-## ✖ dplyr::lag()    masks stats::lag()
-## ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
-```
-
-```r
 library(sf)
-```
-
-```
-## Linking to GEOS 3.11.1, GDAL 3.6.4, PROJ 9.1.1; sf_use_s2() is TRUE
-```
-
-```r
 library(stars)
-```
-
-```
-## Loading required package: abind
-```
-
-```r
 library(starsExtra)
 ```
 
@@ -89,11 +62,6 @@ countries_with_north_border <- europe |> filter(is.element(sovereignt, c("Nether
 northernmost_lines <- st_intersection(boundary_re, countries_with_north_border) 
 ```
 
-```
-## Warning: attribute variables are assumed to be spatially constant throughout
-## all geometries
-```
-
 Finally, I have to delete a small part of the non-northern border in Croatia:
 
 
@@ -114,11 +82,6 @@ northernmost_border <- northernmost_lines |>
   st_difference(polygon)
 ```
 
-```
-## Warning: attribute variables are assumed to be spatially constant throughout
-## all geometries
-```
-
 Since I am planning to use a raster dataset, I will now create a buffer around the border, and on the basis of that, create a raster grid:
 
 
@@ -129,28 +92,9 @@ buffer_around_northern_border <- st_buffer(northernmost_border, 200000)
 
 # Intersection with Europe
 sf_use_s2(FALSE)
-```
-
-```
-## Spherical geometry (s2) switched off
-```
-
-```r
 area_around_re_border <- europe |>
   st_intersection(buffer_around_northern_border)
-```
 
-```
-## although coordinates are longitude/latitude, st_intersection assumes that they
-## are planar
-```
-
-```
-## Warning: attribute variables are assumed to be spatially constant throughout
-## all geometries
-```
-
-```r
 # Check what this area looks like
 area_around_re_border |>
   ggplot() + geom_sf()
@@ -165,37 +109,12 @@ Now, I am creating an sf grid, and then convert it to raster using the `stars` a
 # Build a grid on this basis
 grid <- st_make_grid(area_around_re_border,  n = 100) 
 filter <- st_within(grid, st_union(area_around_re_border)) |> lengths() > 0
-```
 
-```
-## although coordinates are longitude/latitude, st_union assumes that they are
-## planar
-```
-
-```
-## although coordinates are longitude/latitude, st_within assumes that they are
-## planar
-```
-
-```r
 # Check grid
 final_grid <- grid[filter]
 
 # Turn grid into an empty raster and save
 raster_grid <- grid[filter] |> stars::st_as_stars() 
-```
-
-```
-## although coordinates are longitude/latitude, st_intersects assumes that they
-## are planar
-```
-
-```
-## although coordinates are longitude/latitude, st_intersects assumes that they
-## are planar
-```
-
-```r
 final_raster_grid <- raster_grid[raster_grid['values'] ==1]
 ```
 
@@ -217,21 +136,6 @@ And it can even be masked by an `sf` object, something we'll make use of:
 ggplot() + geom_stars(data=final_raster_grid[re])
 ```
 
-```
-## although coordinates are longitude/latitude, st_intersects assumes that they
-## are planar
-```
-
-```
-## although coordinates are longitude/latitude, st_union assumes that they are
-## planar
-```
-
-```
-## although coordinates are longitude/latitude, st_intersects assumes that they
-## are planar
-```
-
 <img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-8-1.png" width="672" />
 
 Finally, we'll create a distance to the border variable using the `dist_to_nearest` function and write it as an attribute in the raster:
@@ -240,359 +144,6 @@ Finally, we'll create a distance to the border variable using the `dist_to_neare
 ```r
 # Create distance to the border:
 nearest_feat <- starsExtra::dist_to_nearest(final_raster_grid, northernmost_lines)
-```
-
-```
-## lines or polygons
-```
-
-```
-## 
-  |                                                                            
-  |                                                                      |   0%
-  |                                                                            
-  |                                                                      |   1%
-  |                                                                            
-  |=                                                                     |   1%
-  |                                                                            
-  |=                                                                     |   2%
-  |                                                                            
-  |==                                                                    |   2%
-  |                                                                            
-  |==                                                                    |   3%
-  |                                                                            
-  |==                                                                    |   4%
-  |                                                                            
-  |===                                                                   |   4%
-  |                                                                            
-  |===                                                                   |   5%
-  |                                                                            
-  |====                                                                  |   5%
-  |                                                                            
-  |====                                                                  |   6%
-  |                                                                            
-  |=====                                                                 |   6%
-  |                                                                            
-  |=====                                                                 |   7%
-  |                                                                            
-  |=====                                                                 |   8%
-  |                                                                            
-  |======                                                                |   8%
-  |                                                                            
-  |======                                                                |   9%
-  |                                                                            
-  |=======                                                               |   9%
-  |                                                                            
-  |=======                                                               |  10%
-  |                                                                            
-  |=======                                                               |  11%
-  |                                                                            
-  |========                                                              |  11%
-  |                                                                            
-  |========                                                              |  12%
-  |                                                                            
-  |=========                                                             |  12%
-  |                                                                            
-  |=========                                                             |  13%
-  |                                                                            
-  |=========                                                             |  14%
-  |                                                                            
-  |==========                                                            |  14%
-  |                                                                            
-  |==========                                                            |  15%
-  |                                                                            
-  |===========                                                           |  15%
-  |                                                                            
-  |===========                                                           |  16%
-  |                                                                            
-  |============                                                          |  16%
-  |                                                                            
-  |============                                                          |  17%
-  |                                                                            
-  |============                                                          |  18%
-  |                                                                            
-  |=============                                                         |  18%
-  |                                                                            
-  |=============                                                         |  19%
-  |                                                                            
-  |==============                                                        |  19%
-  |                                                                            
-  |==============                                                        |  20%
-  |                                                                            
-  |==============                                                        |  21%
-  |                                                                            
-  |===============                                                       |  21%
-  |                                                                            
-  |===============                                                       |  22%
-  |                                                                            
-  |================                                                      |  22%
-  |                                                                            
-  |================                                                      |  23%
-  |                                                                            
-  |================                                                      |  24%
-  |                                                                            
-  |=================                                                     |  24%
-  |                                                                            
-  |=================                                                     |  25%
-  |                                                                            
-  |==================                                                    |  25%
-  |                                                                            
-  |==================                                                    |  26%
-  |                                                                            
-  |===================                                                   |  26%
-  |                                                                            
-  |===================                                                   |  27%
-  |                                                                            
-  |===================                                                   |  28%
-  |                                                                            
-  |====================                                                  |  28%
-  |                                                                            
-  |====================                                                  |  29%
-  |                                                                            
-  |=====================                                                 |  29%
-  |                                                                            
-  |=====================                                                 |  30%
-  |                                                                            
-  |=====================                                                 |  31%
-  |                                                                            
-  |======================                                                |  31%
-  |                                                                            
-  |======================                                                |  32%
-  |                                                                            
-  |=======================                                               |  32%
-  |                                                                            
-  |=======================                                               |  33%
-  |                                                                            
-  |=======================                                               |  34%
-  |                                                                            
-  |========================                                              |  34%
-  |                                                                            
-  |========================                                              |  35%
-  |                                                                            
-  |=========================                                             |  35%
-  |                                                                            
-  |=========================                                             |  36%
-  |                                                                            
-  |==========================                                            |  36%
-  |                                                                            
-  |==========================                                            |  37%
-  |                                                                            
-  |==========================                                            |  38%
-  |                                                                            
-  |===========================                                           |  38%
-  |                                                                            
-  |===========================                                           |  39%
-  |                                                                            
-  |============================                                          |  39%
-  |                                                                            
-  |============================                                          |  40%
-  |                                                                            
-  |============================                                          |  41%
-  |                                                                            
-  |=============================                                         |  41%
-  |                                                                            
-  |=============================                                         |  42%
-  |                                                                            
-  |==============================                                        |  42%
-  |                                                                            
-  |==============================                                        |  43%
-  |                                                                            
-  |==============================                                        |  44%
-  |                                                                            
-  |===============================                                       |  44%
-  |                                                                            
-  |===============================                                       |  45%
-  |                                                                            
-  |================================                                      |  45%
-  |                                                                            
-  |================================                                      |  46%
-  |                                                                            
-  |=================================                                     |  46%
-  |                                                                            
-  |=================================                                     |  47%
-  |                                                                            
-  |=================================                                     |  48%
-  |                                                                            
-  |==================================                                    |  48%
-  |                                                                            
-  |==================================                                    |  49%
-  |                                                                            
-  |===================================                                   |  49%
-  |                                                                            
-  |===================================                                   |  50%
-  |                                                                            
-  |===================================                                   |  51%
-  |                                                                            
-  |====================================                                  |  51%
-  |                                                                            
-  |====================================                                  |  52%
-  |                                                                            
-  |=====================================                                 |  52%
-  |                                                                            
-  |=====================================                                 |  53%
-  |                                                                            
-  |=====================================                                 |  54%
-  |                                                                            
-  |======================================                                |  54%
-  |                                                                            
-  |======================================                                |  55%
-  |                                                                            
-  |=======================================                               |  55%
-  |                                                                            
-  |=======================================                               |  56%
-  |                                                                            
-  |========================================                              |  56%
-  |                                                                            
-  |========================================                              |  57%
-  |                                                                            
-  |========================================                              |  58%
-  |                                                                            
-  |=========================================                             |  58%
-  |                                                                            
-  |=========================================                             |  59%
-  |                                                                            
-  |==========================================                            |  59%
-  |                                                                            
-  |==========================================                            |  60%
-  |                                                                            
-  |==========================================                            |  61%
-  |                                                                            
-  |===========================================                           |  61%
-  |                                                                            
-  |===========================================                           |  62%
-  |                                                                            
-  |============================================                          |  62%
-  |                                                                            
-  |============================================                          |  63%
-  |                                                                            
-  |============================================                          |  64%
-  |                                                                            
-  |=============================================                         |  64%
-  |                                                                            
-  |=============================================                         |  65%
-  |                                                                            
-  |==============================================                        |  65%
-  |                                                                            
-  |==============================================                        |  66%
-  |                                                                            
-  |===============================================                       |  66%
-  |                                                                            
-  |===============================================                       |  67%
-  |                                                                            
-  |===============================================                       |  68%
-  |                                                                            
-  |================================================                      |  68%
-  |                                                                            
-  |================================================                      |  69%
-  |                                                                            
-  |=================================================                     |  69%
-  |                                                                            
-  |=================================================                     |  70%
-  |                                                                            
-  |=================================================                     |  71%
-  |                                                                            
-  |==================================================                    |  71%
-  |                                                                            
-  |==================================================                    |  72%
-  |                                                                            
-  |===================================================                   |  72%
-  |                                                                            
-  |===================================================                   |  73%
-  |                                                                            
-  |===================================================                   |  74%
-  |                                                                            
-  |====================================================                  |  74%
-  |                                                                            
-  |====================================================                  |  75%
-  |                                                                            
-  |=====================================================                 |  75%
-  |                                                                            
-  |=====================================================                 |  76%
-  |                                                                            
-  |======================================================                |  76%
-  |                                                                            
-  |======================================================                |  77%
-  |                                                                            
-  |======================================================                |  78%
-  |                                                                            
-  |=======================================================               |  78%
-  |                                                                            
-  |=======================================================               |  79%
-  |                                                                            
-  |========================================================              |  79%
-  |                                                                            
-  |========================================================              |  80%
-  |                                                                            
-  |========================================================              |  81%
-  |                                                                            
-  |=========================================================             |  81%
-  |                                                                            
-  |=========================================================             |  82%
-  |                                                                            
-  |==========================================================            |  82%
-  |                                                                            
-  |==========================================================            |  83%
-  |                                                                            
-  |==========================================================            |  84%
-  |                                                                            
-  |===========================================================           |  84%
-  |                                                                            
-  |===========================================================           |  85%
-  |                                                                            
-  |============================================================          |  85%
-  |                                                                            
-  |============================================================          |  86%
-  |                                                                            
-  |=============================================================         |  86%
-  |                                                                            
-  |=============================================================         |  87%
-  |                                                                            
-  |=============================================================         |  88%
-  |                                                                            
-  |==============================================================        |  88%
-  |                                                                            
-  |==============================================================        |  89%
-  |                                                                            
-  |===============================================================       |  89%
-  |                                                                            
-  |===============================================================       |  90%
-  |                                                                            
-  |===============================================================       |  91%
-  |                                                                            
-  |================================================================      |  91%
-  |                                                                            
-  |================================================================      |  92%
-  |                                                                            
-  |=================================================================     |  92%
-  |                                                                            
-  |=================================================================     |  93%
-  |                                                                            
-  |=================================================================     |  94%
-  |                                                                            
-  |==================================================================    |  94%
-  |                                                                            
-  |==================================================================    |  95%
-  |                                                                            
-  |===================================================================   |  95%
-  |                                                                            
-  |===================================================================   |  96%
-  |                                                                            
-  |====================================================================  |  96%
-  |                                                                            
-  |====================================================================  |  97%
-  |                                                                            
-  |====================================================================  |  98%
-  |                                                                            
-  |===================================================================== |  98%
-  |                                                                            
-  |===================================================================== |  99%
-  |                                                                            
-  |======================================================================|  99%
-  |                                                                            
-  |======================================================================| 100%
-```
-
-```r
 final_raster_grid$distance <- nearest_feat$d
 ```
 
@@ -603,14 +154,6 @@ To create a distance variable, we now create a variable indicating whether a gri
 # Create indicator for being inside RE
 grid_sf <- st_as_sfc(final_raster_grid, as_points=T)  
 logical <- as.logical(st_within(grid_sf, re))
-```
-
-```
-## although coordinates are longitude/latitude, st_within assumes that they are
-## planar
-```
-
-```r
 final_raster_grid <- final_raster_grid |>
   mutate(inside_re = case_when(!is.na(logical) & values == 1 ~ 1, 
                                is.na(logical) & values == 1 ~  0,
@@ -672,23 +215,7 @@ italy_provinces <- giscoR::gisco_get_nuts(country='Italy', nuts_level='3', year=
 # Filter the relevant municipalities
 # Combine overlaps and within
 filter_indication <- st_within(italy_municipalities, italy_provinces, sparse=TRUE) 
-```
-
-```
-## although coordinates are longitude/latitude, st_within assumes that they are
-## planar
-```
-
-```r
 filter_indication2 <- st_overlaps(italy_municipalities, italy_provinces, sparse=TRUE) 
-```
-
-```
-## although coordinates are longitude/latitude, st_overlaps assumes that they are
-## planar
-```
-
-```r
 mask <- apply(filter_indication, 1, any)
 mask2 <- apply(filter_indication2, 1, any)
 final_mask <- map2_lgl(mask, mask2, ~ any(.x + .y))
@@ -711,39 +238,12 @@ The problem is that the contemporary provinces don't exactly match the old ones 
 ```r
 # Spatial join
 relevant_part <- st_join(relevant_part, italy_provinces, join=st_nearest_feature)
-```
-
-```
-## although coordinates are longitude/latitude, st_nearest_feature assumes that
-## they are planar
-```
-
-```r
 # Calculate centroids of polygons in relevant_part
 relevant_centroids <- st_centroid(relevant_part)
-```
 
-```
-## Warning: st_centroid assumes attributes are constant over geometries
-```
-
-```
-## Warning in st_centroid.sfc(st_geometry(x), of_largest_polygon =
-## of_largest_polygon): st_centroid does not give correct centroids for
-## longitude/latitude data
-```
-
-```r
 # Calculate nearest point on the line for each centroid
 nearest_points <- st_nearest_points(relevant_centroids, border)
-```
 
-```
-## although coordinates are longitude/latitude, st_nearest_points assumes that
-## they are planar
-```
-
-```r
 # Calculate the angle between the line connecting centroids and their nearest points on the border
 angles <- numeric(length(nearest_points))
 for (i in seq_along(nearest_points)) {
