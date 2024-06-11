@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr"><head>
+  
+                           
+     
+
+
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="generator" content="Hugo 0.101.0" />
+<title>How to create a running variable in a spatial RDD? | Bas Machielsen</title>
+
+
+<meta property="twitter:site" content="@basss92">
+<meta property="twitter:creator" content="@basss92">
+
+
+
+
+
+
+
+  
+    
+  
+<meta name="description" content="A demonstration of how to create running variables for spatial RDD designs in different settings">
+
+
+<meta property="og:site_name" content="Bas Machielsen">
+<meta property="og:title" content="How to create a running variable in a spatial RDD? | Bas Machielsen">
+<meta property="og:description" content="A demonstration of how to create running variables for spatial RDD designs in different settings" />
+<meta property="og:type" content="page" />
+<meta property="og:url" content="/blog/2024-05-14-how-to-create-a-running-variable-in-a-spatial-rdd/" />
+<meta property="og:locale" content="en">
+
+
+
+
+    
+        <meta property="og:image" content="/blog/2024-05-14-how-to-create-a-running-variable-in-a-spatial-rdd/featured.png" >
+        <meta property="twitter:card" content="summary_large_image">
+        <meta name="twitter:image" content="/blog/2024-05-14-how-to-create-a-running-variable-in-a-spatial-rdd/featured.png" >
+    
+    
+  <meta itemprop="name" content="How to create a running variable in a spatial RDD?">
+<meta itemprop="description" content="Introduction In this post, I&rsquo;ll explain, using R code, how to create a distance to the border and an associated running variable often met in geographic regression discontinuity designs. Depending on your data, this can be kind of difficult, so I&rsquo;ll explain this using two examples:
+One using raster data, computing distance to the border of the Roman Empire, inspired by a teaching project One using vector data, computing distance to the Veneto-Lombardo border, inspired by a research project with Giacomo Domini."><meta itemprop="datePublished" content="2024-05-14T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2024-05-14T00:00:00+00:00" />
+<meta itemprop="wordCount" content="991"><meta itemprop="image" content="/blog/2024-05-14-how-to-create-a-running-variable-in-a-spatial-rdd/featured.png">
+<meta itemprop="keywords" content="" />
+  
+  
+  <!--[if IE]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  <link rel="shortcut icon" href="favicon_new.ico" type="image/x-icon">
+  <link rel="icon" href="favicon_new.ico" type="image/x-icon">
+  
+  
+  <link rel="stylesheet" href="/style.main.min.555ba9f33efffeb97887b561cc674ae6e47dfbe93583e9f789fc69722e60a59e.css" integrity="sha256-VVup8z7//rl4h7VhzGdK5uR9&#43;&#43;k1g&#43;n3ifxpci5gpZ4=" media="screen">
+  
+  
+  <script src="/panelset.min.dca42702d7daf6fd31dc352efd2bcf0e4ac8c05ccaa58d9293f6177462de5d5f.js" type="text/javascript"></script>
+  
+  
+  <script src="/main.min.d7e4e8181380eb79c579f1573ca10b3aeb727c619c43ff775fec0b0d1624b24d.js" type="text/javascript"></script>
+</head>
+<body>
+      <div class="grid-container">
+<header class="site-header pt4 pb2 mb4 bb b--transparent ph5 headroom z-max" role="banner">
+  <nav class="site-nav db dt-l w-100" role="navigation">
+    <a class="site-brand db dtc-l v-mid link no-underline w-100 w-33-l tc tl-l" href="/" title="Home">
+      <img src="/website_logo.png" class="dib db-l h2 w-auto" alt="Bas Machielsen">
+    </a>
+    <div class="site-links db dtc-l v-mid w-100 w-47-l tc tr-l mt3 mt0-l ttu tracked">
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/" title="Home">Home</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/about/" title="About">About</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 active" href="/blog/" title="Blog">Blog</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/project/" title="Teaching Overview &amp; Repository">Teaching</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/resume/" title="Resume">Resume</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/articles/" title="Articles">Articles</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/collection/" title="Software">Software</a>
+      
+      
+    </div>
+  </nav>
+</header>
+
+<main class="page-main pa4" role="main">
+  <section class="page-content mw7 center">
+    <article class="post-content pa0 ph4-l">
+      <header class="post-header">
+        <h1 class="f1 lh-solid measure-narrow mb3 fw4">How to create a running variable in a spatial RDD?</h1>
+        
+        <p class="f6 measure lh-copy mv1">By Bas Machielsen</p>
+        <p class="f7 db mv0 ttu">May 14, 2024</p>
+
+      
+
+      </header>
+      <section class="post-body pt5 pb4">
+        
+
+
+
+<h2 id="introduction">Introduction
+  <a href="#introduction"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>In this post, I&rsquo;ll explain, using R code, how to create a distance to the border and an associated running variable often met in geographic regression discontinuity designs. Depending on your data, this can be kind of difficult, so I&rsquo;ll explain this using two examples:</p>
+<ul>
+<li>One using <em>raster data</em>, computing distance to the border of the Roman Empire, inspired by a teaching project</li>
+<li>One using <em>vector data</em>, computing distance to the Veneto-Lombardo border, inspired by a research project with Giacomo Domini.</li>
+</ul>
+<p>The difference between these examples is that, in the first case, I have a geographic variable allowing me to easily determine on which side of the border you are. In the second case, I have not, so I need to resort to a slightly more refined method.</p>
+<p>Also, I think it is illustrative to show examples using both raster and vector data.</p>
+
+
+
+
+<h2 id="case-i-roman-empire">Case I: Roman Empire
+  <a href="#case-i-roman-empire"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>For this, I&rsquo;m using the border of the Roman Empire and combine this with a dataset of countries now encompassing the Roman border. I need these libraries:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#900;font-weight:bold">library</span>(cawd)
+</span></span><span style="display:flex;"><span><span style="color:#900;font-weight:bold">library</span>(rnaturalearthdata)
+</span></span><span style="display:flex;"><span><span style="color:#900;font-weight:bold">library</span>(tidyverse)
+</span></span><span style="display:flex;"><span><span style="color:#900;font-weight:bold">library</span>(sf)
+</span></span><span style="display:flex;"><span><span style="color:#900;font-weight:bold">library</span>(stars)
+</span></span><span style="display:flex;"><span><span style="color:#900;font-weight:bold">library</span>(starsExtra)
+</span></span></code></pre></div><p>I now download the maps of Europe and of the Roman Empire:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>europe <span style="color:#000;font-weight:bold">&lt;-</span> rnaturalearthdata<span style="color:#000;font-weight:bold">::</span>sovereignty50 <span style="color:#000;font-weight:bold">|&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">st_as_sf</span>() <span style="color:#000;font-weight:bold">|&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">filter</span>(continent <span style="color:#000;font-weight:bold">==</span> <span style="color:#d14">&#34;Europe&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>re <span style="color:#000;font-weight:bold">&lt;-</span> cawd<span style="color:#000;font-weight:bold">::</span>awmc.roman.empire.117.sp <span style="color:#000;font-weight:bold">|&gt;</span> <span style="color:#900;font-weight:bold">st_as_sf</span>()
+</span></span></code></pre></div><p>I extract the border of the Roman Empire and focus on the northern border:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>boundary_re <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">st_boundary</span>(re)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Extract Northern Border Roman Empire</span>
+</span></span><span style="display:flex;"><span>countries_with_north_border <span style="color:#000;font-weight:bold">&lt;-</span> europe <span style="color:#000;font-weight:bold">|&gt;</span> <span style="color:#900;font-weight:bold">filter</span>(<span style="color:#900;font-weight:bold">is.element</span>(sovereignt, <span style="color:#900;font-weight:bold">c</span>(<span style="color:#d14">&#34;Netherlands&#34;</span>, <span style="color:#d14">&#34;Germany&#34;</span>, <span style="color:#d14">&#34;Croatia&#34;</span>,
+</span></span><span style="display:flex;"><span>                                                                   <span style="color:#d14">&#34;Austria&#34;</span>, <span style="color:#d14">&#34;Hungary&#34;</span>, <span style="color:#d14">&#34;Slovakia&#34;</span>,
+</span></span><span style="display:flex;"><span>                                                                   <span style="color:#d14">&#34;Ukraine&#34;</span>, <span style="color:#d14">&#34;Romania&#34;</span>, <span style="color:#d14">&#34;Bulgaria&#34;</span>,
+</span></span><span style="display:flex;"><span>                                                                   <span style="color:#d14">&#34;Republic of Serbia&#34;</span>)))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Filter the LINESTRING(s) with the maximum Y-coordinate</span>
+</span></span><span style="display:flex;"><span>northernmost_lines <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">st_intersection</span>(boundary_re, countries_with_north_border) 
+</span></span></code></pre></div><p>Finally, I have to delete a small part of the non-northern border in Croatia:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Filter out south border of Croatia</span>
+</span></span><span style="display:flex;"><span>coords <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">matrix</span>(<span style="color:#900;font-weight:bold">c</span>(
+</span></span><span style="display:flex;"><span>  <span style="color:#099">15</span>, <span style="color:#099">46</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#099">20</span>, <span style="color:#099">42</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#099">10</span>, <span style="color:#099">42</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#099">10</span>, <span style="color:#099">46</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#099">15</span>, <span style="color:#099">46</span>), ncol <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">2</span>, byrow <span style="color:#000;font-weight:bold">=</span> <span style="color:#000;font-weight:bold">TRUE</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Create a polygon object</span>
+</span></span><span style="display:flex;"><span>polygon <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">st_polygon</span>(<span style="color:#900;font-weight:bold">list</span>(coords)) <span style="color:#000;font-weight:bold">|&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">st_sfc</span>(crs <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">4326</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>northernmost_border <span style="color:#000;font-weight:bold">&lt;-</span> northernmost_lines <span style="color:#000;font-weight:bold">|&gt;</span> 
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">st_difference</span>(polygon)
+</span></span></code></pre></div><p>Since I am planning to use a raster dataset, I will now create a buffer around the border, and on the basis of that, create a raster grid:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Build Buffer Around Roman Empire Border and Intersection With Europe</span>
+</span></span><span style="display:flex;"><span><span style="color:#900;font-weight:bold">sf_use_s2</span>(<span style="color:#000;font-weight:bold">TRUE</span>)
+</span></span><span style="display:flex;"><span>buffer_around_northern_border <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">st_buffer</span>(northernmost_border, <span style="color:#099">200000</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Intersection with Europe</span>
+</span></span><span style="display:flex;"><span><span style="color:#900;font-weight:bold">sf_use_s2</span>(<span style="color:#000;font-weight:bold">FALSE</span>)
+</span></span><span style="display:flex;"><span>area_around_re_border <span style="color:#000;font-weight:bold">&lt;-</span> europe <span style="color:#000;font-weight:bold">|&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">st_intersection</span>(buffer_around_northern_border)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Check what this area looks like</span>
+</span></span><span style="display:flex;"><span>area_around_re_border <span style="color:#000;font-weight:bold">|&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">ggplot</span>() <span style="color:#000;font-weight:bold">+</span> <span style="color:#900;font-weight:bold">geom_sf</span>()
+</span></span></code></pre></div><img src="/blog/2024-05-14-how-to-create-a-running-variable-in-a-spatial-rdd/index_files/figure-html/unnamed-chunk-5-1.png" width="672" />
+<p>Now, I am creating an sf grid, and then convert it to raster using the <code>stars</code> and <code>starsExtra</code> packages:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Build a grid on this basis</span>
+</span></span><span style="display:flex;"><span>grid <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">st_make_grid</span>(area_around_re_border,  n <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">100</span>) 
+</span></span><span style="display:flex;"><span>filter <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">st_within</span>(grid, <span style="color:#900;font-weight:bold">st_union</span>(area_around_re_border)) <span style="color:#000;font-weight:bold">|&gt;</span> <span style="color:#900;font-weight:bold">lengths</span>() <span style="color:#000;font-weight:bold">&gt;</span> <span style="color:#099">0</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Check grid</span>
+</span></span><span style="display:flex;"><span>final_grid <span style="color:#000;font-weight:bold">&lt;-</span> grid[filter]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Turn grid into an empty raster and save</span>
+</span></span><span style="display:flex;"><span>raster_grid <span style="color:#000;font-weight:bold">&lt;-</span> grid[filter] <span style="color:#000;font-weight:bold">|&gt;</span> stars<span style="color:#000;font-weight:bold">::</span><span style="color:#900;font-weight:bold">st_as_stars</span>() 
+</span></span><span style="display:flex;"><span>final_raster_grid <span style="color:#000;font-weight:bold">&lt;-</span> raster_grid[raster_grid[<span style="color:#d14">&#39;values&#39;</span>] <span style="color:#000;font-weight:bold">==</span><span style="color:#099">1</span>]
+</span></span></code></pre></div><p>This looks as follows:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#900;font-weight:bold">ggplot</span>() <span style="color:#000;font-weight:bold">+</span> 
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">geom_stars</span>(data<span style="color:#000;font-weight:bold">=</span>final_raster_grid) <span style="color:#000;font-weight:bold">+</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">geom_sf</span>(data<span style="color:#000;font-weight:bold">=</span>boundary_re)
+</span></span></code></pre></div><img src="/blog/2024-05-14-how-to-create-a-running-variable-in-a-spatial-rdd/index_files/figure-html/unnamed-chunk-7-1.png" width="672" />
+<p>And it can even be masked by an <code>sf</code> object, something we&rsquo;ll make use of:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#900;font-weight:bold">ggplot</span>() <span style="color:#000;font-weight:bold">+</span> <span style="color:#900;font-weight:bold">geom_stars</span>(data<span style="color:#000;font-weight:bold">=</span>final_raster_grid[re])
+</span></span></code></pre></div><img src="/blog/2024-05-14-how-to-create-a-running-variable-in-a-spatial-rdd/index_files/figure-html/unnamed-chunk-8-1.png" width="672" />
+<p>Finally, we&rsquo;ll create a distance to the border variable using the <code>dist_to_nearest</code> function and write it as an attribute in the raster:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Create distance to the border:</span>
+</span></span><span style="display:flex;"><span>nearest_feat <span style="color:#000;font-weight:bold">&lt;-</span> starsExtra<span style="color:#000;font-weight:bold">::</span><span style="color:#900;font-weight:bold">dist_to_nearest</span>(final_raster_grid, northernmost_lines)
+</span></span><span style="display:flex;"><span>final_raster_grid<span style="color:#000;font-weight:bold">$</span>distance <span style="color:#000;font-weight:bold">&lt;-</span> nearest_feat<span style="color:#000;font-weight:bold">$</span>d
+</span></span></code></pre></div><p>To create a distance variable, we now create a variable indicating whether a grid cell is inside the Roman Empire:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Create indicator for being inside RE</span>
+</span></span><span style="display:flex;"><span>grid_sf <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">st_as_sfc</span>(final_raster_grid, as_points<span style="color:#000;font-weight:bold">=</span><span style="color:#999">T</span>)  
+</span></span><span style="display:flex;"><span>logical <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">as.logical</span>(<span style="color:#900;font-weight:bold">st_within</span>(grid_sf, re))
+</span></span><span style="display:flex;"><span>final_raster_grid <span style="color:#000;font-weight:bold">&lt;-</span> final_raster_grid <span style="color:#000;font-weight:bold">|&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">mutate</span>(inside_re <span style="color:#000;font-weight:bold">=</span> <span style="color:#900;font-weight:bold">case_when</span>(<span style="color:#000;font-weight:bold">!</span><span style="color:#900;font-weight:bold">is.na</span>(logical) <span style="color:#000;font-weight:bold">&amp;</span> values <span style="color:#000;font-weight:bold">==</span> <span style="color:#099">1</span> <span style="color:#000;font-weight:bold">~</span> <span style="color:#099">1</span>, 
+</span></span><span style="display:flex;"><span>                               <span style="color:#900;font-weight:bold">is.na</span>(logical) <span style="color:#000;font-weight:bold">&amp;</span> values <span style="color:#000;font-weight:bold">==</span> <span style="color:#099">1</span> <span style="color:#000;font-weight:bold">~</span>  <span style="color:#099">0</span>,
+</span></span><span style="display:flex;"><span>                               <span style="color:#000;font-weight:bold">TRUE</span> <span style="color:#000;font-weight:bold">~</span> <span style="color:#000;font-weight:bold">NA</span>))
+</span></span></code></pre></div><p>Then, the running variable is just defined as distance if the grid cell is inside the Roman Empire, and -distance otherwise:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Create the running variable</span>
+</span></span><span style="display:flex;"><span>final_raster_grid <span style="color:#000;font-weight:bold">&lt;-</span> final_raster_grid <span style="color:#000;font-weight:bold">|&gt;</span> 
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">mutate</span>(running <span style="color:#000;font-weight:bold">=</span> <span style="color:#900;font-weight:bold">if_else</span>(inside_re <span style="color:#000;font-weight:bold">==</span> <span style="color:#099">1</span>, distance, <span style="color:#000;font-weight:bold">-</span>distance))
+</span></span></code></pre></div><p>This looks as follows:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#900;font-weight:bold">ggplot</span>() <span style="color:#000;font-weight:bold">+</span> 
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">geom_stars</span>(data<span style="color:#000;font-weight:bold">=</span>final_raster_grid[<span style="color:#d14">&#39;running&#39;</span>]) <span style="color:#000;font-weight:bold">+</span> 
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">scale_fill_viridis_c</span>()
+</span></span></code></pre></div><img src="/blog/2024-05-14-how-to-create-a-running-variable-in-a-spatial-rdd/index_files/figure-html/unnamed-chunk-12-1.png" width="672" />
+
+
+
+
+<h2 id="case-ii-veneto-lombardo">Case II: Veneto-Lombardo
+  <a href="#case-ii-veneto-lombardo"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>In this case, we don&rsquo;t have an object like <code>re</code> telling us on which side of the border a particular polygon is. First, we import the border and load the shapefile of municipalities:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Import the border</span>
+</span></span><span style="display:flex;"><span>border <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">st_read</span>(<span style="color:#d14">&#39;./shapefile/shapefile_italy_1860.shp&#39;</span>) <span style="color:#000;font-weight:bold">|&gt;</span>
+</span></span><span style="display:flex;"><span>  dplyr<span style="color:#000;font-weight:bold">::</span><span style="color:#900;font-weight:bold">filter</span>(id <span style="color:#000;font-weight:bold">==</span> <span style="color:#099">5</span>)
+</span></span></code></pre></div><pre tabindex="0"><code>## Reading layer `shapefile_italy_1860&#39; from data source 
+##   `/home/baswork/Documents/git/new_website/content/blog/2024-05-14-how-to-create-a-running-variable-in-a-spatial-rdd/shapefile/shapefile_italy_1860.shp&#39; 
+##   using driver `ESRI Shapefile&#39;
+## Simple feature collection with 5 features and 2 fields
+## Geometry type: MULTILINESTRING
+## Dimension:     XY
+## Bounding box:  xmin: 9.61294e-05 ymin: 0.0004079144 xmax: 13.90954 ymax: 47.09096
+## Geodetic CRS:  WGS 84
+</code></pre><div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Load the municipalities</span>
+</span></span><span style="display:flex;"><span>italy_municipalities <span style="color:#000;font-weight:bold">&lt;-</span> giscoR<span style="color:#000;font-weight:bold">::</span><span style="color:#900;font-weight:bold">gisco_get_lau</span>(country<span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#39;Italy&#39;</span>, year<span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#39;2016&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Load the provinces - to filter the relevant municipalities</span>
+</span></span><span style="display:flex;"><span>italy_provinces <span style="color:#000;font-weight:bold">&lt;-</span> giscoR<span style="color:#000;font-weight:bold">::</span><span style="color:#900;font-weight:bold">gisco_get_nuts</span>(country<span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#39;Italy&#39;</span>, nuts_level<span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#39;3&#39;</span>, year<span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#39;2016&#39;</span>) <span style="color:#000;font-weight:bold">|&gt;</span> 
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">mutate</span>(prov_code <span style="color:#000;font-weight:bold">=</span>  <span style="color:#900;font-weight:bold">str_sub</span>(NUTS_ID, <span style="color:#099">1</span>, <span style="color:#099">4</span>)) <span style="color:#000;font-weight:bold">|&gt;</span> 
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">filter</span>(<span style="color:#900;font-weight:bold">is.element</span>(prov_code, <span style="color:#900;font-weight:bold">c</span>(<span style="color:#d14">&#39;ITC4&#39;</span>, <span style="color:#d14">&#39;ITH3&#39;</span>)))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Filter the relevant municipalities</span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Combine overlaps and within</span>
+</span></span><span style="display:flex;"><span>filter_indication <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">st_within</span>(italy_municipalities, italy_provinces, sparse<span style="color:#000;font-weight:bold">=</span><span style="color:#000;font-weight:bold">TRUE</span>) 
+</span></span><span style="display:flex;"><span>filter_indication2 <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">st_overlaps</span>(italy_municipalities, italy_provinces, sparse<span style="color:#000;font-weight:bold">=</span><span style="color:#000;font-weight:bold">TRUE</span>) 
+</span></span><span style="display:flex;"><span>mask <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">apply</span>(filter_indication, <span style="color:#099">1</span>, any)
+</span></span><span style="display:flex;"><span>mask2 <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">apply</span>(filter_indication2, <span style="color:#099">1</span>, any)
+</span></span><span style="display:flex;"><span>final_mask <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">map2_lgl</span>(mask, mask2, <span style="color:#000;font-weight:bold">~</span> <span style="color:#900;font-weight:bold">any</span>(.x <span style="color:#000;font-weight:bold">+</span> .y))
+</span></span><span style="display:flex;"><span>relevant_part <span style="color:#000;font-weight:bold">&lt;-</span> italy_municipalities[final_mask,]
+</span></span></code></pre></div><p>The shapefile now looks like this:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Plot to check</span>
+</span></span><span style="display:flex;"><span><span style="color:#900;font-weight:bold">ggplot</span>() <span style="color:#000;font-weight:bold">+</span> <span style="color:#900;font-weight:bold">geom_sf</span>(data<span style="color:#000;font-weight:bold">=</span>relevant_part) <span style="color:#000;font-weight:bold">+</span> <span style="color:#900;font-weight:bold">geom_sf</span>(data<span style="color:#000;font-weight:bold">=</span>border, color<span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#39;blue&#39;</span>)
+</span></span></code></pre></div><img src="/blog/2024-05-14-how-to-create-a-running-variable-in-a-spatial-rdd/index_files/figure-html/unnamed-chunk-14-1.png" width="672" />
+<p>The problem is that the contemporary provinces don&rsquo;t exactly match the old ones which we need, so we cannot rely on contemporary data. Instead, we have to find which side of the border each place is located by looking at the <em>angle</em> between the polygon centroid and the border.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Spatial join</span>
+</span></span><span style="display:flex;"><span>relevant_part <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">st_join</span>(relevant_part, italy_provinces, join<span style="color:#000;font-weight:bold">=</span>st_nearest_feature)
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Calculate centroids of polygons in relevant_part</span>
+</span></span><span style="display:flex;"><span>relevant_centroids <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">st_centroid</span>(relevant_part)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Calculate nearest point on the line for each centroid</span>
+</span></span><span style="display:flex;"><span>nearest_points <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">st_nearest_points</span>(relevant_centroids, border)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Calculate the angle between the line connecting centroids and their nearest points on the border</span>
+</span></span><span style="display:flex;"><span>angles <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">numeric</span>(<span style="color:#900;font-weight:bold">length</span>(nearest_points))
+</span></span><span style="display:flex;"><span><span style="color:#900;font-weight:bold">for </span>(i in <span style="color:#900;font-weight:bold">seq_along</span>(nearest_points)) {
+</span></span><span style="display:flex;"><span>  centroid_coords <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">st_coordinates</span>(relevant_centroids[i,])
+</span></span><span style="display:flex;"><span>  nearest_coords <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">st_coordinates</span>(nearest_points[i])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#998;font-style:italic"># Calculate the X and Y differences (endpoint - origin)</span>
+</span></span><span style="display:flex;"><span>  delta_y <span style="color:#000;font-weight:bold">&lt;-</span> nearest_coords[2, <span style="color:#099">2</span>] <span style="color:#000;font-weight:bold">-</span> nearest_coords[1, <span style="color:#099">2</span>]
+</span></span><span style="display:flex;"><span>  delta_x <span style="color:#000;font-weight:bold">&lt;-</span> nearest_coords[2, <span style="color:#099">1</span>] <span style="color:#000;font-weight:bold">-</span> nearest_coords[1, <span style="color:#099">1</span>]
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>  <span style="color:#998;font-style:italic"># Calculate the angle using atan2</span>
+</span></span><span style="display:flex;"><span>  angle_radians <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">atan2</span>(delta_y, delta_x)
+</span></span><span style="display:flex;"><span>  angles[i] <span style="color:#000;font-weight:bold">&lt;-</span> angle_radians <span style="color:#000;font-weight:bold">*</span> (<span style="color:#099">180</span> <span style="color:#000;font-weight:bold">/</span> <span style="color:#000;font-weight:bold">pi</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Add angles to relevant_part</span>
+</span></span><span style="display:flex;"><span>relevant_part<span style="color:#000;font-weight:bold">$</span>angle_to_line <span style="color:#000;font-weight:bold">&lt;-</span> angles
+</span></span><span style="display:flex;"><span>relevant_part<span style="color:#000;font-weight:bold">$</span>group <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">if_else</span>(<span style="color:#900;font-weight:bold">abs</span>(relevant_part<span style="color:#000;font-weight:bold">$</span>angle_to_line) <span style="color:#000;font-weight:bold">&gt;</span> <span style="color:#099">90</span>, <span style="color:#d14">&#34;Veneto&#34;</span>, <span style="color:#d14">&#34;Lombardia&#34;</span>)
+</span></span></code></pre></div><p>Then, after running this algorithm, we get the following:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>relevant_part <span style="color:#000;font-weight:bold">|&gt;</span> 
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">ggplot</span>(<span style="color:#900;font-weight:bold">aes</span>(fill<span style="color:#000;font-weight:bold">=</span>group)) <span style="color:#000;font-weight:bold">+</span> <span style="color:#900;font-weight:bold">geom_sf</span>()
+</span></span></code></pre></div><img src="/blog/2024-05-14-how-to-create-a-running-variable-in-a-spatial-rdd/index_files/figure-html/unnamed-chunk-16-1.png" width="672" />
+<p>..which is what we set out to accomplish! Thanks for reading this post.</p>
+
+        
+        <details closed class="f6 fw7 input-reset">
+  <dl class="f6 lh-copy">
+    <dt class="fw7">Posted on:</dt>
+    <dd class="fw5 ml0">May 14, 2024</dd>
+  </dl>
+  <dl class="f6 lh-copy">
+    <dt class="fw7">Length:</dt>
+    <dd class="fw5 ml0">5 minute read, 991 words</dd>
+  </dl>
+  
+  
+  
+  <dl class="f6 lh-copy">
+    <dt class="fw7">See Also:</dt>
+    
+  </dl>
+</details>
+
+      </section>
+      <footer class="post-footer">
+        <div class="post-pagination dt w-100 mt4 mb2">
+  
+  
+    <a class="prev dtc pr2 tl v-top fw6"
+    href="/blog/2024-06-02-intervals-and-durations-in-feeding-a-new-born/">&larr; Intervals and Durations in Feeding a New-born :)</a>
+  
+  
+  
+    <a class="next dtc pl2 tr v-top fw6"
+    href="/blog/2024-01-04-trends-in-fertility-rates-worldwide-and-in-europe/">Trends in Fertility Rates Worldwide and in Europe &rarr;</a>
+  
+</div>
+
+      </footer>
+    </article>
+    
+      
+<div class="post-comments pa0 pa4-l mt4">
+  
+  <script src="https://utteranc.es/client.js"
+          repo="basm92/new_website"
+          issue-term="pathname"
+          theme="boxy-light"
+          label="comments :crystal_ball:"
+          crossorigin="anonymous"
+          async
+          type="text/javascript">
+  </script>
+  
+</div>
+
+    
+  </section>
+</main>
+<footer class="site-footer pv4 bt b--transparent ph5" role="contentinfo">
+  <nav class="db dt-l w-100">
+    <p class="site-copyright f7 db dtc-l v-mid w-100 w-33-l tc tl-l pv2 pv0-l mv0 lh-copy">
+      &copy; 2024 Bas Machielsen
+      <span class="middot-divider"></span>
+      Made with <span xmlns:dct="http://purl.org/dc/terms/" property="dct:title"><a xmlns:dct="http://purl.org/dc/terms/" href="https://github.com/hugo-apero/" rel="dct:source">Hugo Apéro</a></span>.
+      <br />
+      
+Based on <span xmlns:dct="http://purl.org/dc/terms/" property="dct:title"><a xmlns:dct="http://purl.org/dc/terms/" href="https://github.com/formspree/blogophonic-hugo" rel="dct:source">Blogophonic</a></span> by <a xmlns:cc="http://creativecommons.org/ns#" href="https://formspree.io" property="cc:attributionName" rel="cc:attributionURL">Formspree</a>.
+    </p>
+    
+    <div class="site-social-links db dtc-l v-mid w-100 w-33-l tc pv2 pv0-l mv0">
+      <div class="social-icon-links" aria-hidden="true">
+  
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://github.com/basm92" title="github" target="_blank" rel="noopener">
+      <i class="fab fa-github fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://scholar.google.com/citations?user=bS8uo44AAAAJ" title="google" target="_blank" rel="noopener">
+      <i class="fab fa-google fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://twitter.com/basss92" title="twitter" target="_blank" rel="noopener">
+      <i class="fab fa-twitter fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="mailto:a.h.machielsen@uu.nl" title="envelope" >
+      <i class="fas fa-envelope fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="mailto:basmachielsen@live.nl" title="envelope" >
+      <i class="far fa-envelope fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://orcid.org/0000-0002-9692-0615" title="orcid" target="_blank" rel="noopener">
+      <i class="ai ai-orcid fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="/blog/index.xml" title="rss" >
+      <i class="fas fa-rss fa-lg fa-fw"></i>
+    </a>
+  
+</div>
+
+    </div>
+    
+    <div class="site-links f6 db dtc-l v-mid w-100 w-67-l tc tr-l pv2 pv0-l mv0">
+      
+      <a class="dib pv1 ph2 link" href="/license/" title="License">License</a>
+      
+      <a class="dib pv1 ph2 link" href="/contact/" title="Contact form">Contact</a>
+      
+      <a class="dib pv1 ph2 link" href="/contributors/" title="Contributors">Contributors</a>
+      
+    </div>
+  </nav>
+  
+    <script>
+
+    var i, text, code, codes = document.getElementsByTagName('code');
+    for (let i = 0; i < codes.length;) {
+      code = codes[i];
+      if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+        text = code.textContent;
+        if (/^\$[^$]/.test(text) && /[^$]\$$/.test(text)) {
+          text = text.replace(/^\$/, '\\(').replace(/\$$/, '\\)');
+          code.textContent = text;
+        }
+        if (/^\\\((.|\s)+\\\)$/.test(text) ||
+            /^\\\[(.|\s)+\\\]$/.test(text) ||
+            /^\$(.|\s)+\$$/.test(text) ||
+            /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+          code.outerHTML = code.innerHTML;  
+          continue;
+        }
+      }
+      i++;
+    }
+</script>
+
+  
+    
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.css" integrity="sha384-RZU/ijkSsFbcmivfdRBQDtwuwVqK7GMOw6IMvKyeWL2K5UAlyp6WonmB8m7Jd0Hn" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.js" integrity="sha384-pK1WpvzWVBQiP0/GjnvRxV4mOb0oxFuyRxJlk6vVw146n3egcN5C925NCP7a7BY8" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/contrib/auto-render.min.js" integrity="sha384-vZTG03m+2yp6N6BNi5iM4rW4oIwk5DfcNdFfxkk9ZWpDriOkXX8voJBFrAO7MpVl" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
+
+
+
+    
+  
+  
+</footer>
+
+      </div>
+    </body>
+</html>

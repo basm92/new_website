@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr"><head>
+  
+                           
+     
+
+
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="generator" content="Hugo 0.101.0" />
+<title>Intervals and Durations in Feeding a New-born :) | Bas Machielsen</title>
+
+
+<meta property="twitter:site" content="@basss92">
+<meta property="twitter:creator" content="@basss92">
+
+
+
+
+
+
+
+  
+    
+  
+<meta name="description" content="A post about feeding a new born (and a bit about data)">
+
+
+<meta property="og:site_name" content="Bas Machielsen">
+<meta property="og:title" content="Intervals and Durations in Feeding a New-born :) | Bas Machielsen">
+<meta property="og:description" content="A post about feeding a new born (and a bit about data)" />
+<meta property="og:type" content="page" />
+<meta property="og:url" content="/blog/2024-06-02-intervals-and-durations-in-feeding-a-new-born/" />
+<meta property="og:locale" content="en">
+
+
+
+
+    
+        <meta property="og:image" content="/blog/2024-06-02-intervals-and-durations-in-feeding-a-new-born/featured.png" >
+        <meta property="twitter:card" content="summary_large_image">
+        <meta name="twitter:image" content="/blog/2024-06-02-intervals-and-durations-in-feeding-a-new-born/featured.png" >
+    
+    
+  <meta itemprop="name" content="Intervals and Durations in Feeding a New-born :)">
+<meta itemprop="description" content="Introduction As those of you who might know me know, we (my wife and me) became parents a couple of months ago of a son named Lev. Apart from being a really cool guy, he’s also quite unpredictable in his tendencies for asking to be fed. We’ve been using an app called Huckleberry to record all feeding times and duration, and since he can be quite demanding, we were wondering about the relationship between feeding duration and times (intervals) between feeding."><meta itemprop="datePublished" content="2024-06-02T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2024-06-02T00:00:00+00:00" />
+<meta itemprop="wordCount" content="1592"><meta itemprop="image" content="/blog/2024-06-02-intervals-and-durations-in-feeding-a-new-born/featured.png">
+<meta itemprop="keywords" content="" />
+  
+  
+  <!--[if IE]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  <link rel="shortcut icon" href="favicon_new.ico" type="image/x-icon">
+  <link rel="icon" href="favicon_new.ico" type="image/x-icon">
+  
+  
+  <link rel="stylesheet" href="/style.main.min.555ba9f33efffeb97887b561cc674ae6e47dfbe93583e9f789fc69722e60a59e.css" integrity="sha256-VVup8z7//rl4h7VhzGdK5uR9&#43;&#43;k1g&#43;n3ifxpci5gpZ4=" media="screen">
+  
+  
+  <script src="/panelset.min.dca42702d7daf6fd31dc352efd2bcf0e4ac8c05ccaa58d9293f6177462de5d5f.js" type="text/javascript"></script>
+  
+  
+  <script src="/main.min.d7e4e8181380eb79c579f1573ca10b3aeb727c619c43ff775fec0b0d1624b24d.js" type="text/javascript"></script>
+</head>
+<body>
+      <div class="grid-container">
+<header class="site-header pt4 pb2 mb4 bb b--transparent ph5 headroom z-max" role="banner">
+  <nav class="site-nav db dt-l w-100" role="navigation">
+    <a class="site-brand db dtc-l v-mid link no-underline w-100 w-33-l tc tl-l" href="/" title="Home">
+      <img src="/website_logo.png" class="dib db-l h2 w-auto" alt="Bas Machielsen">
+    </a>
+    <div class="site-links db dtc-l v-mid w-100 w-47-l tc tr-l mt3 mt0-l ttu tracked">
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/" title="Home">Home</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/about/" title="About">About</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 active" href="/blog/" title="Blog">Blog</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/project/" title="Teaching Overview &amp; Repository">Teaching</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/resume/" title="Resume">Resume</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/articles/" title="Articles">Articles</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/collection/" title="Software">Software</a>
+      
+      
+    </div>
+  </nav>
+</header>
+
+<main class="page-main pa4" role="main">
+  <section class="page-content mw7 center">
+    <article class="post-content pa0 ph4-l">
+      <header class="post-header">
+        <h1 class="f1 lh-solid measure-narrow mb3 fw4">Intervals and Durations in Feeding a New-born :)</h1>
+        
+        <p class="f6 measure lh-copy mv1">By Bas Machielsen</p>
+        <p class="f7 db mv0 ttu">June 2, 2024</p>
+
+      
+
+      </header>
+      <section class="post-body pt5 pb4">
+        
+
+
+
+<h2 id="introduction">Introduction
+  <a href="#introduction"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>As those of you who might know me know, we (my wife and me) became parents a couple of months ago of a son named Lev. Apart from being a really cool guy, he’s also quite unpredictable in his tendencies for asking to be fed. We’ve been using an app called Huckleberry to record all feeding times and duration, and since he can be quite demanding, we were wondering about the relationship between feeding duration and times (intervals) between feeding.</p>
+<p>As some of you might know, feeding a new-born can be quite demanding and this analysis might even be practical in the sense that, since there’s some agency the mother has over feeding her child, a mother might look for feeding policy that might decrease the burden a bit.</p>
+<p>But who am I kidding, it’s just fun to analyze these very personal data. In the meantime, I’ll also take the time to discuss the quite new <code>tinytable</code> R package, a new table creating package that seems to be up and coming. Hopefully, after a couple of posts I’ll feel at home enough to begin writing my papers using it: it seems very user friendly.</p>
+
+
+
+
+<h2 id="importing-and-data-wrangling">Importing and Data Wrangling
+  <a href="#importing-and-data-wrangling"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>To start out, I’ll load three package we’ll be needing and start importing my data file:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#900;font-weight:bold">library</span>(tidyverse)
+</span></span><span style="display:flex;"><span><span style="color:#900;font-weight:bold">library</span>(modelsummary)
+</span></span><span style="display:flex;"><span><span style="color:#900;font-weight:bold">library</span>(tinytable)
+</span></span></code></pre></div><p>This is what the raw data look like:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>lev <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">read_delim</span>(<span style="color:#d14">&#39;./c7d82626-bd81-4d48-a96f-09dc4209a560.csv&#39;</span>)
+</span></span></code></pre></div><pre><code>## Rows: 1289 Columns: 8
+## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## chr  (6): Type, Duration, Start Condition, Start Location, End Condition, Notes
+## dttm (2): Start, End
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+</code></pre>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>lev
+</span></span></code></pre></div><pre><code>## # A tibble: 1,289 × 8
+##    Type  Start               End                 Duration `Start Condition`
+##    &lt;chr&gt; &lt;dttm&gt;              &lt;dttm&gt;              &lt;chr&gt;    &lt;chr&gt;            
+##  1 Feed  2024-06-02 16:08:00 2024-06-02 16:29:00 00:20    00:10R           
+##  2 Feed  2024-06-02 12:45:00 2024-06-02 13:29:00 00:44    00:21R           
+##  3 Feed  2024-06-02 08:36:00 2024-06-02 09:22:00 00:46    00:46R           
+##  4 Feed  2024-06-02 06:00:00 2024-06-02 06:19:00 00:19    Null r           
+##  5 Feed  2024-06-02 01:09:00 2024-06-02 01:45:00 00:36    00:36R           
+##  6 Feed  2024-06-02 00:36:00 2024-06-02 00:47:00 00:11    Null r           
+##  7 Feed  2024-06-01 21:21:00 2024-06-01 21:31:00 00:09    00:09R           
+##  8 Feed  2024-06-01 20:28:00 2024-06-01 20:47:00 00:18    00:06R           
+##  9 Feed  2024-06-01 17:56:00 2024-06-01 18:31:00 00:34    00:17R           
+## 10 Feed  2024-06-01 14:37:00 2024-06-01 15:08:00 00:30    00:20R           
+## # ℹ 1,279 more rows
+## # ℹ 3 more variables: `Start Location` &lt;chr&gt;, `End Condition` &lt;chr&gt;,
+## #   Notes &lt;chr&gt;
+</code></pre>
+<p>I need to do a couple of things: I want to extract the month since I need to know how old our son was (he was born at the beginning of the month), and I want to calculate the interval from each feeding to the next. I do that before anything else since we’ve also bottle-fed him without time duration. We want those observations to be NA’ed rather than to be taken into account, since inclusion of those observations and disregarding bottle feedings might overestimate greatly the time between feeding.</p>
+<p>Then, I calculate the interval between feeding, defined as the time between the Start of feeding at <code>\(t\)</code> and the End of the feeding at <code>\(t-1\)</code>. There is a Duration variable there as well for the time a feeding takes, which I take to be an independent variable.</p>
+<p>I also create a variable called day, which is a unique month-day indicator, since I want to estimate the relationship using within-day data (new-born children might have really “good” and “bad” days, so it might be useful to compare within-day and across-day estimates).</p>
+<p>Finally, new-born children, at least after some time, start to acquire day and night rhythms, so we might include “night” as a possible control variable, since the default time between feedings is different at night than during the day. We define “night” to be any time between 9 o’clock in the evening (sadly, this is realistic) and 8 o’clock in the morning.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>lev <span style="color:#000;font-weight:bold">&lt;-</span> lev <span style="color:#000;font-weight:bold">|&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">mutate</span>(month <span style="color:#000;font-weight:bold">=</span> <span style="color:#900;font-weight:bold">month</span>(Start),
+</span></span><span style="display:flex;"><span>         interval <span style="color:#000;font-weight:bold">=</span> <span style="color:#900;font-weight:bold">seconds</span>(Start <span style="color:#000;font-weight:bold">-</span> <span style="color:#900;font-weight:bold">lead</span>(End)),
+</span></span><span style="display:flex;"><span>         Duration <span style="color:#000;font-weight:bold">=</span> <span style="color:#900;font-weight:bold">parse_time</span>(Duration),
+</span></span><span style="display:flex;"><span>         day <span style="color:#000;font-weight:bold">=</span> <span style="color:#900;font-weight:bold">paste0</span>(<span style="color:#900;font-weight:bold">day</span>(Start), <span style="color:#d14">&#34;-&#34;</span>, <span style="color:#900;font-weight:bold">month</span>(Start)),
+</span></span><span style="display:flex;"><span>         night <span style="color:#000;font-weight:bold">=</span> <span style="color:#900;font-weight:bold">if_else</span>(<span style="color:#900;font-weight:bold">between</span>(<span style="color:#900;font-weight:bold">hour</span>(Start), <span style="color:#099">0</span>, <span style="color:#099">8</span>) <span style="color:#000;font-weight:bold">|</span> <span style="color:#900;font-weight:bold">between</span>(<span style="color:#900;font-weight:bold">hour</span>(Start), <span style="color:#099">21</span>, <span style="color:#099">23</span>), <span style="color:#099">1</span>, <span style="color:#099">0</span>))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>lev <span style="color:#000;font-weight:bold">&lt;-</span> lev <span style="color:#000;font-weight:bold">|&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">mutate</span>(Duration <span style="color:#000;font-weight:bold">=</span> <span style="color:#900;font-weight:bold">seconds</span>(Duration))
+</span></span></code></pre></div><p>After parsing all of this, I convert the Duration variable to seconds. Interval is also defined in seconds. This helps later to interpret our estimates.</p>
+
+
+
+
+<h2 id="analysis-all-data">Analysis: All Data
+  <a href="#analysis-all-data"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>My first analysis focuses on all data I have since birth. Like I said, I want to exclude bottle feedings since I don’t have registered the time for them, and I throw out a couple of <code>NA</code> observations. Then, I visually inspect the relationship between Duration and interval between feedings.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>filtered_lev <span style="color:#000;font-weight:bold">&lt;-</span> lev <span style="color:#000;font-weight:bold">|&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">filter</span>(Type <span style="color:#000;font-weight:bold">==</span> <span style="color:#d14">&#34;Feed&#34;</span>, <span style="color:#000;font-weight:bold">!</span><span style="color:#900;font-weight:bold">is.na</span>(End))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>filtered_lev <span style="color:#000;font-weight:bold">|&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">ggplot</span>(<span style="color:#900;font-weight:bold">aes</span>(x<span style="color:#000;font-weight:bold">=</span>Duration, y <span style="color:#000;font-weight:bold">=</span> interval)) <span style="color:#000;font-weight:bold">+</span> <span style="color:#900;font-weight:bold">geom_point</span>()
+</span></span></code></pre></div><img src="/blog/2024-06-02-intervals-and-durations-in-feeding-a-new-born/index_files/figure-html/unnamed-chunk-2-1.png" width="672" />
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#900;font-weight:bold">library</span>(fixest)
+</span></span><span style="display:flex;"><span>model_no_fe <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">feols</span>(fml <span style="color:#000;font-weight:bold">=</span> <span style="color:#900;font-weight:bold">as.numeric</span>(interval) <span style="color:#000;font-weight:bold">~</span> Duration <span style="color:#000;font-weight:bold">+</span> night, data <span style="color:#000;font-weight:bold">=</span> filtered_lev, vcov<span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#39;hc1&#39;</span>)
+</span></span><span style="display:flex;"><span>model_fe <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">feols</span>(fml <span style="color:#000;font-weight:bold">=</span> <span style="color:#900;font-weight:bold">as.numeric</span>(interval) <span style="color:#000;font-weight:bold">~</span> Duration <span style="color:#000;font-weight:bold">+</span> night <span style="color:#000;font-weight:bold">|</span> day, data <span style="color:#000;font-weight:bold">=</span> filtered_lev, vcov<span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#39;hc1&#39;</span>)
+</span></span></code></pre></div><p>Considering this, we might think there’s a positive relationship between feeding time and interval between feedings, which we might have expected. The existence of this is some good news, as mothers can decide to feed longer (provided the baby wants to) to give themselves a longer break in between feedings as a matter of policy. Well, maybe.. I also estimate two regression models, which I report later.</p>
+
+
+
+
+<h2 id="analysis-data-from-2-months-onw">Analysis: Data From 2 Months Onw
+  <a href="#analysis-data-from-2-months-onw"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>The next analysis repeats this, but uses data from 2 months after birth onward. The idea is that behavior should become a little more systematic after 2 months (or so), and eventual patterns might be more visible.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>filtered_lev <span style="color:#000;font-weight:bold">&lt;-</span> lev <span style="color:#000;font-weight:bold">|&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">filter</span>(month <span style="color:#000;font-weight:bold">&gt;</span> <span style="color:#099">4</span>, Type <span style="color:#000;font-weight:bold">==</span> <span style="color:#d14">&#34;Feed&#34;</span>, <span style="color:#000;font-weight:bold">!</span><span style="color:#900;font-weight:bold">is.na</span>(End))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>filtered_lev <span style="color:#000;font-weight:bold">|&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">ggplot</span>(<span style="color:#900;font-weight:bold">aes</span>(x<span style="color:#000;font-weight:bold">=</span>Duration, y <span style="color:#000;font-weight:bold">=</span>interval)) <span style="color:#000;font-weight:bold">+</span> <span style="color:#900;font-weight:bold">geom_point</span>()
+</span></span></code></pre></div><img src="/blog/2024-06-02-intervals-and-durations-in-feeding-a-new-born/index_files/figure-html/unnamed-chunk-3-1.png" width="672" />
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Regression models</span>
+</span></span><span style="display:flex;"><span>model_no_fe2 <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">feols</span>(fml <span style="color:#000;font-weight:bold">=</span> <span style="color:#900;font-weight:bold">as.numeric</span>(interval) <span style="color:#000;font-weight:bold">~</span> Duration <span style="color:#000;font-weight:bold">+</span> night, data <span style="color:#000;font-weight:bold">=</span> filtered_lev, vcov<span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#39;hc1&#39;</span>)
+</span></span><span style="display:flex;"><span>model_fe2 <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">feols</span>(fml <span style="color:#000;font-weight:bold">=</span> <span style="color:#900;font-weight:bold">as.numeric</span>(interval) <span style="color:#000;font-weight:bold">~</span> Duration <span style="color:#000;font-weight:bold">+</span> night <span style="color:#000;font-weight:bold">|</span> day, data <span style="color:#000;font-weight:bold">=</span> filtered_lev, vcov<span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#39;hc1&#39;</span>)
+</span></span></code></pre></div><p>This analysis essentially shows the same pattern, indicating possibly that not much changes during these months. There seems to be a positive relationships but also quite a lot of volatility. Seems like we registered well, as that seems to be exactly my anecdotal experience.</p>
+
+
+
+
+<h2 id="results">Results
+  <a href="#results"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>Now, I want to use the <code>tinytable</code> package to report the results. I was interested in a couple of goodness-of-fit statistics including the adjusted <code>\(R^2\)</code> and the within <code>\(R^2\)</code>. In order to properly speciy that in the <code>modelsummary</code> function used to generate tables, I needed this:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#900;font-weight:bold">get_gof</span>(model_fe)
+</span></span></code></pre></div><pre><code>##       aic      bic r.squared adj.r.squared r2.within r2.within.adjusted
+## 1 7985.11 8349.013 0.4302332     0.2658775 0.2281345          0.2231867
+##       rmse nobs FE: day                 vcov.type
+## 1 3875.149  403       X Heteroskedasticity-robust
+</code></pre>
+<p>That is, the <code>get_gof()</code> function tells me that I’m looking for the “adj.r.squared”, “r2.within”, and “nobs”, which I need later in the <code>modelsummary</code> function in the <code>gof_map</code> argument.</p>
+<p>I’ll now generate a table, but first, I’ll make a manual row including fixed effects (I don’t like modelsummmary’s default X’s):</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>fe <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">tt</span>(<span style="color:#900;font-weight:bold">tibble</span>(a<span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;Day FE&#34;</span>, b<span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;No&#34;</span>, g<span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;Yes&#34;</span>, d<span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;No&#34;</span>, e<span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;Yes&#34;</span>))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#900;font-weight:bold">modelsummary</span>(<span style="color:#900;font-weight:bold">list</span>(model_no_fe,
+</span></span><span style="display:flex;"><span>                  model_fe, 
+</span></span><span style="display:flex;"><span>                  model_no_fe2, 
+</span></span><span style="display:flex;"><span>                  model_fe2),
+</span></span><span style="display:flex;"><span>             title<span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;Estimates of the relationship between Feeding Duration and Feeding Interval&#34;</span>,
+</span></span><span style="display:flex;"><span>             coef_map <span style="color:#000;font-weight:bold">=</span> <span style="color:#900;font-weight:bold">c</span>(<span style="color:#d14">&#34;Duration&#34;</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;Duration&#34;</span>,
+</span></span><span style="display:flex;"><span>                          <span style="color:#d14">&#34;night&#34;</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;Night&#34;</span>,
+</span></span><span style="display:flex;"><span>                          <span style="color:#d14">&#34;(Intercept)&#34;</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;Intercept&#34;</span>),
+</span></span><span style="display:flex;"><span>             gof_map<span style="color:#000;font-weight:bold">=</span><span style="color:#900;font-weight:bold">c</span>(<span style="color:#d14">&#34;adj.r.squared&#34;</span>, <span style="color:#d14">&#34;r2.within&#34;</span>, <span style="color:#d14">&#34;nobs&#34;</span>),
+</span></span><span style="display:flex;"><span>             stars<span style="color:#000;font-weight:bold">=</span><span style="color:#900;font-weight:bold">c</span>(<span style="color:#d14">&#34;*&#34;</span><span style="color:#000;font-weight:bold">=</span><span style="color:#099">0.1</span>, <span style="color:#d14">&#34;**&#34;</span><span style="color:#000;font-weight:bold">=</span><span style="color:#099">0.05</span>, <span style="color:#d14">&#34;***&#34;</span><span style="color:#000;font-weight:bold">=</span><span style="color:#099">0.01</span>),
+</span></span><span style="display:flex;"><span>             output<span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#39;tinytable&#39;</span>) <span style="color:#000;font-weight:bold">|&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">rbind2</span>(fe, use_names<span style="color:#000;font-weight:bold">=</span><span style="color:#000;font-weight:bold">FALSE</span>, headers<span style="color:#000;font-weight:bold">=</span><span style="color:#000;font-weight:bold">FALSE</span>) <span style="color:#000;font-weight:bold">|&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">group_tt</span>(j<span style="color:#000;font-weight:bold">=</span><span style="color:#900;font-weight:bold">list</span>(<span style="color:#d14">&#34;All Data&#34;</span> <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">2</span><span style="color:#000;font-weight:bold">:</span><span style="color:#099">3</span>, <span style="color:#d14">&#34;&gt; 2 Months&#34;</span> <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">4</span><span style="color:#000;font-weight:bold">:</span><span style="color:#099">5</span>)) 
+</span></span></code></pre></div><!DOCTYPE html> 
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>tinytable_9ljkxpz69gsr2lz4xsmu</title>
+    <style>
+.table td.tinytable_css_roemkdnjm2jxz0j7v3mc, .table th.tinytable_css_roemkdnjm2jxz0j7v3mc {    border-bottom: solid 0.1em #d3d8dc; }
+.table td.tinytable_css_7emg8ca6kc1sod0vlo0k, .table th.tinytable_css_7emg8ca6kc1sod0vlo0k {    text-align: center; }
+.table td.tinytable_css_r3mbchqrq9j2wqdu5vze, .table th.tinytable_css_r3mbchqrq9j2wqdu5vze {    border-bottom: solid 0.05em #d3d8dc; }
+    </style>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+    </script>
+  </head>
+&#10;  <body>
+    <div class="container">
+      <table class="table table-borderless" id="tinytable_9ljkxpz69gsr2lz4xsmu" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing='true'>
+        <thead>
+<tr>
+<th scope="col" align="center" colspan=1> </th>
+<th scope="col" align="center" colspan=2>All Data</th>
+<th scope="col" align="center" colspan=2>> 2 Months</th>
+</tr>
+        <caption>Estimates of the relationship between Feeding Duration and Feeding Interval</caption>
+              <tr>
+                <th scope="col"> </th>
+                <th scope="col">(1)</th>
+                <th scope="col">(2)</th>
+                <th scope="col">(3)</th>
+                <th scope="col">(4)</th>
+              </tr>
+        </thead>
+        <tfoot><tr><td colspan='5'>* p < 0.1, ** p < 0.05, *** p < 0.01</td></tr></tfoot>
+        <tbody>
+                <tr>
+                  <td>Duration </td>
+                  <td>3.851***   </td>
+                  <td>3.657***   </td>
+                  <td>1.713**    </td>
+                  <td>1.555*     </td>
+                </tr>
+                <tr>
+                  <td>         </td>
+                  <td>(0.399)    </td>
+                  <td>(0.469)    </td>
+                  <td>(0.842)    </td>
+                  <td>(0.874)    </td>
+                </tr>
+                <tr>
+                  <td>Night    </td>
+                  <td>2783.092***</td>
+                  <td>3517.360***</td>
+                  <td>4331.308***</td>
+                  <td>4373.623***</td>
+                </tr>
+                <tr>
+                  <td>         </td>
+                  <td>(484.316)  </td>
+                  <td>(530.671)  </td>
+                  <td>(767.805)  </td>
+                  <td>(812.662)  </td>
+                </tr>
+                <tr>
+                  <td>Intercept</td>
+                  <td>1737.000***</td>
+                  <td>           </td>
+                  <td>5746.130***</td>
+                  <td>           </td>
+                </tr>
+                <tr>
+                  <td>         </td>
+                  <td>(593.210)  </td>
+                  <td>           </td>
+                  <td>(1252.376) </td>
+                  <td>           </td>
+                </tr>
+                <tr>
+                  <td>R2 Adj.  </td>
+                  <td>0.184      </td>
+                  <td>0.266      </td>
+                  <td>0.165      </td>
+                  <td>0.104      </td>
+                </tr>
+                <tr>
+                  <td>R2 Within</td>
+                  <td>           </td>
+                  <td>0.228      </td>
+                  <td>           </td>
+                  <td>0.173      </td>
+                </tr>
+                <tr>
+                  <td>Num.Obs. </td>
+                  <td>403        </td>
+                  <td>403        </td>
+                  <td>210        </td>
+                  <td>210        </td>
+                </tr>
+                <tr>
+                  <td>Day FE   </td>
+                  <td>No         </td>
+                  <td>Yes        </td>
+                  <td>No         </td>
+                  <td>Yes        </td>
+                </tr>
+        </tbody>
+      </table>
+    </div>
+&#10;    <script>
+      function styleCell_tinytable_35vkqork3ojmxebuxtxn(i, j, css_id) {
+        var table = document.getElementById("tinytable_9ljkxpz69gsr2lz4xsmu");
+        table.rows[i].cells[j].classList.add(css_id);
+      }
+      function insertSpanRow(i, colspan, content) {
+        var table = document.getElementById('tinytable_9ljkxpz69gsr2lz4xsmu');
+        var newRow = table.insertRow(i);
+        var newCell = newRow.insertCell(0);
+        newCell.setAttribute("colspan", colspan);
+        // newCell.innerText = content;
+        // this may be unsafe, but innerText does not interpret <br>
+        newCell.innerHTML = content;
+      }
+      function spanCell_tinytable_35vkqork3ojmxebuxtxn(i, j, rowspan, colspan) {
+        var table = document.getElementById("tinytable_9ljkxpz69gsr2lz4xsmu");
+        const targetRow = table.rows[i];
+        const targetCell = targetRow.cells[j];
+        for (let r = 0; r < rowspan; r++) {
+          // Only start deleting cells to the right for the first row (r == 0)
+          if (r === 0) {
+            // Delete cells to the right of the target cell in the first row
+            for (let c = colspan - 1; c > 0; c--) {
+              if (table.rows[i + r].cells[j + c]) {
+                table.rows[i + r].deleteCell(j + c);
+              }
+            }
+          }
+          // For rows below the first, delete starting from the target column
+          if (r > 0) {
+            for (let c = colspan - 1; c >= 0; c--) {
+              if (table.rows[i + r] && table.rows[i + r].cells[j]) {
+                table.rows[i + r].deleteCell(j);
+              }
+            }
+          }
+        }
+        // Set rowspan and colspan of the target cell
+        targetCell.rowSpan = rowspan;
+        targetCell.colSpan = colspan;
+      }
+&#10;window.addEventListener('load', function () { styleCell_tinytable_35vkqork3ojmxebuxtxn(1, 0, 'tinytable_css_roemkdnjm2jxz0j7v3mc') })
+window.addEventListener('load', function () { styleCell_tinytable_35vkqork3ojmxebuxtxn(1, 1, 'tinytable_css_roemkdnjm2jxz0j7v3mc') })
+window.addEventListener('load', function () { styleCell_tinytable_35vkqork3ojmxebuxtxn(1, 2, 'tinytable_css_roemkdnjm2jxz0j7v3mc') })
+window.addEventListener('load', function () { styleCell_tinytable_35vkqork3ojmxebuxtxn(1, 3, 'tinytable_css_roemkdnjm2jxz0j7v3mc') })
+window.addEventListener('load', function () { styleCell_tinytable_35vkqork3ojmxebuxtxn(1, 4, 'tinytable_css_roemkdnjm2jxz0j7v3mc') })
+window.addEventListener('load', function () { styleCell_tinytable_35vkqork3ojmxebuxtxn(0, 0, 'tinytable_css_7emg8ca6kc1sod0vlo0k') })
+window.addEventListener('load', function () { styleCell_tinytable_35vkqork3ojmxebuxtxn(0, 1, 'tinytable_css_7emg8ca6kc1sod0vlo0k') })
+window.addEventListener('load', function () { styleCell_tinytable_35vkqork3ojmxebuxtxn(0, 2, 'tinytable_css_7emg8ca6kc1sod0vlo0k') })
+window.addEventListener('load', function () { styleCell_tinytable_35vkqork3ojmxebuxtxn(0, 3, 'tinytable_css_7emg8ca6kc1sod0vlo0k') })
+window.addEventListener('load', function () { styleCell_tinytable_35vkqork3ojmxebuxtxn(0, 4, 'tinytable_css_7emg8ca6kc1sod0vlo0k') })
+window.addEventListener('load', function () { styleCell_tinytable_35vkqork3ojmxebuxtxn(0, 1, 'tinytable_css_r3mbchqrq9j2wqdu5vze') })
+window.addEventListener('load', function () { styleCell_tinytable_35vkqork3ojmxebuxtxn(0, 2, 'tinytable_css_r3mbchqrq9j2wqdu5vze') })
+    </script>
+&#10;  </body>
+&#10;</html>
+<p>As you can see, there seems to be a positive relationship between duration and the time between feedings. According to the first two models, for each second you lengthen feeding, you get almost 4 seconds on “free time” between feedings.</p>
+<p>In the second two models, the relationship seems to weaken a little bit: for every second of extra feeding, you get about 1.5 seconds of extra free time. In the night, it seems to be indeed the case that new-borns delay feeding. There is clear evidence for a day-time and night-time regime: at night, babies (well at least, Lev) delay food for up to an hour more in the first two months, and in the second two months that actually seems to increase until something like 1 hour and 10 minutes.</p>
+<p>This all seems to hold irrespective of “day” fixed effects. So conditioning on within-day deviations from the average doesn’t really seem to make a difference, indicating that day-to-day behavior is sufficiently systematic and “off-days” are maybe more expressed in different ways like superfluous crying rather than in feeding patterns.</p>
+<p>Finally, kids are volatile: the adjusted R-squared in all models, and the within <code>\(R^2\)</code> in the FE models isn’t that high: about 20% of variance can be explained. What explains the other 80% is a big guess - if you have any ideas, let me know :)</p>
+
+
+
+
+<h2 id="conclusion">Conclusion
+  <a href="#conclusion"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>Finally, of course, these results are prone to omitted variable bias. Sonya, my wife, might be prone to earlier or delayed feeding as a result of various different pressures which might be correlated with the interval between feedings. Nevertheless, using inter-day variation should go a long way to eliminate this. Anyway, thanks for reading! Of course, this is all a kind of a joke in celebration of our son but it is nevertheless pretty interesting to look at these data.</p>
+
+        
+        <details closed class="f6 fw7 input-reset">
+  <dl class="f6 lh-copy">
+    <dt class="fw7">Posted on:</dt>
+    <dd class="fw5 ml0">June 2, 2024</dd>
+  </dl>
+  <dl class="f6 lh-copy">
+    <dt class="fw7">Length:</dt>
+    <dd class="fw5 ml0">8 minute read, 1592 words</dd>
+  </dl>
+  
+  
+  
+  <dl class="f6 lh-copy">
+    <dt class="fw7">See Also:</dt>
+    
+  </dl>
+</details>
+
+      </section>
+      <footer class="post-footer">
+        <div class="post-pagination dt w-100 mt4 mb2">
+  
+  
+  
+  
+    <a class="next dtc pl2 tr v-top fw6"
+    href="/blog/2024-05-14-how-to-create-a-running-variable-in-a-spatial-rdd/">How to create a running variable in a spatial RDD? &rarr;</a>
+  
+</div>
+
+      </footer>
+    </article>
+    
+      
+<div class="post-comments pa0 pa4-l mt4">
+  
+  <script src="https://utteranc.es/client.js"
+          repo="basm92/new_website"
+          issue-term="pathname"
+          theme="boxy-light"
+          label="comments :crystal_ball:"
+          crossorigin="anonymous"
+          async
+          type="text/javascript">
+  </script>
+  
+</div>
+
+    
+  </section>
+</main>
+<footer class="site-footer pv4 bt b--transparent ph5" role="contentinfo">
+  <nav class="db dt-l w-100">
+    <p class="site-copyright f7 db dtc-l v-mid w-100 w-33-l tc tl-l pv2 pv0-l mv0 lh-copy">
+      &copy; 2024 Bas Machielsen
+      <span class="middot-divider"></span>
+      Made with <span xmlns:dct="http://purl.org/dc/terms/" property="dct:title"><a xmlns:dct="http://purl.org/dc/terms/" href="https://github.com/hugo-apero/" rel="dct:source">Hugo Apéro</a></span>.
+      <br />
+      
+Based on <span xmlns:dct="http://purl.org/dc/terms/" property="dct:title"><a xmlns:dct="http://purl.org/dc/terms/" href="https://github.com/formspree/blogophonic-hugo" rel="dct:source">Blogophonic</a></span> by <a xmlns:cc="http://creativecommons.org/ns#" href="https://formspree.io" property="cc:attributionName" rel="cc:attributionURL">Formspree</a>.
+    </p>
+    
+    <div class="site-social-links db dtc-l v-mid w-100 w-33-l tc pv2 pv0-l mv0">
+      <div class="social-icon-links" aria-hidden="true">
+  
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://github.com/basm92" title="github" target="_blank" rel="noopener">
+      <i class="fab fa-github fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://scholar.google.com/citations?user=bS8uo44AAAAJ" title="google" target="_blank" rel="noopener">
+      <i class="fab fa-google fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://twitter.com/basss92" title="twitter" target="_blank" rel="noopener">
+      <i class="fab fa-twitter fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="mailto:a.h.machielsen@uu.nl" title="envelope" >
+      <i class="fas fa-envelope fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="mailto:basmachielsen@live.nl" title="envelope" >
+      <i class="far fa-envelope fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://orcid.org/0000-0002-9692-0615" title="orcid" target="_blank" rel="noopener">
+      <i class="ai ai-orcid fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="/blog/index.xml" title="rss" >
+      <i class="fas fa-rss fa-lg fa-fw"></i>
+    </a>
+  
+</div>
+
+    </div>
+    
+    <div class="site-links f6 db dtc-l v-mid w-100 w-67-l tc tr-l pv2 pv0-l mv0">
+      
+      <a class="dib pv1 ph2 link" href="/license/" title="License">License</a>
+      
+      <a class="dib pv1 ph2 link" href="/contact/" title="Contact form">Contact</a>
+      
+      <a class="dib pv1 ph2 link" href="/contributors/" title="Contributors">Contributors</a>
+      
+    </div>
+  </nav>
+  
+    <script>
+
+    var i, text, code, codes = document.getElementsByTagName('code');
+    for (let i = 0; i < codes.length;) {
+      code = codes[i];
+      if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+        text = code.textContent;
+        if (/^\$[^$]/.test(text) && /[^$]\$$/.test(text)) {
+          text = text.replace(/^\$/, '\\(').replace(/\$$/, '\\)');
+          code.textContent = text;
+        }
+        if (/^\\\((.|\s)+\\\)$/.test(text) ||
+            /^\\\[(.|\s)+\\\]$/.test(text) ||
+            /^\$(.|\s)+\$$/.test(text) ||
+            /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+          code.outerHTML = code.innerHTML;  
+          continue;
+        }
+      }
+      i++;
+    }
+</script>
+
+  
+    
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.css" integrity="sha384-RZU/ijkSsFbcmivfdRBQDtwuwVqK7GMOw6IMvKyeWL2K5UAlyp6WonmB8m7Jd0Hn" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.js" integrity="sha384-pK1WpvzWVBQiP0/GjnvRxV4mOb0oxFuyRxJlk6vVw146n3egcN5C925NCP7a7BY8" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/contrib/auto-render.min.js" integrity="sha384-vZTG03m+2yp6N6BNi5iM4rW4oIwk5DfcNdFfxkk9ZWpDriOkXX8voJBFrAO7MpVl" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
+
+
+
+    
+  
+  
+</footer>
+
+      </div>
+    </body>
+</html>

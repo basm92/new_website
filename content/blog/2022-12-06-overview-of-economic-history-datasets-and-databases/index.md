@@ -53,9 +53,15 @@ In this post, I'll give an overview and short description of various commonly-us
 35. [Municipal Data](#municipal-data)
 36. [R Spatial Data Packages](#r-spatial-data-packages)
 37. [Other Data Packages](#other-data-packages)
-38. [Regional GDP and HDI](#region-gdp-and-hdi)
+38. [Regional GDP and HDI](#regional-gdp-and-hdi)
 39. [Linguistic Data](#linguistic-data)
-
+40. [Mining Production](#mining-production)
+41. [Gridded Data Collection GRID PRIO](#gridded-data-collection-grid-prio)
+42. [Gridded Population](#gridded-population)
+43. [Road Networks](#road-networks)
+44. [Biodiversity](#biodiversity)
+45. [EEA Geospatial Data Catalogue](#eea-geospatial-data-catalogue)
+46. [Cartes Historiques](#cartes-historiques)
 
 ## World Values Survey
 
@@ -301,6 +307,14 @@ gem_dat <- toc |> filter(stringr::str_detect(Title, 'gemeente'))
 
 Kummu et al. (Nature, 2018) present gap-filled multiannual datasets in gridded form for Gross Domestic Product (GDP) and Human Development Index (HDI). To provide a consistent product over time and space, the sub-national data were only used indirectly, scaling the reported national value and thus, remaining representative of the official statistics. This resulted in annual gridded datasets for GDP per capita (PPP), total GDP (PPP), and HDI, for the whole world at 5 arc-min resolution for the 25-year period of 1990–2015. Additionally, total GDP (PPP) is provided with 30 arc-sec resolution for three time steps (1990, 2000, 2015). Available [here](https://datadryad.org/stash/dataset/doi:10.5061/dryad.dk1j0).
 
+Also, DOSE is a substantially extended version of DOSE – the MCC-PIK Database Of Sub-national Economic Output. DOSE v2 contains harmonised data on reported economic output for:
+  - 1,661 sub-national regions
+  - across 83 countries
+  - from 1953 to 2020
+  - with sectoral detail for the agricultural, manufacturing and services sectors.
+  
+Available [here](https://zenodo.org/records/7573249)
+
 ## Linguistic Data
 
 - [WorldGeoDatasets](https://worldgeodatasets.com/language/)
@@ -308,4 +322,44 @@ Kummu et al. (Nature, 2018) present gap-filled multiannual datasets in gridded f
 - [InfoPlease on basis of CIA world factbook](https://www.infoplease.com/countries/languages-spoken-in-each-country-of-the-world)
 - [CIA World Factbook](https://www.cia.gov/the-world-factbook/field/languages/)
 
+## Mining Production
+
+While the extraction of natural resources has been well documented and analysed at the national level, production trends at the level of individual mines are more difficult to uncover, mainly due to poor availability of mining data with sub-national detail. In this paper, we contribute to filling this gap by presenting an open database on global coal and metal mine production on the level of individual mines. It is based on manually gathered information from more than 1900 freely available reports of mining companies, where every data point is linked to its source document, ensuring full transparency. The database covers 1171 individual mines and reports mine-level production for 80 different materials in the period 2000–2021. Available [here](https://www.nature.com/articles/s41597-023-01965-y). 
+
+## Gridded Data Collection GRID PRIO
+
+A whole host of gridded datasets, including nightlights, is available [here](https://grid.prio.org/#/download). The data come in .csv format. These need a grid reference file, which is also available somewhere on the website. Also available through: `devtools::install_github("prio-data/priogrid")`. The actual shapefile which allows you to combine these data is on [this page](https://grid.prio.org/#/extensions).
+
+## Gridded Population
+
+- [Gridded Population of the World](https://cmr.earthdata.nasa.gov/search/concepts/C1597159135-SEDAC.html)
+- [Gridded Population of the Netherlands](https://www.pdok.nl/introductie/-/article/cbs-bevolkingsspreiding-population-distribution-)
+
+## Road Networks
+
+An overview of road networks per country:
+
+| Country | Description | Link |
+| --- | ---| --- |
+| France | ROUTE 500 | [Link](https://transport.data.gouv.fr/datasets/route-500) |
+| France | Medieval Road Network | [Link](http://www.medievalfrenchroads.org/map/) |
+| Netherlands | Nationaal Wegen Bestand | [Link](https://www.pdok.nl/introductie/-/article/nationaal-wegen-bestand-nwb-wegen) |
+
+## Biodiversity
+
+- [Biodiversitymapping.org](https://biodiversitymapping.org/index.php/download/) has several GIS biodiversity shapefiles. 
+- [European Biodiversity Data](https://sdi.eea.europa.eu/catalogue/biodiversity/eng/catalog.search#/home)
+
+
+## EEA Geospatial Data Catalogue
+
+- Available [here](https://sdi.eea.europa.eu/catalogue/srv/eng/catalog.search#/home)
+  - Among which is the [Urban Atlas](https://sdi.eea.europa.eu/catalogue/srv/eng/catalog.search#/metadata/fb4dffa1-6ceb-4cc0-8372-1ed354c285e6)
+  - And the [ESRI Land Cover Data](https://livingatlas.arcgis.com/landcoverexplorer/#mapCenter=6.02500%2C52.37100%2C8&mode=step&timeExtent=2017%2C2022&year=2017)
+  - And the [CORINE Land Cover Data](https://land.copernicus.eu/en/products/corine-land-cover)
+  - Which in turn comes from the [Copernicus Database](https://land.copernicus.eu/en/products)
+  
+## Cartes Historiques
+
+- [A website](https://cartonumerique.blogspot.com/p/cartes-historiques.html) detailing an overview and redirections to repositories with various historical shapefiles
 

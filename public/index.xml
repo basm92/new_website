@@ -6,7 +6,7 @@
     <description>Recent content on Bas Machielsen</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Wed, 21 Feb 2024 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 02 Jun 2024 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>cbs_hist_downloader</title>
       <link>/collection/cbs_hist_downloader/</link>
@@ -32,6 +32,25 @@
       
       <guid>/collection/hdng/</guid>
       <description>hdng is a package facilitating the use of the HDNG Database, a database containing quantative information in various aspects of Dutch municipalities from about 1800 to the 1980&amp;rsquo;s. This package aids the user in finding their way through the database, allowing them to search for wanted variables, browse within categories, and finally, make a query to extract the wanted data.</description>
+    </item>
+    
+    <item>
+      <title>Intervals and Durations in Feeding a New-born :)</title>
+      <link>/blog/2024-06-02-intervals-and-durations-in-feeding-a-new-born/</link>
+      <pubDate>Sun, 02 Jun 2024 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2024-06-02-intervals-and-durations-in-feeding-a-new-born/</guid>
+      <description>Introduction As those of you who might know me know, we (my wife and me) became parents a couple of months ago of a son named Lev. Apart from being a really cool guy, he’s also quite unpredictable in his tendencies for asking to be fed. We’ve been using an app called Huckleberry to record all feeding times and duration, and since he can be quite demanding, we were wondering about the relationship between feeding duration and times (intervals) between feeding.</description>
+    </item>
+    
+    <item>
+      <title>How to create a running variable in a spatial RDD?</title>
+      <link>/blog/2024-05-14-how-to-create-a-running-variable-in-a-spatial-rdd/</link>
+      <pubDate>Tue, 14 May 2024 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2024-05-14-how-to-create-a-running-variable-in-a-spatial-rdd/</guid>
+      <description>Introduction In this post, I&amp;rsquo;ll explain, using R code, how to create a distance to the border and an associated running variable often met in geographic regression discontinuity designs. Depending on your data, this can be kind of difficult, so I&amp;rsquo;ll explain this using two examples:
+One using raster data, computing distance to the border of the Roman Empire, inspired by a teaching project One using vector data, computing distance to the Veneto-Lombardo border, inspired by a research project with Giacomo Domini.</description>
     </item>
     
     <item>
