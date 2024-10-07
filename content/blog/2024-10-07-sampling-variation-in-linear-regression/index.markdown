@@ -243,12 +243,12 @@ In principle, if we knew `\(\sigma^2\)` (which we don’t, because it’s a popu
 In other words, we have now derived that:
 
 $$
-\frac{\hat{\beta}_j - \beta_j}{\text{SE}(\hat{\beta})} \sim \mathcal{N}(0,1)
+\frac{\hat{\beta}_j - \beta_j}{\text{SE}(\hat{\beta_j})} \sim \mathcal{N}(0,1)
 $$
 
-where `\(\text{SE}(\hat{\beta})= \sqrt{\sigma^2 (X^TX)^{-1}_{jj}}\)`, a result which we obtain by standardizing our variable.
+where `\(\text{SE}(\hat{\beta})= \sqrt{\sigma^2 (X^TX)^{-1}_{jj}}\)`, a result which we obtain by standardizing our variable. SE is short for standard error.
 
-However, the problem is that we don’t know `\(\sigma^2\)`, and we have to estimate it. Estimating it changes the distribution of `\(\hat{\beta}\)` to a `\(t\)` distribution rather than a normal distribution. How that works will be explained in the next section, but feel free to skip it.
+However, the problem is that we don’t know `\(\sigma^2\)`, and we have to estimate it. Estimating it changes the distribution of `\(\hat{\beta}\)` to a `\(t\)` distribution rather than a normal distribution. The `\(t\)` statistics use, instead of `\(\text{SE}_{true}\)`, an estimated standard error, `\(\text{SE}_{emp}\)`, defined as `\(\text{SE}_{emp} = \sqrt{\hat{\sigma^2} (X^T X)^{-1}_{jj}}\)`, with a particular estimate for `\(\sigma^2\)` motivated in the next section. The resulting statistic will be `\(t(n-k)\)` distributed rather than normally distributed. How that works will also be explained in the next section, but feel free to skip it.
 
 ### Deriving the `\(t\)` Distribution
 
@@ -260,60 +260,41 @@ $$
 
 This is an unbiased estimator for `\(\sigma^2\)` because of the following:
 
-- `\(\hat{\epsilon}^T \hat{\epsilon} = \epsilon^T M_X \epsilon\)`, where `\(M\)` is the [annihalator matrix](https://en.wikipedia.org/wiki/Projection_matrix#Application_for_residuals). This relates the residuals to the error term.
+- `\(\hat{\epsilon}^T \hat{\epsilon} = \epsilon^T M_X \epsilon\)`, where `\(M_X\)` is the [annihalator matrix](https://en.wikipedia.org/wiki/Projection_matrix#Application_for_residuals). This relates the residuals to the error term.
 - Using the fact that for a random vector `\(z \sim \mathcal{N}(0, \sigma^2 I_n)\)` and an idempotent matrix `\(A\)` of rank `\(r\)`, the expected value of the quadratic form `\(z^T A z = \sigma^2 \cdot \text{tr}(A)\)`
 - Hence the expected value `\(\mathbb{E}[\hat{\epsilon}^T \hat{\epsilon}] = \mathbb{E}[\epsilon^T M_X \epsilon] = \sigma^2 \cdot \text{tr}(M_X)\)`
 - Since the `\(\text{tr}(M_X) = (n-k)\)`, the expected value `\(\mathbb{E}[\hat{\epsilon}^T \hat{\epsilon}] = \sigma^2 (n-k)\)`, which means that `\(\hat{\sigma^2}\)` as defined above is unbiased for `\(\sigma^2\)`.
 
-The estimated error variance `\(\hat{\sigma^2}\)`? is `\(\chi^2\)` distributed with `\(n-k\)` degrees of freedom because of the following:
+The estimated error variance `\(\hat{\sigma^2}\)` scaled by the true variance is `\(\chi^2\)` distributed with `\(n-k\)` degrees of freedom because of the following:
 
-> If `\(A\)` is a symmetric, idempotent matrix of rank `\(r\)`, and `\(z \sim  \mathcal{N}(0,I_n)\)`, then `\(z^T A z \sim \chi^2_r\)`
+> If `\(A\)` is a symmetric, idempotent matrix of rank `\(r\)`, and `\(z \sim  \mathcal{N}(0,\sigma^2 I_n)\)`, then `\(\frac{z^T A z}{\sigma^2} \sim \chi^2_r\)`
 
-Then, our `\(t\)` statistic is defined as:
+Hence in this case,
 
 $$
-t_j = \frac{ \hat{\beta}_j - \beta_j }{\hat{\sigma^2} (X^TX)^{-1}}
+\frac{(n-k)\hat{\sigma^2}}{\sigma^2} = \frac{\hat{\epsilon}^T \hat{\epsilon}}{\sigma^2} \sim \chi^2_{n-k} \text{or } \frac{\hat{\sigma^2}}{\sigma^2} \sim \frac{\chi^2_{n-k}}{(n-k)}
 $$
 
-What is the distribution of this statistic?
+A `\(t\)` distribution is defined as
 
-This statistic follows a `\(t\)` -distribution with `\(n-k\)` degrees of freedom. Here’s why:
+$$
+T = \frac{Z}{\sqrt{\frac{V}{v}}}
+$$
+where `\(Z \sim \mathcal{N}(0,1)\)` and `\(V \sim \chi^2\)` with `\(v\)` degrees of freedom.
 
-- The numerator is normally distributed, as seen before.
-- The denominator is `\(\chi^2\)` distributed.
+Note that our sampling distribution depends on our theoretical distributions as follows:
 
-That is, the scaled sum of squared residuals follows a chi-squared distribution with n−kn−k degrees of freedom. Therefore, σ<sup>2σ</sup>2, the sample estimate of σ2σ2, is related to the chi-squared distribution as:
-σ^2=σ2χn−k2n−k
-σ^2=n−kσ2χn−k2​​
+`\begin{align*} \frac{(\hat{\beta}_j - \beta_j)}{SE_{emp} (\beta)} = \frac{\frac{(\hat{\beta}_j - \beta_j)} {\sigma \sqrt{(X^TX)^{-1}_{jj}}}}{\sqrt{\frac{\hat{\sigma^2}}{\sigma^2}}} \end{align*}`
 
-Thus, the denominator σ<sup>2σ</sup>2
+This exactly fits the definition of the `\(t\)` distribution, since `\(Z = \frac{(\hat{\beta}_j - \beta_j)} {\sigma \sqrt{(X^TX)^{-1}_{jj}}}\)`, the `\(\sigma\)`’s cancel each other out, and \$
 
-​involves a chi-squared distribution.
-c. Combining Both Terms (t-Distribution)
-
-The t-statistic is the ratio of a normally distributed variable (the numerator) and the square root of a chi-squared distributed variable divided by its degrees of freedom (the denominator). This is precisely the definition of a t-distributed variable.
-
-Mathematically, if:
-z∼N(0,1)andS2σ2∼χν2ν
-z∼N(0,1)andσ2S2​∼νχν2​​
-
-then the ratio:
-t=zS2ν
-t=νS2​
-​z​
-
-follows a t-distribution with νν degrees of freedom.
-
-In our case, this corresponds to:
-tj=β<sup>j−βj0σ</sup>2\[(X⊤X)−1\]jj∼tn−k
-tj​=σ^2\[(X⊤X)−1\]jj​
-​β^​j​−βj0​​∼tn−k​
-
-where n−kn−k are the degrees of freedom.
+Hence, we have proven that our `\(t\)` statistics follow the `\(t\)` distribution with `\((n-k)\)` degrees of freedom.
 
 ### Hypothesis Testing?
 
-So what are we doing when we’re doing hypothesis testing in linear regression?
+So what are we doing when we’re doing hypothesis testing in linear regression? We have now, under certain assumptions, obtained the sampling distribution of our estimated `\(\beta\)` coefficients. We can use that to impose a null hypothesis of a coefficient `\(\beta_j\)` taking on a certain value, and consider the sampling distribution. Then, we can compute the likelihood that our coefficient takes on the value of **our actually estimated coefficient** and, using the sampling distribution, consider how likely such an estimate, or more extreme estimates, are under the null hypothesis.
+
+The resulting likelihood is again defined as the `\(p\)` value.
 
 ### Conclusion
 
