@@ -34,5 +34,5 @@ Between about 1850 and 1920, Western Europe underwent a period of democratizatio
 
 ### Download
 
-Download the working paper [**here**](https://bas-m.netlify.app/papers/polelite_votingbehavior.pdf
+Download the working paper [**here**](https://bas-m.netlify.app/papers/polelite_votingbehavior.pdf)
   
