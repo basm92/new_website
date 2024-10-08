@@ -363,7 +363,7 @@ p_value
 
 Where I have calculated the `\(p\)` value for a two-sided test, reflecting the probability of obtaining the coefficient of obtaining our actually obtained coefficient estimate *or something more extreme* according to the null hypothesis.
 
-Hence again, the probability of obtaining something like the obtained sample mean, or something more extreme, if the null hypothesis were true, is an event that is **extremely unlikely**. Hence, we **reject** the null hypothesis in favor of the alternative hypothesis.
+Hence again, the probability of obtaining something like the estimated `\(\beta\)` coefficient or something more extreme, if the null hypothesis were true, is an event that is **extremely unlikely**. Hence, we **reject** the null hypothesis in favor of the alternative hypothesis.
 
 Note, finally, that the `\(t\)` statistic and `\(p\)` value are exactly equal to those in the regression table.
 
