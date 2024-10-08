@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr"><head>
+  
+                           
+     
+
+
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="generator" content="Hugo 0.101.0" />
+<title>Sampling Variation in Linear Regression | Bas Machielsen</title>
+
+
+<meta property="twitter:site" content="@basss92">
+<meta property="twitter:creator" content="@basss92">
+
+
+
+
+
+
+
+  
+    
+  
+<meta name="description" content="A part of a 2-series blog post on sampling variation. Part II.">
+
+
+<meta property="og:site_name" content="Bas Machielsen">
+<meta property="og:title" content="Sampling Variation in Linear Regression | Bas Machielsen">
+<meta property="og:description" content="A part of a 2-series blog post on sampling variation. Part II." />
+<meta property="og:type" content="page" />
+<meta property="og:url" content="/blog/2024-10-07-sampling-variation-in-linear-regression/" />
+<meta property="og:locale" content="en">
+
+
+
+
+    
+        <meta property="og:image" content="/blog/2024-10-07-sampling-variation-in-linear-regression/featured.png" >
+        <meta property="twitter:card" content="summary_large_image">
+        <meta name="twitter:image" content="/blog/2024-10-07-sampling-variation-in-linear-regression/featured.png" >
+    
+    
+  <meta itemprop="name" content="Sampling Variation in Linear Regression">
+<meta itemprop="description" content="Sampling Variation and Regression Analysis Introduction This blog post on sampling variation in regression analysis is part two of a two-part blog post on sample variations. In part 1, available here, I provide a gentle introduction to the subject and present the logic of hypothesis testing. In this part, I derive the sampling distribution for the \(\beta\) coefficients in a standard linear regression model. Some of the derivations here are technical, but those can be skipped by the reader not interested in petty details."><meta itemprop="datePublished" content="2024-10-08T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2024-10-08T00:00:00+00:00" />
+<meta itemprop="wordCount" content="2099"><meta itemprop="image" content="/blog/2024-10-07-sampling-variation-in-linear-regression/featured.png">
+<meta itemprop="keywords" content="" />
+  
+  
+  <!--[if IE]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  <link rel="shortcut icon" href="favicon_new.ico" type="image/x-icon">
+  <link rel="icon" href="favicon_new.ico" type="image/x-icon">
+  
+  
+  <link rel="stylesheet" href="/style.main.min.555ba9f33efffeb97887b561cc674ae6e47dfbe93583e9f789fc69722e60a59e.css" integrity="sha256-VVup8z7//rl4h7VhzGdK5uR9&#43;&#43;k1g&#43;n3ifxpci5gpZ4=" media="screen">
+  
+  
+  <script src="/panelset.min.dca42702d7daf6fd31dc352efd2bcf0e4ac8c05ccaa58d9293f6177462de5d5f.js" type="text/javascript"></script>
+  
+  
+  <script src="/main.min.d7e4e8181380eb79c579f1573ca10b3aeb727c619c43ff775fec0b0d1624b24d.js" type="text/javascript"></script>
+</head>
+<body>
+      <div class="grid-container">
+<header class="site-header pt4 pb2 mb4 bb b--transparent ph5 headroom z-max" role="banner">
+  <nav class="site-nav db dt-l w-100" role="navigation">
+    <a class="site-brand db dtc-l v-mid link no-underline w-100 w-33-l tc tl-l" href="/" title="Home">
+      <img src="/website_logo.png" class="dib db-l h2 w-auto" alt="Bas Machielsen">
+    </a>
+    <div class="site-links db dtc-l v-mid w-100 w-47-l tc tr-l mt3 mt0-l ttu tracked">
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/" title="Home">Home</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/about/" title="About">About</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 active" href="/blog/" title="Blog">Blog</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/project/" title="Teaching Overview &amp; Repository">Teaching</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/resume/" title="Resume">Resume</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/articles/" title="Articles">Articles</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/collection/" title="Software">Software</a>
+      
+      
+    </div>
+  </nav>
+</header>
+
+<main class="page-main pa4" role="main">
+  <section class="page-content mw7 center">
+    <article class="post-content pa0 ph4-l">
+      <header class="post-header">
+        <h1 class="f1 lh-solid measure-narrow mb3 fw4">Sampling Variation in Linear Regression</h1>
+        
+        <p class="f6 measure lh-copy mv1">By Bas Machielsen</p>
+        <p class="f7 db mv0 ttu">October 8, 2024</p>
+
+      
+
+      </header>
+      <section class="post-body pt5 pb4">
+        
+
+
+
+<h2 id="sampling-variation-and-regression-analysis">Sampling Variation and Regression Analysis
+  <a href="#sampling-variation-and-regression-analysis"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+
+
+
+
+<h3 id="introduction">Introduction
+  <a href="#introduction"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h3>
+<p>This blog post on sampling variation in regression analysis is part two of a two-part blog post on sample variations. In part 1, available 
+<a href="click">here</a>, I provide a gentle introduction to the subject and present the logic of hypothesis testing. In this part, I derive the sampling distribution for the <code>\(\beta\)</code> coefficients in a standard linear regression model. Some of the derivations here are technical, but those can be skipped by the reader not interested in petty details.</p>
+
+
+
+
+<h3 id="sampling-variation-in-the-context-of-regression-analysis">Sampling Variation in the Context of Regression Analysis
+  <a href="#sampling-variation-in-the-context-of-regression-analysis"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h3>
+<p>In linear regression analysis, we often start with a linear model:</p>
+<p>$$
+Y = X \beta + \epsilon
+$$</p>
+<p>Note that the only source of random variation here is the <code>\(\epsilon\)</code>. If <code>\(Y=X\beta\)</code> (without <code>\(\epsilon\)</code>) we would always recover our <code>\(\beta\)</code> coefficient with certainty. But because of <code>\(\epsilon\)</code> can take on certain values, purely due to coincidence, in our sample, this could skew our estimate of <code>\(\beta\)</code>, potentially far away from the true <code>\(\beta\)</code>. Let me illustrate that with a piece of R code as well:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Load regression libraries</span>
+</span></span><span style="display:flex;"><span><span style="color:#900;font-weight:bold">library</span>(tidyverse, quietly<span style="color:#000;font-weight:bold">=</span><span style="color:#000;font-weight:bold">TRUE</span>); <span style="color:#900;font-weight:bold">library</span>(fixest, quietly <span style="color:#000;font-weight:bold">=</span> <span style="color:#000;font-weight:bold">TRUE</span>); <span style="color:#900;font-weight:bold">library</span>(modelsummary)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Reproducible randomness</span>
+</span></span><span style="display:flex;"><span><span style="color:#900;font-weight:bold">set.seed</span>(<span style="color:#099">1234</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Set the parameters</span>
+</span></span><span style="display:flex;"><span>epsilon <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">rnorm</span>(n<span style="color:#000;font-weight:bold">=</span><span style="color:#099">50</span>, mean<span style="color:#000;font-weight:bold">=</span><span style="color:#099">0</span>, sd<span style="color:#000;font-weight:bold">=</span><span style="color:#099">2</span>)
+</span></span><span style="display:flex;"><span>beta <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#099">3</span>
+</span></span><span style="display:flex;"><span>x <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">runif</span>(n<span style="color:#000;font-weight:bold">=</span><span style="color:#099">50</span>, min<span style="color:#000;font-weight:bold">=</span><span style="color:#099">0</span>, max<span style="color:#000;font-weight:bold">=</span><span style="color:#099">5</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Generate Y as a function of X and Epsilon</span>
+</span></span><span style="display:flex;"><span>y <span style="color:#000;font-weight:bold">&lt;-</span> x<span style="color:#000;font-weight:bold">*</span>beta <span style="color:#000;font-weight:bold">+</span> epsilon
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Create a data.frame and plot the data points</span>
+</span></span><span style="display:flex;"><span>df <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">tibble</span>(x<span style="color:#000;font-weight:bold">=</span>x, y<span style="color:#000;font-weight:bold">=</span>y)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Plot</span>
+</span></span><span style="display:flex;"><span><span style="color:#900;font-weight:bold">ggplot</span>(df, <span style="color:#900;font-weight:bold">aes</span>(x<span style="color:#000;font-weight:bold">=</span>x, y<span style="color:#000;font-weight:bold">=</span>y)) <span style="color:#000;font-weight:bold">+</span> <span style="color:#900;font-weight:bold">geom_point</span>()
+</span></span></code></pre></div><img src="/blog/2024-10-07-sampling-variation-in-linear-regression/index_files/figure-html/unnamed-chunk-1-1.png" width="672" />
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Estimate a linear model</span>
+</span></span><span style="display:flex;"><span><span style="color:#900;font-weight:bold">feols</span>(y <span style="color:#000;font-weight:bold">~</span> x, data <span style="color:#000;font-weight:bold">=</span> df) <span style="color:#000;font-weight:bold">|&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">modelsummary</span>(gof_map <span style="color:#000;font-weight:bold">=</span> <span style="color:#d14">&#34;nobs&#34;</span>)
+</span></span></code></pre></div><!DOCTYPE html> 
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>tinytable_j1g3l9niccqmeti9cw5l</title>
+    <style>
+.table td.tinytable_css_ywk3dqgq9gdleqca7fbm, .table th.tinytable_css_ywk3dqgq9gdleqca7fbm {    border-bottom: solid 0.1em #d3d8dc; }
+.table td.tinytable_css_tmqtb2uyj3cfuakzesth, .table th.tinytable_css_tmqtb2uyj3cfuakzesth {    text-align: left; }
+.table td.tinytable_css_61iepfnkosp6v5wc9nj5, .table th.tinytable_css_61iepfnkosp6v5wc9nj5 {    text-align: center; }
+.table td.tinytable_css_xsmen0wj5ukr8wy5uhok, .table th.tinytable_css_xsmen0wj5ukr8wy5uhok {    border-bottom: solid 0.05em black; }
+    </style>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+    </script>
+  </head>
+&#10;  <body>
+    <div class="container">
+      <table class="table table-borderless" id="tinytable_j1g3l9niccqmeti9cw5l" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing='true'>
+        <thead>
+        &#10;              <tr>
+                <th scope="col"> </th>
+                <th scope="col">(1)</th>
+              </tr>
+        </thead>
+        &#10;        <tbody>
+                <tr>
+                  <td>(Intercept)</td>
+                  <td>-1.091 </td>
+                </tr>
+                <tr>
+                  <td>           </td>
+                  <td>(0.505)</td>
+                </tr>
+                <tr>
+                  <td>x          </td>
+                  <td>3.071  </td>
+                </tr>
+                <tr>
+                  <td>           </td>
+                  <td>(0.168)</td>
+                </tr>
+                <tr>
+                  <td>Num.Obs.   </td>
+                  <td>50     </td>
+                </tr>
+        </tbody>
+      </table>
+    </div>
+&#10;    <script>
+      function styleCell_tinytable_mu1nodavrwwvek9xo114(i, j, css_id) {
+        var table = document.getElementById("tinytable_j1g3l9niccqmeti9cw5l");
+        table.rows[i].cells[j].classList.add(css_id);
+      }
+      function insertSpanRow(i, colspan, content) {
+        var table = document.getElementById('tinytable_j1g3l9niccqmeti9cw5l');
+        var newRow = table.insertRow(i);
+        var newCell = newRow.insertCell(0);
+        newCell.setAttribute("colspan", colspan);
+        // newCell.innerText = content;
+        // this may be unsafe, but innerText does not interpret <br>
+        newCell.innerHTML = content;
+      }
+      function spanCell_tinytable_mu1nodavrwwvek9xo114(i, j, rowspan, colspan) {
+        var table = document.getElementById("tinytable_j1g3l9niccqmeti9cw5l");
+        const targetRow = table.rows[i];
+        const targetCell = targetRow.cells[j];
+        for (let r = 0; r < rowspan; r++) {
+          // Only start deleting cells to the right for the first row (r == 0)
+          if (r === 0) {
+            // Delete cells to the right of the target cell in the first row
+            for (let c = colspan - 1; c > 0; c--) {
+              if (table.rows[i + r].cells[j + c]) {
+                table.rows[i + r].deleteCell(j + c);
+              }
+            }
+          }
+          // For rows below the first, delete starting from the target column
+          if (r > 0) {
+            for (let c = colspan - 1; c >= 0; c--) {
+              if (table.rows[i + r] && table.rows[i + r].cells[j]) {
+                table.rows[i + r].deleteCell(j);
+              }
+            }
+          }
+        }
+        // Set rowspan and colspan of the target cell
+        targetCell.rowSpan = rowspan;
+        targetCell.colSpan = colspan;
+      }
+&#10;window.addEventListener('load', function () { styleCell_tinytable_mu1nodavrwwvek9xo114(0, 0, 'tinytable_css_ywk3dqgq9gdleqca7fbm') })
+window.addEventListener('load', function () { styleCell_tinytable_mu1nodavrwwvek9xo114(0, 1, 'tinytable_css_ywk3dqgq9gdleqca7fbm') })
+window.addEventListener('load', function () { styleCell_tinytable_mu1nodavrwwvek9xo114(0, 0, 'tinytable_css_tmqtb2uyj3cfuakzesth') })
+window.addEventListener('load', function () { styleCell_tinytable_mu1nodavrwwvek9xo114(1, 0, 'tinytable_css_tmqtb2uyj3cfuakzesth') })
+window.addEventListener('load', function () { styleCell_tinytable_mu1nodavrwwvek9xo114(2, 0, 'tinytable_css_tmqtb2uyj3cfuakzesth') })
+window.addEventListener('load', function () { styleCell_tinytable_mu1nodavrwwvek9xo114(3, 0, 'tinytable_css_tmqtb2uyj3cfuakzesth') })
+window.addEventListener('load', function () { styleCell_tinytable_mu1nodavrwwvek9xo114(4, 0, 'tinytable_css_tmqtb2uyj3cfuakzesth') })
+window.addEventListener('load', function () { styleCell_tinytable_mu1nodavrwwvek9xo114(5, 0, 'tinytable_css_tmqtb2uyj3cfuakzesth') })
+window.addEventListener('load', function () { styleCell_tinytable_mu1nodavrwwvek9xo114(0, 1, 'tinytable_css_61iepfnkosp6v5wc9nj5') })
+window.addEventListener('load', function () { styleCell_tinytable_mu1nodavrwwvek9xo114(1, 1, 'tinytable_css_61iepfnkosp6v5wc9nj5') })
+window.addEventListener('load', function () { styleCell_tinytable_mu1nodavrwwvek9xo114(2, 1, 'tinytable_css_61iepfnkosp6v5wc9nj5') })
+window.addEventListener('load', function () { styleCell_tinytable_mu1nodavrwwvek9xo114(3, 1, 'tinytable_css_61iepfnkosp6v5wc9nj5') })
+window.addEventListener('load', function () { styleCell_tinytable_mu1nodavrwwvek9xo114(4, 1, 'tinytable_css_61iepfnkosp6v5wc9nj5') })
+window.addEventListener('load', function () { styleCell_tinytable_mu1nodavrwwvek9xo114(5, 1, 'tinytable_css_61iepfnkosp6v5wc9nj5') })
+window.addEventListener('load', function () { styleCell_tinytable_mu1nodavrwwvek9xo114(4, 0, 'tinytable_css_xsmen0wj5ukr8wy5uhok') })
+window.addEventListener('load', function () { styleCell_tinytable_mu1nodavrwwvek9xo114(4, 1, 'tinytable_css_xsmen0wj5ukr8wy5uhok') })
+    </script>
+&#10;  </body>
+&#10;</html>
+<p>As you can see, our coefficient estimate is <code>\(3.07\)</code> and not 3, purely due to coincidence in sampling. Hence, our <code>\(\beta\)</code> coefficient also exhibits sampling variation as a result of the randomness in the error term <code>\(\epsilon\)</code>.</p>
+<p>To illustrate that even more clearly, let me repeat the preceding piece of code 1,000 times. That is:</p>
+<ul>
+<li>Sample <code>\(N=50\)</code> observations from <code>\(\epsilon\)</code> and <code>\(X\)</code>.</li>
+<li>Generate <code>\(Y\)</code> from these observations</li>
+<li>Estimate the <code>\(\beta\)</code> coefficient.</li>
+</ul>
+<p>And finally, plot the resulting <code>\(1,000 \beta\)</code> coefficients.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>coefficients <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">map_dbl</span>(<span style="color:#099">1</span><span style="color:#000;font-weight:bold">:</span><span style="color:#099">1000</span>, <span style="color:#000;font-weight:bold">~</span> {
+</span></span><span style="display:flex;"><span>  epsilon <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">rnorm</span>(n<span style="color:#000;font-weight:bold">=</span><span style="color:#099">50</span>, mean<span style="color:#000;font-weight:bold">=</span><span style="color:#099">0</span>, sd<span style="color:#000;font-weight:bold">=</span><span style="color:#099">2</span>)
+</span></span><span style="display:flex;"><span>  x <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">runif</span>(n<span style="color:#000;font-weight:bold">=</span><span style="color:#099">50</span>, min<span style="color:#000;font-weight:bold">=</span><span style="color:#099">0</span>, max<span style="color:#000;font-weight:bold">=</span><span style="color:#099">5</span>)
+</span></span><span style="display:flex;"><span>  y <span style="color:#000;font-weight:bold">&lt;-</span> x<span style="color:#000;font-weight:bold">*</span>beta <span style="color:#000;font-weight:bold">+</span> epsilon <span style="color:#998;font-style:italic"># Remember, true beta is still 3</span>
+</span></span><span style="display:flex;"><span>  df <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">tibble</span>(x<span style="color:#000;font-weight:bold">=</span>x, y<span style="color:#000;font-weight:bold">=</span>y)
+</span></span><span style="display:flex;"><span>  reg <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">feols</span>(y <span style="color:#000;font-weight:bold">~</span> x, data <span style="color:#000;font-weight:bold">=</span> df)
+</span></span><span style="display:flex;"><span>  estimated_beta <span style="color:#000;font-weight:bold">&lt;-</span> reg<span style="color:#000;font-weight:bold">$</span>coeftable<span style="color:#000;font-weight:bold">$</span>Estimate[2]
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">return</span>(estimated_beta)
+</span></span><span style="display:flex;"><span>})
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Plot the result</span>
+</span></span><span style="display:flex;"><span><span style="color:#900;font-weight:bold">tibble</span>(coef<span style="color:#000;font-weight:bold">=</span>coefficients) <span style="color:#000;font-weight:bold">|&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">ggplot</span>(<span style="color:#900;font-weight:bold">aes</span>(x<span style="color:#000;font-weight:bold">=</span>coef)) <span style="color:#000;font-weight:bold">+</span> <span style="color:#900;font-weight:bold">geom_histogram</span>()
+</span></span></code></pre></div><pre><code>## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+</code></pre>
+<img src="/blog/2024-10-07-sampling-variation-in-linear-regression/index_files/figure-html/unnamed-chunk-2-1.png" width="672" />
+<p>Even though on average, we estimate a <code>\(\beta\)</code> coefficient of 3, but out of these 1,000 times, we have, purely due to coincidental values of our <code>\(\epsilon\)</code> obtained <code>\(\beta\)</code> coefficients that are quite different from 3.</p>
+<p>Under the assumption that our error term is normally distributed with mean 0 and variance <code>\(\sigma^2\)</code>, we can also derive the sampling distribution for our <code>\(\beta\)</code> coefficients.</p>
+
+
+
+
+<h3 id="deriving-the-sampling-distribution-in-linear-regression">Deriving the Sampling Distribution in Linear Regression
+  <a href="#deriving-the-sampling-distribution-in-linear-regression"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h3>
+<p>Our starting point is a well-known formula for the <code>\(\beta\)</code> coefficients in regression, computed by OLS:</p>
+<p>$$
+\hat{\beta} = (X^T X)^{-1}X^T y
+$$</p>
+<p>For those unfamiliar with this expression, this is the <em>multivariate</em> expression of the estimated <code>\(\beta\)</code> coefficients. So this allows you to express your <code>\(k\)</code> estimated <code>\(\beta\)</code> coefficients at once. If you haven’t seen this before, don’t worry, it’s just the generalization of the expression <code>\(\hat{\beta}={\text{Cov(X,Y)} \over \text{Var}(X)}\)</code>, with the nuance that this expresses all <code>\(k\)</code> <code>\(\beta\)</code> coefficients at once.</p>
+<p>What is the distribution of <code>\(\hat{\beta}\)</code>?</p>
+<p>Since <code>\(y = X\beta + \epsilon\)</code>, substituting this in the expression for <code>\(\hat{\beta}\)</code> gives:</p>
+<p>$$
+\hat{\beta}= \beta +(X^T X)^{-1}X^T \epsilon
+$$</p>
+<p>We assumed that <code>\(\epsilon\)</code> is normally distributed. Specifically, it is distributed as <code>\(\mathcal{N}(0, \sigma^2 I_n)\)</code> where <code>\(I_n\)</code> is the identity matrix. This is just a very short way of saying that errors are uncorrelated with each other and have constant variance.</p>
+<p>Since <code>\(\epsilon\)</code> is a normally distributed variable, a linear function of <code>\(\epsilon\)</code> is also a normally distributed variable.</p>
+<p>In fact, this is the generalization of the identity <code>\(\text{Var}(aZ) = a^2 \text{Var}(Z)\)</code> we’ve seen before, but in a multivariate context.</p>
+<p>Adding something deterministic, <code>\(\beta\)</code> to that function changes the mean but keeps it a normal variable. Hence, <code>\(\hat{\beta}\)</code> is distributed as:</p>
+<p>$$
+\hat{\beta} \sim \mathcal{N}(\beta, \sigma^2 (X^T X)^{-1})
+$$</p>
+<p>In principle, if we knew <code>\(\sigma^2\)</code> (which we don’t, because it’s a population value), we could do hypotheses tests around the <code>\(j\)</code>’th <code>\(\hat{\beta}\)</code> coefficient: we have just argued that <code>\(\beta_j\)</code> is normally distributed with mean <code>\(\beta_j\)</code> and variance <code>\(\sigma^2 (X^T X)^{-1}_{jj}\)</code>.</p>
+<p>In other words, we have now derived that:</p>
+<p>$$
+\frac{\hat{\beta}_j - \beta_j}{\text{SE}(\hat{\beta_j})} \sim \mathcal{N}(0,1)
+$$</p>
+<p>where <code>\(\text{SE}(\hat{\beta_j})= \sqrt{\sigma^2 (X^TX)^{-1}_{jj}}\)</code>, a result which we obtain by standardizing our variable. SE is short for standard error.</p>
+<p>However, the problem is that we don’t know <code>\(\sigma^2\)</code>, and we have to estimate it. Estimating it changes the distribution of <code>\(\hat{\beta}\)</code> to a <code>\(t\)</code> distribution rather than a normal distribution. The <code>\(t\)</code> statistics use, instead of <code>\(\text{SE}(\beta_j)\)</code>, an estimated standard error, <code>\(\text{SE}_{emp}\)</code>, defined as <code>\(\text{SE}_{emp} = \sqrt{\hat{\sigma^2} (X^T X)^{-1}_{jj}}\)</code>, with a particular estimate for <code>\(\sigma^2\)</code> motivated in the next section. I have denoted this with <code>\(emp\)</code>, short for “empirical”, meaning we use only the data to come up with this estimate. No population parameters are involved. The resulting statistic will be <code>\(t(n-k)\)</code> distributed rather than normally distributed. How that works will also be explained in the next section, but feel free to skip it.</p>
+
+
+
+
+<h3 id="deriving-the-t-distribution">Deriving the <code>\(t\)</code> Distribution
+  <a href="#deriving-the-t-distribution"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h3>
+<p>As an estimate of <code>\(\sigma^2\)</code>, we’re using the following estimator:</p>
+<p>$$
+\hat{\sigma^2} = {(\hat{\epsilon}^T \hat{\epsilon}) \over (n-k)}
+$$</p>
+<p>This is an unbiased estimator for <code>\(\sigma^2\)</code> because of the following:</p>
+<ul>
+<li><code>\(\hat{\epsilon}^T \hat{\epsilon} = \epsilon^T M_X \epsilon\)</code>, where <code>\(M_X\)</code> is the 
+<a href="https://en.wikipedia.org/wiki/Projection_matrix#Application_for_residuals" target="_blank" rel="noopener">annihalator matrix</a>. This relates the residuals to the error term.</li>
+<li>Using the fact that for a random vector <code>\(z \sim \mathcal{N}(0, \sigma^2 I_n)\)</code> and an idempotent matrix <code>\(A\)</code> of rank <code>\(r\)</code>, the expected value of the quadratic form <code>\(z^T A z = \sigma^2 \cdot \text{tr}(A)\)</code></li>
+<li>Hence the expected value <code>\(\mathbb{E}[\hat{\epsilon}^T \hat{\epsilon}] = \mathbb{E}[\epsilon^T M_X \epsilon] = \sigma^2 \cdot \text{tr}(M_X)\)</code></li>
+<li>Since the <code>\(\text{tr}(M_X) = (n-k)\)</code>, the expected value <code>\(\mathbb{E}[\hat{\epsilon}^T \hat{\epsilon}] = \sigma^2 (n-k)\)</code>, which means that <code>\(\hat{\sigma^2}\)</code> as defined above is unbiased for <code>\(\sigma^2\)</code>.</li>
+</ul>
+<p>The estimated error variance <code>\(\hat{\sigma^2}\)</code> scaled by the true variance is <code>\(\chi^2\)</code> distributed with <code>\(n-k\)</code> degrees of freedom because of the following:</p>
+<blockquote>
+<p>If <code>\(A\)</code> is a symmetric, idempotent matrix of rank <code>\(r\)</code>, and <code>\(z \sim  \mathcal{N}(0,\sigma^2 I_n)\)</code>, then <code>\(\frac{z^T A z}{\sigma^2} \sim \chi^2_r\)</code></p>
+</blockquote>
+<p>Hence in this case,</p>
+<p>$$
+\frac{(n-k)\hat{\sigma^2}}{\sigma^2} = \frac{\hat{\epsilon}^T \hat{\epsilon}}{\sigma^2} \sim \chi^2_{n-k} \text{ or } \frac{\hat{\sigma^2}}{\sigma^2} \sim \frac{\chi^2_{n-k}}{(n-k)}
+$$</p>
+<p>A <code>\(t\)</code> distribution is defined as</p>
+<p>$$
+T = \frac{Z}{\sqrt{\frac{V}{v}}}
+$$
+where <code>\(Z \sim \mathcal{N}(0,1)\)</code> and <code>\(V \sim \chi^2\)</code> with <code>\(v\)</code> degrees of freedom.</p>
+<p>Note that our sampling distribution depends on our theoretical distributions as follows:</p>
+<p><code>\begin{align*} \frac{(\hat{\beta}_j - \beta_j)}{SE_{emp} (\beta)} = \frac{\frac{(\hat{\beta}_j - \beta_j)} {\sigma \sqrt{(X^TX)^{-1}_{jj}}}}{\sqrt{\frac{\hat{\sigma^2}}{\sigma^2}}} \end{align*}</code></p>
+<p>This exactly fits the definition of the <code>\(t\)</code> distribution, since <code>\(Z = \frac{(\hat{\beta}_j - \beta_j)} {\sigma \sqrt{(X^TX)^{-1}_{jj}}}\)</code>, and the <code>\(\frac{V}{v}\)</code> under the square-root is exactly <code>\(\frac{\hat{\sigma^2}}{\sigma^2}\)</code>, which we have seen before, is <code>\(\chi^2\)</code> distributed scaled by its <code>\((n-k)\)</code> degrees of freedom.</p>
+<p>Hence, we have proven that under the null hypothesis <code>\(\beta_j\)</code>, our <code>\(t\)</code> statistic follows the <code>\(t\)</code> distribution with <code>\((n-k)\)</code> degrees of freedom.</p>
+
+
+
+
+<h3 id="hypothesis-testing">Hypothesis Testing?
+  <a href="#hypothesis-testing"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h3>
+<p>So what are we doing when we’re doing hypothesis testing in linear regression? We have now, under certain assumptions, obtained the sampling distribution of our estimated <code>\(\beta\)</code> coefficients. We can use that to impose a null hypothesis of a coefficient <code>\(\beta_j\)</code> taking on a certain value, and consider the sampling distribution. Then, we can compute the likelihood that our coefficient takes on the value of <strong>our actually estimated coefficient</strong> and, using the sampling distribution, consider how likely such an estimate, or more extreme estimates, are under the null hypothesis.</p>
+<p>The resulting likelihood is again defined as the <code>\(p\)</code> value.</p>
+<p>The previous expressions allow us to calculate all of this manually. Let’s take a simulate example again and estimate a simple regression:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>beta <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#099">2</span> 
+</span></span><span style="display:flex;"><span>data <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">tibble</span>(x<span style="color:#000;font-weight:bold">=</span><span style="color:#900;font-weight:bold">runif</span>(<span style="color:#099">20</span>, <span style="color:#099">1</span>, <span style="color:#099">5</span>), y <span style="color:#000;font-weight:bold">=</span> beta<span style="color:#000;font-weight:bold">*</span>x <span style="color:#000;font-weight:bold">+</span> <span style="color:#900;font-weight:bold">rnorm</span>(<span style="color:#099">20</span>, <span style="color:#099">0</span>, <span style="color:#099">12</span>))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>model <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">feols</span>(y <span style="color:#000;font-weight:bold">~</span> x <span style="color:#000;font-weight:bold">+</span> <span style="color:#099">0</span>, data <span style="color:#000;font-weight:bold">=</span> data)
+</span></span><span style="display:flex;"><span>model
+</span></span></code></pre></div><pre><code>## OLS estimation, Dep. Var.: y
+## Observations: 20 
+## Standard-errors: IID 
+##   Estimate Std. Error t value Pr(&gt;|t|)    
+## x  2.37497   0.867267 2.73845 0.013058 *  
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## RMSE: 11.5   Adj. R2: -0.083863
+</code></pre>
+<p>As you can see, our <code>\(\beta\)</code> coefficient is <code>\(2.37\)</code> and our standard error is <code>\(0.86\)</code>. Our <code>\(t\)</code> value is <code>\(2.73\)</code> and our <code>\(p\)</code> value about <code>\(0.013\)</code>. We have seen before that our (empirical) standard error equals:</p>
+<p>$$
+\sqrt{\hat{\sigma^2} (X^TX)^{-1}_{jj}}
+`$$,</p>
+<p>which we can also calculate using our data:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>n <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#099">20</span>; k <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#099">1</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Calculate our estimate sigma_sq_hat</span>
+</span></span><span style="display:flex;"><span>sigma_sq_hat <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#099">1</span><span style="color:#000;font-weight:bold">/</span>(n<span style="color:#000;font-weight:bold">-</span>k) <span style="color:#000;font-weight:bold">*</span> model<span style="color:#000;font-weight:bold">$</span>residuals <span style="color:#000;font-weight:bold">%*%</span> model<span style="color:#000;font-weight:bold">$</span>residuals
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Calculate the (empirical) standard error</span>
+</span></span><span style="display:flex;"><span>standard_error <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">sqrt</span>(sigma_sq_hat <span style="color:#000;font-weight:bold">*</span> <span style="color:#900;font-weight:bold">solve</span>(<span style="color:#900;font-weight:bold">t</span>(data<span style="color:#000;font-weight:bold">$</span>x) <span style="color:#000;font-weight:bold">%*%</span> data<span style="color:#000;font-weight:bold">$</span>x))
+</span></span><span style="display:flex;"><span>standard_error
+</span></span></code></pre></div><pre><code>##          [,1]
+## [1,] 0.867267
+</code></pre>
+<p>.. which is the exact number in the above regression table.</p>
+<p>Using this standard error, we can now perform <strong>hypothesis tests</strong> on our <code>\(\beta\)</code> coefficient. We impose a null hypothesis, for example, that our actual <code>\(\beta\)</code> coefficient equals zero. Then, using the sampling distribution of our coefficient, we can calculate the probability of obtaining the coefficient estimate <em>that we have actually obtained</em> under the null hypothesis:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>beta_coefficient <span style="color:#000;font-weight:bold">&lt;-</span> model<span style="color:#000;font-weight:bold">$</span>coeftable<span style="color:#000;font-weight:bold">$</span>Estimate[1]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Calculate the t-statistic under the null hypothesis that Beta = 0</span>
+</span></span><span style="display:flex;"><span>t_statistic <span style="color:#000;font-weight:bold">&lt;-</span> beta_coefficient <span style="color:#000;font-weight:bold">/</span> standard_error
+</span></span><span style="display:flex;"><span>t_statistic
+</span></span></code></pre></div><pre><code>##         [,1]
+## [1,] 2.73845
+</code></pre>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Calculate the two-sided p-value</span>
+</span></span><span style="display:flex;"><span>p_value <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#099">2</span><span style="color:#000;font-weight:bold">*</span>(<span style="color:#099">1</span><span style="color:#000;font-weight:bold">-</span><span style="color:#900;font-weight:bold">pt</span>(t_statistic, df <span style="color:#000;font-weight:bold">=</span> n<span style="color:#099">-1</span>))
+</span></span><span style="display:flex;"><span>p_value
+</span></span></code></pre></div><pre><code>##           [,1]
+## [1,] 0.0130577
+</code></pre>
+<p>Where I have calculated the <code>\(p\)</code> value for a two-sided test, reflecting the probability of obtaining the coefficient of obtaining our actually obtained coefficient estimate <em>or something more extreme</em> according to the null hypothesis.</p>
+<p>Hence again, the probability of obtaining something like the obtained sample mean, or something more extreme, if the null hypothesis were true, is an event that is <strong>extremely unlikely</strong>. Hence, we <strong>reject</strong> the null hypothesis in favor of the alternative hypothesis.</p>
+<p>Note, finally, that the <code>\(t\)</code> statistic and <code>\(p\)</code> value are exactly equal to those in the regression table.</p>
+
+
+
+
+<h3 id="hypothesis-testing-graphically">Hypothesis Testing Graphically
+  <a href="#hypothesis-testing-graphically"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h3>
+<p>To close off this post, let me demonstrate the process of testing</p>
+<p>$$
+H_0: \beta = 0 \
+H_A: \beta \neq 0
+$$</p>
+<p>.. And let’s do this graphically. Under the null hypothesis, <code>\(\beta\)</code> is <code>\(t\)</code> distributed with <code>\(n-k\)</code> degrees of freedom, which in our example amounted to <code>\(20 -1 = 19\)</code> degrees of freedom. Hence, the distribution of <code>\(t\)</code> statistics under the null hypothesis looks as follows:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>t_dist <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">tibble</span>(grid<span style="color:#000;font-weight:bold">=</span><span style="color:#900;font-weight:bold">seq</span>(<span style="color:#099">-3</span>, <span style="color:#099">3</span>, by<span style="color:#000;font-weight:bold">=</span><span style="color:#099">0.01</span>), density<span style="color:#000;font-weight:bold">=</span><span style="color:#900;font-weight:bold">dt</span>(grid,df <span style="color:#000;font-weight:bold">=</span> n<span style="color:#000;font-weight:bold">-</span>k))
+</span></span><span style="display:flex;"><span>p1 <span style="color:#000;font-weight:bold">&lt;-</span> t_dist <span style="color:#000;font-weight:bold">|&gt;</span> 
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">ggplot</span>(<span style="color:#900;font-weight:bold">aes</span>(x<span style="color:#000;font-weight:bold">=</span>grid, y<span style="color:#000;font-weight:bold">=</span>density)) <span style="color:#000;font-weight:bold">+</span> <span style="color:#900;font-weight:bold">geom_line</span>()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>p1
+</span></span></code></pre></div><img src="/blog/2024-10-07-sampling-variation-in-linear-regression/index_files/figure-html/unnamed-chunk-6-1.png" width="672" />
+<p>Our obtained <code>\(t\)</code> statistic, however, was equal to 2.7384503. Graphically:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>p2 <span style="color:#000;font-weight:bold">&lt;-</span> p1 <span style="color:#000;font-weight:bold">+</span> <span style="color:#900;font-weight:bold">geom_vline</span>(xintercept<span style="color:#000;font-weight:bold">=</span>t_statistic)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>p2
+</span></span></code></pre></div><img src="/blog/2024-10-07-sampling-variation-in-linear-regression/index_files/figure-html/unnamed-chunk-7-1.png" width="672" />
+<p>This is an <em>extremely unlikely</em> event under the null hypothesis. The <code>\(p\)</code> value can also be visualized by showing the probability under the null hypothesis of obtaining our actual <code>\(t\)</code> value or something more extreme:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>right_tail <span style="color:#000;font-weight:bold">&lt;-</span> t_dist <span style="color:#000;font-weight:bold">|&gt;</span> <span style="color:#900;font-weight:bold">filter</span>(grid <span style="color:#000;font-weight:bold">&gt;=</span> <span style="color:#900;font-weight:bold">as.numeric</span>(t_statistic))
+</span></span><span style="display:flex;"><span>left_tail <span style="color:#000;font-weight:bold">&lt;-</span> t_dist <span style="color:#000;font-weight:bold">|&gt;</span> <span style="color:#900;font-weight:bold">filter</span>(grid <span style="color:#000;font-weight:bold">&lt;</span> <span style="color:#000;font-weight:bold">-</span><span style="color:#900;font-weight:bold">as.numeric</span>(t_statistic))
+</span></span><span style="display:flex;"><span>p2 <span style="color:#000;font-weight:bold">+</span> <span style="color:#900;font-weight:bold">geom_area</span>(data <span style="color:#000;font-weight:bold">=</span> right_tail,
+</span></span><span style="display:flex;"><span>               <span style="color:#900;font-weight:bold">aes</span>(x <span style="color:#000;font-weight:bold">=</span> grid, y <span style="color:#000;font-weight:bold">=</span> density), 
+</span></span><span style="display:flex;"><span>               fill <span style="color:#000;font-weight:bold">=</span> <span style="color:#d14">&#34;blue&#34;</span>,
+</span></span><span style="display:flex;"><span>               alpha <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">0.3</span>) <span style="color:#000;font-weight:bold">+</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#900;font-weight:bold">geom_area</span>(data <span style="color:#000;font-weight:bold">=</span> left_tail,
+</span></span><span style="display:flex;"><span>            <span style="color:#900;font-weight:bold">aes</span>(x <span style="color:#000;font-weight:bold">=</span> grid, y <span style="color:#000;font-weight:bold">=</span> density),
+</span></span><span style="display:flex;"><span>            fill<span style="color:#000;font-weight:bold">=</span> <span style="color:#d14">&#34;red&#34;</span>,
+</span></span><span style="display:flex;"><span>            alpha <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">0.3</span>)
+</span></span></code></pre></div><img src="/blog/2024-10-07-sampling-variation-in-linear-regression/index_files/figure-html/unnamed-chunk-8-1.png" width="672" />
+<p>The one-sided <code>\(p\)</code> value corresponding to the blue area, and the two-sided <code>\(p\)</code> value, as reported here, corresponding to the combined blue and red areas.</p>
+
+
+
+
+<h3 id="conclusion">Conclusion
+  <a href="#conclusion"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h3>
+<p>This blog post focused on the concept of sampling variation. In part I, in a very simple case, we introduced the concept by looking at a series of <code>\(N\)</code> i.i.d. normal variables, and derived the uncertainty surrounding our estimated mean.</p>
+<p>Then, we did the same thing for linear regression, which turned out to be a little bit more difficult. The difficulty was that we don’t have access to the error variance parameter <code>\(\sigma^2\)</code>, but have to make do with an estimate of that parameter. That makes it that the final sampling distribution we end up with is not normal, but <code>\(t\)</code> distributed.</p>
+<p>Finally, we focused on hypothesis testing. In hypothesis testing, we hold that the true coefficient estimate is a certain number, for example, 0. Then, we use our obtained information on the sampling distribution to consider how likely it is that our <em>actual</em> coefficient has been obtained given that the true coefficient is zero, and the sampling distribution is the distribution we’ve estimated.</p>
+<p>Hopefully, this background article has helped you visualizing and seeing more clearly how sampling variation, and its conceptual sibling, hypothesis testing, work. Thanks for reading! If you have any comments, mail them to a dot h dot machielsen at uu dot nl.</p>
+
+        
+        <details closed class="f6 fw7 input-reset">
+  <dl class="f6 lh-copy">
+    <dt class="fw7">Posted on:</dt>
+    <dd class="fw5 ml0">October 8, 2024</dd>
+  </dl>
+  <dl class="f6 lh-copy">
+    <dt class="fw7">Length:</dt>
+    <dd class="fw5 ml0">10 minute read, 2099 words</dd>
+  </dl>
+  
+  
+  
+  <dl class="f6 lh-copy">
+    <dt class="fw7">See Also:</dt>
+    
+  </dl>
+</details>
+
+      </section>
+      <footer class="post-footer">
+        <div class="post-pagination dt w-100 mt4 mb2">
+  
+  
+  
+  
+    <a class="next dtc pl2 tr v-top fw6"
+    href="/blog/2024-10-07-what-is-sampling-variation/">What is Sampling Variation? &rarr;</a>
+  
+</div>
+
+      </footer>
+    </article>
+    
+      
+<div class="post-comments pa0 pa4-l mt4">
+  
+  <script src="https://utteranc.es/client.js"
+          repo="basm92/new_website"
+          issue-term="pathname"
+          theme="boxy-light"
+          label="comments :crystal_ball:"
+          crossorigin="anonymous"
+          async
+          type="text/javascript">
+  </script>
+  
+</div>
+
+    
+  </section>
+</main>
+<footer class="site-footer pv4 bt b--transparent ph5" role="contentinfo">
+  <nav class="db dt-l w-100">
+    <p class="site-copyright f7 db dtc-l v-mid w-100 w-33-l tc tl-l pv2 pv0-l mv0 lh-copy">
+      &copy; 2024 Bas Machielsen
+      <span class="middot-divider"></span>
+      Made with <span xmlns:dct="http://purl.org/dc/terms/" property="dct:title"><a xmlns:dct="http://purl.org/dc/terms/" href="https://github.com/hugo-apero/" rel="dct:source">Hugo Apéro</a></span>.
+      <br />
+      
+Based on <span xmlns:dct="http://purl.org/dc/terms/" property="dct:title"><a xmlns:dct="http://purl.org/dc/terms/" href="https://github.com/formspree/blogophonic-hugo" rel="dct:source">Blogophonic</a></span> by <a xmlns:cc="http://creativecommons.org/ns#" href="https://formspree.io" property="cc:attributionName" rel="cc:attributionURL">Formspree</a>.
+    </p>
+    
+    <div class="site-social-links db dtc-l v-mid w-100 w-33-l tc pv2 pv0-l mv0">
+      <div class="social-icon-links" aria-hidden="true">
+  
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://github.com/basm92" title="github" target="_blank" rel="noopener">
+      <i class="fab fa-github fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://scholar.google.com/citations?user=bS8uo44AAAAJ" title="google" target="_blank" rel="noopener">
+      <i class="fab fa-google fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://twitter.com/basss92" title="twitter" target="_blank" rel="noopener">
+      <i class="fab fa-twitter fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="mailto:a.h.machielsen@uu.nl" title="envelope" >
+      <i class="fas fa-envelope fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="mailto:basmachielsen@live.nl" title="envelope" >
+      <i class="far fa-envelope fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://orcid.org/0000-0002-9692-0615" title="orcid" target="_blank" rel="noopener">
+      <i class="ai ai-orcid fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="/blog/index.xml" title="rss" >
+      <i class="fas fa-rss fa-lg fa-fw"></i>
+    </a>
+  
+</div>
+
+    </div>
+    
+    <div class="site-links f6 db dtc-l v-mid w-100 w-67-l tc tr-l pv2 pv0-l mv0">
+      
+      <a class="dib pv1 ph2 link" href="/license/" title="License">License</a>
+      
+      <a class="dib pv1 ph2 link" href="/contact/" title="Contact form">Contact</a>
+      
+      <a class="dib pv1 ph2 link" href="/contributors/" title="Contributors">Contributors</a>
+      
+    </div>
+  </nav>
+  
+    <script>
+
+    var i, text, code, codes = document.getElementsByTagName('code');
+    for (let i = 0; i < codes.length;) {
+      code = codes[i];
+      if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+        text = code.textContent;
+        if (/^\$[^$]/.test(text) && /[^$]\$$/.test(text)) {
+          text = text.replace(/^\$/, '\\(').replace(/\$$/, '\\)');
+          code.textContent = text;
+        }
+        if (/^\\\((.|\s)+\\\)$/.test(text) ||
+            /^\\\[(.|\s)+\\\]$/.test(text) ||
+            /^\$(.|\s)+\$$/.test(text) ||
+            /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+          code.outerHTML = code.innerHTML;  
+          continue;
+        }
+      }
+      i++;
+    }
+</script>
+
+  
+    
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.css" integrity="sha384-RZU/ijkSsFbcmivfdRBQDtwuwVqK7GMOw6IMvKyeWL2K5UAlyp6WonmB8m7Jd0Hn" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.js" integrity="sha384-pK1WpvzWVBQiP0/GjnvRxV4mOb0oxFuyRxJlk6vVw146n3egcN5C925NCP7a7BY8" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/contrib/auto-render.min.js" integrity="sha384-vZTG03m+2yp6N6BNi5iM4rW4oIwk5DfcNdFfxkk9ZWpDriOkXX8voJBFrAO7MpVl" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
+
+
+
+    
+  
+  
+</footer>
+
+      </div>
+    </body>
+</html>

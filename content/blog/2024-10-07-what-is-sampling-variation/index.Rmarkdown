@@ -126,7 +126,7 @@ Using the sampling distribution, and in particular, the **variance** can also be
 
 > Given a value for $\mu$ under the null hypothesis and the variance of the sampling distribution, what is the probability of obtaining a sample mean that I have actually obtained, or something more extreme?
 
-This is precisely the definition of a $p$ value. asdfsadf
+This is precisely the definition of a $p$ value.
 
 In my simulated example above, I can test H0 of the population mean being equal to, say, four against the alternative hypothesis of it being $\neq 4$ and calculate the $p$ value. To do that, I calculate the probability that a normal distribution with the **mean** specified by a null hypothesis, takes on the value of the **obtained sample mean**, but I use the _variance_ as obtained above. Thus, according to the null hypothesis of $\bar{X}=4$, $\bar{X}$ is distributed as:
 

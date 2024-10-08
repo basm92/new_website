@@ -246,9 +246,9 @@ $$
 \frac{\hat{\beta}_j - \beta_j}{\text{SE}(\hat{\beta_j})} \sim \mathcal{N}(0,1)
 $$
 
-where `\(\text{SE}(\hat{\beta})= \sqrt{\sigma^2 (X^TX)^{-1}_{jj}}\)`, a result which we obtain by standardizing our variable. SE is short for standard error.
+where `\(\text{SE}(\hat{\beta_j})= \sqrt{\sigma^2 (X^TX)^{-1}_{jj}}\)`, a result which we obtain by standardizing our variable. SE is short for standard error.
 
-However, the problem is that we don’t know `\(\sigma^2\)`, and we have to estimate it. Estimating it changes the distribution of `\(\hat{\beta}\)` to a `\(t\)` distribution rather than a normal distribution. The `\(t\)` statistics use, instead of `\(\text{SE}_{true}\)`, an estimated standard error, `\(\text{SE}_{emp}\)`, defined as `\(\text{SE}_{emp} = \sqrt{\hat{\sigma^2} (X^T X)^{-1}_{jj}}\)`, with a particular estimate for `\(\sigma^2\)` motivated in the next section. The resulting statistic will be `\(t(n-k)\)` distributed rather than normally distributed. How that works will also be explained in the next section, but feel free to skip it.
+However, the problem is that we don’t know `\(\sigma^2\)`, and we have to estimate it. Estimating it changes the distribution of `\(\hat{\beta}\)` to a `\(t\)` distribution rather than a normal distribution. The `\(t\)` statistics use, instead of `\(\text{SE}(\beta_j)\)`, an estimated standard error, `\(\text{SE}_{emp}\)`, defined as `\(\text{SE}_{emp} = \sqrt{\hat{\sigma^2} (X^T X)^{-1}_{jj}}\)`, with a particular estimate for `\(\sigma^2\)` motivated in the next section. I have denoted this with `\(emp\)`, short for “empirical”, meaning we use only the data to come up with this estimate. No population parameters are involved. The resulting statistic will be `\(t(n-k)\)` distributed rather than normally distributed. How that works will also be explained in the next section, but feel free to skip it.
 
 ### Deriving the `\(t\)` Distribution
 
@@ -272,7 +272,7 @@ The estimated error variance `\(\hat{\sigma^2}\)` scaled by the true variance is
 Hence in this case,
 
 $$
-\frac{(n-k)\hat{\sigma^2}}{\sigma^2} = \frac{\hat{\epsilon}^T \hat{\epsilon}}{\sigma^2} \sim \chi^2_{n-k} \text{or } \frac{\hat{\sigma^2}}{\sigma^2} \sim \frac{\chi^2_{n-k}}{(n-k)}
+\frac{(n-k)\hat{\sigma^2}}{\sigma^2} = \frac{\hat{\epsilon}^T \hat{\epsilon}}{\sigma^2} \sim \chi^2_{n-k} \text{ or } \frac{\hat{\sigma^2}}{\sigma^2} \sim \frac{\chi^2_{n-k}}{(n-k)}
 $$
 
 A `\(t\)` distribution is defined as
@@ -286,9 +286,9 @@ Note that our sampling distribution depends on our theoretical distributions as 
 
 `\begin{align*} \frac{(\hat{\beta}_j - \beta_j)}{SE_{emp} (\beta)} = \frac{\frac{(\hat{\beta}_j - \beta_j)} {\sigma \sqrt{(X^TX)^{-1}_{jj}}}}{\sqrt{\frac{\hat{\sigma^2}}{\sigma^2}}} \end{align*}`
 
-This exactly fits the definition of the `\(t\)` distribution, since `\(Z = \frac{(\hat{\beta}_j - \beta_j)} {\sigma \sqrt{(X^TX)^{-1}_{jj}}}\)`, the `\(\sigma\)`’s cancel each other out, and \$
+This exactly fits the definition of the `\(t\)` distribution, since `\(Z = \frac{(\hat{\beta}_j - \beta_j)} {\sigma \sqrt{(X^TX)^{-1}_{jj}}}\)`, and the `\(\frac{V}{v}\)` under the square-root is exactly `\(\frac{\hat{\sigma^2}}{\sigma^2}\)`, which we have seen before, is `\(\chi^2\)` distributed scaled by its `\((n-k)\)` degrees of freedom.
 
-Hence, we have proven that our `\(t\)` statistics follow the `\(t\)` distribution with `\((n-k)\)` degrees of freedom.
+Hence, we have proven that under the null hypothesis `\(\beta_j\)`, our `\(t\)` statistic follows the `\(t\)` distribution with `\((n-k)\)` degrees of freedom.
 
 ### Hypothesis Testing?
 
@@ -296,9 +296,130 @@ So what are we doing when we’re doing hypothesis testing in linear regression?
 
 The resulting likelihood is again defined as the `\(p\)` value.
 
+The previous expressions allow us to calculate all of this manually. Let’s take a simulate example again and estimate a simple regression:
+
+``` r
+beta <- 2 
+data <- tibble(x=runif(20, 1, 5), y = beta*x + rnorm(20, 0, 12))
+
+model <- feols(y ~ x + 0, data = data)
+model
+```
+
+    ## OLS estimation, Dep. Var.: y
+    ## Observations: 20 
+    ## Standard-errors: IID 
+    ##   Estimate Std. Error t value Pr(>|t|)    
+    ## x  2.37497   0.867267 2.73845 0.013058 *  
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## RMSE: 11.5   Adj. R2: -0.083863
+
+As you can see, our `\(\beta\)` coefficient is `\(2.37\)` and our standard error is `\(0.86\)`. Our `\(t\)` value is `\(2.73\)` and our `\(p\)` value about `\(0.013\)`. We have seen before that our (empirical) standard error equals:
+
+$$
+\sqrt{\hat{\sigma^2} (X^TX)^{-1}_{jj}}
+`$$,
+
+which we can also calculate using our data:
+
+``` r
+n <- 20; k <- 1
+
+# Calculate our estimate sigma_sq_hat
+sigma_sq_hat <- 1/(n-k) * model$residuals %*% model$residuals
+
+# Calculate the (empirical) standard error
+standard_error <- sqrt(sigma_sq_hat * solve(t(data$x) %*% data$x))
+standard_error
+```
+
+    ##          [,1]
+    ## [1,] 0.867267
+
+.. which is the exact number in the above regression table.
+
+Using this standard error, we can now perform **hypothesis tests** on our `\(\beta\)` coefficient. We impose a null hypothesis, for example, that our actual `\(\beta\)` coefficient equals zero. Then, using the sampling distribution of our coefficient, we can calculate the probability of obtaining the coefficient estimate *that we have actually obtained* under the null hypothesis:
+
+``` r
+beta_coefficient <- model$coeftable$Estimate[1]
+
+# Calculate the t-statistic under the null hypothesis that Beta = 0
+t_statistic <- beta_coefficient / standard_error
+t_statistic
+```
+
+    ##         [,1]
+    ## [1,] 2.73845
+
+``` r
+# Calculate the two-sided p-value
+p_value <- 2*(1-pt(t_statistic, df = n-1))
+p_value
+```
+
+    ##           [,1]
+    ## [1,] 0.0130577
+
+Where I have calculated the `\(p\)` value for a two-sided test, reflecting the probability of obtaining the coefficient of obtaining our actually obtained coefficient estimate *or something more extreme* according to the null hypothesis.
+
+Hence again, the probability of obtaining something like the obtained sample mean, or something more extreme, if the null hypothesis were true, is an event that is **extremely unlikely**. Hence, we **reject** the null hypothesis in favor of the alternative hypothesis.
+
+Note, finally, that the `\(t\)` statistic and `\(p\)` value are exactly equal to those in the regression table.
+
+### Hypothesis Testing Graphically
+
+To close off this post, let me demonstrate the process of testing
+
+$$
+H_0: \beta = 0 \\
+H_A: \beta \neq 0
+$$
+
+.. And let’s do this graphically. Under the null hypothesis, `\(\beta\)` is `\(t\)` distributed with `\(n-k\)` degrees of freedom, which in our example amounted to `\(20 -1 = 19\)` degrees of freedom. Hence, the distribution of `\(t\)` statistics under the null hypothesis looks as follows:
+
+``` r
+t_dist <- tibble(grid=seq(-3, 3, by=0.01), density=dt(grid,df = n-k))
+p1 <- t_dist |> 
+  ggplot(aes(x=grid, y=density)) + geom_line()
+
+p1
+```
+
+<img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-6-1.png" width="672" />
+
+Our obtained `\(t\)` statistic, however, was equal to 2.7384503. Graphically:
+
+``` r
+p2 <- p1 + geom_vline(xintercept=t_statistic)
+
+p2
+```
+
+<img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-7-1.png" width="672" />
+
+This is an *extremely unlikely* event under the null hypothesis. The `\(p\)` value can also be visualized by showing the probability under the null hypothesis of obtaining our actual `\(t\)` value or something more extreme:
+
+``` r
+right_tail <- t_dist |> filter(grid >= as.numeric(t_statistic))
+left_tail <- t_dist |> filter(grid < -as.numeric(t_statistic))
+p2 + geom_area(data = right_tail,
+               aes(x = grid, y = density), 
+               fill = "blue",
+               alpha = 0.3) +
+  geom_area(data = left_tail,
+            aes(x = grid, y = density),
+            fill= "red",
+            alpha = 0.3)
+```
+
+<img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-8-1.png" width="672" />
+
+The one-sided `\(p\)` value corresponding to the blue area, and the two-sided `\(p\)` value, as reported here, corresponding to the combined blue and red areas.
+
 ### Conclusion
 
-This blog post focused on the concept of sampling variation. In a very simple case, we introduced the concept by looking at a series of `\(N\)` i.i.d. normal variables, and derived the uncertainty surrounding our estimated mean.
+This blog post focused on the concept of sampling variation. In part I, in a very simple case, we introduced the concept by looking at a series of `\(N\)` i.i.d. normal variables, and derived the uncertainty surrounding our estimated mean.
 
 Then, we did the same thing for linear regression, which turned out to be a little bit more difficult. The difficulty was that we don’t have access to the error variance parameter `\(\sigma^2\)`, but have to make do with an estimate of that parameter. That makes it that the final sampling distribution we end up with is not normal, but `\(t\)` distributed.
 

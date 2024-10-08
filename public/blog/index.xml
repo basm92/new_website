@@ -6,7 +6,25 @@
     <description>Recent content in Blog on Bas Machielsen</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sun, 02 Jun 2024 00:00:00 +0000</lastBuildDate><atom:link href="/blog/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 08 Oct 2024 00:00:00 +0000</lastBuildDate><atom:link href="/blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Sampling Variation in Linear Regression</title>
+      <link>/blog/2024-10-07-sampling-variation-in-linear-regression/</link>
+      <pubDate>Tue, 08 Oct 2024 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2024-10-07-sampling-variation-in-linear-regression/</guid>
+      <description>Sampling Variation and Regression Analysis Introduction This blog post on sampling variation in regression analysis is part two of a two-part blog post on sample variations. In part 1, available here, I provide a gentle introduction to the subject and present the logic of hypothesis testing. In this part, I derive the sampling distribution for the \(\beta\) coefficients in a standard linear regression model. Some of the derivations here are technical, but those can be skipped by the reader not interested in petty details.</description>
+    </item>
+    
+    <item>
+      <title>What is Sampling Variation?</title>
+      <link>/blog/2024-10-07-what-is-sampling-variation/</link>
+      <pubDate>Mon, 07 Oct 2024 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2024-10-07-what-is-sampling-variation/</guid>
+      <description>What is Sampling Variation? Introduction In this blog post, I want to pay attention to the concept of sampling variation. In my econometrics classes, I have often found that students have a hard time wrapping their heads around this concept, especially in the case of regression analysis. Some of the questions I often get range from &amp;ldquo;why is our estimate of \(\beta\) uncertain, since we have obtained it in a deterministic way from our data sample&amp;rdquo; to &amp;ldquo;where do \(t\) statistics come from?</description>
+    </item>
+    
     <item>
       <title>Intervals and Durations in Feeding a New-born :)</title>
       <link>/blog/2024-06-02-intervals-and-durations-in-feeding-a-new-born/</link>

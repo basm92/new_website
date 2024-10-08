@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr"><head>
+  
+                           
+     
+
+
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="generator" content="Hugo 0.101.0" />
+<title>What is Sampling Variation? | Bas Machielsen</title>
+
+
+<meta property="twitter:site" content="@basss92">
+<meta property="twitter:creator" content="@basss92">
+
+
+
+
+
+
+
+  
+    
+  
+<meta name="description" content="A part of a 2-series blog post on sampling variation. Part I.">
+
+
+<meta property="og:site_name" content="Bas Machielsen">
+<meta property="og:title" content="What is Sampling Variation? | Bas Machielsen">
+<meta property="og:description" content="A part of a 2-series blog post on sampling variation. Part I." />
+<meta property="og:type" content="page" />
+<meta property="og:url" content="/blog/2024-10-07-what-is-sampling-variation/" />
+<meta property="og:locale" content="en">
+
+
+
+
+    
+        <meta property="og:image" content="/blog/2024-10-07-what-is-sampling-variation/featured.png" >
+        <meta property="twitter:card" content="summary_large_image">
+        <meta name="twitter:image" content="/blog/2024-10-07-what-is-sampling-variation/featured.png" >
+    
+    
+  <meta itemprop="name" content="What is Sampling Variation?">
+<meta itemprop="description" content="What is Sampling Variation? Introduction In this blog post, I want to pay attention to the concept of sampling variation. In my econometrics classes, I have often found that students have a hard time wrapping their heads around this concept, especially in the case of regression analysis. Some of the questions I often get range from &ldquo;why is our estimate of \(\beta\) uncertain, since we have obtained it in a deterministic way from our data sample&rdquo; to &ldquo;where do \(t\) statistics come from?"><meta itemprop="datePublished" content="2024-10-07T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2024-10-07T00:00:00+00:00" />
+<meta itemprop="wordCount" content="1482"><meta itemprop="image" content="/blog/2024-10-07-what-is-sampling-variation/featured.png">
+<meta itemprop="keywords" content="" />
+  
+  
+  <!--[if IE]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  <link rel="shortcut icon" href="favicon_new.ico" type="image/x-icon">
+  <link rel="icon" href="favicon_new.ico" type="image/x-icon">
+  
+  
+  <link rel="stylesheet" href="/style.main.min.555ba9f33efffeb97887b561cc674ae6e47dfbe93583e9f789fc69722e60a59e.css" integrity="sha256-VVup8z7//rl4h7VhzGdK5uR9&#43;&#43;k1g&#43;n3ifxpci5gpZ4=" media="screen">
+  
+  
+  <script src="/panelset.min.dca42702d7daf6fd31dc352efd2bcf0e4ac8c05ccaa58d9293f6177462de5d5f.js" type="text/javascript"></script>
+  
+  
+  <script src="/main.min.d7e4e8181380eb79c579f1573ca10b3aeb727c619c43ff775fec0b0d1624b24d.js" type="text/javascript"></script>
+</head>
+<body>
+      <div class="grid-container">
+<header class="site-header pt4 pb2 mb4 bb b--transparent ph5 headroom z-max" role="banner">
+  <nav class="site-nav db dt-l w-100" role="navigation">
+    <a class="site-brand db dtc-l v-mid link no-underline w-100 w-33-l tc tl-l" href="/" title="Home">
+      <img src="/website_logo.png" class="dib db-l h2 w-auto" alt="Bas Machielsen">
+    </a>
+    <div class="site-links db dtc-l v-mid w-100 w-47-l tc tr-l mt3 mt0-l ttu tracked">
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/" title="Home">Home</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/about/" title="About">About</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 active" href="/blog/" title="Blog">Blog</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/project/" title="Teaching Overview &amp; Repository">Teaching</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/resume/" title="Resume">Resume</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/articles/" title="Articles">Articles</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/collection/" title="Software">Software</a>
+      
+      
+    </div>
+  </nav>
+</header>
+
+<main class="page-main pa4" role="main">
+  <section class="page-content mw7 center">
+    <article class="post-content pa0 ph4-l">
+      <header class="post-header">
+        <h1 class="f1 lh-solid measure-narrow mb3 fw4">What is Sampling Variation?</h1>
+        
+        <p class="f6 measure lh-copy mv1">By Bas Machielsen</p>
+        <p class="f7 db mv0 ttu">October 7, 2024</p>
+
+      
+
+      </header>
+      <section class="post-body pt5 pb4">
+        
+
+
+
+<h2 id="what-is-sampling-variation">What is Sampling Variation?
+  <a href="#what-is-sampling-variation"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+
+
+
+
+<h3 id="introduction">Introduction
+  <a href="#introduction"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h3>
+<p>In this blog post, I want to pay attention to the concept of <strong>sampling variation</strong>. In my econometrics classes, I have often found that students have a hard time wrapping their heads around this concept, especially in the case of regression analysis. Some of the questions I often get range from &ldquo;why is our estimate of <code>\(\beta\)</code> uncertain, since we have obtained it in a deterministic way from our data sample&rdquo; to &ldquo;where do <code>\(t\)</code> statistics come from?&rdquo;.</p>
+<p>In this blog post, I explain the fundamental concept responsible for why our estimate of <code>\(\beta\)</code> is uncertain, and how to characterize (meaning, put probabilities on it) this uncertainty: the concept of <strong>sampling variation</strong>. In this characterization, we&rsquo;ll also focus on the origins of the <code>\(t\)</code> distribution used for hypothesis testing.</p>
+
+
+
+
+<h3 id="basics-of-sampling-variation">Basics of Sampling Variation
+  <a href="#basics-of-sampling-variation"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h3>
+<p>Be that as it may, the basic concept of sampling variation is very easy to grasp.</p>
+<p>Consider a series of i.i.d. normally distributed random variables <code>\(X_i\)</code> (indexed by the <code>\(i\)</code>&lsquo;th observation), distributed with mean <code>\(\mu\)</code> and variance <code>\(\sigma^2\)</code>. This means that we pretend that all of our data points are generated by such a normal distribution, and each observation in our dataset is generated by that very same distribution, irrespective of preceding or subsequent data points.</p>
+<p>As an econometrician, it&rsquo;s your job to estimate the <code>\(\mu\)</code> and <code>\(\sigma^2\)</code> parameters of that normal distribution based on a finite sample of <code>\(N\)</code> observations. The following piece of R code illustrates that:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Load libraries, set seed for reproducability</span>
+</span></span><span style="display:flex;"><span><span style="color:#900;font-weight:bold">library</span>(tidyverse, quietly <span style="color:#000;font-weight:bold">=</span> <span style="color:#000;font-weight:bold">TRUE</span>)
+</span></span><span style="display:flex;"><span><span style="color:#900;font-weight:bold">set.seed</span>(<span style="color:#099">1234</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Set parameters for our normal distribution and sample size</span>
+</span></span><span style="display:flex;"><span>mu <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#099">5</span>; sigma_sq <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#099">1</span>; n <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#099">20</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Sample from this &#34;true&#34; population distribution</span>
+</span></span><span style="display:flex;"><span>sample <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">tibble</span>(data<span style="color:#000;font-weight:bold">=</span><span style="color:#900;font-weight:bold">rnorm</span>(n<span style="color:#000;font-weight:bold">=</span>n, mean<span style="color:#000;font-weight:bold">=</span>mu, sd<span style="color:#000;font-weight:bold">=</span><span style="color:#900;font-weight:bold">sqrt</span>(sigma_sq)))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#900;font-weight:bold">head</span>(sample, <span style="color:#099">5</span>)
+</span></span></code></pre></div><pre tabindex="0"><code>## # A tibble: 5 × 1
+##    data
+##   &lt;dbl&gt;
+## 1  3.79
+## 2  5.28
+## 3  6.08
+## 4  2.65
+## 5  5.43
+</code></pre><div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#900;font-weight:bold">mean</span>(sample<span style="color:#000;font-weight:bold">$</span>data)
+</span></span></code></pre></div><pre tabindex="0"><code>## [1] 4.749336
+</code></pre><p>As you can see, we have sampled from a normal distribution with <code>\(\mu=5\)</code>. However, our estimated mean is only 4.7493359.</p>
+<p>Because you have only twenty data points, the probability of you getting <em>exactly</em> 5 as an estimate for your <code>\(\mu\)</code> is very small (in fact, it&rsquo;s zero). In addition, there is a certain probability of you sampling <em>exclusively</em> very high-valued data points and your estimated mean being way higher than five. Similarly, there is a certain probability of sampling low-valued data points, making your estimated mean way lower than five.</p>
+<p>All of this can happen precisely due to <strong>coincidence</strong>. The process of putting certain numbers on these probabilities is the process of deriving the <strong>sampling distribution</strong>. After we have found the sampling distribution, we can use it to quantify the uncertainty that we attach to a certain estimate.</p>
+<p>One particular parameter governing the sampling distribution is the sample size <code>\(N\)</code>. It turns out, as we will see, that the larger the sample size, the lower the probability of sampling <em>only</em> extreme data points.</p>
+<p>If you don&rsquo;t understand this, consider repeated fair coin flips. The probability of receiving 3 out of 3 heads (a sample size of 3) is larger than the probability of receiving 10 out of 10 heads (a sample size of 10). Which in turn is smaller than the probability of receiving 100 out of 100 heads. Et cetera.</p>
+<p>Similarly, if our true normal distribution has <code>\(\mu=5\)</code>, the probability of, for example, observing only observations that are higher than, say, 6, becomes smaller and smaller as our sample size increases.</p>
+<p>Technically, the probability of drawing an observation <em>greater than 6</em> from our normal random variable <code>\(\mathcal{N}(5, 1)\)</code> is:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>p_greater_than_6 <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#099">1</span> <span style="color:#000;font-weight:bold">-</span> <span style="color:#900;font-weight:bold">pnorm</span>(<span style="color:#099">6</span>, mean<span style="color:#000;font-weight:bold">=</span>mu, sd <span style="color:#000;font-weight:bold">=</span> <span style="color:#900;font-weight:bold">sqrt</span>(sigma_sq))
+</span></span><span style="display:flex;"><span>p_greater_than_6
+</span></span></code></pre></div><pre tabindex="0"><code>## [1] 0.1586553
+</code></pre><p>So about 15%. The probability that two observations are both greater than six is:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>p_greater_than_6^2
+</span></span></code></pre></div><pre tabindex="0"><code>## [1] 0.02517149
+</code></pre><p>So only 2%, because our observations are <strong>independently distributed</strong>.</p>
+<p>Because the probability of sampling only extreme observations decreases with the sample size, this means that, if your sample is very large, you&rsquo;re bound the end up with an estimate of <code>\(\mu\)</code> that is fairly close to the real population parameter.</p>
+
+
+
+
+<h3 id="deriving-sampling-variation-example">Deriving Sampling Variation: Example
+  <a href="#deriving-sampling-variation-example"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h3>
+<p>Let us now derive more explicitly the sampling distribution of the around the parameter <code>\(\mu\)</code>.</p>
+<p>We know that we estimate the mean by:</p>
+<p>$$
+\bar{X} = \frac{1}{N} \sum_{i=1}^N X_i
+$$</p>
+<p>We also know that each <code>\(X_i\)</code> has expected value equal to the population mean <code>\(\mathbb{E}[X_i]=\mu\)</code> and variance <code>\(\sigma^2\)</code>.</p>
+<p>Let us now consider the sum of independent normal variables. Let&rsquo;s call that <code>\(S\)</code> for a second:</p>
+<p>$$
+S = \sum_{i=1}^N X_i
+$$</p>
+<p>We know that the <code>\(S\)</code> is also normally distributed as it is a combination of i.i.d. normal distributions, and let us now derive the <code>\(\mu\)</code> and the <code>\(\sigma^2\)</code> of the <code>\(S\)</code>, that is, of the normal distribution that arises from the sum of <code>\(N\)</code> i.i.d. normal random variables.</p>
+<p>Since all of the <code>\(N\)</code> i.i.d. normals have the same expectation, <code>\(\mu\)</code>, <code>\(S\)</code> will have the expected value <code>\(N \mu\)</code>. Since all of them are independent, and have the same variance, the variance of the <code>\(S\)</code> will equal <code>\(N \sigma^2\)</code>.</p>
+<p>Since the sample mean <code>\(\bar{X}\)</code> is just the sum divided by <code>\(\frac{1}{N}\)</code>, the sample mean <code>\(\bar{X}\)</code> will also follow a normal distribution. The <code>\(\mu\)</code> of that distribution, denoted as <code>\(\mu_{bar{X}}\)</code> is just:</p>
+<p>$$
+\mu_{\bar{X}} = \frac{1}{N} \mu_S
+$$</p>
+<p>where <code>\(\mu_S\)</code> is the mean of <code>\(S\)</code>, which we have seen to equal <code>\(N \mu\)</code>. Hence, the expected value of the sample mean <code>\(\bar{X}\)</code> is <code>\(\mu\)</code>. That is a good thing! This means that the sample mean is an unbiased estimator of the population mean.</p>
+<p>As for the variance, remember the rule that: <code>\(\text{Var}(aZ)= a^2 \text{Var}(Z)\)</code> for any random variable <code>\(Z\)</code>. In this case, the variance of <code>\(\bar{X} = \text{Var}(\frac{1}{N} S)\)</code>.</p>
+<p>This equals:</p>
+<p>$$
+\sigma^2_{\bar{X}} = \frac{1}{N^2} \text{Var}(S) = \frac{1}{N^2} N \sigma^2 = \frac{1}{N} \sigma^2
+$$</p>
+<p>Hence, what we have derived is that the <em>sample mean</em> is distributed as:</p>
+<p>$$
+\bar{X} \sim \mathcal{N}(\mu, \frac{1}{N} \sigma^2)
+$$</p>
+<p>This is very nice. That means that as the sample size grows, we&rsquo;re obtaining a distribution around the population mean with a smaller and smaller variance. This formally illustrates what I argued anecdotally earlier: the probability of estimating an extreme sample mean (in the sense of being far away from the population mean) decreases with <code>\(N\)</code>.</p>
+<p>The other parameter that governs the uncertainty of our sample mean is <code>\(\sigma^2\)</code>. If our variables we sample have higher true population variance, the probability of achieving more extreme draws (again meaning, a sample mean far away from the population mean) is higher. Hence, this would imply more uncertainty around our estimate.</p>
+
+
+
+
+<h3 id="hypothesis-testing">Hypothesis Testing
+  <a href="#hypothesis-testing"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h3>
+<p>Using the sampling distribution, and in particular, the <strong>variance</strong> can also be useful for <strong>hypothesis testing</strong>. I&rsquo;ll get back to this in the case of linear regression, but a hypothesis test is nothing else than asking:</p>
+<blockquote>
+<p>Given a value for <code>\(\mu\)</code> under the null hypothesis and the variance of the sampling distribution, what is the probability of obtaining a sample mean that I have actually obtained, or something more extreme?</p>
+</blockquote>
+<p>This is precisely the definition of a <code>\(p\)</code> value.</p>
+<p>In my simulated example above, I can test H0 of the population mean being equal to, say, four against the alternative hypothesis of it being <code>\(\neq 4\)</code> and calculate the <code>\(p\)</code> value. To do that, I calculate the probability that a normal distribution with the <strong>mean</strong> specified by a null hypothesis, takes on the value of the <strong>obtained sample mean</strong>, but I use the <em>variance</em> as obtained above. Thus, according to the null hypothesis of <code>\(\bar{X}=4\)</code>, <code>\(\bar{X}\)</code> is distributed as:</p>
+<p>$$
+H_0\text{:} \bar{X} \sim \mathcal{N}(4, {\sigma^2 \over N})
+$$
+The <code>\(p\)</code> value is therefore, reflecting the probability under the null hypothesis of achieve something like the sample mean or something more extrame is:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>obtained_sample_mean <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#900;font-weight:bold">mean</span>(sample<span style="color:#000;font-weight:bold">$</span>data)
+</span></span><span style="display:flex;"><span>p_value <span style="color:#000;font-weight:bold">&lt;-</span> <span style="color:#099">2</span><span style="color:#000;font-weight:bold">*</span>(<span style="color:#099">1</span> <span style="color:#000;font-weight:bold">-</span> <span style="color:#900;font-weight:bold">pnorm</span>(obtained_sample_mean, mean<span style="color:#000;font-weight:bold">=</span><span style="color:#099">4</span>, sd<span style="color:#000;font-weight:bold">=</span><span style="color:#900;font-weight:bold">sqrt</span>(sigma_sq<span style="color:#000;font-weight:bold">/</span>n)))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>p_value
+</span></span></code></pre></div><pre tabindex="0"><code>## [1] 0.0008048187
+</code></pre><p>Hence, the probability of obtaining something like the obtained sample mean, or something more extreme, if the null hypothesis were true, is an event that is <em>extremely unlikely</em>. Hence, we <strong>reject</strong> the null hypothesis in favor of the alternative hypothesis.</p>
+<p>Note that we have calculated the <code>\(p\)</code> value for a two sided test, by:</p>
+<ul>
+<li>First calculating the probability of obtaining something less than the <code>obtained_sample_mean</code> given a true population mean of zero (<code>pnorm()</code>)</li>
+<li>Then calculating the complement of that, reflecting the probability of obtaining something more extreme than the population mean. (This would be the <code>\(p\)</code> value for a one tailed test against the alternative <code>\(H_A: \mu  &gt; 4\)</code>)</li>
+<li>Then multiplying the resulting value by two, reflecting a two-sided test.</li>
+</ul>
+<p>Now that we know how to do this in a simple case, we can also do the exact same thing in the context of linear regression analysis. To read about this, read the 
+<a href="click">follow-up blog post</a> to this present blog post. In any case, thanks for reading, and I hope this helps you understanding sampling variation.</p>
+
+        
+        <details closed class="f6 fw7 input-reset">
+  <dl class="f6 lh-copy">
+    <dt class="fw7">Posted on:</dt>
+    <dd class="fw5 ml0">October 7, 2024</dd>
+  </dl>
+  <dl class="f6 lh-copy">
+    <dt class="fw7">Length:</dt>
+    <dd class="fw5 ml0">7 minute read, 1482 words</dd>
+  </dl>
+  
+  
+  
+  <dl class="f6 lh-copy">
+    <dt class="fw7">See Also:</dt>
+    
+  </dl>
+</details>
+
+      </section>
+      <footer class="post-footer">
+        <div class="post-pagination dt w-100 mt4 mb2">
+  
+  
+    <a class="prev dtc pr2 tl v-top fw6"
+    href="/blog/2024-10-07-sampling-variation-in-linear-regression/">&larr; Sampling Variation in Linear Regression</a>
+  
+  
+  
+    <a class="next dtc pl2 tr v-top fw6"
+    href="/blog/2024-06-02-intervals-and-durations-in-feeding-a-new-born/">Intervals and Durations in Feeding a New-born :) &rarr;</a>
+  
+</div>
+
+      </footer>
+    </article>
+    
+      
+<div class="post-comments pa0 pa4-l mt4">
+  
+  <script src="https://utteranc.es/client.js"
+          repo="basm92/new_website"
+          issue-term="pathname"
+          theme="boxy-light"
+          label="comments :crystal_ball:"
+          crossorigin="anonymous"
+          async
+          type="text/javascript">
+  </script>
+  
+</div>
+
+    
+  </section>
+</main>
+<footer class="site-footer pv4 bt b--transparent ph5" role="contentinfo">
+  <nav class="db dt-l w-100">
+    <p class="site-copyright f7 db dtc-l v-mid w-100 w-33-l tc tl-l pv2 pv0-l mv0 lh-copy">
+      &copy; 2024 Bas Machielsen
+      <span class="middot-divider"></span>
+      Made with <span xmlns:dct="http://purl.org/dc/terms/" property="dct:title"><a xmlns:dct="http://purl.org/dc/terms/" href="https://github.com/hugo-apero/" rel="dct:source">Hugo Apéro</a></span>.
+      <br />
+      
+Based on <span xmlns:dct="http://purl.org/dc/terms/" property="dct:title"><a xmlns:dct="http://purl.org/dc/terms/" href="https://github.com/formspree/blogophonic-hugo" rel="dct:source">Blogophonic</a></span> by <a xmlns:cc="http://creativecommons.org/ns#" href="https://formspree.io" property="cc:attributionName" rel="cc:attributionURL">Formspree</a>.
+    </p>
+    
+    <div class="site-social-links db dtc-l v-mid w-100 w-33-l tc pv2 pv0-l mv0">
+      <div class="social-icon-links" aria-hidden="true">
+  
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://github.com/basm92" title="github" target="_blank" rel="noopener">
+      <i class="fab fa-github fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://scholar.google.com/citations?user=bS8uo44AAAAJ" title="google" target="_blank" rel="noopener">
+      <i class="fab fa-google fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://twitter.com/basss92" title="twitter" target="_blank" rel="noopener">
+      <i class="fab fa-twitter fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="mailto:a.h.machielsen@uu.nl" title="envelope" >
+      <i class="fas fa-envelope fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="mailto:basmachielsen@live.nl" title="envelope" >
+      <i class="far fa-envelope fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://orcid.org/0000-0002-9692-0615" title="orcid" target="_blank" rel="noopener">
+      <i class="ai ai-orcid fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="/blog/index.xml" title="rss" >
+      <i class="fas fa-rss fa-lg fa-fw"></i>
+    </a>
+  
+</div>
+
+    </div>
+    
+    <div class="site-links f6 db dtc-l v-mid w-100 w-67-l tc tr-l pv2 pv0-l mv0">
+      
+      <a class="dib pv1 ph2 link" href="/license/" title="License">License</a>
+      
+      <a class="dib pv1 ph2 link" href="/contact/" title="Contact form">Contact</a>
+      
+      <a class="dib pv1 ph2 link" href="/contributors/" title="Contributors">Contributors</a>
+      
+    </div>
+  </nav>
+  
+    <script>
+
+    var i, text, code, codes = document.getElementsByTagName('code');
+    for (let i = 0; i < codes.length;) {
+      code = codes[i];
+      if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+        text = code.textContent;
+        if (/^\$[^$]/.test(text) && /[^$]\$$/.test(text)) {
+          text = text.replace(/^\$/, '\\(').replace(/\$$/, '\\)');
+          code.textContent = text;
+        }
+        if (/^\\\((.|\s)+\\\)$/.test(text) ||
+            /^\\\[(.|\s)+\\\]$/.test(text) ||
+            /^\$(.|\s)+\$$/.test(text) ||
+            /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+          code.outerHTML = code.innerHTML;  
+          continue;
+        }
+      }
+      i++;
+    }
+</script>
+
+  
+    
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.css" integrity="sha384-RZU/ijkSsFbcmivfdRBQDtwuwVqK7GMOw6IMvKyeWL2K5UAlyp6WonmB8m7Jd0Hn" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.js" integrity="sha384-pK1WpvzWVBQiP0/GjnvRxV4mOb0oxFuyRxJlk6vVw146n3egcN5C925NCP7a7BY8" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/contrib/auto-render.min.js" integrity="sha384-vZTG03m+2yp6N6BNi5iM4rW4oIwk5DfcNdFfxkk9ZWpDriOkXX8voJBFrAO7MpVl" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
+
+
+
+    
+  
+  
+</footer>
+
+      </div>
+    </body>
+</html>

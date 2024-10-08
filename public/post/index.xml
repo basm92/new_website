@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts on Bas Machielsen</title>
+    <link>/post/</link>
+    <description>Recent content in Posts on Bas Machielsen</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Mon, 07 Oct 2024 00:00:00 +0000</lastBuildDate><atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Sampling Variation in Linear Regression</title>
+      <link>/post/2024-10-07-sampling-variation-in-linear-regression/</link>
+      <pubDate>Mon, 07 Oct 2024 00:00:00 +0000</pubDate>
+      
+      <guid>/post/2024-10-07-sampling-variation-in-linear-regression/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>What is Sampling Variation?</title>
+      <link>/post/2024-10-07-what-is-sampling-variation/</link>
+      <pubDate>Mon, 07 Oct 2024 00:00:00 +0000</pubDate>
+      
+      <guid>/post/2024-10-07-what-is-sampling-variation/</guid>
+      <description>What is Sampling Variation? Introduction In this blog post, I want to pay attention to the concept of sampling variation. In my econometrics classes, I have often found that students have a hard time wrapping their heads around this concept, especially in the case of regression analysis. Some of the questions I often get range from “why is our estimate of \(\beta\) uncertain, since we have obtained it in a deterministic way from our data sample” to “where do \(t\) statistics come from?</description>
+    </item>
+    
+  </channel>
+</rss>
