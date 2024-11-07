@@ -6,7 +6,17 @@
     <description>Recent content in Course on Bas Machielsen</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Wed, 19 Apr 2023 00:00:00 +0000</lastBuildDate><atom:link href="/categories/course/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 16 Oct 2024 00:00:00 +0000</lastBuildDate><atom:link href="/categories/course/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Introduction to Applied Data Science</title>
+      <link>/project/iads/</link>
+      <pubDate>Wed, 16 Oct 2024 00:00:00 +0000</pubDate>
+      
+      <guid>/project/iads/</guid>
+      <description> Introduction The link above contains the lecture slides for three sessions on the theme &amp;ldquo;Historical Persistence&amp;rdquo; for the Applied Economics Research Course, a 3rd year BSc-level course. The lectures are as follows:
+Lecture 1: Introduction to Data Science &amp;amp; R Lecture 2: Introduction to Programming Lecture 3: Getting Data, API &amp;amp; Databases Lecture 4: Getting Data, Web Scraping Lecture 5: Transforming and Cleaning Data Lecture 6: Spatial and Network Data Lecture 7: Text Data &amp;amp; Text Mining Lecture 8: Applied Data Science Project </description>
+    </item>
+    
     <item>
       <title>Historical Persistence</title>
       <link>/project/hist_pers_2023/</link>

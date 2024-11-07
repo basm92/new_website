@@ -6,7 +6,7 @@
     <description>Recent content on Bas Machielsen</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Tue, 08 Oct 2024 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 16 Oct 2024 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>cbs_hist_downloader</title>
       <link>/collection/cbs_hist_downloader/</link>
@@ -32,6 +32,16 @@
       
       <guid>/collection/hdng/</guid>
       <description>hdng is a package facilitating the use of the HDNG Database, a database containing quantative information in various aspects of Dutch municipalities from about 1800 to the 1980&amp;rsquo;s. This package aids the user in finding their way through the database, allowing them to search for wanted variables, browse within categories, and finally, make a query to extract the wanted data.</description>
+    </item>
+    
+    <item>
+      <title>Introduction to Applied Data Science</title>
+      <link>/project/iads/</link>
+      <pubDate>Wed, 16 Oct 2024 00:00:00 +0000</pubDate>
+      
+      <guid>/project/iads/</guid>
+      <description> Introduction The link above contains the lecture slides for three sessions on the theme &amp;ldquo;Historical Persistence&amp;rdquo; for the Applied Economics Research Course, a 3rd year BSc-level course. The lectures are as follows:
+Lecture 1: Introduction to Data Science &amp;amp; R Lecture 2: Introduction to Programming Lecture 3: Getting Data, API &amp;amp; Databases Lecture 4: Getting Data, Web Scraping Lecture 5: Transforming and Cleaning Data Lecture 6: Spatial and Network Data Lecture 7: Text Data &amp;amp; Text Mining Lecture 8: Applied Data Science Project </description>
     </item>
     
     <item>

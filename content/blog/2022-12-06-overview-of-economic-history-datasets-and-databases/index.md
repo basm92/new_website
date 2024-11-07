@@ -62,6 +62,7 @@ In this post, I'll give an overview and short description of various commonly-us
 44. [Biodiversity](#biodiversity)
 45. [EEA Geospatial Data Catalogue](#eea-geospatial-data-catalogue)
 46. [Cartes Historiques](#cartes-historiques)
+47. [CEPII Trade History Database](https://www.cepii.fr/cepii/en/bdd_modele/bdd_modele_item.asp?id=32)(#cepii-trade-history-database)
 
 ## World Values Survey
 
@@ -362,4 +363,8 @@ An overview of road networks per country:
 ## Cartes Historiques
 
 - [A website](https://cartonumerique.blogspot.com/p/cartes-historiques.html) detailing an overview and redirections to repositories with various historical shapefiles
+
+## CEPII Trade History Database
+
+TRADHIST allows analyzing trade globalization in a long-term historical perspective. It was notably used to estimate the evolution of trade costs over two centuries. 
 

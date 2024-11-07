@@ -12,7 +12,25 @@
     <lastmod>2020-01-01T00:00:00+00:00</lastmod>
   </url><url>
     <loc>/</loc>
-    <lastmod>2024-10-08T00:00:00+00:00</lastmod>
+    <lastmod>2024-10-16T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>/categories/</loc>
+    <lastmod>2024-10-16T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>/categories/course/</loc>
+    <lastmod>2024-10-16T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>/tags/hugo-site/</loc>
+    <lastmod>2024-10-16T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>/project/iads/</loc>
+    <lastmod>2024-10-16T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>/project/</loc>
+    <lastmod>2024-10-16T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>/tags/</loc>
+    <lastmod>2024-10-16T00:00:00+00:00</lastmod>
   </url><url>
     <loc>/blog/</loc>
     <lastmod>2024-10-08T00:00:00+00:00</lastmod>
@@ -35,16 +53,7 @@
     <loc>/articles/</loc>
     <lastmod>2024-02-21T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/categories/</loc>
-    <lastmod>2024-02-21T00:00:00+00:00</lastmod>
-  </url><url>
     <loc>/articles/polrents/</loc>
-    <lastmod>2024-02-21T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>/tags/hugo-site/</loc>
-    <lastmod>2024-02-21T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>/tags/</loc>
     <lastmod>2024-02-21T00:00:00+00:00</lastmod>
   </url><url>
     <loc>/blog/2024-01-04-trends-in-fertility-rates-worldwide-and-in-europe/</loc>
@@ -65,13 +74,7 @@
     <loc>/blog/2023-05-04-inference-with-raster-spatial-data-in-r/</loc>
     <lastmod>2023-05-04T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/categories/course/</loc>
-    <lastmod>2023-04-19T00:00:00+00:00</lastmod>
-  </url><url>
     <loc>/project/hist_pers_2023/</loc>
-    <lastmod>2023-04-19T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>/project/</loc>
     <lastmod>2023-04-19T00:00:00+00:00</lastmod>
   </url><url>
     <loc>/blog/2023-02-27-democracy-and-peace/</loc>
