@@ -6,7 +6,21 @@
     <description>Recent content in Blog on Bas Machielsen</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Tue, 08 Oct 2024 00:00:00 +0000</lastBuildDate><atom:link href="/blog/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 30 Nov 2024 00:00:00 +0000</lastBuildDate><atom:link href="/blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Short Memo About Inverse Probability Weighting</title>
+      <link>/blog/2024-11-30-short-memo-about-inverse-probability-weighting/</link>
+      <pubDate>Sat, 30 Nov 2024 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2024-11-30-short-memo-about-inverse-probability-weighting/</guid>
+      <description>Introduction I want to briefly have on paper the logic behind using inverse probability-weighted estimators of the ATT (average treatment effect on the treated) in a causal inference context.
+Setup Let \(Y(1)\) and \(Y(0)\) denote the potential outcomes under treatment and no treatment, respectively.
+The ATT is defined as:
+$$ ATT=\mathbb{E}[Y(1)−Y(0)∣T=1] $$
+where \(T \in \{0,1\}\) indicates treatment status.
+We assume that conditional on covariates \(X\), the treatment is independent of \(Y(0)\), an assumption known as unconfoundedness.</description>
+    </item>
+    
     <item>
       <title>Sampling Variation in Linear Regression</title>
       <link>/blog/2024-10-07-sampling-variation-in-linear-regression/</link>
