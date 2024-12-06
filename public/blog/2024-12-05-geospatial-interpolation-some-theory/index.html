@@ -46,7 +46,7 @@
   <meta itemprop="name" content="Geospatial Interpolation: Some Theory">
 <meta itemprop="description" content="1. Introduction Hi all, I want to write about geospatial interpolation methods and the underlying math. Potentially, in a follow-up blog post, I&rsquo;ll also discuss example, but in this post, I&rsquo;ll confine myself to some of the theory, introducing concepts like the variogram and the kriging equations: terms which I wasn&rsquo;t familiar with until very recently. So this post serves as a consolidation of my newly obtained knowledge. It can serve as a background to a text such as this."><meta itemprop="datePublished" content="2024-12-05T00:00:00+00:00" />
 <meta itemprop="dateModified" content="2024-12-05T00:00:00+00:00" />
-<meta itemprop="wordCount" content="1497"><meta itemprop="image" content="/blog/2024-12-05-geospatial-interpolation-some-theory/featured.png">
+<meta itemprop="wordCount" content="1498"><meta itemprop="image" content="/blog/2024-12-05-geospatial-interpolation-some-theory/featured.png">
 <meta itemprop="keywords" content="" />
   
   
@@ -251,7 +251,7 @@ $$</p>
 \Gamma = \begin{bmatrix} \gamma (h_{11}) &amp; \gamma (h_{12}) &amp; \dots &amp; \gamma (h_{1n}) \ \newline
 \gamma (h_{21}) &amp; \gamma (h_{22}) &amp; \dots &amp; \gamma (h_{2n}) \ \newline
 \vdots &amp; \vdots &amp; \ddots &amp; \vdots \ \newline
-\gamma (h_{n1}) &amp; \gamma (h_{n2}) &amp; \dots &amp; \gamma h_{nn}
+\gamma (h_{n1}) &amp; \gamma (h_{n2}) &amp; \dots &amp; \gamma (h_{nn})
 \end{bmatrix}
 $$</p>
 <p>Let <code>\(\gamma_*\)</code> be a column vector of variogram values between the observed points and the to be interpolated location:</p>
@@ -277,7 +277,7 @@ $$</p>
 <p>Intuitively, it makes sense that the distance between any point <code>\(s_i\)</code> and a to be interpolated point <code>\(s*\)</code> is a <em>some</em> weighted average of all other distances. Since variograms are a function of distances only, the relationship should also hold for variograms. But a more formal derivation is as follows:</p>
 <p>Since we&rsquo;re minimizing the variance, we have:</p>
 <p>$$
-\text{Var}(e(s∗))=\text{Var}(Z(s∗)) + \sum_{i=1}^N \sum_{j=1}^N \lambda_i \lambda_j \text{Cov}(Z(s_i),Z(s_j)) - 2 \sum_{i=1}^N \lambda_i Cov(Z(s∗),Z(s_i)).
+\text{Var}(e(s∗))=\text{Var}(Z(s∗)) + \sum_{i=1}^N \sum_{j=1}^N \lambda_i \lambda_j \text{Cov}(Z(s_i),Z(s_j)) - 2 \sum_{i=1}^N \lambda_i \text{Cov}(Z(s∗),Z(s_i)).
 $$</p>
 <p>By our stationarity assumptions, we have:</p>
 <ul>
@@ -287,7 +287,7 @@ $$</p>
 </ul>
 <p>Hence, the objective function simplifies, and combined with the constraint that <code>\(\sum_{i=1}^N \lambda_i=1\)</code>, we have the following Lagrangian:</p>
 <p>$$
-\mathcal{L}(\lambda, \mu)=C(0)+ \sum_{i=1}^N \lambda_i \lambda_j C(h_{ij})−2 \sum_{i=1}^N C(h_{i*})+ \mu (1−\sum_{i=1}^n \lambda_i).
+\mathcal{L}(\lambda, \mu)=C(0)+ \sum_{i=1}^N \sum_{j=1}^N \lambda_i \lambda_j C(h_{ij})−2 \sum_{i=1}^N C(h_{i*})+ \mu (1−\sum_{i=1}^n \lambda_i).
 $$</p>
 <p>Differentiating this with respect to an arbitrary <code>\(\lambda_k\)</code> of our choice variables, and simplifying gives:</p>
 <p>$$
@@ -333,7 +333,7 @@ $$</p>
   </dl>
   <dl class="f6 lh-copy">
     <dt class="fw7">Length:</dt>
-    <dd class="fw5 ml0">8 minute read, 1497 words</dd>
+    <dd class="fw5 ml0">8 minute read, 1498 words</dd>
   </dl>
   
   

@@ -133,7 +133,7 @@ $$
 \Gamma = \begin{bmatrix} \gamma (h_{11}) & \gamma (h_{12}) & \dots & \gamma (h_{1n}) \\ \newline
 \gamma (h_{21}) & \gamma (h_{22}) & \dots & \gamma (h_{2n}) \\ \newline
 \vdots & \vdots & \ddots & \vdots \\ \newline
-\gamma (h_{n1}) & \gamma (h_{n2}) & \dots & \gamma h_{nn} 
+\gamma (h_{n1}) & \gamma (h_{n2}) & \dots & \gamma (h_{nn}) 
 \end{bmatrix}
 $$
 
@@ -166,7 +166,7 @@ Intuitively, it makes sense that the distance between any point `\(s_i\)` and a 
 Since we're minimizing the variance, we have:
 
 $$
-\text{Var}(e(s∗))=\text{Var}(Z(s∗)) + \sum_{i=1}^N \sum_{j=1}^N \lambda_i \lambda_j \text{Cov}(Z(s_i),Z(s_j)) - 2 \sum_{i=1}^N \lambda_i Cov(Z(s∗),Z(s_i)).
+\text{Var}(e(s∗))=\text{Var}(Z(s∗)) + \sum_{i=1}^N \sum_{j=1}^N \lambda_i \lambda_j \text{Cov}(Z(s_i),Z(s_j)) - 2 \sum_{i=1}^N \lambda_i \text{Cov}(Z(s∗),Z(s_i)).
 $$
 
 By our stationarity assumptions, we have:
@@ -178,7 +178,7 @@ By our stationarity assumptions, we have:
 Hence, the objective function simplifies, and combined with the constraint that `\(\sum_{i=1}^N \lambda_i=1\)`, we have the following Lagrangian:
 
 $$
-\mathcal{L}(\lambda, \mu)=C(0)+ \sum_{i=1}^N \lambda_i \lambda_j C(h_{ij})−2 \sum_{i=1}^N C(h_{i*})+ \mu (1−\sum_{i=1}^n \lambda_i). 
+\mathcal{L}(\lambda, \mu)=C(0)+ \sum_{i=1}^N \sum_{j=1}^N \lambda_i \lambda_j C(h_{ij})−2 \sum_{i=1}^N C(h_{i*})+ \mu (1−\sum_{i=1}^n \lambda_i). 
 $$
 
 
