@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr"><head>
+  
+                           
+     
+
+
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="generator" content="Hugo 0.101.0" />
+<title>Geospatial Interpolation: Some Theory | Bas Machielsen</title>
+
+
+<meta property="twitter:site" content="@basss92">
+<meta property="twitter:creator" content="@basss92">
+
+
+
+
+
+
+
+  
+    
+  
+<meta name="description" content="Some theory about geospatial interpolation methods">
+
+
+<meta property="og:site_name" content="Bas Machielsen">
+<meta property="og:title" content="Geospatial Interpolation: Some Theory | Bas Machielsen">
+<meta property="og:description" content="Some theory about geospatial interpolation methods" />
+<meta property="og:type" content="page" />
+<meta property="og:url" content="/blog/2024-12-05-geospatial-interpolation-some-theory/" />
+<meta property="og:locale" content="en">
+
+
+
+
+    
+        <meta property="og:image" content="/blog/2024-12-05-geospatial-interpolation-some-theory/featured.png" >
+        <meta property="twitter:card" content="summary_large_image">
+        <meta name="twitter:image" content="/blog/2024-12-05-geospatial-interpolation-some-theory/featured.png" >
+    
+    
+  <meta itemprop="name" content="Geospatial Interpolation: Some Theory">
+<meta itemprop="description" content="1. Introduction Hi all, I want to write about geospatial interpolation methods and the underlying math. Potentially, in a follow-up blog post, I&rsquo;ll also discuss example, but in this post, I&rsquo;ll confine myself to some of the theory, introducing concepts like the variogram and the kriging equations: terms which I wasn&rsquo;t familiar with until very recently. So this post serves as a consolidation of my newly obtained knowledge. It can serve as a background to a text such as this."><meta itemprop="datePublished" content="2024-12-05T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2024-12-05T00:00:00+00:00" />
+<meta itemprop="wordCount" content="1497"><meta itemprop="image" content="/blog/2024-12-05-geospatial-interpolation-some-theory/featured.png">
+<meta itemprop="keywords" content="" />
+  
+  
+  <!--[if IE]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  <link rel="shortcut icon" href="favicon_new.ico" type="image/x-icon">
+  <link rel="icon" href="favicon_new.ico" type="image/x-icon">
+  
+  
+  <link rel="stylesheet" href="/style.main.min.555ba9f33efffeb97887b561cc674ae6e47dfbe93583e9f789fc69722e60a59e.css" integrity="sha256-VVup8z7//rl4h7VhzGdK5uR9&#43;&#43;k1g&#43;n3ifxpci5gpZ4=" media="screen">
+  
+  
+  <script src="/panelset.min.dca42702d7daf6fd31dc352efd2bcf0e4ac8c05ccaa58d9293f6177462de5d5f.js" type="text/javascript"></script>
+  
+  
+  <script src="/main.min.d7e4e8181380eb79c579f1573ca10b3aeb727c619c43ff775fec0b0d1624b24d.js" type="text/javascript"></script>
+</head>
+<body>
+      <div class="grid-container">
+<header class="site-header pt4 pb2 mb4 bb b--transparent ph5 headroom z-max" role="banner">
+  <nav class="site-nav db dt-l w-100" role="navigation">
+    <a class="site-brand db dtc-l v-mid link no-underline w-100 w-33-l tc tl-l" href="/" title="Home">
+      <img src="/website_logo.png" class="dib db-l h2 w-auto" alt="Bas Machielsen">
+    </a>
+    <div class="site-links db dtc-l v-mid w-100 w-47-l tc tr-l mt3 mt0-l ttu tracked">
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/" title="Home">Home</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/about/" title="About">About</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 active" href="/blog/" title="Blog">Blog</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/project/" title="Teaching Overview &amp; Repository">Teaching</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/resume/" title="Resume">Resume</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/articles/" title="Articles">Articles</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/collection/" title="Software">Software</a>
+      
+      
+    </div>
+  </nav>
+</header>
+
+<main class="page-main pa4" role="main">
+  <section class="page-content mw7 center">
+    <article class="post-content pa0 ph4-l">
+      <header class="post-header">
+        <h1 class="f1 lh-solid measure-narrow mb3 fw4">Geospatial Interpolation: Some Theory</h1>
+        
+        <p class="f6 measure lh-copy mv1">By Bas Machielsen</p>
+        <p class="f7 db mv0 ttu">December 5, 2024</p>
+
+      
+
+      </header>
+      <section class="post-body pt5 pb4">
+        
+
+
+
+<h3 id="1-introduction">1. Introduction
+  <a href="#1-introduction"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h3>
+<p>Hi all, I want to write about geospatial interpolation methods and the underlying math. Potentially, in a follow-up blog post, I&rsquo;ll also discuss example, but in this post, I&rsquo;ll confine myself to some of the theory, introducing concepts like the <em>variogram</em> and the <em>kriging</em> equations: terms which I wasn&rsquo;t familiar with until very recently. So this post serves as a consolidation of my newly obtained knowledge. It can serve as a background to a text such as 
+<a href="https://r-spatial.org/book/12-Interpolation.html" target="_blank" rel="noopener">this</a>.</p>
+
+
+
+
+<h3 id="2-what-is-spatial-interpolation">2. What is Spatial Interpolation?
+  <a href="#2-what-is-spatial-interpolation"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h3>
+<p>Spatial interpolation is evaluating/prediction a particular value <code>\(Z\)</code> at a point <code>\(s\)</code>, denoted <code>\(Z(s)\)</code> on the basis of observed data points <code>\(s_i\)</code>. As a motivating example, and potentially the simplest form of spatial interpolation, we can give the following:</p>
+<p>$$
+Z(s) = \frac{\sum_{i=1}^N w_i Z(s_i)}{\sum_{i=1}^N w_i}
+$$</p>
+<p>with <code>\( w_i = | s - s_i |^{-p}\)</code> and usually, the &ldquo;inverse distance power&rdquo; <code>\(p\)</code> equal to two, or potentially with optimized weights using cross validation. We should think of <code>\(s\)</code> as being pixels in a raster data set, for which we have available observable points <code>\(s_i\)</code>, which we want to extrapolate to all other points, one such point being denoted as <code>\(s\)</code>. This is also the notation that I follow in the remainder of this post: <code>\(s\)</code> is an arbitrary pixel we want to extrapolate for.</p>
+
+
+
+
+<h3 id="3-spatial-covariance-and-the-variogram">3. Spatial Covariance and the Variogram
+  <a href="#3-spatial-covariance-and-the-variogram"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h3>
+<p>The main method (as far as I get) used to interpolate geospatially is not the preceding method, even though it can be used, sometimes with good results. However, the main method starts with a stationary model such as this:</p>
+<p>$$
+Z(s) = m + e(s)
+$$</p>
+<p>where <code>\(m\)</code> is the mean of the value <code>\(Z\)</code>, and <code>\(e(s)\)</code> is a mean-zero error term. One object of interest here is the covariance of the error term <code>\(e(s)\)</code>. I referred to the model above as stationary exactly because of the structure imposed on this covariance matrix. In the standard model, it looks like this. For <code>\(n\)</code> observed locations <code>\(s_1, \dots, s_n\)</code>, the spatial covariance matrix <code>\(C\)</code> is an <code>\(n \times n\)</code> matrix where each element represents the covariance between <code>\(e(s_i)\)</code> and <code>\(e(s_j)\)</code>:</p>
+<p>$$
+\mathbf{C} = \begin{bmatrix}
+C(0) &amp; C(h_{12}) &amp; \dots &amp; C(h_{1n}) \ \newline
+C(h_{21}) &amp; C(0) &amp; \dots &amp; C(h_{2n}) \ \newline
+\vdots &amp; \vdots &amp; \ddots &amp; \vdots \ \newline
+C(h_{n1}) &amp; C(h_{n2}) &amp; \dots &amp; C(0)
+\end{bmatrix}
+$$</p>
+<p>where <code>\(h_{ij} = ||s_i - s_j||\)</code> is the distance between locations <code>\(s_i\)</code> and <code>\(s_j\)</code>. Implicit in this matrix, there is a <strong>covariance function</strong> <code>\(C(h)\)</code>, which defines the covariance between two observations squarely as a function of distance between them <code>\(h\)</code>.</p>
+<p>The covariance function <code>\(C(h)\)</code>, with <code>\(h\)</code> being the distance between an arbitrary point <code>\(s\)</code> and point <code>\(s+h\)</code>, is defined as:</p>
+<p>$$
+C(h)=\text{Cov}(e(s),e(s+h))=E[e(s)e(s+h)]−E[e(s)]E[e(s+h)]
+$$</p>
+<p>Since we have imposed that <code>\(E(e(s))=0\)</code>, this simplifies to:</p>
+<p>$$
+C(h)=E[e(s)e(s+h)].
+$$</p>
+<p>Note also that <code>\(C(0)\)</code> represents the variance of <code>\(e(s)\)</code>. The <strong>variogram</strong> is a relationship that reflects the difference between <code>\(C(h)\)</code> and <code>\(C(0)\)</code>. The variogram is defined as:</p>
+<p>$$
+\gamma (h)=\frac{1}{2} \mathbb{E}[(e(s)−e(s+h))^2]
+$$</p>
+<p>Essentially, the variogram can be thought of as a continuous function in <code>\(h\)</code> that aligns with these sample covariances. The variogram <code>\(\gamma (h)\)</code> and covariance <code>\(\mathbf{C}(h)\)</code> are mathematically related as:</p>
+<p>$$
+\gamma(h)=C(0)−C(h).
+$$</p>
+<p>To see that, expand the square in the definition of the variogram:</p>
+<p>$$
+\gamma (h)=\frac{1}{2}(E[e(s)^2]−2E[e(s)e(s+h)]+E[e(s+h)^2]).
+$$</p>
+<p>Under stationarity, the random field e(s)e(s) has:</p>
+<ul>
+<li>Constant variance:</li>
+</ul>
+<p>$$
+E[e(s)^2]=E[e(s+h)^2]=C(0),
+$$</p>
+<ul>
+<li>A covariance function depending only on the distance <code>\(h\)</code>, not on <code>\(s\)</code>:</li>
+</ul>
+<p>$$
+E[e(s)e(s+h)]=C(h).
+$$</p>
+<p>Hence <code>\(\gamma (h) = \frac{1}{2} (C(0) - 2 C(h) + C(0)) = C(0) - C(h)\)</code>.</p>
+<p>The variogram is a theoretical construct, but can also be estimated, for example, as follows. Let <code>\(h_i\)</code> be a distance interval from <code>\(h_{i0}\)</code> to <code>\(h_{i1}\)</code>:</p>
+<p>$$
+\hat{\gamma}(h) = \frac{1}{2N(h_i)} \sum_{j=1}^{N(h_i)} (z(s_i) - z(s_i + h&rsquo;))^2 \text{ for } h_{i0} &lt; h&rsquo; &lt; h_{i1}.
+$$
+<code>\(N(h_i)\)</code> is the number of observations (sample pairs) available for distance interval <code>\(h_i\)</code>.</p>
+<p>Why do we need the variogram? The variogram allows you to estimate the covariance matrix <code>\(C(h)\)</code> in an easy and convenient way, by fitting a curve to the sample variogram. Additionally, it turns out that when spatial interpolating using a method called <strong>kriging</strong>, the form used in the variogram turns out to be convenient, as we will see.</p>
+
+
+
+
+<h3 id="4-the-kriging-system-setup">4. The Kriging System Setup
+  <a href="#4-the-kriging-system-setup"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h3>
+<p>We aim to predict <code>\(Z(s)\)</code> as a weighted sum of the observed values <code>\(Z(s_i)\)</code>:</p>
+<p>$$
+Z (s) = \sum_{i=1}^n \lambda_i Z (s_i)
+$$</p>
+<p>while ensuring two things:</p>
+<ul>
+<li>The prediction is unbiased, meaning <code>\(E[Z(s)]=E[Z(s_i)]\)</code>.</li>
+<li>The prediction minimizes the variance of the error.</li>
+</ul>
+<p>The unbiasedness condition requires that the weights sum to 1, <code>\(\sum_{i=1}^N \lambda_i = 1\)</code>.</p>
+<p>To minimize the prediction error variance, we use the spatial correlation structure encoded by the variogram. For each to be interpolated observation <code>\(Z(s)\)</code>, the kriging weights <code>\(\lambda_i\)</code> are chosen such that the variance of the prediction error:</p>
+<p>$$
+\text{Var}\left(Z(s) - \sum_{i=1}^N \lambda_iZ(s_i)\right)
+$$</p>
+<p>is minimized.</p>
+<p>That leads to the so-called <strong>kriging system</strong>, providing a solution for the weights <code>\(\lambda_i\)</code>. I&rsquo;ll first state this system of equations, then explain where it comes from. For each <strong>observed point</strong> <code>\(s_i\)</code>, the kriging system requires the following relationship to hold between that observed point <code>\(s_i\)</code>, the variogram value corresponding to the distance of that observed point with all other observed points, and the distance between the observed point <code>\(s_i\)</code> and the to be interpolated point <code>\(s*\)</code>:</p>
+<p>$$
+\sum_{j=1}^N \lambda_j \gamma (h_{ij}) + \mu = \gamma (h_{i*})
+$$</p>
+<p>where <code>\(\gamma (h_{ij})\)</code> are the variogram value for the distance between <code>\(s_i\)</code> and <code>\(s_j\)</code>, <code>\(\gamma (h_{i*})\)</code> is the variogram value for the distance between <code>\(s_i\)</code> and the predicted location <code>\(s*\)</code>, and <code>\(\mu\)</code> is a Lagrange multiplier enforcing the constraint <code>\(\sum_{j=1}^N \lambda_j = 1\)</code>. The constraint <code>\(\sum_{j=1}^N \lambda_j = 1\)</code> is the second component of the kriging system. Since this relationship holds for all observed points <code>\(s_i\)</code>, we can rewrite this using linear algebra. But mind that this is a <em>separate</em> system for each to be interpolated point <code>\(s*\)</code>:</p>
+<p>Let <code>\(\Gamma\)</code> be a matrix with the variogram values between all observed points:</p>
+<p>$$
+\Gamma = \begin{bmatrix} \gamma (h_{11}) &amp; \gamma (h_{12}) &amp; \dots &amp; \gamma (h_{1n}) \ \newline
+\gamma (h_{21}) &amp; \gamma (h_{22}) &amp; \dots &amp; \gamma (h_{2n}) \ \newline
+\vdots &amp; \vdots &amp; \ddots &amp; \vdots \ \newline
+\gamma (h_{n1}) &amp; \gamma (h_{n2}) &amp; \dots &amp; \gamma h_{nn}
+\end{bmatrix}
+$$</p>
+<p>Let <code>\(\gamma_*\)</code> be a column vector of variogram values between the observed points and the to be interpolated location:</p>
+<p>$$
+\gamma_* = \begin{bmatrix}
+\gamma (h_{1*}) \ \newline
+\gamma (h_{2*}) \ \newline
+\vdots \ \newline
+\gamma (h_{n*})
+\end{bmatrix}
+$$</p>
+<p>Let <code>\(\lambda\)</code> be a column vector of <code>\(n\)</code> weights, and <code>\(v\)</code> be a row vector of <code>\(n\)</code> ones. The <strong>kriging</strong> system is then expressed as:</p>
+<p>$$
+\begin{bmatrix}
+\Gamma &amp; v^T \ \newline
+v &amp; 0
+\end{bmatrix} \begin{bmatrix}
+\lambda \ \newline
+\mu \end{bmatrix} =
+\begin{bmatrix} \gamma_* \ \newline
+1 \end{bmatrix}
+$$</p>
+<p>Intuitively, it makes sense that the distance between any point <code>\(s_i\)</code> and a to be interpolated point <code>\(s*\)</code> is a <em>some</em> weighted average of all other distances. Since variograms are a function of distances only, the relationship should also hold for variograms. But a more formal derivation is as follows:</p>
+<p>Since we&rsquo;re minimizing the variance, we have:</p>
+<p>$$
+\text{Var}(e(s∗))=\text{Var}(Z(s∗)) + \sum_{i=1}^N \sum_{j=1}^N \lambda_i \lambda_j \text{Cov}(Z(s_i),Z(s_j)) - 2 \sum_{i=1}^N \lambda_i Cov(Z(s∗),Z(s_i)).
+$$</p>
+<p>By our stationarity assumptions, we have:</p>
+<ul>
+<li><code>\(\text{Var}(Z(s_∗))=C(0)\)</code>,</li>
+<li><code>\(\text{Cov}(Z(s_∗),Z(s_i))=C(h_{i∗})\)</code></li>
+<li><code>\(\text{Cov}(Z(s_i),Z(s_j))=C(h_{ij})\)</code></li>
+</ul>
+<p>Hence, the objective function simplifies, and combined with the constraint that <code>\(\sum_{i=1}^N \lambda_i=1\)</code>, we have the following Lagrangian:</p>
+<p>$$
+\mathcal{L}(\lambda, \mu)=C(0)+ \sum_{i=1}^N \lambda_i \lambda_j C(h_{ij})−2 \sum_{i=1}^N C(h_{i*})+ \mu (1−\sum_{i=1}^n \lambda_i).
+$$</p>
+<p>Differentiating this with respect to an arbitrary <code>\(\lambda_k\)</code> of our choice variables, and simplifying gives:</p>
+<p>$$
+\sum_{j=1}^n \lambda_j C(h_{kj})−C(h_{k∗})−\frac{\mu}{2}=0
+$$</p>
+<p>whereas differentiating with respect to the Lagrange multiplier <code>\(\mu\)</code> just gives us back our constraint. Normalizing the Lagrange multiplier, and writing these <code>\(n\)</code> equations in a system from combined with the constraint gives us the matrix formulation as seen above. Since all of these things are observed, we can simply solve the kriging system for <code>\((\lambda, \mu)\)</code> and find our weights <code>\(\lambda\)</code>.</p>
+
+
+
+
+<h3 id="5-extensions">5. Extensions
+  <a href="#5-extensions"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h3>
+<p>If you have other variables at your disposal for the <em>entire grid</em>, that is, including the points you want to interpolate, you could potentially extend the model with covariates:</p>
+<p>$$
+Z(s) = \sum_{j=0}^p \beta_j X_j (s) + e(s)
+$$</p>
+<p>In this case, the strategy boils down to modeling the conditional spatial covariance. Similarly, we can potentially extend the covariance structure by allowing spatial covariance to be a function of time:</p>
+<p>$$
+Z(s, t) = \mu + e(s, t)
+$$</p>
+<p>This boils down to estimating a separate variogram for each discrete time point <code>\(t\)</code>, and solving the kriging system using that particular variogram.</p>
+
+
+
+
+<h3 id="6-conclusion">6. Conclusion
+  <a href="#6-conclusion"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h3>
+<p>I have attempted to underpin basic geospatial interpolation models and explain the logic on which they&rsquo;re based. I hope this was useful as a more mathematical underpinning of methods that seem arbitrary at first sight. If you have any recommendations or good texts on this subject that might be interesting, make sure to let me know. Thanks for reading!</p>
+
+        
+        <details closed class="f6 fw7 input-reset">
+  <dl class="f6 lh-copy">
+    <dt class="fw7">Posted on:</dt>
+    <dd class="fw5 ml0">December 5, 2024</dd>
+  </dl>
+  <dl class="f6 lh-copy">
+    <dt class="fw7">Length:</dt>
+    <dd class="fw5 ml0">8 minute read, 1497 words</dd>
+  </dl>
+  
+  
+  
+  <dl class="f6 lh-copy">
+    <dt class="fw7">See Also:</dt>
+    
+  </dl>
+</details>
+
+      </section>
+      <footer class="post-footer">
+        <div class="post-pagination dt w-100 mt4 mb2">
+  
+  
+  
+  
+    <a class="next dtc pl2 tr v-top fw6"
+    href="/blog/2024-11-30-short-memo-about-inverse-probability-weighting/">Short Memo About Inverse Probability Weighting &rarr;</a>
+  
+</div>
+
+      </footer>
+    </article>
+    
+      
+<div class="post-comments pa0 pa4-l mt4">
+  
+  <script src="https://utteranc.es/client.js"
+          repo="basm92/new_website"
+          issue-term="pathname"
+          theme="boxy-light"
+          label="comments :crystal_ball:"
+          crossorigin="anonymous"
+          async
+          type="text/javascript">
+  </script>
+  
+</div>
+
+    
+  </section>
+</main>
+<footer class="site-footer pv4 bt b--transparent ph5" role="contentinfo">
+  <nav class="db dt-l w-100">
+    <p class="site-copyright f7 db dtc-l v-mid w-100 w-33-l tc tl-l pv2 pv0-l mv0 lh-copy">
+      &copy; 2024 Bas Machielsen
+      <span class="middot-divider"></span>
+      Made with <span xmlns:dct="http://purl.org/dc/terms/" property="dct:title"><a xmlns:dct="http://purl.org/dc/terms/" href="https://github.com/hugo-apero/" rel="dct:source">Hugo Apéro</a></span>.
+      <br />
+      
+Based on <span xmlns:dct="http://purl.org/dc/terms/" property="dct:title"><a xmlns:dct="http://purl.org/dc/terms/" href="https://github.com/formspree/blogophonic-hugo" rel="dct:source">Blogophonic</a></span> by <a xmlns:cc="http://creativecommons.org/ns#" href="https://formspree.io" property="cc:attributionName" rel="cc:attributionURL">Formspree</a>.
+    </p>
+    
+    <div class="site-social-links db dtc-l v-mid w-100 w-33-l tc pv2 pv0-l mv0">
+      <div class="social-icon-links" aria-hidden="true">
+  
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://github.com/basm92" title="github" target="_blank" rel="noopener">
+      <i class="fab fa-github fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://scholar.google.com/citations?user=bS8uo44AAAAJ" title="google" target="_blank" rel="noopener">
+      <i class="fab fa-google fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://twitter.com/basss92" title="twitter" target="_blank" rel="noopener">
+      <i class="fab fa-twitter fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="mailto:a.h.machielsen@uu.nl" title="envelope" >
+      <i class="fas fa-envelope fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="mailto:basmachielsen@live.nl" title="envelope" >
+      <i class="far fa-envelope fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://orcid.org/0000-0002-9692-0615" title="orcid" target="_blank" rel="noopener">
+      <i class="ai ai-orcid fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="/blog/index.xml" title="rss" >
+      <i class="fas fa-rss fa-lg fa-fw"></i>
+    </a>
+  
+</div>
+
+    </div>
+    
+    <div class="site-links f6 db dtc-l v-mid w-100 w-67-l tc tr-l pv2 pv0-l mv0">
+      
+      <a class="dib pv1 ph2 link" href="/license/" title="License">License</a>
+      
+      <a class="dib pv1 ph2 link" href="/contact/" title="Contact form">Contact</a>
+      
+      <a class="dib pv1 ph2 link" href="/contributors/" title="Contributors">Contributors</a>
+      
+    </div>
+  </nav>
+  
+    <script>
+
+    var i, text, code, codes = document.getElementsByTagName('code');
+    for (let i = 0; i < codes.length;) {
+      code = codes[i];
+      if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+        text = code.textContent;
+        if (/^\$[^$]/.test(text) && /[^$]\$$/.test(text)) {
+          text = text.replace(/^\$/, '\\(').replace(/\$$/, '\\)');
+          code.textContent = text;
+        }
+        if (/^\\\((.|\s)+\\\)$/.test(text) ||
+            /^\\\[(.|\s)+\\\]$/.test(text) ||
+            /^\$(.|\s)+\$$/.test(text) ||
+            /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+          code.outerHTML = code.innerHTML;  
+          continue;
+        }
+      }
+      i++;
+    }
+</script>
+
+  
+    
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.css" integrity="sha384-RZU/ijkSsFbcmivfdRBQDtwuwVqK7GMOw6IMvKyeWL2K5UAlyp6WonmB8m7Jd0Hn" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.js" integrity="sha384-pK1WpvzWVBQiP0/GjnvRxV4mOb0oxFuyRxJlk6vVw146n3egcN5C925NCP7a7BY8" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/contrib/auto-render.min.js" integrity="sha384-vZTG03m+2yp6N6BNi5iM4rW4oIwk5DfcNdFfxkk9ZWpDriOkXX8voJBFrAO7MpVl" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
+
+
+
+    
+  
+  
+</footer>
+
+      </div>
+    </body>
+</html>

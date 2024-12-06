@@ -6,7 +6,7 @@
     <description>Recent content on Bas Machielsen</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sat, 30 Nov 2024 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 05 Dec 2024 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>cbs_hist_downloader</title>
       <link>/collection/cbs_hist_downloader/</link>
@@ -32,6 +32,15 @@
       
       <guid>/collection/hdng/</guid>
       <description>hdng is a package facilitating the use of the HDNG Database, a database containing quantative information in various aspects of Dutch municipalities from about 1800 to the 1980&amp;rsquo;s. This package aids the user in finding their way through the database, allowing them to search for wanted variables, browse within categories, and finally, make a query to extract the wanted data.</description>
+    </item>
+    
+    <item>
+      <title>Geospatial Interpolation: Some Theory</title>
+      <link>/blog/2024-12-05-geospatial-interpolation-some-theory/</link>
+      <pubDate>Thu, 05 Dec 2024 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2024-12-05-geospatial-interpolation-some-theory/</guid>
+      <description>1. Introduction Hi all, I want to write about geospatial interpolation methods and the underlying math. Potentially, in a follow-up blog post, I&amp;rsquo;ll also discuss example, but in this post, I&amp;rsquo;ll confine myself to some of the theory, introducing concepts like the variogram and the kriging equations: terms which I wasn&amp;rsquo;t familiar with until very recently. So this post serves as a consolidation of my newly obtained knowledge. It can serve as a background to a text such as this.</description>
     </item>
     
     <item>

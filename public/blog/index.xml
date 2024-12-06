@@ -6,7 +6,16 @@
     <description>Recent content in Blog on Bas Machielsen</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sat, 30 Nov 2024 00:00:00 +0000</lastBuildDate><atom:link href="/blog/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 05 Dec 2024 00:00:00 +0000</lastBuildDate><atom:link href="/blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Geospatial Interpolation: Some Theory</title>
+      <link>/blog/2024-12-05-geospatial-interpolation-some-theory/</link>
+      <pubDate>Thu, 05 Dec 2024 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2024-12-05-geospatial-interpolation-some-theory/</guid>
+      <description>1. Introduction Hi all, I want to write about geospatial interpolation methods and the underlying math. Potentially, in a follow-up blog post, I&amp;rsquo;ll also discuss example, but in this post, I&amp;rsquo;ll confine myself to some of the theory, introducing concepts like the variogram and the kriging equations: terms which I wasn&amp;rsquo;t familiar with until very recently. So this post serves as a consolidation of my newly obtained knowledge. It can serve as a background to a text such as this.</description>
+    </item>
+    
     <item>
       <title>Short Memo About Inverse Probability Weighting</title>
       <link>/blog/2024-11-30-short-memo-about-inverse-probability-weighting/</link>
