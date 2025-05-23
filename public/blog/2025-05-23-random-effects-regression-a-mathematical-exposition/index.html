@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr"><head>
+  
+                           
+     
+
+
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="generator" content="Hugo 0.101.0" />
+<title>Random Effects Regression: A Mathematical Exposition | Bas Machielsen</title>
+
+
+<meta property="twitter:site" content="@basss92">
+<meta property="twitter:creator" content="@basss92">
+
+
+
+
+
+
+
+  
+    
+  
+<meta name="description" content="A post on random effects regression, comparing it to OLS and FE.">
+
+
+<meta property="og:site_name" content="Bas Machielsen">
+<meta property="og:title" content="Random Effects Regression: A Mathematical Exposition | Bas Machielsen">
+<meta property="og:description" content="A post on random effects regression, comparing it to OLS and FE." />
+<meta property="og:type" content="page" />
+<meta property="og:url" content="/blog/2025-05-23-random-effects-regression-a-mathematical-exposition/" />
+<meta property="og:locale" content="en">
+
+
+
+
+    
+        <meta property="og:image" content="/blog/sidebar-listing.png" >
+        <meta property="twitter:card" content="summary_large_image">
+        <meta name="twitter:image" content="/blog/sidebar-listing.png" >
+    
+    
+  <meta itemprop="name" content="Random Effects Regression: A Mathematical Exposition">
+<meta itemprop="description" content="Introduction Hi all, I wanted to write a short primer on random effects regression, since I&rsquo;m working on this for a course I&rsquo;m teaching, and I think the exposition in most textbooks isn&rsquo;t that clear. To improve this, I present a mathematical derivation of the random effects model here. I should note that I&rsquo;m not a fan of the random effects model at all. I think it should be seen as a curiosity rather than a solution in many cases."><meta itemprop="datePublished" content="2025-05-23T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2025-05-23T00:00:00+00:00" />
+<meta itemprop="wordCount" content="1059">
+<meta itemprop="keywords" content="" />
+  
+  
+  <!--[if IE]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  <link rel="shortcut icon" href="favicon_new.ico" type="image/x-icon">
+  <link rel="icon" href="favicon_new.ico" type="image/x-icon">
+  
+  
+  <link rel="stylesheet" href="/style.main.min.555ba9f33efffeb97887b561cc674ae6e47dfbe93583e9f789fc69722e60a59e.css" integrity="sha256-VVup8z7//rl4h7VhzGdK5uR9&#43;&#43;k1g&#43;n3ifxpci5gpZ4=" media="screen">
+  
+  
+  <script src="/panelset.min.dca42702d7daf6fd31dc352efd2bcf0e4ac8c05ccaa58d9293f6177462de5d5f.js" type="text/javascript"></script>
+  
+  
+  <script src="/main.min.11d2df4163a7df9fb9d31f699461f02d84700b160cd42fa951b0982fc4d468bc.js" type="text/javascript"></script>
+</head>
+<body>
+      <div class="grid-container">
+<header class="site-header pt4 pb2 mb4 bb b--transparent ph5 headroom z-max" role="banner">
+  <nav class="site-nav db dt-l w-100" role="navigation">
+    <a class="site-brand db dtc-l v-mid link no-underline w-100 w-33-l tc tl-l" href="/" title="Home">
+      <img src="/website_logo.png" class="dib db-l h2 w-auto" alt="Bas Machielsen">
+    </a>
+    <div class="site-links db dtc-l v-mid w-100 w-47-l tc tr-l mt3 mt0-l ttu tracked">
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/" title="Home">Home</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/about/" title="About">About</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 active" href="/blog/" title="Blog">Blog</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/project/" title="Teaching Overview &amp; Repository">Teaching</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/resume/" title="Resume">Resume</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/articles/" title="Articles">Articles</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/collection/" title="Software">Software</a>
+      
+      
+    </div>
+  </nav>
+</header>
+
+<main class="page-main pa4" role="main">
+  <section class="page-content mw7 center">
+    <article class="post-content pa0 ph4-l">
+      <header class="post-header">
+        <h1 class="f1 lh-solid measure-narrow mb3 fw4">Random Effects Regression: A Mathematical Exposition</h1>
+        
+        <p class="f6 measure lh-copy mv1">By Bas Machielsen</p>
+        <p class="f7 db mv0 ttu">May 23, 2025</p>
+
+      
+
+      </header>
+      <section class="post-body pt5 pb4">
+        
+
+
+
+<h2 id="introduction">Introduction
+  <a href="#introduction"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>Hi all, I wanted to write a short primer on random effects regression, since I&rsquo;m working on this for a course I&rsquo;m teaching,
+and I think the exposition in most textbooks isn&rsquo;t that clear.
+To improve this, I present a mathematical derivation of the random effects model here.
+I should note that I&rsquo;m not a fan of the random effects model <em>at all</em>. I think it should be seen as a curiosity rather than a solution in many cases.
+However, for didactical purposes, it makes sense to analyze the random effects model and observe it is a weighted average of OLS and FE models.</p>
+
+
+
+
+<h2 id="set-up">Set-up
+  <a href="#set-up"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>Imagine you have data for N individuals (or firms, countries, etc.), denoted by i = 1, &hellip;, N, observed over T time periods, denoted by t = 1, &hellip;, T. (For simplicity, we&rsquo;ll assume a balanced panel, meaning each individual is observed for all T periods, though RE can handle unbalanced panels.)</p>
+<p>A generic linear model for such data could be:</p>
+<p>$$
+y_{it} = \beta_0 + \beta_1 x_{1it} + \beta_2 x_{2it} + \dots + \beta_k x_{kit} + v_{it}
+$$</p>
+<p>Where:</p>
+<ul>
+<li>
+<p>\(y_{it}\) is the dependent variable for individual i at time t.</p>
+</li>
+<li>
+<p>\(x_{jit}\) is the j-th independent variable for individual i at time t.</p>
+</li>
+<li>
+<p>\(\beta_0\) is the overall intercept.</p>
+</li>
+<li>
+<p>\(\beta_1, \dots, \beta_k\) are the coefficients for the independent variables.</p>
+</li>
+<li>
+<p>\(v_{it}\) is the error term for individual i at time t.</p>
+</li>
+</ul>
+<p>The problem is that \(v_{it}\) likely contains unobserved individual-specific characteristics that are constant over time
+(e.g., innate ability, firm culture) and also purely random noise.</p>
+
+
+
+
+<h2 id="the-random-effects-model">The Random Effects Model
+  <a href="#the-random-effects-model"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>The random effects model explicitly decomposes the error term v_it into two components:</p>
+<p>$$v_{it} = u_{i} + \epsilon_{it}$$</p>
+<p>So, the model becomes:</p>
+<p>$$
+y_it = β_0 + β_1<em>x_1it + &hellip; + β_k</em>x_kit + u_i + ε_it
+$$</p>
+<p>We can also write the model by combining \(\beta_0\) and \(u_i\) into an individual-specific intercept:</p>
+<p>$$
+y_it = (β_0 + u_i) + β_1<em>x_1it + &hellip; + β_k</em>x_kit + ε_it
+$$</p>
+<p>Here, \(\alpha_i = \beta_0 + u_i\) is the random intercept for individual $i$.</p>
+
+
+
+
+<h2 id="assumptions">Assumptions
+  <a href="#assumptions"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>We assume the following things about \(u_i\), \(\epsilon_{it}\) and their relationship:</p>
+<p>Random Effect \(u_i\):</p>
+<ul>
+<li>
+<p>E[u_i] = 0 (The mean of the individual effects is zero; any non-zero mean is absorbed into β_0).</p>
+</li>
+<li>
+<p>Var(u_i) = σ_u² (The variance of the individual effects is constant).</p>
+</li>
+<li>
+<p>Cov(u_i, u_j) = 0 for i ≠ j (Individual effects are uncorrelated across individuals).</p>
+</li>
+</ul>
+<p>Idiosyncratic Error \(\epsilon_{it}\):</p>
+<ul>
+<li>
+<p>E[ε_it] = 0.</p>
+</li>
+<li>
+<p>Var(ε_it) = σ_ε² (The variance of the idiosyncratic errors is constant – homoscedasticity).</p>
+</li>
+<li>
+<p>Cov(ε_it, ε_is) = 0 for \(t \neq s\) (No serial correlation in idiosyncratic errors for a given individual, after accounting for u_i).</p>
+</li>
+<li>
+<p>Cov(ε_it, ε_js) = 0 for \(i \neq j\) (Idiosyncratic errors are uncorrelated across individuals).</p>
+</li>
+</ul>
+<p>No correlation between u_i and ε_it:</p>
+<ul>
+<li>Cov(u_i, ε_jt) = 0 for all \(i, j, t\). The individual random effects are uncorrelated with the idiosyncratic errors.</li>
+</ul>
+
+
+
+
+<h2 id="the-structure-of-the-composite-error-term">The Structure of the Composite Error Term
+  <a href="#the-structure-of-the-composite-error-term"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>The composite error term is \(v_{it} = u_i + \epsilon_{it}\). Let&rsquo;s look at its properties:</p>
+<ul>
+<li>
+<p>E[v_it] = E[u_i] + E[ε_it] = 0 + 0 = 0.</p>
+</li>
+<li>
+<p>Var(v_it) = Var(u_i) + Var(ε_it) + 2*Cov(u_i, ε_it) = σ_u² + σ_ε² (due to the third assumption).</p>
+</li>
+</ul>
+<p>Now, consider the covariance of the composite error terms for the same individual i but at different time periods \(t\) and \(s\) (\(t \neq s\)):</p>
+<p>$$
+Cov(v_{it}, v_{is}) \newline
+= Cov(u_i + ε_{it}, u_i + ε_{is}) \newline
+= Cov(u_i, u_i) + Cov(u_i, ε_{is}) + Cov(ε_{it}, u_i) + Cov(ε_{it}, ε_{is}) \newline
+\text{which equals, using all three assumptions:} \newline
+Var(u_i) + 0 + 0 + 0 = σ_u^2
+$$</p>
+<p>This is a key result: For a given individual i, the error terms \(v_{it}\) and \(v_{is}\) are correlated
+across time because they share the same \(u_i\) component. The correlation is:</p>
+<p>$$
+Corr(v_{it}, v_{is}) = \frac{Cov(v_{it}, v_{is})}{\sqrt{(Var(v_{it})Var(v_{is}))}}
+= \frac{ σ_u² }{ (σ_u² + σ_ε²)}
+$$</p>
+<p>This correlation is often called the intra-class correlation coefficient (ICC), denoted by \(\rho\).
+It represents the proportion of the total variance in the error term that is attributable to the individual-specific effect \(u_i\).</p>
+<p>$$
+ρ = \frac{σ_u^2}{(σ_u^2 + σ_ε^2)}
+$$</p>
+<p>If \(σ_u^2 = 0\), then \(\rho = 0\), and there&rsquo;s no individual-specific random effect, so OLS on pooled data would be appropriate.</p>
+
+
+
+
+<h2 id="estimation-generalized-least-squares-gls">Estimation: Generalized Least Squares (GLS)
+  <a href="#estimation-generalized-least-squares-gls"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>Because of the serial correlation in the composite error term v_it (i.e., Cov(v_it, v_is) = σ_u² ≠ 0),
+Ordinary Least Squares (OLS) applied to the pooled data \(y_{it} = X_{it}&rsquo;\beta + v_{it}\) will still
+be unbiased and consistent, but it will be inefficient, and the standard errors will be incorrect.</p>
+<p>The efficient estimator is Generalized Least Squares (GLS). The GLS estimator is:</p>
+<p>$$
+β_{GLS} = (X&rsquo;\Omega^{-1}X)^{-1} X&rsquo;\Omega^{-1}Y
+$$</p>
+<p>where Ω is the variance-covariance matrix of the composite error vector \(v\).
+For panel data, \(\Omega\) has a block-diagonal structure, with each block \(\Omega_i\) corresponding to individual i.
+\(\Omega_i\) (a \(T \times T\) matrix for individual i) has:</p>
+<pre><code>σ_u² + σ_ε² on the diagonal.
+
+σ_u² on the off-diagonals.
+</code></pre>
+<p>In practice, σ_u² and σ_ε² are unknown. So, we use Feasible GLS (FGLS):</p>
+<pre><code>Estimate σ_u² and σ_ε² (e.g., from OLS residuals, or ANOVA methods on residuals from a preliminary regression like fixed effects or between effects).
+
+Construct an estimate Ω̂ using σ̂_u² and σ̂_ε².
+
+Compute β̂_FGLS = (X'Ω̂⁻¹X)⁻¹ X'Ω̂⁻¹Y.
+</code></pre>
+<p>The FGLS transformation (often called &ldquo;quasi-demeaning&rdquo; or &ldquo;partial demeaning&rdquo;) for the random effects model can be written as:
+y_it - θ * ȳ_i = β_1(x_1it - θ * x̄_1i) + &hellip; + β_k(x_kit - θ * x̄_ki) + (v_it - θ * v̄_i)
+where:</p>
+<pre><code>ȳ_i = (1/T) Σ_t y_it (the mean of y for individual i). Similar for x̄_ji.
+
+θ = 1 - sqrt(σ_ε² / (T_i * σ_u² + σ_ε²))
+(Note: T_i is the number of observations for individual i. If balanced, T_i = T).
+</code></pre>
+<p>Observe the behavior of θ:</p>
+<pre><code>If σ_u² = 0 (no random effect), then θ = 0. The RE model becomes pooled OLS: y_it = ....
+
+If T_i → ∞, then θ → 1. The RE model behaves like the Fixed Effects (FE) model (which uses full demeaning: y_it - ȳ_i).
+
+If σ_ε² = 0 (all variation is due to u_i), then θ → 1 (if T_i &gt; 0), also behaving like FE.
+</code></pre>
+<p>So, the RE estimator is a weighted average of the between-estimator (using ȳ_i and x̄_i) and the within-estimator (FE, using y_it - ȳ_i and x_it - x̄_i).</p>
+
+        
+        <details closed class="f6 fw7 input-reset">
+  <dl class="f6 lh-copy">
+    <dt class="fw7">Posted on:</dt>
+    <dd class="fw5 ml0">May 23, 2025</dd>
+  </dl>
+  <dl class="f6 lh-copy">
+    <dt class="fw7">Length:</dt>
+    <dd class="fw5 ml0">5 minute read, 1059 words</dd>
+  </dl>
+  
+  
+  
+  <dl class="f6 lh-copy">
+    <dt class="fw7">See Also:</dt>
+    
+  </dl>
+</details>
+
+      </section>
+      <footer class="post-footer">
+        <div class="post-pagination dt w-100 mt4 mb2">
+  
+  
+  
+  
+    <a class="next dtc pl2 tr v-top fw6"
+    href="/blog/2024-12-05-geospatial-interpolation-some-theory/">Geospatial Interpolation: Some Theory &rarr;</a>
+  
+</div>
+
+      </footer>
+    </article>
+    
+      
+<div class="post-comments pa0 pa4-l mt4">
+  
+  <script src="https://utteranc.es/client.js"
+          repo="basm92/new_website"
+          issue-term="pathname"
+          theme="boxy-light"
+          label="comments :crystal_ball:"
+          crossorigin="anonymous"
+          async
+          type="text/javascript">
+  </script>
+  
+</div>
+
+    
+  </section>
+</main>
+<footer class="site-footer pv4 bt b--transparent ph5" role="contentinfo">
+  <nav class="db dt-l w-100">
+    <p class="site-copyright f7 db dtc-l v-mid w-100 w-33-l tc tl-l pv2 pv0-l mv0 lh-copy">
+      &copy; 2025 Bas Machielsen
+      <span class="middot-divider"></span>
+      Made with <span xmlns:dct="http://purl.org/dc/terms/" property="dct:title"><a xmlns:dct="http://purl.org/dc/terms/" href="https://github.com/hugo-apero/" rel="dct:source">Hugo Apéro</a></span>.
+      <br />
+      
+Based on <span xmlns:dct="http://purl.org/dc/terms/" property="dct:title"><a xmlns:dct="http://purl.org/dc/terms/" href="https://github.com/formspree/blogophonic-hugo" rel="dct:source">Blogophonic</a></span> by <a xmlns:cc="http://creativecommons.org/ns#" href="https://formspree.io" property="cc:attributionName" rel="cc:attributionURL">Formspree</a>.
+    </p>
+    
+    <div class="site-social-links db dtc-l v-mid w-100 w-33-l tc pv2 pv0-l mv0">
+      <div class="social-icon-links" aria-hidden="true">
+  
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://github.com/basm92" title="github" target="_blank" rel="noopener">
+      <i class="fab fa-github fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://scholar.google.com/citations?user=bS8uo44AAAAJ" title="google" target="_blank" rel="noopener">
+      <i class="fab fa-google fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://twitter.com/basss92" title="twitter" target="_blank" rel="noopener">
+      <i class="fab fa-twitter fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="mailto:a.h.machielsen@uu.nl" title="envelope" >
+      <i class="fas fa-envelope fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="mailto:basmachielsen@live.nl" title="envelope" >
+      <i class="far fa-envelope fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://orcid.org/0000-0002-9692-0615" title="orcid" target="_blank" rel="noopener">
+      <i class="ai ai-orcid fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="/blog/index.xml" title="rss" >
+      <i class="fas fa-rss fa-lg fa-fw"></i>
+    </a>
+  
+</div>
+
+    </div>
+    
+    <div class="site-links f6 db dtc-l v-mid w-100 w-67-l tc tr-l pv2 pv0-l mv0">
+      
+      <a class="dib pv1 ph2 link" href="/license/" title="License">License</a>
+      
+      <a class="dib pv1 ph2 link" href="/contact/" title="Contact form">Contact</a>
+      
+      <a class="dib pv1 ph2 link" href="/contributors/" title="Contributors">Contributors</a>
+      
+    </div>
+  </nav>
+  
+    <script>
+
+    var i, text, code, codes = document.getElementsByTagName('code');
+    for (let i = 0; i < codes.length;) {
+      code = codes[i];
+      if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+        text = code.textContent;
+        if (/^\$[^$]/.test(text) && /[^$]\$$/.test(text)) {
+          text = text.replace(/^\$/, '\\(').replace(/\$$/, '\\)');
+          code.textContent = text;
+        }
+        if (/^\\\((.|\s)+\\\)$/.test(text) ||
+            /^\\\[(.|\s)+\\\]$/.test(text) ||
+            /^\$(.|\s)+\$$/.test(text) ||
+            /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+          code.outerHTML = code.innerHTML;  
+          continue;
+        }
+      }
+      i++;
+    }
+</script>
+
+  
+    
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.css" integrity="sha384-RZU/ijkSsFbcmivfdRBQDtwuwVqK7GMOw6IMvKyeWL2K5UAlyp6WonmB8m7Jd0Hn" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.js" integrity="sha384-pK1WpvzWVBQiP0/GjnvRxV4mOb0oxFuyRxJlk6vVw146n3egcN5C925NCP7a7BY8" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/contrib/auto-render.min.js" integrity="sha384-vZTG03m+2yp6N6BNi5iM4rW4oIwk5DfcNdFfxkk9ZWpDriOkXX8voJBFrAO7MpVl" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
+
+
+
+    
+  
+  
+</footer>
+
+      </div>
+    </body>
+</html>
