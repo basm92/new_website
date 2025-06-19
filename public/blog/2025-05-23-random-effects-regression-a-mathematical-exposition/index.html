@@ -46,7 +46,7 @@
   <meta itemprop="name" content="Random Effects Regression: A Mathematical Exposition">
 <meta itemprop="description" content="Introduction Hi all, I wanted to write a short primer on random effects regression, since I&rsquo;m working on this for a course I&rsquo;m teaching, and I think the exposition in most textbooks isn&rsquo;t that clear. To improve this, I present a mathematical derivation of the random effects model here. I should note that I&rsquo;m not a fan of the random effects model at all. I think it should be seen as a curiosity rather than a solution in many cases."><meta itemprop="datePublished" content="2025-05-23T00:00:00+00:00" />
 <meta itemprop="dateModified" content="2025-05-23T00:00:00+00:00" />
-<meta itemprop="wordCount" content="1059">
+<meta itemprop="wordCount" content="1371">
 <meta itemprop="keywords" content="" />
   
   
@@ -150,7 +150,7 @@ However, for didactical purposes, it makes sense to analyze the random effects m
       <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
     </svg></a>
 </h2>
-<p>Imagine you have data for N individuals (or firms, countries, etc.), denoted by i = 1, &hellip;, N, observed over T time periods, denoted by t = 1, &hellip;, T. (For simplicity, we&rsquo;ll assume a balanced panel, meaning each individual is observed for all T periods, though RE can handle unbalanced panels.)</p>
+<p>Imagine you have data for N individuals (or firms, countries, etc.), denoted by \(i = 1, \dots, N\), observed over \(T\) time periods, denoted by \(t = 1, \dots, T\). (For simplicity, we&rsquo;ll assume a balanced panel, meaning each individual is observed for all \(T\) periods, though RE can handle unbalanced panels.)</p>
 <p>A generic linear model for such data could be:</p>
 <p>$$
 y_{it} = \beta_0 + \beta_1 x_{1it} + \beta_2 x_{2it} + \dots + \beta_k x_{kit} + v_{it}
@@ -189,13 +189,13 @@ $$</p>
 <p>$$v_{it} = u_{i} + \epsilon_{it}$$</p>
 <p>So, the model becomes:</p>
 <p>$$
-y_it = β_0 + β_1<em>x_1it + &hellip; + β_k</em>x_kit + u_i + ε_it
+y_{it} = \beta_0 + \beta_1 x_{1it} + \dots + \beta_k x_{kit} + u_i + \epsilon_{it}
 $$</p>
 <p>We can also write the model by combining \(\beta_0\) and \(u_i\) into an individual-specific intercept:</p>
 <p>$$
-y_it = (β_0 + u_i) + β_1<em>x_1it + &hellip; + β_k</em>x_kit + ε_it
+y_{it} = (\beta_0 + u_i) + \beta_1 x_{1it} + \dots + \beta_k x_{kit} + \epsilon_{it}
 $$</p>
-<p>Here, \(\alpha_i = \beta_0 + u_i\) is the random intercept for individual $i$.</p>
+<p>Here, \(\alpha_i = \beta_0 + u_i\) is the random intercept for individual \(i\).</p>
 
 
 
@@ -210,33 +210,33 @@ $$</p>
 <p>Random Effect \(u_i\):</p>
 <ul>
 <li>
-<p>E[u_i] = 0 (The mean of the individual effects is zero; any non-zero mean is absorbed into β_0).</p>
+<p>\(E[u_i] = 0\) (The mean of the individual effects is zero; any non-zero mean is absorbed into \beta_0).</p>
 </li>
 <li>
-<p>Var(u_i) = σ_u² (The variance of the individual effects is constant).</p>
+<p>\(\text{Var}(u_i) = \sigma^2_u\) (The variance of the individual effects is constant).</p>
 </li>
 <li>
-<p>Cov(u_i, u_j) = 0 for i ≠ j (Individual effects are uncorrelated across individuals).</p>
+<p>\(\text{Cov}(u_i, u_j) = 0 \text{ for } i \neq j\) (Individual effects are uncorrelated across individuals).</p>
 </li>
 </ul>
 <p>Idiosyncratic Error \(\epsilon_{it}\):</p>
 <ul>
 <li>
-<p>E[ε_it] = 0.</p>
+<p>\(E[\epsilon_{it}] = 0\).</p>
 </li>
 <li>
-<p>Var(ε_it) = σ_ε² (The variance of the idiosyncratic errors is constant – homoscedasticity).</p>
+<p>\(\text{Var}(\epsilon_{it}) = \sigma^2_\epsilon\) (The variance of the idiosyncratic errors is constant – homoscedasticity).</p>
 </li>
 <li>
-<p>Cov(ε_it, ε_is) = 0 for \(t \neq s\) (No serial correlation in idiosyncratic errors for a given individual, after accounting for u_i).</p>
+<p>\(\text{Cov}(\epsilon_{it}, \epsilon_{is}) = 0 \text{ for } t \neq s\) (No serial correlation in idiosyncratic errors for a given individual, after accounting for \(u_i\)).</p>
 </li>
 <li>
-<p>Cov(ε_it, ε_js) = 0 for \(i \neq j\) (Idiosyncratic errors are uncorrelated across individuals).</p>
+<p>\(\text{Cov}(\epsilon_{it}, \epsilon_{js}) = 0 \text{ for } i \neq j\) (Idiosyncratic errors are uncorrelated across individuals).</p>
 </li>
 </ul>
-<p>No correlation between u_i and ε_it:</p>
+<p>No correlation between \(u_i\) and \(\epsilon_{it}\):</p>
 <ul>
-<li>Cov(u_i, ε_jt) = 0 for all \(i, j, t\). The individual random effects are uncorrelated with the idiosyncratic errors.</li>
+<li>\(\text{Cov}(u_i, \epsilon_{jt}) = 0 \text{ for all } i, j, t\). The individual random effects are uncorrelated with the idiosyncratic errors.</li>
 </ul>
 
 
@@ -251,32 +251,34 @@ $$</p>
 <p>The composite error term is \(v_{it} = u_i + \epsilon_{it}\). Let&rsquo;s look at its properties:</p>
 <ul>
 <li>
-<p>E[v_it] = E[u_i] + E[ε_it] = 0 + 0 = 0.</p>
+<p>\(E[v_it] = E[u_i] + E[\epsilon_{it}] = 0 + 0 = 0\).</p>
 </li>
 <li>
-<p>Var(v_it) = Var(u_i) + Var(ε_it) + 2*Cov(u_i, ε_it) = σ_u² + σ_ε² (due to the third assumption).</p>
+<p>\(\text{Var}(v_{it}) = \text{Var}(u_i) + \text{Var}(\epsilon_{it}) + 2 \text{Cov}(u_i, \epsilon_{it}) = \sigma^2_u + \sigma^2_\epsilon\) (due to the third assumption).</p>
 </li>
 </ul>
 <p>Now, consider the covariance of the composite error terms for the same individual i but at different time periods \(t\) and \(s\) (\(t \neq s\)):</p>
 <p>$$
-Cov(v_{it}, v_{is}) \newline
-= Cov(u_i + ε_{it}, u_i + ε_{is}) \newline
-= Cov(u_i, u_i) + Cov(u_i, ε_{is}) + Cov(ε_{it}, u_i) + Cov(ε_{it}, ε_{is}) \newline
-\text{which equals, using all three assumptions:} \newline
-Var(u_i) + 0 + 0 + 0 = σ_u^2
+\begin{aligned}
+\text{Cov}(v_{it}, v_{is})
+&amp;= \text{Cov}(u_i + ε_{it}, u_i + ε_{is}) \newline
+&amp;= \text{Cov}(u_i, u_i) + \text{Cov}(u_i, ε_{is}) + \text{Cov}(ε_{it}, u_i) + \text{Cov}(ε_{it}, ε_{is}) \newline
+&amp;\text{which equals, using all three assumptions:} \newline
+&amp;\text{Var}(u_i) + 0 + 0 + 0 = σ_u^2
+\end{aligned}
 $$</p>
-<p>This is a key result: For a given individual i, the error terms \(v_{it}\) and \(v_{is}\) are correlated
+<p>This is a key result: For a given individual \(i\), the error terms \(v_{it}\) and \(v_{is}\) are correlated
 across time because they share the same \(u_i\) component. The correlation is:</p>
 <p>$$
-Corr(v_{it}, v_{is}) = \frac{Cov(v_{it}, v_{is})}{\sqrt{(Var(v_{it})Var(v_{is}))}}
-= \frac{ σ_u² }{ (σ_u² + σ_ε²)}
+\text{Cor}(v_{it}, v_{is}) = \frac{\text{Cov}(v_{it}, v_{is})}{\sqrt{(\text{Var}(v_{it})\text{Var}(v_{is}))}}
+= \frac{ \sigma_u^2 }{ (\sigma_u^2 + \sigma_\epsilon^2)}
 $$</p>
 <p>This correlation is often called the intra-class correlation coefficient (ICC), denoted by \(\rho\).
 It represents the proportion of the total variance in the error term that is attributable to the individual-specific effect \(u_i\).</p>
 <p>$$
-ρ = \frac{σ_u^2}{(σ_u^2 + σ_ε^2)}
+\rho = \frac{\sigma_u^2}{(\sigma_u^2 + \sigma_\epsilon^2)}
 $$</p>
-<p>If \(σ_u^2 = 0\), then \(\rho = 0\), and there&rsquo;s no individual-specific random effect, so OLS on pooled data would be appropriate.</p>
+<p>If \(\sigma_u^2 = 0\), then \(\rho = 0\), and there&rsquo;s no individual-specific random effect, so OLS on pooled data would be appropriate.</p>
 
 
 
@@ -287,43 +289,76 @@ $$</p>
       <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
     </svg></a>
 </h2>
-<p>Because of the serial correlation in the composite error term v_it (i.e., Cov(v_it, v_is) = σ_u² ≠ 0),
+<p>Because of the serial correlation in the composite error term \(v_{it}\) (i.e., \(\text{Cov}(v_{it}, v_{is}) = \sigma_u^2 \neq 0\)),
 Ordinary Least Squares (OLS) applied to the pooled data \(y_{it} = X_{it}&rsquo;\beta + v_{it}\) will still
 be unbiased and consistent, but it will be inefficient, and the standard errors will be incorrect.</p>
-<p>The efficient estimator is Generalized Least Squares (GLS). The GLS estimator is:</p>
+<p>The efficient estimator is Generalized Least Squares (GLS). This is because the setting is OLS with heteroskedastic data, for which the optimal estimator normalizes the variance again. Then, by the Gauss-Markov theorem, that estimator is efficient. The GLS estimator is:</p>
 <p>$$
-β_{GLS} = (X&rsquo;\Omega^{-1}X)^{-1} X&rsquo;\Omega^{-1}Y
+\beta_{GLS} = (X&rsquo;\Omega^{-1}X)^{-1} X&rsquo;\Omega^{-1}Y
 $$</p>
-<p>where Ω is the variance-covariance matrix of the composite error vector \(v\).
-For panel data, \(\Omega\) has a block-diagonal structure, with each block \(\Omega_i\) corresponding to individual i.
+<p>where $\Omega$ is the variance-covariance matrix of the composite error vector \(v\).
+For panel data, \(\Omega\) has a block-diagonal structure, with each block \(\Omega_i\) corresponding to individual \(i\).
 \(\Omega_i\) (a \(T \times T\) matrix for individual i) has:</p>
-<pre><code>σ_u² + σ_ε² on the diagonal.
+<ul>
+<li>\(\sigma_u^2 + \sigma_\epsilon^2\) on the diagonal.</li>
+<li>\(\sigma_u^2\) on the off-diagonals.</li>
+</ul>
+<p>In practice, \(\sigma_u^2\) and \(\sigma_\epsilon^2\) are unknown. So, we have to use a Feasible GLS (FGLS) procedure:</p>
+<ul>
+<li>Estimate \(\sigma_u^2\) and \(\sigma_\epsilon^2\) (e.g., from OLS residuals.)
+<ul>
+<li>How to do this?</li>
+<li>The overall variance of the OLS residuals is a natural estimator for \(\text{Var}(v_{it}) = \sigma_u^2 + \sigma_\epsilon^2\). This is the first equation we need.</li>
+<li>Consider the average residual for each individual \(i\):</li>
+<li>\(\bar{e_i} = (1/T) \sum_t\hat{e}_{it}\).</li>
+<li>These \(\hat{e_i}\) are estimates of \(\hat{v_i} = (1/T) \sum_t v_{it} = (1/T) \sum_t (u_i + \epsilon_{it}) = u_i + \bar{\epsilon}_i\). (Since \(u_i\) is constant for individual \(i\)).</li>
+<li>Now, let&rsquo;s find the variance of these individual-average residuals across individuals:</li>
+<li>\(\text{Var}(\hat{e_i}) = Var(u_i + \bar{\epsilon_i})\)</li>
+<li>Assuming \(u_i \text{ and } \epsilon_{it}\) are uncorrelated, and \(\epsilon_{it}\) are serially uncorrelated for a given \i\):</li>
+<li>\(\text{Var}(u_i + \bar{\epsilon_i}) = \text{Var}(u_i) + \text{Var}(\bar{\epsilon_i}) = \sigma_u^2 + \text{Var}( (1/T) \sum_t \epsilon_{it} ) \)</li>
+<li>\(= \sigma_u^2 + (1/T^2) \sum_t \text{Var}(\epsilon_{it}) = \sigma_u^2 + (1/T^2) \cdot T \cdot \sigma_\epsilon^2 = \sigma_u^2 + \sigma^2_\epsilon / T \)</li>
+<li>So, the sample variance of the \(\bar{e_i}\) values, let&rsquo;s call it \( s_{\bar{e_i}^2}\) estimates \(\sigma_u^2 + \sigma_\epsilon^2 /T \).</li>
+<li>Hence, our second equation is: \(\sigma^2_u + \sigma^2_\epsilon /T = s_{\bar{e_i}^2}\)</li>
+<li>We have two equations and two unknowns and solve for \(\sigma^2_u \text{ and } \sigma^2_\epsilon\).</li>
+</ul>
+</li>
+<li>Construct an estimate of \(\hat{\Omega}\) using  \(\hat{\sigma_u^2}\) and \(\hat{\sigma_\epsilon^2}\)</li>
+<li>Compute \(\beta^{FGLS} = (X&rsquo;\hat{\Omega}^{-1}X)^{-1} X&rsquo;\hat{\Omega}^{-1}Y\).</li>
+</ul>
+<p>The FGLS transformation (often called &ldquo;quasi-demeaning&rdquo; or &ldquo;partial demeaning&rdquo;) for the random effects model can be written as:</p>
+<p>$$
+y_{it} - \theta \bar{y_i}  = \beta_1( x_{1it} -\theta\bar{x_{1i}}) +\dots + \beta_k(x_{kit} - \theta\bar{x_{ki}}) + (v_{it} -\theta \bar{v}_i)
+$$</p>
+<p>where:</p>
+<ul>
+<li>\(\bar{y_i} = (1/T) \sum_t y_{it}\) (the mean of \(y\) for individual \(i\)). Similar for \(\bar{x_{ji}}\).</li>
+<li>\(\theta = 1 - \sqrt{\frac{\sigma^2\epsilon}{(T_i \sigma^2_u + \sigma^2_\epsilon)}}\)</li>
+<li>\(T_i\) is the no. of observations for individual \(i.\) If balanced, \(T_i = T\).</li>
+</ul>
+<p>The reason for this is the following:</p>
+<ol>
+<li>The transformation \(y_{it} - \theta \bar{y_i}\) (and similarly for X&rsquo;s) aims to create a new error term \(v_{it*} = (u_i + \epsilon_{it}) - \theta(u_i + \bar{\epsilon_i})\).</li>
+<li>We choose \(\theta = 1 - \sqrt{\frac{\sigma^2\epsilon}{(T_i \sigma^2_u + \sigma^2_\epsilon)}}\) because this specific value makes the covariance between transformed errors for the same individual at different times, \(\text{Cov}(v_{it*}, v_{is*})\) (for \(t \neq s\)), equal to zero.</li>
+<li>With this \(\theta\), the variance of the transformed errors also simplifies to \(\text{Var}(v_{it*}) = \sigma^2_\epsilon\), meaning they are homoscedastic and serially uncorrelated.</li>
+<li>Applying OLS to this &ldquo;quasi-demeaned&rdquo; data is equivalent to GLS on the original data, yielding efficient estimates.</li>
+</ol>
 
-σ_u² on the off-diagonals.
-</code></pre>
-<p>In practice, σ_u² and σ_ε² are unknown. So, we use Feasible GLS (FGLS):</p>
-<pre><code>Estimate σ_u² and σ_ε² (e.g., from OLS residuals, or ANOVA methods on residuals from a preliminary regression like fixed effects or between effects).
 
-Construct an estimate Ω̂ using σ̂_u² and σ̂_ε².
 
-Compute β̂_FGLS = (X'Ω̂⁻¹X)⁻¹ X'Ω̂⁻¹Y.
-</code></pre>
-<p>The FGLS transformation (often called &ldquo;quasi-demeaning&rdquo; or &ldquo;partial demeaning&rdquo;) for the random effects model can be written as:
-y_it - θ * ȳ_i = β_1(x_1it - θ * x̄_1i) + &hellip; + β_k(x_kit - θ * x̄_ki) + (v_it - θ * v̄_i)
-where:</p>
-<pre><code>ȳ_i = (1/T) Σ_t y_it (the mean of y for individual i). Similar for x̄_ji.
 
-θ = 1 - sqrt(σ_ε² / (T_i * σ_u² + σ_ε²))
-(Note: T_i is the number of observations for individual i. If balanced, T_i = T).
-</code></pre>
-<p>Observe the behavior of θ:</p>
-<pre><code>If σ_u² = 0 (no random effect), then θ = 0. The RE model becomes pooled OLS: y_it = ....
-
-If T_i → ∞, then θ → 1. The RE model behaves like the Fixed Effects (FE) model (which uses full demeaning: y_it - ȳ_i).
-
-If σ_ε² = 0 (all variation is due to u_i), then θ → 1 (if T_i &gt; 0), also behaving like FE.
-</code></pre>
-<p>So, the RE estimator is a weighted average of the between-estimator (using ȳ_i and x̄_i) and the within-estimator (FE, using y_it - ȳ_i and x_it - x̄_i).</p>
+<h2 id="interpretation">Interpretation
+  <a href="#interpretation"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>Observe the behavior of \(\theta\):</p>
+<ul>
+<li>If \(\sigma_u^2 = 0\) (no random effect), then \(\theta = 0\). The RE model becomes pooled OLS.</li>
+<li>If \(T_i \rightarrow \infty\), then \(\theta \rightarrow 1\). The RE model behaves like the Fixed Effects (FE) model (which uses full demeaning).</li>
+<li>If \(\sigma_\epsilon^2 = 0\) (all variation is due to \(u_i\)), then \(\theta \rightarrow 1 \) (if \(T_i &gt; 0\)), also behaving like FE.</li>
+</ul>
+<p>So, the RE estimator is a weighted average of the between-estimator (using \(\bar{y_i} \text{ and } \bar{x_i}\)) and the within-estimator (FE, using \(y_{it} - \bar{y_i} \text{ and } x_{it} - \bar{x_i}\)).</p>
 
         
         <details closed class="f6 fw7 input-reset">
@@ -333,7 +368,7 @@ If σ_ε² = 0 (all variation is due to u_i), then θ → 1 (if T_i &gt; 0), als
   </dl>
   <dl class="f6 lh-copy">
     <dt class="fw7">Length:</dt>
-    <dd class="fw5 ml0">5 minute read, 1059 words</dd>
+    <dd class="fw5 ml0">7 minute read, 1371 words</dd>
   </dl>
   
   
