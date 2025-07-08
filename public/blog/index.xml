@@ -8,6 +8,17 @@
     <language>en</language>
     <lastBuildDate>Tue, 08 Jul 2025 00:00:00 +0000</lastBuildDate><atom:link href="/blog/index.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>Polars Selectors</title>
+      <link>/blog/2025-07-08-polars-selectors/</link>
+      <pubDate>Tue, 08 Jul 2025 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2025-07-08-polars-selectors/</guid>
+      <description>Excellent. Let&amp;rsquo;s dive into these more advanced and idiomatic Polars techniques. These patterns are crucial for writing concise, expressive, and efficient Polars code, moving beyond basic transformations into more nuanced data manipulation.
+We will use a new example dataset for these concepts to better illustrate their specific use cases. Let&amp;rsquo;s imagine a dataset from a university&amp;rsquo;s course enrollment system.
+import polars as pl import polars.selectors as cs # We&amp;#39;ll need this for advanced column selection # Create our example DataFrame df_courses = pl.</description>
+    </item>
+    
+    <item>
       <title>Python Polars Demonstration for Data Wrangling</title>
       <link>/blog/2025-07-08-python-polars-demonstration-for-data-wrangling/</link>
       <pubDate>Tue, 08 Jul 2025 00:00:00 +0000</pubDate>
