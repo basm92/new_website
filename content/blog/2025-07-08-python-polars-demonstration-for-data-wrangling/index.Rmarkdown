@@ -80,10 +80,10 @@ df.columns
 df.dtypes
 
 # Show the first 5 rows of the DataFrame
-df.head()
+df[:, :5].head()
 
 # Get descriptive statistics for the numerical columns
-df.describe()
+df[:, :5].describe()
 ```
 
 These inspection methods are helpful for getting a quick overview of your data's structure and content, just as you would in pandas.
