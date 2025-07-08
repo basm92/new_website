@@ -9,7 +9,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="generator" content="Hugo 0.101.0" />
-<title>Polars Selectors | Bas Machielsen</title>
+<title>Polars Selectors and Panel Data | Bas Machielsen</title>
 
 
 <meta property="twitter:site" content="@basss92">
@@ -24,12 +24,12 @@
   
     
   
-<meta name="description" content="A small blogpost about selection of variables in polars.">
+<meta name="description" content="A small blogpost about selection of variables in polars. And a focus on time series and panel data.">
 
 
 <meta property="og:site_name" content="Bas Machielsen">
-<meta property="og:title" content="Polars Selectors | Bas Machielsen">
-<meta property="og:description" content="A small blogpost about selection of variables in polars." />
+<meta property="og:title" content="Polars Selectors and Panel Data | Bas Machielsen">
+<meta property="og:description" content="A small blogpost about selection of variables in polars. And a focus on time series and panel data." />
 <meta property="og:type" content="page" />
 <meta property="og:url" content="/blog/2025-07-08-polars-selectors/" />
 <meta property="og:locale" content="en">
@@ -43,12 +43,12 @@
         <meta name="twitter:image" content="/blog/sidebar-listing.png" >
     
     
-  <meta itemprop="name" content="Polars Selectors">
-<meta itemprop="description" content="Excellent. Let&rsquo;s dive into these more advanced and idiomatic Polars techniques. These patterns are crucial for writing concise, expressive, and efficient Polars code, moving beyond basic transformations into more nuanced data manipulation.
-We will use a new example dataset for these concepts to better illustrate their specific use cases. Let&rsquo;s imagine a dataset from a university&rsquo;s course enrollment system.
+  <meta itemprop="name" content="Polars Selectors and Panel Data">
+<meta itemprop="description" content="Introduction In this post, let’s dive into these more advanced and idiomatic Polars techniques. These patterns are crucial for writing concise, expressive, and efficient Polars code, moving beyond basic transformations into more nuanced data manipulation.
+We will use a new example dataset for these concepts to better illustrate their specific use cases. Let’s imagine a dataset from a university’s course enrollment system.
 import polars as pl import polars.selectors as cs # We&#39;ll need this for advanced column selection # Create our example DataFrame df_courses = pl."><meta itemprop="datePublished" content="2025-07-08T00:00:00+00:00" />
 <meta itemprop="dateModified" content="2025-07-08T00:00:00+00:00" />
-<meta itemprop="wordCount" content="1513">
+<meta itemprop="wordCount" content="3351">
 <meta itemprop="keywords" content="" />
   
   
@@ -118,7 +118,7 @@ import polars as pl import polars.selectors as cs # We&#39;ll need this for adva
   <section class="page-content mw7 center">
     <article class="post-content pa0 ph4-l">
       <header class="post-header">
-        <h1 class="f1 lh-solid measure-narrow mb3 fw4">Polars Selectors</h1>
+        <h1 class="f1 lh-solid measure-narrow mb3 fw4">Polars Selectors and Panel Data</h1>
         
         <p class="f6 measure lh-copy mv1">By Bas Machielsen</p>
         <p class="f7 db mv0 ttu">July 8, 2025</p>
@@ -127,8 +127,18 @@ import polars as pl import polars.selectors as cs # We&#39;ll need this for adva
 
       </header>
       <section class="post-body pt5 pb4">
-        <p>Excellent. Let&rsquo;s dive into these more advanced and idiomatic Polars techniques. These patterns are crucial for writing concise, expressive, and efficient Polars code, moving beyond basic transformations into more nuanced data manipulation.</p>
-<p>We will use a new example dataset for these concepts to better illustrate their specific use cases. Let&rsquo;s imagine a dataset from a university&rsquo;s course enrollment system.</p>
+        
+
+
+
+<h2 id="introduction">Introduction
+  <a href="#introduction"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>In this post, let’s dive into these more advanced and idiomatic Polars techniques. These patterns are crucial for writing concise, expressive, and efficient Polars code, moving beyond basic transformations into more nuanced data manipulation.</p>
+<p>We will use a new example dataset for these concepts to better illustrate their specific use cases. Let’s imagine a dataset from a university’s course enrollment system.</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#000;font-weight:bold">import</span> <span style="color:#555">polars</span> <span style="color:#000;font-weight:bold">as</span> <span style="color:#555">pl</span>
 </span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">import</span> <span style="color:#555">polars.selectors</span> <span style="color:#000;font-weight:bold">as</span> <span style="color:#555">cs</span> <span style="color:#998;font-style:italic"># We&#39;ll need this for advanced column selection</span>
 </span></span><span style="display:flex;"><span>
@@ -141,17 +151,16 @@ import polars as pl import polars.selectors as cs # We&#39;ll need this for adva
 </span></span><span style="display:flex;"><span>    <span style="color:#d14">&#34;grade_letter&#34;</span>: [<span style="color:#d14">&#34;A&#34;</span>, <span style="color:#d14">&#34;B&#34;</span>, <span style="color:#d14">&#34;A&#34;</span>, <span style="color:#d14">&#34;C&#34;</span>, <span style="color:#d14">&#34;B&#34;</span>, <span style="color:#d14">&#34;A&#34;</span>, <span style="color:#d14">&#34;A&#34;</span>],
 </span></span><span style="display:flex;"><span>    <span style="color:#d14">&#34;credits&#34;</span>: [<span style="color:#099">4</span>, <span style="color:#099">4</span>, <span style="color:#099">4</span>, <span style="color:#099">3</span>, <span style="color:#099">4</span>, <span style="color:#099">3</span>, <span style="color:#099">4</span>]
 </span></span><span style="display:flex;"><span>})
-</span></span></code></pre></div><hr>
+</span></span></code></pre></div>
 
 
 
-
-<h3 id="advanced-indexing-selecting-data-by-position">Advanced Indexing: Selecting Data by Position
+<h2 id="advanced-indexing-selecting-data-by-position">Advanced Indexing: Selecting Data by Position
   <a href="#advanced-indexing-selecting-data-by-position"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
       <path d="M0 0h24v24H0z" fill="currentColor"></path>
       <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
     </svg></a>
-</h3>
+</h2>
 <p>While filtering data based on its content (<code>.filter()</code>) is the most common way to select rows, there are times when you need to select data based on its integer position or index. Polars provides powerful and efficient ways to do this, far beyond simple head/tail operations.</p>
 
 
@@ -160,28 +169,26 @@ import polars as pl import polars.selectors as cs # We&#39;ll need this for adva
 <h4 id="method-1-chaining-nth-drop-and-slice">Method 1: Chaining <code>nth</code>, <code>drop</code>, and <code>slice</code>
   <a href="#method-1-chaining-nth-drop-and-slice"></a>
 </h4>
-<p>This method shows the power of chaining operations together to achieve a precise subset. Let&rsquo;s break down the user&rsquo;s first snippet: <code>(df.select(...).drop(...)).slice(...)</code>.</p>
+<p>This method shows the power of chaining operations together to achieve a precise subset. Let’s break down the user’s first snippet: <code>(df.select(...).drop(...)).slice(...)</code>.</p>
 <ol>
 <li>
-<p><strong><code>pl.nth(indices)</code></strong>: This expression is used within a <code>select</code> or <code>filter</code> context to pick rows by their specific, zero-based index. You can provide a single index or a list of indices. It&rsquo;s the equivalent of &ldquo;give me the 0th row, the 1st row, and the rows from index 3 to 5.&rdquo;</p>
+<p><strong><code>pl.nth(indices)</code></strong>: This expression is used within a <code>select</code> or <code>filter</code> context to pick rows by their specific, zero-based index. You can provide a single index or a list of indices. It’s the equivalent of “give me the 0th row, the 1st row, and the rows from index 3 to 5.”</p>
 </li>
 <li>
 <p><strong><code>.drop(column_name)</code></strong>: This is a straightforward method to remove one or more columns from the DataFrame after they have been used in a calculation or selection.</p>
 </li>
 <li>
-<p><strong><code>.slice(offset, length)</code></strong>: This method selects a contiguous block (a &ldquo;slice&rdquo;) of rows from a DataFrame, starting at the <code>offset</code> index and taking <code>length</code> rows.</p>
+<p><strong><code>.slice(offset, length)</code></strong>: This method selects a contiguous block (a “slice”) of rows from a DataFrame, starting at the <code>offset</code> index and taking <code>length</code> rows.</p>
 </li>
 </ol>
-<p>Let&rsquo;s apply this logic to our <code>df_courses</code> dataset. Imagine we want to select the first two rows and rows 4 through 5, create a lowercase version of the <code>course_name</code>, drop the original <code>course_name</code>, and then from that result, take only the rows starting from the 4th position.</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#998;font-style:italic"># The logic from the user&#39;s snippet, applied to our data</span>
-</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Let&#39;s rename &#39;Cursus&#39; to &#39;course_name&#39; for our example</span>
-</span></span><span style="display:flex;"><span>complex_selection <span style="color:#000;font-weight:bold">=</span> (
+<p>Let’s apply this logic to our <code>df_courses</code> dataset. Imagine we want to select the first two rows and rows 4 through 5, create a lowercase version of the <code>course_name</code>, drop the original <code>course_name</code>, and then from that result, take only the rows starting from the 4th position.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>complex_selection <span style="color:#000;font-weight:bold">=</span> (
 </span></span><span style="display:flex;"><span>    df_courses
 </span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">.</span>select(
 </span></span><span style="display:flex;"><span>        pl<span style="color:#000;font-weight:bold">.</span>nth([<span style="color:#099">0</span>, <span style="color:#099">1</span>] <span style="color:#000;font-weight:bold">+</span> <span style="color:#0086b3">list</span>(<span style="color:#0086b3">range</span>(<span style="color:#099">3</span>, <span style="color:#099">5</span>))), <span style="color:#998;font-style:italic"># Select rows 0, 1, 3, 4</span>
 </span></span><span style="display:flex;"><span>        test<span style="color:#000;font-weight:bold">=</span>pl<span style="color:#000;font-weight:bold">.</span>col(<span style="color:#d14">&#34;course_name&#34;</span>)<span style="color:#000;font-weight:bold">.</span>str<span style="color:#000;font-weight:bold">.</span>to_lowercase() <span style="color:#998;font-style:italic"># Create a new column &#39;test&#39;</span>
 </span></span><span style="display:flex;"><span>    )
-</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">.</span>drop(<span style="color:#d14">&#34;course_name&#34;</span>) <span style="color:#998;font-style:italic"># Drop the original column</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#998;font-style:italic"># Drop the original column</span>
 </span></span><span style="display:flex;"><span>)<span style="color:#000;font-weight:bold">.</span>slice(<span style="color:#099">2</span>, <span style="color:#099">2</span>) <span style="color:#998;font-style:italic"># From the result, take 2 rows starting at index 2</span>
 </span></span></code></pre></div><p>This chain is executed sequentially. First Polars selects rows <code>[0, 1, 3, 4]</code>, creating a new 4-row DataFrame. Then, <code>.slice(2, 2)</code> is applied to this <em>new</em> DataFrame, selecting the final two rows (which were originally rows 3 and 4 of <code>df_courses</code>).</p>
 
@@ -192,7 +199,7 @@ import polars as pl import polars.selectors as cs # We&#39;ll need this for adva
   <a href="#method-2-using-polarsselectors"></a>
 </h4>
 <p>Polars has a dedicated module, <code>polars.selectors</code> (conventionally imported as <code>cs</code>), for creating expressive column selections. This is often cleaner than manual list building.</p>
-<p>The user&rsquo;s snippet <code>cs.by_index(...)</code> is a powerful column selector. It allows you to select columns based on their integer position.</p>
+<p>The user’s snippet <code>cs.by_index(...)</code> is a powerful column selector. It allows you to select columns based on their integer position.</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Select the first two columns (student_id, full_name) and the last three columns</span>
 </span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># using their indices.</span>
 </span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Note: list(range(3,6)) corresponds to columns at index 3, 4, and 5.</span>
@@ -219,7 +226,7 @@ import polars as pl import polars.selectors as cs # We&#39;ll need this for adva
   <a href="#dynamic-renaming-with-a-lambda-function"></a>
 </h4>
 <p>The <code>.rename()</code> method can accept a dictionary for explicit renames, but its real power lies in accepting a function (like a lambda). This function is applied to every column name, allowing you to perform programmatic renames across the entire DataFrame.</p>
-<p>Let&rsquo;s say we want to standardize our column names to be all lowercase and have no underscores.</p>
+<p>Let’s say we want to standardize our column names to be all lowercase and have no underscores.</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#998;font-style:italic"># The user&#39;s snippet applied to our df_courses</span>
 </span></span><span style="display:flex;"><span>df_renamed <span style="color:#000;font-weight:bold">=</span> df_courses<span style="color:#000;font-weight:bold">.</span>rename(
 </span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">lambda</span> column_name: column_name<span style="color:#000;font-weight:bold">.</span>lower()<span style="color:#000;font-weight:bold">.</span>replace(<span style="color:#d14">&#34;_&#34;</span>, <span style="color:#d14">&#34;&#34;</span>)
@@ -233,10 +240,10 @@ import polars as pl import polars.selectors as cs # We&#39;ll need this for adva
 <h4 id="the-universal-selector-plall">The Universal Selector: <code>pl.all()</code>
   <a href="#the-universal-selector-plall"></a>
 </h4>
-<p>Often you want to apply an operation to <em>every</em> column. <code>pl.all()</code> is a selector that means exactly that: &ldquo;all columns&rdquo;. It&rsquo;s a powerful shorthand that prevents you from having to type out every column name.</p>
+<p>Often you want to apply an operation to <em>every</em> column. <code>pl.all()</code> is a selector that means exactly that: “all columns”. It’s a powerful shorthand that prevents you from having to type out every column name.</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Append a suffix to all column names</span>
 </span></span><span style="display:flex;"><span>df_suffixed <span style="color:#000;font-weight:bold">=</span> df_courses<span style="color:#000;font-weight:bold">.</span>select(
-</span></span><span style="display:flex;"><span>    pl<span style="color:#000;font-weight:bold">.</span>all()<span style="color:#000;font-weight:bold">.</span>suffix(<span style="color:#d14">&#34;_original&#34;</span>)
+</span></span><span style="display:flex;"><span>    pl<span style="color:#000;font-weight:bold">.</span>all()<span style="color:#000;font-weight:bold">.</span>name<span style="color:#000;font-weight:bold">.</span>suffix(<span style="color:#d14">&#34;_original&#34;</span>)  <span style="color:#998;font-style:italic"># Correct method</span>
 </span></span><span style="display:flex;"><span>)
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># You can also exclude columns from the &#39;all&#39; selection</span>
@@ -253,14 +260,14 @@ import polars as pl import polars.selectors as cs # We&#39;ll need this for adva
 
 
 
-<h3 id="combining-dataframes-the-concat-operation">Combining DataFrames: The <code>concat</code> Operation
+<h2 id="combining-dataframes-the-concat-operation">Combining DataFrames: The <code>concat</code> Operation
   <a href="#combining-dataframes-the-concat-operation"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
       <path d="M0 0h24v24H0z" fill="currentColor"></path>
       <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
     </svg></a>
-</h3>
-<p>Stitching DataFrames together is a fundamental task. Polars&rsquo; <code>pl.concat()</code> function is a versatile tool for this, and the <code>how</code> parameter dictates its behavior.</p>
-<p>Let&rsquo;s create two simple DataFrames to demonstrate.</p>
+</h2>
+<p>Stitching DataFrames together is a fundamental task. Polars’ <code>pl.concat()</code> function is a versatile tool for this, and the <code>how</code> parameter dictates its behavior.</p>
+<p>Let’s create two simple DataFrames to demonstrate.</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>df1 <span style="color:#000;font-weight:bold">=</span> pl<span style="color:#000;font-weight:bold">.</span>DataFrame({
 </span></span><span style="display:flex;"><span>    <span style="color:#d14">&#34;a&#34;</span>: [<span style="color:#099">1</span>, <span style="color:#099">2</span>],
 </span></span><span style="display:flex;"><span>    <span style="color:#d14">&#34;b&#34;</span>: [<span style="color:#099">3</span>, <span style="color:#099">4</span>]
@@ -278,7 +285,7 @@ import polars as pl import polars.selectors as cs # We&#39;ll need this for adva
 <p><strong><code>how=&quot;horizontal&quot;</code></strong>: This places DataFrames side-by-side, creating a wider DataFrame. This is only advisable if the DataFrames have the same height and no overlapping column names.</p>
 </li>
 <li>
-<p><strong><code>how=&quot;diagonal&quot;</code></strong>: This is a more specialized method shown in the user&rsquo;s snippet. It concatenates the DataFrames along the diagonal, extending both rows and columns. It effectively places the second DataFrame below and to the right of the first one, filling the misaligned quadrants with nulls.</p>
+<p><strong><code>how=&quot;diagonal&quot;</code></strong>: This is a more specialized method shown in the user’s snippet. It concatenates the DataFrames along the diagonal, extending both rows and columns. It effectively places the second DataFrame below and to the right of the first one, filling the misaligned quadrants with nulls.</p>
 </li>
 </ul>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#998;font-style:italic"># The user&#39;s snippet shows diagonal concatenation</span>
@@ -295,9 +302,9 @@ import polars as pl import polars.selectors as cs # We&#39;ll need this for adva
       <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
     </svg></a>
 </h3>
-<p>What happens when a built-in Polars expression doesn&rsquo;t exist for your specific, complex logic? Polars provides ways to apply custom Python functions, but it&rsquo;s crucial to understand the performance hierarchy.</p>
+<p>What happens when a built-in Polars expression doesn’t exist for your specific, complex logic? Polars provides ways to apply custom Python functions, but it’s crucial to understand the performance hierarchy.</p>
 <p><strong>The Golden Rule: Native expressions are always fastest. Use custom Python functions only when absolutely necessary.</strong></p>
-<p>Let&rsquo;s establish a clear hierarchy from most-performant to least-performant.</p>
+<p>Let’s establish a clear hierarchy from most-performant to least-performant.</p>
 
 
 
@@ -306,15 +313,20 @@ import polars as pl import polars.selectors as cs # We&#39;ll need this for adva
   <a href="#1-slowest-row-wise-plapply"></a>
 </h4>
 <p>This applies a Python function to each row. As discussed previously, this is an <strong>anti-pattern</strong> and should be avoided. It serializes the process and involves costly data conversion between Rust and Python for every single row.</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#998;font-style:italic"># The user&#39;s snippet: calculating sum of two columns row by row</span>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Snippet: calculating sum of two columns row by row</span>
 </span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># THIS IS VERY SLOW AND NOT RECOMMENDED</span>
 </span></span><span style="display:flex;"><span>df_slow_apply <span style="color:#000;font-weight:bold">=</span> df_courses<span style="color:#000;font-weight:bold">.</span>select(
-</span></span><span style="display:flex;"><span>    pl<span style="color:#000;font-weight:bold">.</span>apply([<span style="color:#d14">&#34;grade_numeric&#34;</span>, <span style="color:#d14">&#34;credits&#34;</span>], <span style="color:#000;font-weight:bold">lambda</span> row_values: row_values[<span style="color:#099">0</span>] <span style="color:#000;font-weight:bold">+</span> row_values[<span style="color:#099">1</span>])
+</span></span><span style="display:flex;"><span>    pl<span style="color:#000;font-weight:bold">.</span>struct([<span style="color:#d14">&#34;grade_numeric&#34;</span>, <span style="color:#d14">&#34;credits&#34;</span>])
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">.</span>map_elements(
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">lambda</span> x: x[<span style="color:#d14">&#34;grade_numeric&#34;</span>] <span style="color:#000;font-weight:bold">+</span> x[<span style="color:#d14">&#34;credits&#34;</span>] <span style="color:#000;font-weight:bold">if</span> <span style="color:#000;font-weight:bold">None</span> <span style="color:#000;font-weight:bold">not</span> <span style="color:#000;font-weight:bold">in</span> x<span style="color:#000;font-weight:bold">.</span>values() <span style="color:#000;font-weight:bold">else</span> <span style="color:#000;font-weight:bold">None</span>,
+</span></span><span style="display:flex;"><span>        return_dtype<span style="color:#000;font-weight:bold">=</span>pl<span style="color:#000;font-weight:bold">.</span>Float64  <span style="color:#998;font-style:italic"># or whatever your expected dtype is</span>
+</span></span><span style="display:flex;"><span>    )
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">.</span>alias(<span style="color:#d14">&#34;total_score&#34;</span>)
 </span></span><span style="display:flex;"><span>)
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># The correct, native, and blazingly fast way to do this:</span>
 </span></span><span style="display:flex;"><span>df_fast_native <span style="color:#000;font-weight:bold">=</span> df_courses<span style="color:#000;font-weight:bold">.</span>select(
-</span></span><span style="display:flex;"><span>    (pl<span style="color:#000;font-weight:bold">.</span>col(<span style="color:#d14">&#34;grade_numeric&#34;</span>) <span style="color:#000;font-weight:bold">+</span> pl<span style="color:#000;font-weight:bold">.</span>col(<span style="color:#d14">&#34;credits&#34;</span>))
+</span></span><span style="display:flex;"><span>    (pl<span style="color:#000;font-weight:bold">.</span>col(<span style="color:#d14">&#34;grade_numeric&#34;</span>) <span style="color:#000;font-weight:bold">+</span> pl<span style="color:#000;font-weight:bold">.</span>col(<span style="color:#d14">&#34;credits&#34;</span>))<span style="color:#000;font-weight:bold">.</span>alias(<span style="color:#d14">&#34;total_score&#34;</span>)
 </span></span><span style="display:flex;"><span>)
 </span></span></code></pre></div>
 
@@ -326,8 +338,8 @@ import polars as pl import polars.selectors as cs # We&#39;ll need this for adva
 <p>The <code>.map()</code> (or its alias <code>.apply</code> on an expression) method applies a Python function to each <em>element</em> within a column. This is still slower than a native expression because of the Python function call overhead for each value, but it is significantly better than a row-wise apply.</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#998;font-style:italic"># The user&#39;s snippet: multiply every value in every column by 2</span>
 </span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># This will fail on non-numeric columns, so let&#39;s select numeric ones first</span>
-</span></span><span style="display:flex;"><span>df_mapped <span style="color:#000;font-weight:bold">=</span> df_courses<span style="color:#000;font-weight:bold">.</span>select(
-</span></span><span style="display:flex;"><span>    cs<span style="color:#000;font-weight:bold">.</span>numeric()<span style="color:#000;font-weight:bold">.</span>map(<span style="color:#000;font-weight:bold">lambda</span> value: value <span style="color:#000;font-weight:bold">*</span> <span style="color:#099">2</span> <span style="color:#000;font-weight:bold">if</span> value <span style="color:#000;font-weight:bold">is</span> <span style="color:#000;font-weight:bold">not</span> <span style="color:#000;font-weight:bold">None</span> <span style="color:#000;font-weight:bold">else</span> <span style="color:#000;font-weight:bold">None</span>)
+</span></span><span style="display:flex;"><span>df_mapped <span style="color:#000;font-weight:bold">=</span> df_courses<span style="color:#000;font-weight:bold">.</span>with_columns(
+</span></span><span style="display:flex;"><span>    (cs<span style="color:#000;font-weight:bold">.</span>numeric() <span style="color:#000;font-weight:bold">*</span> <span style="color:#099">2</span>)<span style="color:#000;font-weight:bold">.</span>name<span style="color:#000;font-weight:bold">.</span>suffix(<span style="color:#d14">&#34;_doubled&#34;</span>)
 </span></span><span style="display:flex;"><span>)
 </span></span></code></pre></div><p>This is best used for complex transformations on single values for which no native Polars function exists.</p>
 
@@ -343,16 +355,326 @@ import polars as pl import polars.selectors as cs # We&#39;ll need this for adva
 <li><strong><code>.map(lambda s: ...)</code></strong>: You then apply your Python function to this <code>Struct</code> object.</li>
 </ol>
 <p>The magic here is that Polars can pass the entire <code>Struct</code> to Python much more efficiently than individual row elements. The lambda function receives a dictionary-like object, which is easy and readable to work with.</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#998;font-style:italic"># The user&#39;s snippet: divide col1 by col2. Let&#39;s use our data.</span>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#998;font-style:italic"># This snippet: divide col1 by col2. Let&#39;s use our data.</span>
 </span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Goal: Calculate a custom &#39;weighted_grade&#39; = grade_numeric * (credits / 4)</span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># The corrected, working version of your code</span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Corrected code with the required null check using &#39;is not None&#39;</span>
 </span></span><span style="display:flex;"><span>df_struct_map <span style="color:#000;font-weight:bold">=</span> df_courses<span style="color:#000;font-weight:bold">.</span>with_columns(
 </span></span><span style="display:flex;"><span>    pl<span style="color:#000;font-weight:bold">.</span>struct([<span style="color:#d14">&#34;grade_numeric&#34;</span>, <span style="color:#d14">&#34;credits&#34;</span>])
-</span></span><span style="display:flex;"><span>      <span style="color:#000;font-weight:bold">.</span>map(
-</span></span><span style="display:flex;"><span>          <span style="color:#000;font-weight:bold">lambda</span> s: s[<span style="color:#d14">&#34;grade_numeric&#34;</span>] <span style="color:#000;font-weight:bold">*</span> (s[<span style="color:#d14">&#34;credits&#34;</span>] <span style="color:#000;font-weight:bold">/</span> <span style="color:#099">4</span>)
+</span></span><span style="display:flex;"><span>      <span style="color:#000;font-weight:bold">.</span>map_elements(
+</span></span><span style="display:flex;"><span>          <span style="color:#000;font-weight:bold">lambda</span> s: s[<span style="color:#d14">&#34;grade_numeric&#34;</span>] <span style="color:#000;font-weight:bold">*</span> (s[<span style="color:#d14">&#34;credits&#34;</span>] <span style="color:#000;font-weight:bold">/</span> <span style="color:#099">4</span>) <span style="color:#000;font-weight:bold">if</span> s[<span style="color:#d14">&#39;grade_numeric&#39;</span>] <span style="color:#000;font-weight:bold">is</span> <span style="color:#000;font-weight:bold">not</span> <span style="color:#000;font-weight:bold">None</span> <span style="color:#000;font-weight:bold">else</span> <span style="color:#000;font-weight:bold">None</span>,
+</span></span><span style="display:flex;"><span>          return_dtype<span style="color:#000;font-weight:bold">=</span>pl<span style="color:#000;font-weight:bold">.</span>Float64
 </span></span><span style="display:flex;"><span>      )
 </span></span><span style="display:flex;"><span>      <span style="color:#000;font-weight:bold">.</span>alias(<span style="color:#d14">&#34;weighted_grade&#34;</span>)
 </span></span><span style="display:flex;"><span>)
 </span></span></code></pre></div><p>This approach is vastly superior to <code>.apply()</code> because it minimizes the overhead between Rust and Python and allows the query optimizer to better reason about the operation. When you absolutely need custom logic across columns, <code>struct().map()</code> is the tool to reach for.</p>
+
+
+
+
+<h4 id="4-idiomatic-high-performance-polars-code">4. Idiomatic, high-performance Polars Code
+  <a href="#4-idiomatic-high-performance-polars-code"></a>
+</h4>
+<p>But if you can use standard functions, you should always prefer this.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#998;font-style:italic"># The explicit null check is not needed, as Polars handles it automatically.</span>
+</span></span><span style="display:flex;"><span>df_struct_map <span style="color:#000;font-weight:bold">=</span> df_courses<span style="color:#000;font-weight:bold">.</span>with_columns(
+</span></span><span style="display:flex;"><span>    (pl<span style="color:#000;font-weight:bold">.</span>col(<span style="color:#d14">&#34;grade_numeric&#34;</span>) <span style="color:#000;font-weight:bold">*</span> (pl<span style="color:#000;font-weight:bold">.</span>col(<span style="color:#d14">&#34;credits&#34;</span>) <span style="color:#000;font-weight:bold">/</span> <span style="color:#099">4</span>))<span style="color:#000;font-weight:bold">.</span>alias(<span style="color:#d14">&#34;weighted_grade&#34;</span>)
+</span></span><span style="display:flex;"><span>)
+</span></span></code></pre></div>
+
+
+
+<h2 id="panel-data">Panel Data
+  <a href="#panel-data"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+
+
+
+
+<h3 id="analyzing-panel-data-accessing-past-observations-with-window-functions">Analyzing Panel Data: Accessing Past Observations with Window Functions
+  <a href="#analyzing-panel-data-accessing-past-observations-with-window-functions"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h3>
+<p>A very common and powerful type of dataset in fields like econometrics and finance is <strong>panel data</strong> (or longitudinal data). This data structure involves tracking multiple individuals (people, companies, sensors, etc.) over multiple points in time. A key analytical task is to compute new features for an individual at a specific time point that depend on that same individual’s state at a <em>previous</em> time point.</p>
+<p>Examples of such tasks include:</p>
+<ul>
+<li>Calculating the month-over-month sales growth for each store in a retail chain.</li>
+<li>Finding the change in a patient’s heart rate since their last visit.</li>
+<li>Determining if a stock’s price has increased for three consecutive days.</li>
+</ul>
+<p>Attempting to do this with traditional looping or complex joins is inefficient and cumbersome. Polars solves this problem elegantly with <strong>window functions</strong>, invoked using the <code>.over()</code> expression.</p>
+<p>A window function is a calculation that operates on a “window” of rows (a subset of the data) that are related to the current row. The <code>.over()</code> clause specifies how to form these windows. This is different from a <code>.group_by().agg()</code> operation, which collapses each group into a single row. A window function performs a calculation for each row, but within the context of its group, and returns a result for every single row.</p>
+
+
+
+
+<h4 id="example-dataset-patient-vital-signs">Example Dataset: Patient Vital Signs
+  <a href="#example-dataset-patient-vital-signs"></a>
+</h4>
+<p>Let’s create a dataset tracking the vital signs of several patients over a series of hospital visits. Note that the data is deliberately not sorted by patient or date to demonstrate that Polars will handle this correctly.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#000;font-weight:bold">import</span> <span style="color:#555">polars</span> <span style="color:#000;font-weight:bold">as</span> <span style="color:#555">pl</span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">from</span> <span style="color:#555">datetime</span> <span style="color:#000;font-weight:bold">import</span> date
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>df_vitals <span style="color:#000;font-weight:bold">=</span> pl<span style="color:#000;font-weight:bold">.</span>DataFrame({
+</span></span><span style="display:flex;"><span>    <span style="color:#d14">&#34;patient_id&#34;</span>: [<span style="color:#099">101</span>, <span style="color:#099">205</span>, <span style="color:#099">101</span>, <span style="color:#099">303</span>, <span style="color:#099">205</span>, <span style="color:#099">101</span>],
+</span></span><span style="display:flex;"><span>    <span style="color:#d14">&#34;visit_date&#34;</span>: [
+</span></span><span style="display:flex;"><span>        date(<span style="color:#099">2023</span>, <span style="color:#099">1</span>, <span style="color:#099">15</span>),
+</span></span><span style="display:flex;"><span>        date(<span style="color:#099">2023</span>, <span style="color:#099">1</span>, <span style="color:#099">20</span>),
+</span></span><span style="display:flex;"><span>        date(<span style="color:#099">2023</span>, <span style="color:#099">2</span>, <span style="color:#099">10</span>),
+</span></span><span style="display:flex;"><span>        date(<span style="color:#099">2023</span>, <span style="color:#099">1</span>, <span style="color:#099">5</span>),
+</span></span><span style="display:flex;"><span>        date(<span style="color:#099">2023</span>, <span style="color:#099">3</span>, <span style="color:#099">1</span>),
+</span></span><span style="display:flex;"><span>        date(<span style="color:#099">2023</span>, <span style="color:#099">4</span>, <span style="color:#099">5</span>),
+</span></span><span style="display:flex;"><span>    ],
+</span></span><span style="display:flex;"><span>    <span style="color:#d14">&#34;heart_rate&#34;</span>: [<span style="color:#099">78</span>, <span style="color:#099">95</span>, <span style="color:#099">82</span>, <span style="color:#099">70</span>, <span style="color:#099">92</span>, <span style="color:#099">75</span>],
+</span></span><span style="display:flex;"><span>    <span style="color:#d14">&#34;systolic_bp&#34;</span>: [<span style="color:#099">120</span>, <span style="color:#099">145</span>, <span style="color:#099">122</span>, <span style="color:#099">110</span>, <span style="color:#099">141</span>, <span style="color:#099">118</span>]
+</span></span><span style="display:flex;"><span>})
+</span></span></code></pre></div><p>Our goal is to create a new column, <code>previous_heart_rate</code>, which for each visit, shows the heart rate for that <em>same patient</em> from their immediately preceding visit.</p>
+
+
+
+
+<h4 id="the-wrong-way-a-simple-shift">The Wrong Way: A Simple <code>shift</code>
+  <a href="#the-wrong-way-a-simple-shift"></a>
+</h4>
+<p>A newcomer might think to use <code>.shift(1)</code> on the <code>heart_rate</code> column. Let’s see why this is incorrect.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Incorrect approach: a simple shift does not respect the groups</span>
+</span></span><span style="display:flex;"><span>df_wrong_shift <span style="color:#000;font-weight:bold">=</span> df_vitals<span style="color:#000;font-weight:bold">.</span>with_columns(
+</span></span><span style="display:flex;"><span>    pl<span style="color:#000;font-weight:bold">.</span>col(<span style="color:#d14">&#34;heart_rate&#34;</span>)<span style="color:#000;font-weight:bold">.</span>shift(<span style="color:#099">1</span>)<span style="color:#000;font-weight:bold">.</span>alias(<span style="color:#d14">&#34;previous_heart_rate&#34;</span>)
+</span></span><span style="display:flex;"><span>)
+</span></span></code></pre></div><p>This operation blindly shifts the entire <code>heart_rate</code> column down by one position, irrespective of the <code>patient_id</code>. The second row (patient 205) would incorrectly get the previous heart rate from the first row (patient 101). This is meaningless.</p>
+
+
+
+
+<h4 id="the-right-way-shift-with-over">The Right Way: <code>shift()</code> with <code>.over()</code>
+  <a href="#the-right-way-shift-with-over"></a>
+</h4>
+<p>The solution is to tell Polars to perform the <code>shift</code> operation <em>within the context of each patient’s group</em>. The <code>.over()</code> clause does exactly this. It partitions the data by the given column(s) and applies the expression to each partition independently.</p>
+<p><strong>Crucially, the concept of “previous” is only meaningful if the data is sorted by time.</strong> Therefore, the first and most important step is to sort the DataFrame by the time column.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#998;font-style:italic"># The correct, efficient, and idiomatic Polars way</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Step 1: Sort the data to establish a clear chronological order.</span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># This is essential for any time-based window function.</span>
+</span></span><span style="display:flex;"><span>df_sorted <span style="color:#000;font-weight:bold">=</span> df_vitals<span style="color:#000;font-weight:bold">.</span>sort(<span style="color:#d14">&#34;visit_date&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Step 2: Apply the window function.</span>
+</span></span><span style="display:flex;"><span>df_with_previous_hr <span style="color:#000;font-weight:bold">=</span> df_sorted<span style="color:#000;font-weight:bold">.</span>with_columns(
+</span></span><span style="display:flex;"><span>    pl<span style="color:#000;font-weight:bold">.</span>col(<span style="color:#d14">&#34;heart_rate&#34;</span>)<span style="color:#000;font-weight:bold">.</span>shift(<span style="color:#099">1</span>)<span style="color:#000;font-weight:bold">.</span>over(<span style="color:#d14">&#34;patient_id&#34;</span>)<span style="color:#000;font-weight:bold">.</span>alias(<span style="color:#d14">&#34;previous_heart_rate&#34;</span>)
+</span></span><span style="display:flex;"><span>)
+</span></span></code></pre></div><p>Let’s break down the key expression: <code>pl.col(&quot;heart_rate&quot;).shift(1).over(&quot;patient_id&quot;)</code></p>
+<ol>
+<li><strong><code>pl.col(&quot;heart_rate&quot;)</code></strong>: We select the column we want to operate on.</li>
+<li><strong><code>.shift(1)</code></strong>: We specify the operation: get the value from the previous row.</li>
+<li><strong><code>.over(&quot;patient_id&quot;)</code></strong>: This is the magic. It instructs Polars:
+<ul>
+<li>“First, partition the (already sorted) DataFrame by <code>patient_id</code>.”</li>
+<li>“Then, for each partition (i.e., for each patient’s timeline), apply the <code>.shift(1)</code> operation independently.”</li>
+<li>“Finally, stitch the results back together in the original order.”</li>
+</ul>
+</li>
+</ol>
+<p>The result is a DataFrame where the <code>previous_heart_rate</code> for a given row correctly corresponds to that same patient’s prior visit, and is <code>null</code> for the very first visit of each patient since there is no preceding data for them.</p>
+
+
+
+
+<h4 id="expanding-the-concept-more-powerful-window-functions">Expanding the Concept: More Powerful Window Functions
+  <a href="#expanding-the-concept-more-powerful-window-functions"></a>
+</h4>
+<p>The <code>shift</code> operation is just the beginning. The <code>.over()</code> clause can be combined with a vast array of expressions to answer more complex questions.</p>
+<p><strong>Example 1: Calculating the Change in Blood Pressure</strong></p>
+<p>Now that we have the previous value, we can easily calculate the change since the last visit.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#998;font-style:italic"># We can define the &#39;previous_bp&#39; inside the same expression</span>
+</span></span><span style="display:flex;"><span>df_with_bp_change <span style="color:#000;font-weight:bold">=</span> df_vitals<span style="color:#000;font-weight:bold">.</span>sort(<span style="color:#d14">&#34;visit_date&#34;</span>)<span style="color:#000;font-weight:bold">.</span>with_columns(
+</span></span><span style="display:flex;"><span>    (
+</span></span><span style="display:flex;"><span>        pl<span style="color:#000;font-weight:bold">.</span>col(<span style="color:#d14">&#34;systolic_bp&#34;</span>) <span style="color:#000;font-weight:bold">-</span> pl<span style="color:#000;font-weight:bold">.</span>col(<span style="color:#d14">&#34;systolic_bp&#34;</span>)<span style="color:#000;font-weight:bold">.</span>shift(<span style="color:#099">1</span>)<span style="color:#000;font-weight:bold">.</span>over(<span style="color:#d14">&#34;patient_id&#34;</span>)
+</span></span><span style="display:flex;"><span>    )<span style="color:#000;font-weight:bold">.</span>alias(<span style="color:#d14">&#34;bp_change_since_last_visit&#34;</span>)
+</span></span><span style="display:flex;"><span>)
+</span></span></code></pre></div><p><strong>Example 2: Calculating a Rolling Average</strong></p>
+<p>Let’s compute the 2-visit rolling average heart rate for each patient.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#998;font-style:italic"># The rolling_mean function also works as a window function</span>
+</span></span><span style="display:flex;"><span>df_with_rolling_avg <span style="color:#000;font-weight:bold">=</span> df_vitals<span style="color:#000;font-weight:bold">.</span>sort(<span style="color:#d14">&#34;visit_date&#34;</span>)<span style="color:#000;font-weight:bold">.</span>with_columns(
+</span></span><span style="display:flex;"><span>    pl<span style="color:#000;font-weight:bold">.</span>col(<span style="color:#d14">&#34;heart_rate&#34;</span>)<span style="color:#000;font-weight:bold">.</span>rolling_mean(window_size<span style="color:#000;font-weight:bold">=</span><span style="color:#099">2</span>)<span style="color:#000;font-weight:bold">.</span>over(<span style="color:#d14">&#34;patient_id&#34;</span>)<span style="color:#000;font-weight:bold">.</span>alias(<span style="color:#d14">&#34;2_visit_hr_avg&#34;</span>)
+</span></span><span style="display:flex;"><span>)
+</span></span></code></pre></div><p>Here, for each row, Polars looks at the current and previous heart rate <em>for that patient</em> and computes the average.</p>
+<p><strong>Example 3: A Cumulative Visit Count</strong></p>
+<p>We can also use window functions for cumulative calculations, like numbering the visits for each patient.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#998;font-style:italic"># We use pl.lit(1) to create a column of 1s to sum up</span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># The idiomatic and correct way to generate a visit number</span>
+</span></span><span style="display:flex;"><span>df_with_visit_count <span style="color:#000;font-weight:bold">=</span> df_vitals<span style="color:#000;font-weight:bold">.</span>sort(<span style="color:#d14">&#34;visit_date&#34;</span>)<span style="color:#000;font-weight:bold">.</span>with_columns(
+</span></span><span style="display:flex;"><span>    pl<span style="color:#000;font-weight:bold">.</span>arange(<span style="color:#099">1</span>, pl<span style="color:#000;font-weight:bold">.</span>len() <span style="color:#000;font-weight:bold">+</span> <span style="color:#099">1</span>)<span style="color:#000;font-weight:bold">.</span>over(<span style="color:#d14">&#34;patient_id&#34;</span>)<span style="color:#000;font-weight:bold">.</span>alias(<span style="color:#d14">&#34;visit_number&#34;</span>)
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#0086b3">print</span>(df_with_visit_count)
+</span></span></code></pre></div><pre><code>## shape: (6, 5)
+## ┌────────────┬────────────┬────────────┬─────────────┬──────────────┐
+## │ patient_id ┆ visit_date ┆ heart_rate ┆ systolic_bp ┆ visit_number │
+## │ ---        ┆ ---        ┆ ---        ┆ ---         ┆ ---          │
+## │ i64        ┆ date       ┆ i64        ┆ i64         ┆ i64          │
+## ╞════════════╪════════════╪════════════╪═════════════╪══════════════╡
+## │ 303        ┆ 2023-01-05 ┆ 70         ┆ 110         ┆ 1            │
+## │ 101        ┆ 2023-01-15 ┆ 78         ┆ 120         ┆ 1            │
+## │ 205        ┆ 2023-01-20 ┆ 95         ┆ 145         ┆ 1            │
+## │ 101        ┆ 2023-02-10 ┆ 82         ┆ 122         ┆ 2            │
+## │ 205        ┆ 2023-03-01 ┆ 92         ┆ 141         ┆ 2            │
+## │ 101        ┆ 2023-04-05 ┆ 75         ┆ 118         ┆ 3            │
+## └────────────┴────────────┴────────────┴─────────────┴──────────────┘
+</code></pre>
+<p>The <code>cumsum()</code> (cumulative sum) function, when applied over the patient partitions, effectively counts the visits in chronological order for each patient.</p>
+
+
+
+
+<h2 id="multi-level-data">Multi-level data
+  <a href="#multi-level-data"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>You can and absolutely should use <code>.over()</code> with multiple grouping columns. This is the standard and highly efficient way to handle nested contexts, such as an individual within a country, a product within a store, or a sensor on a specific machine. Let’s build on our previous logic.</p>
+
+
+
+
+<h3 id="multi-level-window-functions-handling-nested-groups">Multi-Level Window Functions: Handling Nested Groups
+  <a href="#multi-level-window-functions-handling-nested-groups"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h3>
+<p>Often, your “individual” entity is itself part of a larger group, and you need your calculations to respect both levels of this hierarchy. For example, when calculating a user’s “previous month’s activity,” you must ensure you don’t accidentally pull data from a user with the same ID but in a <em>different country</em>.</p>
+<p>The <code>.over()</code> clause elegantly handles this by accepting a list of column names. When you provide multiple columns, Polars creates partitions based on the <strong>unique combinations</strong> of the values in those columns.</p>
+
+
+
+
+<h4 id="example-dataset-user-activity-by-country">Example Dataset: User Activity by Country
+  <a href="#example-dataset-user-activity-by-country"></a>
+</h4>
+<p>Let’s create a dataset of user spending, where users can be active in different countries. We will also include a user with the same ID (<code>101</code>) in two different countries to explicitly demonstrate how Polars keeps them separate.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#000;font-weight:bold">import</span> <span style="color:#555">polars</span> <span style="color:#000;font-weight:bold">as</span> <span style="color:#555">pl</span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">from</span> <span style="color:#555">datetime</span> <span style="color:#000;font-weight:bold">import</span> date
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>df_activity <span style="color:#000;font-weight:bold">=</span> pl<span style="color:#000;font-weight:bold">.</span>DataFrame({
+</span></span><span style="display:flex;"><span>    <span style="color:#d14">&#34;country&#34;</span>: [<span style="color:#d14">&#34;USA&#34;</span>, <span style="color:#d14">&#34;USA&#34;</span>, <span style="color:#d14">&#34;Canada&#34;</span>, <span style="color:#d14">&#34;USA&#34;</span>, <span style="color:#d14">&#34;Canada&#34;</span>, <span style="color:#d14">&#34;USA&#34;</span>, <span style="color:#d14">&#34;Canada&#34;</span>],
+</span></span><span style="display:flex;"><span>    <span style="color:#d14">&#34;user_id&#34;</span>: [<span style="color:#099">101</span>, <span style="color:#099">102</span>, <span style="color:#099">101</span>, <span style="color:#099">101</span>, <span style="color:#099">101</span>, <span style="color:#099">102</span>, <span style="color:#099">205</span>],
+</span></span><span style="display:flex;"><span>    <span style="color:#d14">&#34;month&#34;</span>: [
+</span></span><span style="display:flex;"><span>        date(<span style="color:#099">2023</span>, <span style="color:#099">1</span>, <span style="color:#099">1</span>),
+</span></span><span style="display:flex;"><span>        date(<span style="color:#099">2023</span>, <span style="color:#099">1</span>, <span style="color:#099">1</span>),
+</span></span><span style="display:flex;"><span>        date(<span style="color:#099">2023</span>, <span style="color:#099">1</span>, <span style="color:#099">1</span>), <span style="color:#998;font-style:italic"># User 101 in Canada</span>
+</span></span><span style="display:flex;"><span>        date(<span style="color:#099">2023</span>, <span style="color:#099">2</span>, <span style="color:#099">1</span>), <span style="color:#998;font-style:italic"># User 101 in USA</span>
+</span></span><span style="display:flex;"><span>        date(<span style="color:#099">2023</span>, <span style="color:#099">2</span>, <span style="color:#099">1</span>), <span style="color:#998;font-style:italic"># User 101 in Canada</span>
+</span></span><span style="display:flex;"><span>        date(<span style="color:#099">2023</span>, <span style="color:#099">2</span>, <span style="color:#099">1</span>), <span style="color:#998;font-style:italic"># User 102 in USA</span>
+</span></span><span style="display:flex;"><span>        date(<span style="color:#099">2023</span>, <span style="color:#099">1</span>, <span style="color:#099">1</span>),
+</span></span><span style="display:flex;"><span>    ],
+</span></span><span style="display:flex;"><span>    <span style="color:#d14">&#34;monthly_spend&#34;</span>: [<span style="color:#099">50</span>, <span style="color:#099">120</span>, <span style="color:#099">45</span>, <span style="color:#099">65</span>, <span style="color:#099">55</span>, <span style="color:#099">110</span>, <span style="color:#099">200</span>]
+</span></span><span style="display:flex;"><span>})
+</span></span></code></pre></div><p>Our goal is to calculate <code>previous_month_spend</code> for each user <em>within each country</em>. The spending of User 101 in the USA should be completely independent of the spending of User 101 in Canada.</p>
+
+
+
+
+<h4 id="the-solution-passing-a-list-to-over">The Solution: Passing a List to <code>.over()</code>
+  <a href="#the-solution-passing-a-list-to-over"></a>
+</h4>
+<p>The logic remains the same as before, but we simply provide a list of our grouping columns to the <code>.over()</code> clause.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#998;font-style:italic"># The pattern for multi-level window functions</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Step 1: Sort by the full hierarchy, with time last.</span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># This ensures that within each (country, user) group, the data is chronological.</span>
+</span></span><span style="display:flex;"><span>df_sorted <span style="color:#000;font-weight:bold">=</span> df_activity<span style="color:#000;font-weight:bold">.</span>sort(<span style="color:#d14">&#34;country&#34;</span>, <span style="color:#d14">&#34;user_id&#34;</span>, <span style="color:#d14">&#34;month&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Step 2: Apply the window function over the multi-level group.</span>
+</span></span><span style="display:flex;"><span>df_with_previous_spend <span style="color:#000;font-weight:bold">=</span> df_sorted<span style="color:#000;font-weight:bold">.</span>with_columns(
+</span></span><span style="display:flex;"><span>    pl<span style="color:#000;font-weight:bold">.</span>col(<span style="color:#d14">&#34;monthly_spend&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">.</span>shift(<span style="color:#099">1</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">.</span>over([<span style="color:#d14">&#34;country&#34;</span>, <span style="color:#d14">&#34;user_id&#34;</span>])  <span style="color:#998;font-style:italic"># Pass a list of columns here</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">.</span>alias(<span style="color:#d14">&#34;previous_month_spend&#34;</span>)
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>df_with_previous_spend<span style="color:#000;font-weight:bold">.</span>head(<span style="color:#099">5</span>)
+</span></span></code></pre></div><div><style>
+.dataframe > thead > tr,
+.dataframe > tbody > tr {
+  text-align: right;
+  white-space: pre-wrap;
+}
+</style>
+<small>shape: (5, 5)</small><table border="1" class="dataframe"><thead><tr><th>country</th><th>user_id</th><th>month</th><th>monthly_spend</th><th>previous_month_spend</th></tr><tr><td>str</td><td>i64</td><td>date</td><td>i64</td><td>i64</td></tr></thead><tbody><tr><td>&quot;Canada&quot;</td><td>101</td><td>2023-01-01</td><td>45</td><td>null</td></tr><tr><td>&quot;Canada&quot;</td><td>101</td><td>2023-02-01</td><td>55</td><td>45</td></tr><tr><td>&quot;Canada&quot;</td><td>205</td><td>2023-01-01</td><td>200</td><td>null</td></tr><tr><td>&quot;USA&quot;</td><td>101</td><td>2023-01-01</td><td>50</td><td>null</td></tr><tr><td>&quot;USA&quot;</td><td>101</td><td>2023-02-01</td><td>65</td><td>50</td></tr></tbody></table></div>
+<p>This output clearly demonstrates that the window functions have correctly respected the two-level grouping hierarchy.</p>
+<p>The expression <code>pl.col(&quot;monthly_spend&quot;).shift(1).over([&quot;country&quot;, &quot;user_id&quot;])</code> instructs Polars to:</p>
+<ol>
+<li>First, conceptually partition the data based on the unique <code>(country, user_id)</code> pairs. This creates logical sub-groups like <code>(&quot;Canada&quot;, 101)</code>, <code>(&quot;Canada&quot;, 205)</code>, <code>(&quot;USA&quot;, 101)</code>, and <code>(&quot;USA&quot;, 102)</code>.</li>
+<li>Within each of these independent sub-groups, apply the <code>.shift(1)</code> operation.</li>
+<li>The <code>shift</code> for the <code>(&quot;USA&quot;, 101)</code> group will never see data from the <code>(&quot;Canada&quot;, 101)</code> group, which is exactly the behavior we need.</li>
+</ol>
+
+
+
+
+<h3 id="advanced-example-difference-from-country-average">Advanced Example: Difference from Country Average
+  <a href="#advanced-example-difference-from-country-average"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h3>
+<p>The power of this pattern extends far beyond simple <code>shift</code> operations. Let’s ask a more complex question: <strong>“For each month, how did a user’s spending differ from their country’s average spending in that same month?”</strong></p>
+<p>This requires a different kind of window. We need to group by <code>country</code> and <code>month</code> to calculate the average, but still return a value for every user row.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Calculate the difference from the country&#39;s monthly average</span>
+</span></span><span style="display:flex;"><span>df_with_country_diff <span style="color:#000;font-weight:bold">=</span> df_activity<span style="color:#000;font-weight:bold">.</span>with_columns(
+</span></span><span style="display:flex;"><span>    (
+</span></span><span style="display:flex;"><span>        pl<span style="color:#000;font-weight:bold">.</span>col(<span style="color:#d14">&#34;monthly_spend&#34;</span>) <span style="color:#000;font-weight:bold">-</span> pl<span style="color:#000;font-weight:bold">.</span>mean(<span style="color:#d14">&#34;monthly_spend&#34;</span>)<span style="color:#000;font-weight:bold">.</span>over([<span style="color:#d14">&#34;country&#34;</span>, <span style="color:#d14">&#34;month&#34;</span>])
+</span></span><span style="display:flex;"><span>    )<span style="color:#000;font-weight:bold">.</span>alias(<span style="color:#d14">&#34;spend_vs_country_avg&#34;</span>)
+</span></span><span style="display:flex;"><span>)
+</span></span></code></pre></div><p>In this expression, <code>.over([&quot;country&quot;, &quot;month&quot;])</code> tells Polars:</p>
+<ol>
+<li>For each row, find its <code>(country, month)</code> group (e.g., <code>(&quot;USA&quot;, 2023-01-01)</code>).</li>
+<li>Calculate the <code>mean(&quot;monthly_spend&quot;)</code> for that entire group.</li>
+<li>Subtract this group mean from the individual row’s <code>monthly_spend</code>.</li>
+<li>Return this result for the current row.</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>df_with_country_diff<span style="color:#000;font-weight:bold">.</span>head(<span style="color:#099">5</span>)
+</span></span></code></pre></div><div><style>
+.dataframe > thead > tr,
+.dataframe > tbody > tr {
+  text-align: right;
+  white-space: pre-wrap;
+}
+</style>
+<small>shape: (5, 5)</small><table border="1" class="dataframe"><thead><tr><th>country</th><th>user_id</th><th>month</th><th>monthly_spend</th><th>spend_vs_country_avg</th></tr><tr><td>str</td><td>i64</td><td>date</td><td>i64</td><td>f64</td></tr></thead><tbody><tr><td>&quot;USA&quot;</td><td>101</td><td>2023-01-01</td><td>50</td><td>-35.0</td></tr><tr><td>&quot;USA&quot;</td><td>102</td><td>2023-01-01</td><td>120</td><td>35.0</td></tr><tr><td>&quot;Canada&quot;</td><td>101</td><td>2023-01-01</td><td>45</td><td>-77.5</td></tr><tr><td>&quot;USA&quot;</td><td>101</td><td>2023-02-01</td><td>65</td><td>-22.5</td></tr><tr><td>&quot;Canada&quot;</td><td>101</td><td>2023-02-01</td><td>55</td><td>0.0</td></tr></tbody></table></div>
+<p>This is a profoundly powerful operation that elegantly calculates a group-level statistic and broadcasts it back to the individual members of the group, all within a single, highly optimized expression.</p>
+<p><strong>In summary</strong>, using <code>.over()</code> with a list of columns is the standard, idiomatic, and highly performant way to conduct analysis on hierarchical or multi-level panel data. It gives you precise control over the context of your calculations, ensuring that your analysis respects the nested structure of your data.</p>
+
+
+
+
+<h4 id="summary-the-power-of-over">Summary: The Power of <code>over()</code>
+  <a href="#summary-the-power-of-over"></a>
+</h4>
+<p>To analyze panel data and access past information for an individual:</p>
+<ol>
+<li><strong>Always sort your DataFrame first</strong> by the column that defines time (<code>visit_date</code>, <code>timestamp</code>, etc.). This is the most critical step.</li>
+<li>Use <code>.with_columns()</code> (or <code>select()</code>) to create your new feature.</li>
+<li>Inside, define your expression using a function like <code>shift()</code>, <code>rolling_mean()</code>, <code>cumsum()</code>, etc.</li>
+<li>Chain <strong><code>.over(grouping_column)</code></strong> to the end of your expression. The <code>grouping_column</code> is the identifier for your individuals (<code>patient_id</code>, <code>store_id</code>, etc.).</li>
+</ol>
+<p>This pattern is one of the cornerstones of high-performance data analysis in Polars. It is declarative, highly readable, and allows the query optimizer to execute these complex, grouped time-series operations with maximum efficiency and parallelism.</p>
+
+
+
+
+<h2 id="conclusion">Conclusion
+  <a href="#conclusion"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>Hopefully this post was able to demonstrate a bit of the power of the <code>over()</code> paradigm in polars. Thanks for reading.</p>
 
         
         <details closed class="f6 fw7 input-reset">
@@ -362,7 +684,7 @@ import polars as pl import polars.selectors as cs # We&#39;ll need this for adva
   </dl>
   <dl class="f6 lh-copy">
     <dt class="fw7">Length:</dt>
-    <dd class="fw5 ml0">8 minute read, 1513 words</dd>
+    <dd class="fw5 ml0">16 minute read, 3351 words</dd>
   </dl>
   
   
