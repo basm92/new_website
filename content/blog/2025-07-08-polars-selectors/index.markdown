@@ -27,7 +27,18 @@ df_courses = pl.DataFrame({
     "grade_letter": ["A", "B", "A", "C", "B", "A", "A"],
     "credits": [4, 4, 4, 3, 4, 3, 4]
 })
+
+df_courses
 ```
+
+<div><style>
+.dataframe > thead > tr,
+.dataframe > tbody > tr {
+  text-align: right;
+  white-space: pre-wrap;
+}
+</style>
+<small>shape: (7, 6)</small><table border="1" class="dataframe"><thead><tr><th>student_id</th><th>full_name</th><th>course_name</th><th>grade_numeric</th><th>grade_letter</th><th>credits</th></tr><tr><td>i64</td><td>str</td><td>str</td><td>f64</td><td>str</td><td>i64</td></tr></thead><tbody><tr><td>101</td><td>&quot;Alice Smith&quot;</td><td>&quot;Intro to CS&quot;</td><td>95.5</td><td>&quot;A&quot;</td><td>4</td></tr><tr><td>102</td><td>&quot;Bob Johnson&quot;</td><td>&quot;Linear Algebra&quot;</td><td>88.0</td><td>&quot;B&quot;</td><td>4</td></tr><tr><td>101</td><td>&quot;Alice Smith&quot;</td><td>&quot;Data Structures&quot;</td><td>91.2</td><td>&quot;A&quot;</td><td>4</td></tr><tr><td>103</td><td>&quot;Charlie Brown&quot;</td><td>&quot;Calc I&quot;</td><td>76.0</td><td>&quot;C&quot;</td><td>3</td></tr><tr><td>102</td><td>&quot;Bob Johnson&quot;</td><td>&quot;Linear Algebra&quot;</td><td>89.5</td><td>&quot;B&quot;</td><td>4</td></tr><tr><td>104</td><td>&quot;Diana Prince&quot;</td><td>&quot;World History&quot;</td><td>null</td><td>&quot;A&quot;</td><td>3</td></tr><tr><td>101</td><td>&quot;Alice Smith&quot;</td><td>&quot;Algorithms&quot;</td><td>98.1</td><td>&quot;A&quot;</td><td>4</td></tr></tbody></table></div>
 
 ## Advanced Indexing: Selecting Data by Position
 

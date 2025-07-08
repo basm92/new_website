@@ -27,6 +27,8 @@ df_courses = pl.DataFrame({
     "grade_letter": ["A", "B", "A", "C", "B", "A", "A"],
     "credits": [4, 4, 4, 3, 4, 3, 4]
 })
+
+df_courses
 ```
 
 
