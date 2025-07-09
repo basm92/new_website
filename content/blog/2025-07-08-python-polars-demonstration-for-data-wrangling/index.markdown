@@ -2,7 +2,7 @@
 title: Python Polars Demonstration for Data Wrangling
 author: 'Bas Machielsen'
 excerpt: A short demonstration of the polars package in Python for data wrangling.
-date: '2025-07-08'
+date: '2025-07-07'
 slug: []
 categories: []
 tags: []
@@ -12,7 +12,7 @@ tags: []
 
 I’ve never really liked pandas. I always thought it was tedious to work with and it bothered me there were never really quick ways to do something simple. Thinks like renaming, filtering and selecting columns were always more tedious than they should’ve been too. Since a while now, I’ve been using the Python library `polars` instead. `polars` has an API which is much more similar to the R `tidyverse` system, it’s super suitable for piped sequences of code, and it has a submodule called `polars.selectors`, which allows you to select columns and rows easily. In what follows, I’ll give a short demonstration of the `polars` package using some commonly-used (and some less commonly-used) operations using an example dataset.
 
-## Why `polars` is different?
+## Why is `polars` different?
 
 There’s basically four things that make `polars` different, and better fro
 
@@ -281,8 +281,6 @@ This single, chained command represents a complete analytical query. It defines:
 
 This holistic optimization is what sets Polars apart from the step-by-step, eager execution model of libraries like pandas.
 
-Of course. Here are the additional sections expanding on specific Polars features, formatted in Markdown and continuing the tutorial style.
-
 ## Don’t Use Row-Wise Operations
 
 Coming from libraries like pandas, a common pattern is to iterate over rows or use a function like `pandas.DataFrame.apply(axis=1)` to perform complex calculations that involve multiple columns. Polars *does* have an `.apply()` method on its DataFrames, but using it is almost always an anti-pattern that should be avoided.
@@ -509,7 +507,7 @@ df_extracted = df_logs.with_columns(
 
 This ability to use the `.str` namespace within a `with_columns` or `filter` context, combined with the power of regex, allows you to perform complex text processing tasks as part of a single, optimized Polars query.
 
-## Final, Complete Example: Chaining it All Together
+## Final Example
 
 Let’s write one final, comprehensive query to showcase the expressiveness and power of Polars. Our goal is to find the top 5 busiest routes (defined by pickup and dropoff location IDs) for trips paid by credit card, calculating their average fare, distance, and trip count.
 

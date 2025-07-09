@@ -21,7 +21,7 @@ import polars as pl import polars.selectors as cs # We&amp;#39;ll need this for 
     <item>
       <title>Python Polars Demonstration for Data Wrangling</title>
       <link>/blog/2025-07-08-python-polars-demonstration-for-data-wrangling/</link>
-      <pubDate>Tue, 08 Jul 2025 00:00:00 +0000</pubDate>
+      <pubDate>Mon, 07 Jul 2025 00:00:00 +0000</pubDate>
       
       <guid>/blog/2025-07-08-python-polars-demonstration-for-data-wrangling/</guid>
       <description>Introduction I’ve never really liked pandas. I always thought it was tedious to work with and it bothered me there were never really quick ways to do something simple. Thinks like renaming, filtering and selecting columns were always more tedious than they should’ve been too. Since a while now, I’ve been using the Python library polars instead. polars has an API which is much more similar to the R tidyverse system, it’s super suitable for piped sequences of code, and it has a submodule called polars.</description>
