@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr"><head>
+  
+                           
+     
+
+
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="generator" content="Hugo 0.101.0" />
+<title>Python Polars Demonstration for Data Wrangling | Bas Machielsen</title>
+
+
+<meta property="twitter:site" content="@basss92">
+<meta property="twitter:creator" content="@basss92">
+
+
+
+
+
+
+
+  
+    
+  
+<meta name="description" content="A short demonstration of the polars package in Python for data wrangling.">
+
+
+<meta property="og:site_name" content="Bas Machielsen">
+<meta property="og:title" content="Python Polars Demonstration for Data Wrangling | Bas Machielsen">
+<meta property="og:description" content="A short demonstration of the polars package in Python for data wrangling." />
+<meta property="og:type" content="page" />
+<meta property="og:url" content="/blog/2025-07-08-python-polars-demonstration-for-data-wrangling/" />
+<meta property="og:locale" content="en">
+
+
+
+
+    
+        <meta property="og:image" content="/blog/sidebar-listing.png" >
+        <meta property="twitter:card" content="summary_large_image">
+        <meta name="twitter:image" content="/blog/sidebar-listing.png" >
+    
+    
+  <meta itemprop="name" content="Python Polars Demonstration for Data Wrangling">
+<meta itemprop="description" content="Introduction I’ve never really liked pandas. I always thought it was tedious to work with and it bothered me there were never really quick ways to do something simple. Thinks like renaming, filtering and selecting columns were always more tedious than they should’ve been too. Since a while now, I’ve been using the Python library polars instead. polars has an API which is much more similar to the R tidyverse system, it’s super suitable for piped sequences of code, and it has a submodule called polars."><meta itemprop="datePublished" content="2025-07-07T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2025-07-07T00:00:00+00:00" />
+<meta itemprop="wordCount" content="3841">
+<meta itemprop="keywords" content="" />
+  
+  
+  <!--[if IE]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  <link rel="shortcut icon" href="favicon_new.ico" type="image/x-icon">
+  <link rel="icon" href="favicon_new.ico" type="image/x-icon">
+  
+  
+  <link rel="stylesheet" href="/style.main.min.555ba9f33efffeb97887b561cc674ae6e47dfbe93583e9f789fc69722e60a59e.css" integrity="sha256-VVup8z7//rl4h7VhzGdK5uR9&#43;&#43;k1g&#43;n3ifxpci5gpZ4=" media="screen">
+  
+  
+  <script src="/panelset.min.dca42702d7daf6fd31dc352efd2bcf0e4ac8c05ccaa58d9293f6177462de5d5f.js" type="text/javascript"></script>
+  
+  
+  <script src="/main.min.11d2df4163a7df9fb9d31f699461f02d84700b160cd42fa951b0982fc4d468bc.js" type="text/javascript"></script>
+</head>
+<body>
+      <div class="grid-container">
+<header class="site-header pt4 pb2 mb4 bb b--transparent ph5 headroom z-max" role="banner">
+  <nav class="site-nav db dt-l w-100" role="navigation">
+    <a class="site-brand db dtc-l v-mid link no-underline w-100 w-33-l tc tl-l" href="/" title="Home">
+      <img src="/website_logo.png" class="dib db-l h2 w-auto" alt="Bas Machielsen">
+    </a>
+    <div class="site-links db dtc-l v-mid w-100 w-47-l tc tr-l mt3 mt0-l ttu tracked">
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/" title="Home">Home</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/about/" title="About">About</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 active" href="/blog/" title="Blog">Blog</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/project/" title="Teaching Overview &amp; Repository">Teaching</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/resume/" title="Resume">Resume</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/articles/" title="Articles">Articles</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/collection/" title="Software">Software</a>
+      
+      
+    </div>
+  </nav>
+</header>
+
+<main class="page-main pa4" role="main">
+  <section class="page-content mw7 center">
+    <article class="post-content pa0 ph4-l">
+      <header class="post-header">
+        <h1 class="f1 lh-solid measure-narrow mb3 fw4">Python Polars Demonstration for Data Wrangling</h1>
+        
+        <p class="f6 measure lh-copy mv1">By Bas Machielsen</p>
+        <p class="f7 db mv0 ttu">July 7, 2025</p>
+
+      
+
+      </header>
+      <section class="post-body pt5 pb4">
+        
+
+
+
+<h2 id="introduction">Introduction
+  <a href="#introduction"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>I’ve never really liked pandas. I always thought it was tedious to work with and it bothered me there were never really quick ways to do something simple. Thinks like renaming, filtering and selecting columns were always more tedious than they should’ve been too. Since a while now, I’ve been using the Python library <code>polars</code> instead. <code>polars</code> has an API which is much more similar to the R <code>tidyverse</code> system, it’s super suitable for piped sequences of code, and it has a submodule called <code>polars.selectors</code>, which allows you to select columns and rows easily. In what follows, I’ll give a short demonstration of the <code>polars</code> package using some commonly-used (and some less commonly-used) operations using an example dataset.</p>
+
+
+
+
+<h2 id="why-is-polars-different">Why is <code>polars</code> different?
+  <a href="#why-is-polars-different"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>There’s basically four things that make <code>polars</code> different, and better fro</p>
+<ul>
+<li>
+<p>Parallelism by Default: Modern CPUs have multiple cores, yet many traditional data tools are single-threaded. Polars is built to parallelize your queries automatically wherever possible. Operations like aggregations, joins, and even simple column transformations are spread across all available CPU cores, dramatically reducing execution time.</p>
+</li>
+<li>
+<p>Apache Arrow Memory Model: Unlike pandas, which has its own memory layout, Polars is built directly on the Apache Arrow specification. Arrow is a language-agnostic, columnar memory format optimized for analytical query performance. This column-based structure is highly efficient for the types of scans and aggregations common in data analysis and enables zero-copy data transfer between systems that also speak Arrow (like database clients, Spark, or other processing engines).</p>
+</li>
+<li>
+<p>The Expression API: This is perhaps the most significant departure from pandas. Instead of executing operations one by one, Polars encourages you to build up a series of “expressions” that describe the transformations you want to perform. These expressions are essentially a recipe or a plan. This approach allows Polars’ query optimizer to analyze the entire plan, reorder operations for maximum efficiency, and then execute it in a highly parallelized manner.</p>
+</li>
+<li>
+<p>Lazy Execution: Closely tied to the Expression API is the concept of lazy execution. Instead of immediately computing a result, you can build a query plan against a dataset (even one that hasn’t been loaded into memory yet). Polars only executes the plan when you explicitly ask for the result. This enables incredible memory efficiency—you can filter a 50GB file down to the 100MB you actually need before loading the data into RAM.</p>
+</li>
+</ul>
+
+
+
+
+<h2 id="set-up">Set-Up
+  <a href="#set-up"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>Getting started with Polars is straightforward. You can install it using pip. It’s recommended to also install pyarrow, which Polars uses for certain operations, and connectorx for high-performance database connections.</p>
+<pre><code>pip install polars pyarrow connectorx
+</code></pre>
+<p>Once installed, you can import it into your Python script or notebook. The conventional alias for Polars is <code>pl</code>, much like <code>pd</code> for pandas or <code>np</code> for NumPy.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#000;font-weight:bold">import</span> <span style="color:#555">polars</span> <span style="color:#000;font-weight:bold">as</span> <span style="color:#555">pl</span>
+</span></span></code></pre></div>
+
+
+
+<h2 id="example-nyc-taxi-trips">Example: NYC Taxi Trips
+  <a href="#example-nyc-taxi-trips"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>For the exploration, we will use a subset of the NYC Taxi Trip dataset. This dataset is a great example because it contains a mix of numerical, categorical, and datetime data, and its real-world versions are often too large to fit comfortably in memory, making it a perfect candidate for Polars’ lazy processing capabilities.</p>
+<p>We will use a single Parquet file from one of the monthly releases, which is a highly efficient columnar storage format that Polars reads exceptionally well.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#998;font-style:italic"># The URL for our example dataset (Yellow Taxi Trip Records for January 2022)</span>
+</span></span><span style="display:flex;"><span>DATA_URL <span style="color:#000;font-weight:bold">=</span> <span style="color:#d14">&#34;https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2022-01.parquet&#34;</span>
+</span></span></code></pre></div>
+
+
+
+<h2 id="the-building-blocks-of-polars">The Building Blocks of Polars
+  <a href="#the-building-blocks-of-polars"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>There are two fundamental objects in Polars: the Series (a single column of data) and the DataFrame (a two-dimensional table of one or more Series). If you’re coming from pandas, this structure will feel familiar. However, how you interact with them is different.</p>
+<ul>
+<li>Creating a DataFrame</li>
+</ul>
+<p>You can create a Polars DataFrame in several ways: from a dictionary, a list of lists, a NumPy array, a pandas DataFrame, or, most commonly, by reading from a file.</p>
+<p>Let’s start by reading our Parquet file directly into a DataFrame. This is an example of eager execution, where Polars reads the file and loads its contents into memory immediately.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Eagerly read the Parquet file from the URL into a DataFrame</span>
+</span></span><span style="display:flex;"><span>df <span style="color:#000;font-weight:bold">=</span> pl<span style="color:#000;font-weight:bold">.</span>read_parquet(DATA_URL)
+</span></span></code></pre></div><ul>
+<li>Inspecting the DataFrame</li>
+</ul>
+<p>Once loaded, you can inspect the DataFrame using familiar methods.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Display the shape of the DataFrame (rows, columns)</span>
+</span></span><span style="display:flex;"><span>df<span style="color:#000;font-weight:bold">.</span>shape
+</span></span></code></pre></div><pre><code>## (2463931, 19)
+</code></pre>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Display the column names</span>
+</span></span><span style="display:flex;"><span>df<span style="color:#000;font-weight:bold">.</span>columns
+</span></span></code></pre></div><pre><code>## ['VendorID', 'tpep_pickup_datetime', 'tpep_dropoff_datetime', 'passenger_count', 'trip_distance', 'RatecodeID', 'store_and_fwd_flag', 'PULocationID', 'DOLocationID', 'payment_type', 'fare_amount', 'extra', 'mta_tax', 'tip_amount', 'tolls_amount', 'improvement_surcharge', 'total_amount', 'congestion_surcharge', 'airport_fee']
+</code></pre>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Display the data types of each column</span>
+</span></span><span style="display:flex;"><span>df<span style="color:#000;font-weight:bold">.</span>dtypes
+</span></span></code></pre></div><pre><code>## [Int64, Datetime(time_unit='ns', time_zone=None), Datetime(time_unit='ns', time_zone=None), Float64, Float64, Float64, String, Int64, Int64, Int64, Float64, Float64, Float64, Float64, Float64, Float64, Float64, Float64, Float64]
+</code></pre>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Show the first 5 rows of the DataFrame</span>
+</span></span><span style="display:flex;"><span>df[:, :<span style="color:#099">5</span>]<span style="color:#000;font-weight:bold">.</span>head()
+</span></span></code></pre></div><div><style>
+.dataframe > thead > tr,
+.dataframe > tbody > tr {
+  text-align: right;
+  white-space: pre-wrap;
+}
+</style>
+<small>shape: (5, 5)</small><table border="1" class="dataframe"><thead><tr><th>VendorID</th><th>tpep_pickup_datetime</th><th>tpep_dropoff_datetime</th><th>passenger_count</th><th>trip_distance</th></tr><tr><td>i64</td><td>datetime[ns]</td><td>datetime[ns]</td><td>f64</td><td>f64</td></tr></thead><tbody><tr><td>1</td><td>2022-01-01 00:35:40</td><td>2022-01-01 00:53:29</td><td>2.0</td><td>3.8</td></tr><tr><td>1</td><td>2022-01-01 00:33:43</td><td>2022-01-01 00:42:07</td><td>1.0</td><td>2.1</td></tr><tr><td>2</td><td>2022-01-01 00:53:21</td><td>2022-01-01 01:02:19</td><td>1.0</td><td>0.97</td></tr><tr><td>2</td><td>2022-01-01 00:25:21</td><td>2022-01-01 00:35:23</td><td>1.0</td><td>1.09</td></tr><tr><td>2</td><td>2022-01-01 00:36:48</td><td>2022-01-01 01:14:20</td><td>1.0</td><td>4.3</td></tr></tbody></table></div>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Get descriptive statistics for the numerical columns</span>
+</span></span><span style="display:flex;"><span>df[:, :<span style="color:#099">5</span>]<span style="color:#000;font-weight:bold">.</span>describe()
+</span></span></code></pre></div><div><style>
+.dataframe > thead > tr,
+.dataframe > tbody > tr {
+  text-align: right;
+  white-space: pre-wrap;
+}
+</style>
+<small>shape: (9, 6)</small><table border="1" class="dataframe"><thead><tr><th>statistic</th><th>VendorID</th><th>tpep_pickup_datetime</th><th>tpep_dropoff_datetime</th><th>passenger_count</th><th>trip_distance</th></tr><tr><td>str</td><td>f64</td><td>str</td><td>str</td><td>f64</td><td>f64</td></tr></thead><tbody><tr><td>&quot;count&quot;</td><td>2.463931e6</td><td>&quot;2463931&quot;</td><td>&quot;2463931&quot;</td><td>2.392428e6</td><td>2.463931e6</td></tr><tr><td>&quot;null_count&quot;</td><td>0.0</td><td>&quot;0&quot;</td><td>&quot;0&quot;</td><td>71503.0</td><td>0.0</td></tr><tr><td>&quot;mean&quot;</td><td>1.707819</td><td>&quot;2022-01-17 01:19:51.689726&quot;</td><td>&quot;2022-01-17 01:34:04.421901&quot;</td><td>1.389453</td><td>5.372751</td></tr><tr><td>&quot;std&quot;</td><td>0.502137</td><td>null</td><td>null</td><td>0.982969</td><td>547.871404</td></tr><tr><td>&quot;min&quot;</td><td>1.0</td><td>&quot;2008-12-31 22:23:09&quot;</td><td>&quot;2008-12-31 23:06:56&quot;</td><td>0.0</td><td>0.0</td></tr><tr><td>&quot;25%&quot;</td><td>1.0</td><td>&quot;2022-01-09 15:37:41&quot;</td><td>&quot;2022-01-09 15:50:51&quot;</td><td>1.0</td><td>1.04</td></tr><tr><td>&quot;50%&quot;</td><td>2.0</td><td>&quot;2022-01-17 12:11:45&quot;</td><td>&quot;2022-01-17 12:23:49&quot;</td><td>1.0</td><td>1.74</td></tr><tr><td>&quot;75%&quot;</td><td>2.0</td><td>&quot;2022-01-24 13:49:38&quot;</td><td>&quot;2022-01-24 14:02:51&quot;</td><td>1.0</td><td>3.13</td></tr><tr><td>&quot;max&quot;</td><td>6.0</td><td>&quot;2022-05-18 20:41:57&quot;</td><td>&quot;2022-05-18 20:47:45&quot;</td><td>9.0</td><td>306159.28</td></tr></tbody></table></div>
+<p>These inspection methods are helpful for getting a quick overview of your data’s structure and content, just as you would in pandas.</p>
+
+
+
+
+<h2 id="expressions-and-contexts">Expressions and Contexts
+  <a href="#expressions-and-contexts"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>The true power of Polars is unlocked through its Expression API. An expression in Polars is an object that represents a calculation or transformation to be performed on one or more columns. It is not the result of the calculation itself.</p>
+<p>Expressions are always used within a specific context. The three most important contexts are:</p>
+<ul>
+<li><code>select()</code>: Used for selecting or creating columns.</li>
+<li><code>filter()</code>: Used for selecting rows based on a condition.</li>
+<li><code>with_columns()</code>: Used for adding or transforming columns.</li>
+</ul>
+<p>Let’s start with a simple expression. pl.col(“column_name”) is an expression that selects a column.</p>
+<ul>
+<li>Selecting Data with <code>select</code></li>
+</ul>
+<p>The select method is used to choose which columns you want to keep or to create new ones.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Select a single column</span>
+</span></span><span style="display:flex;"><span>selection_one_col <span style="color:#000;font-weight:bold">=</span> df<span style="color:#000;font-weight:bold">.</span>select(
+</span></span><span style="display:flex;"><span>    pl<span style="color:#000;font-weight:bold">.</span>col(<span style="color:#d14">&#34;passenger_count&#34;</span>)
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Select multiple columns by name</span>
+</span></span><span style="display:flex;"><span>selection_multiple_cols <span style="color:#000;font-weight:bold">=</span> df<span style="color:#000;font-weight:bold">.</span>select([
+</span></span><span style="display:flex;"><span>    pl<span style="color:#000;font-weight:bold">.</span>col(<span style="color:#d14">&#34;tpep_pickup_datetime&#34;</span>),
+</span></span><span style="display:flex;"><span>    pl<span style="color:#000;font-weight:bold">.</span>col(<span style="color:#d14">&#34;tpep_dropoff_datetime&#34;</span>),
+</span></span><span style="display:flex;"><span>    pl<span style="color:#000;font-weight:bold">.</span>col(<span style="color:#d14">&#34;trip_distance&#34;</span>)
+</span></span><span style="display:flex;"><span>])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Expressions can be combined to create new columns within a select</span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Here, we create a new column &#39;tip_percentage&#39;</span>
+</span></span><span style="display:flex;"><span>selection_with_new_col <span style="color:#000;font-weight:bold">=</span> df<span style="color:#000;font-weight:bold">.</span>select([
+</span></span><span style="display:flex;"><span>    pl<span style="color:#000;font-weight:bold">.</span>col(<span style="color:#d14">&#34;total_amount&#34;</span>),
+</span></span><span style="display:flex;"><span>    pl<span style="color:#000;font-weight:bold">.</span>col(<span style="color:#d14">&#34;tip_amount&#34;</span>),
+</span></span><span style="display:flex;"><span>    (pl<span style="color:#000;font-weight:bold">.</span>col(<span style="color:#d14">&#34;tip_amount&#34;</span>) <span style="color:#000;font-weight:bold">/</span> pl<span style="color:#000;font-weight:bold">.</span>col(<span style="color:#d14">&#34;total_amount&#34;</span>) <span style="color:#000;font-weight:bold">*</span> <span style="color:#099">100</span>)<span style="color:#000;font-weight:bold">.</span>alias(<span style="color:#d14">&#34;tip_percentage&#34;</span>)
+</span></span><span style="display:flex;"><span>])
+</span></span></code></pre></div><p>Notice the <code>.alias(&quot;new_name&quot;)</code> method. This is essential for giving your new, computed columns a name. Without it, Polars would assign a default, often unhelpful, name.</p>
+<ul>
+<li>Filtering Data with <code>filter</code></li>
+</ul>
+<p>The filter method is used to select rows that meet one or more conditions. The conditions are, you guessed it, expressions.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Filter for trips with more than 2 passengers</span>
+</span></span><span style="display:flex;"><span>filter_high_passenger_count <span style="color:#000;font-weight:bold">=</span> df<span style="color:#000;font-weight:bold">.</span>filter(
+</span></span><span style="display:flex;"><span>    pl<span style="color:#000;font-weight:bold">.</span>col(<span style="color:#d14">&#34;passenger_count&#34;</span>) <span style="color:#000;font-weight:bold">&gt;</span> <span style="color:#099">2</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Filter for trips that were paid by credit card (VendorID 1) and cost more than $50</span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># The &#39;&amp;&#39; operator is used for &#39;AND&#39; conditions</span>
+</span></span><span style="display:flex;"><span>filter_high_value_card_trips <span style="color:#000;font-weight:bold">=</span> df<span style="color:#000;font-weight:bold">.</span>filter(
+</span></span><span style="display:flex;"><span>    (pl<span style="color:#000;font-weight:bold">.</span>col(<span style="color:#d14">&#34;VendorID&#34;</span>) <span style="color:#000;font-weight:bold">==</span> <span style="color:#099">1</span>) <span style="color:#000;font-weight:bold">&amp;</span> (pl<span style="color:#000;font-weight:bold">.</span>col(<span style="color:#d14">&#34;total_amount&#34;</span>) <span style="color:#000;font-weight:bold">&gt;</span> <span style="color:#099">50</span>)
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Filter for short trips (less than 1 mile) OR very long trips (more than 50 miles)</span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># The &#39;|&#39; operator is used for &#39;OR&#39; conditions</span>
+</span></span><span style="display:flex;"><span>filter_short_or_long_trips <span style="color:#000;font-weight:bold">=</span> df<span style="color:#000;font-weight:bold">.</span>filter(
+</span></span><span style="display:flex;"><span>    (pl<span style="color:#000;font-weight:bold">.</span>col(<span style="color:#d14">&#34;trip_distance&#34;</span>) <span style="color:#000;font-weight:bold">&lt;</span> <span style="color:#099">1</span>) <span style="color:#000;font-weight:bold">|</span> (pl<span style="color:#000;font-weight:bold">.</span>col(<span style="color:#d14">&#34;trip_distance&#34;</span>) <span style="color:#000;font-weight:bold">&gt;</span> <span style="color:#099">50</span>)
+</span></span><span style="display:flex;"><span>)
+</span></span></code></pre></div><p>The ability to chain logical conditions inside a single filter call is both clean and efficient. Polars can optimize the execution of these compound predicates.</p>
+<ul>
+<li>Adding and Modifying Columns with <code>with_columns</code></li>
+</ul>
+<p>While select can create new columns, it also discards the old ones. More often, you’ll want to add new columns to your existing DataFrame. For this, with_columns is the perfect tool.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Let&#39;s add the &#39;tip_percentage&#39; column to our original DataFrame</span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># and also calculate trip duration in minutes</span>
+</span></span><span style="display:flex;"><span>df_with_new_cols <span style="color:#000;font-weight:bold">=</span> df<span style="color:#000;font-weight:bold">.</span>with_columns([
+</span></span><span style="display:flex;"><span>    (pl<span style="color:#000;font-weight:bold">.</span>col(<span style="color:#d14">&#34;tip_amount&#34;</span>) <span style="color:#000;font-weight:bold">/</span> pl<span style="color:#000;font-weight:bold">.</span>col(<span style="color:#d14">&#34;total_amount&#34;</span>) <span style="color:#000;font-weight:bold">*</span> <span style="color:#099">100</span>)<span style="color:#000;font-weight:bold">.</span>alias(<span style="color:#d14">&#34;tip_percentage&#34;</span>),
+</span></span><span style="display:flex;"><span>    (
+</span></span><span style="display:flex;"><span>        (pl<span style="color:#000;font-weight:bold">.</span>col(<span style="color:#d14">&#34;tpep_dropoff_datetime&#34;</span>) <span style="color:#000;font-weight:bold">-</span> pl<span style="color:#000;font-weight:bold">.</span>col(<span style="color:#d14">&#34;tpep_pickup_datetime&#34;</span>))<span style="color:#000;font-weight:bold">.</span>dt<span style="color:#000;font-weight:bold">.</span>total_seconds() <span style="color:#000;font-weight:bold">/</span> <span style="color:#099">60</span>
+</span></span><span style="display:flex;"><span>    )<span style="color:#000;font-weight:bold">.</span>alias(<span style="color:#d14">&#34;trip_duration_minutes&#34;</span>)
+</span></span><span style="display:flex;"><span>])
+</span></span></code></pre></div><p>In this example, we see two more powerful features:</p>
+<ul>
+<li>
+<p>Pipeing or Chaining expressions: We chain arithmetic operations to calculate the percentage.</p>
+</li>
+<li>
+<p>Specialized namespaces: We use the .dt namespace for datetime-specific operations, like calculating the duration in seconds. Polars also has .str for string manipulations, .list for list operations, and more, providing a consistent and discoverable API.</p>
+</li>
+<li>
+<p>Lazy vs. Eager Evaluation: Optimizing for Performance and Memory</p>
+</li>
+</ul>
+<p>So far, we’ve been working in eager mode. Every command we issued was executed immediately. This is fine for datasets that fit comfortably in RAM, but for larger-than-memory datasets, it’s a non-starter.</p>
+<p>This is where lazy execution comes in. Instead of <code>read_parquet</code>, we use <code>scan_parquet</code>.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Create a LazyFrame by scanning the file</span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># This does NOT load any data into memory. It only inspects the file&#39;s metadata.</span>
+</span></span><span style="display:flex;"><span>lazy_df <span style="color:#000;font-weight:bold">=</span> pl<span style="color:#000;font-weight:bold">.</span>scan_parquet(DATA_URL)
+</span></span></code></pre></div><p>The lazy_df object is not a DataFrame; it’s a LazyFrame. It holds a representation of the query plan we intend to run. No data has been read, and no computation has been performed.</p>
+<p>Now, we can chain all our transformations just as before.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Build a query plan on our LazyFrame</span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># 1. Filter for trips with a positive trip distance and fare amount.</span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># 2. Create new columns for trip duration and average speed.</span>
+</span></span><span style="display:flex;"><span>query_plan <span style="color:#000;font-weight:bold">=</span> lazy_df<span style="color:#000;font-weight:bold">.</span>filter(
+</span></span><span style="display:flex;"><span>    (pl<span style="color:#000;font-weight:bold">.</span>col(<span style="color:#d14">&#34;trip_distance&#34;</span>) <span style="color:#000;font-weight:bold">&gt;</span> <span style="color:#099">0</span>) <span style="color:#000;font-weight:bold">&amp;</span> (pl<span style="color:#000;font-weight:bold">.</span>col(<span style="color:#d14">&#34;fare_amount&#34;</span>) <span style="color:#000;font-weight:bold">&gt;</span> <span style="color:#099">0</span>)
+</span></span><span style="display:flex;"><span>)<span style="color:#000;font-weight:bold">.</span>with_columns([
+</span></span><span style="display:flex;"><span>    (
+</span></span><span style="display:flex;"><span>        (pl<span style="color:#000;font-weight:bold">.</span>col(<span style="color:#d14">&#34;tpep_dropoff_datetime&#34;</span>) <span style="color:#000;font-weight:bold">-</span> pl<span style="color:#000;font-weight:bold">.</span>col(<span style="color:#d14">&#34;tpep_pickup_datetime&#34;</span>))<span style="color:#000;font-weight:bold">.</span>dt<span style="color:#000;font-weight:bold">.</span>total_seconds() <span style="color:#000;font-weight:bold">/</span> <span style="color:#099">60</span>
+</span></span><span style="display:flex;"><span>    )<span style="color:#000;font-weight:bold">.</span>alias(<span style="color:#d14">&#34;trip_duration_minutes&#34;</span>),
+</span></span><span style="display:flex;"><span>    (
+</span></span><span style="display:flex;"><span>        pl<span style="color:#000;font-weight:bold">.</span>col(<span style="color:#d14">&#34;trip_distance&#34;</span>) <span style="color:#000;font-weight:bold">/</span> ((pl<span style="color:#000;font-weight:bold">.</span>col(<span style="color:#d14">&#34;tpep_dropoff_datetime&#34;</span>) <span style="color:#000;font-weight:bold">-</span> pl<span style="color:#000;font-weight:bold">.</span>col(<span style="color:#d14">&#34;tpep_pickup_datetime&#34;</span>))<span style="color:#000;font-weight:bold">.</span>dt<span style="color:#000;font-weight:bold">.</span>total_seconds() <span style="color:#000;font-weight:bold">/</span> <span style="color:#099">3600</span>)
+</span></span><span style="display:flex;"><span>    )<span style="color:#000;font-weight:bold">.</span>alias(<span style="color:#d14">&#34;average_mph&#34;</span>)
+</span></span><span style="display:flex;"><span>])
+</span></span></code></pre></div><p>At this point, query_plan is still just a LazyFrame. We’ve described what we want to do, but nothing has happened yet. Polars has taken this chain of operations and fed it to its query optimizer. The optimizer might, for instance, realize it can apply the filter while reading the data from disk, so it never even has to load the filtered-out rows into memory. This is called predicate pushdown and is a key source of Polars’ efficiency.</p>
+<p>To execute the plan and get our final result, we call the <code>.collect()</code> method.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Execute the plan and collect the results into a DataFrame</span>
+</span></span><span style="display:flex;"><span>final_df <span style="color:#000;font-weight:bold">=</span> query_plan<span style="color:#000;font-weight:bold">.</span>collect()
+</span></span></code></pre></div><p>Now, and only now, does Polars execute the full, optimized plan across all available CPU cores, reading only the necessary data and producing the final DataFrame.</p>
+<ul>
+<li>Group By and Aggregations</li>
+</ul>
+<p>Data analysis isn’t complete without the ability to group data and compute aggregate statistics. The pattern in Polars is <code>.group_by().agg()</code>, which will feel familiar to users of pandas or SQL.</p>
+<p>Let’s use our lazy query as a base and perform an aggregation. We want to find the average tip percentage and the maximum trip duration for each payment_type.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Build a full analysis pipeline: scan, filter, create features, and aggregate</span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Note: We use the lazy_df from before</span>
+</span></span><span style="display:flex;"><span>final_agg_plan <span style="color:#000;font-weight:bold">=</span> lazy_df<span style="color:#000;font-weight:bold">.</span>filter(
+</span></span><span style="display:flex;"><span>    pl<span style="color:#000;font-weight:bold">.</span>col(<span style="color:#d14">&#34;passenger_count&#34;</span>) <span style="color:#000;font-weight:bold">&gt;</span> <span style="color:#099">0</span>
+</span></span><span style="display:flex;"><span>)<span style="color:#000;font-weight:bold">.</span>with_columns([
+</span></span><span style="display:flex;"><span>    (pl<span style="color:#000;font-weight:bold">.</span>col(<span style="color:#d14">&#34;tip_amount&#34;</span>) <span style="color:#000;font-weight:bold">/</span> pl<span style="color:#000;font-weight:bold">.</span>col(<span style="color:#d14">&#34;total_amount&#34;</span>) <span style="color:#000;font-weight:bold">*</span> <span style="color:#099">100</span>)<span style="color:#000;font-weight:bold">.</span>alias(<span style="color:#d14">&#34;tip_percentage&#34;</span>),
+</span></span><span style="display:flex;"><span>    (
+</span></span><span style="display:flex;"><span>        (pl<span style="color:#000;font-weight:bold">.</span>col(<span style="color:#d14">&#34;tpep_dropoff_datetime&#34;</span>) <span style="color:#000;font-weight:bold">-</span> pl<span style="color:#000;font-weight:bold">.</span>col(<span style="color:#d14">&#34;tpep_pickup_datetime&#34;</span>))<span style="color:#000;font-weight:bold">.</span>dt<span style="color:#000;font-weight:bold">.</span>total_seconds() <span style="color:#000;font-weight:bold">/</span> <span style="color:#099">60</span>
+</span></span><span style="display:flex;"><span>    )<span style="color:#000;font-weight:bold">.</span>alias(<span style="color:#d14">&#34;trip_duration_minutes&#34;</span>)
+</span></span><span style="display:flex;"><span>])<span style="color:#000;font-weight:bold">.</span>group_by(<span style="color:#d14">&#34;payment_type&#34;</span>)<span style="color:#000;font-weight:bold">.</span>agg([
+</span></span><span style="display:flex;"><span>    pl<span style="color:#000;font-weight:bold">.</span>mean(<span style="color:#d14">&#34;tip_percentage&#34;</span>)<span style="color:#000;font-weight:bold">.</span>alias(<span style="color:#d14">&#34;avg_tip_percentage&#34;</span>),
+</span></span><span style="display:flex;"><span>    pl<span style="color:#000;font-weight:bold">.</span>max(<span style="color:#d14">&#34;trip_duration_minutes&#34;</span>)<span style="color:#000;font-weight:bold">.</span>alias(<span style="color:#d14">&#34;max_trip_duration&#34;</span>),
+</span></span><span style="display:flex;"><span>    pl<span style="color:#000;font-weight:bold">.</span>len()<span style="color:#000;font-weight:bold">.</span>alias(<span style="color:#d14">&#34;num_trips&#34;</span>) <span style="color:#998;font-style:italic"># pl.count() counts the number of rows in each group</span>
+</span></span><span style="display:flex;"><span>])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Now, execute the entire plan</span>
+</span></span><span style="display:flex;"><span>results <span style="color:#000;font-weight:bold">=</span> final_agg_plan<span style="color:#000;font-weight:bold">.</span>collect()
+</span></span></code></pre></div><p>This single, chained command represents a complete analytical query. It defines:</p>
+<ul>
+<li>Scanning the data source lazily.</li>
+<li>Filtering rows based on a condition.</li>
+<li>Creating new feature columns.</li>
+<li>Grouping the results by a categorical column.</li>
+<li>Aggregating multiple values for each group.</li>
+<li>Polars’ query optimizer analyzes this entire chain as a single unit, finding the most efficient path to the final result before executing it in parallel.</li>
+</ul>
+<p>This holistic optimization is what sets Polars apart from the step-by-step, eager execution model of libraries like pandas.</p>
+
+
+
+
+<h2 id="dont-use-row-wise-operations">Don’t Use Row-Wise Operations
+  <a href="#dont-use-row-wise-operations"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>Coming from libraries like pandas, a common pattern is to iterate over rows or use a function like <code>pandas.DataFrame.apply(axis=1)</code> to perform complex calculations that involve multiple columns. Polars <em>does</em> have an <code>.apply()</code> method on its DataFrames, but using it is almost always an anti-pattern that should be avoided.</p>
+<p><strong>Why is row-wise execution an anti-pattern in Polars?</strong></p>
+<ol>
+<li><strong>It Destroys Parallelism:</strong> Polars achieves its speed by operating on entire columns at once, allowing it to use SIMD (Single Instruction, Multiple Data) CPU instructions and parallelize the work across all available cores. A row-wise function is inherently sequential; it processes one row at a time in a Python loop, completely nullifying Polars’ parallel execution engine.</li>
+<li><strong>It Incurs a Huge Performance Penalty:</strong> For each row, data has to be converted from Polars’ efficient Rust-native memory representation into Python objects, the Python function is called, and the result is converted back. This back-and-forth conversion is extremely slow compared to a native, vectorized operation.</li>
+<li><strong>It Prevents Query Optimization:</strong> When you use a custom row-wise Python function, you are essentially creating a “black box” for the Polars query optimizer. The optimizer cannot see inside the function, so it cannot reorder operations, perform predicate pushdown, or apply any of its other powerful tricks.</li>
+</ol>
+<p>The “Polars way” is to always think in terms of columnar operations. If you find yourself wanting to do something for <em>each row</em>, take a step back and ask: “How can I express this as an operation on entire columns?”</p>
+<p>Let’s look at a concrete example. Imagine we have sensor readings and for each row (timestamp), we want to find the maximum reading across all sensors.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#998;font-style:italic"># A sample DataFrame of sensor readings</span>
+</span></span><span style="display:flex;"><span>df_sensors <span style="color:#000;font-weight:bold">=</span> pl<span style="color:#000;font-weight:bold">.</span>DataFrame({
+</span></span><span style="display:flex;"><span>    <span style="color:#d14">&#34;sensor_a&#34;</span>: [<span style="color:#099">1.0</span>, <span style="color:#099">2.0</span>, <span style="color:#099">5.0</span>, <span style="color:#099">4.0</span>, <span style="color:#000;font-weight:bold">None</span>],
+</span></span><span style="display:flex;"><span>    <span style="color:#d14">&#34;sensor_b&#34;</span>: [<span style="color:#099">3.0</span>, <span style="color:#000;font-weight:bold">None</span>, <span style="color:#099">6.0</span>, <span style="color:#099">1.0</span>, <span style="color:#099">3.0</span>],
+</span></span><span style="display:flex;"><span>    <span style="color:#d14">&#34;sensor_c&#34;</span>: [<span style="color:#099">2.0</span>, <span style="color:#099">3.0</span>, <span style="color:#099">7.0</span>, <span style="color:#099">2.0</span>, <span style="color:#099">4.0</span>],
+</span></span><span style="display:flex;"><span>})
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># The anti-pattern: using a row-wise apply (AVOID THIS)</span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># This will be very slow on large datasets</span>
+</span></span><span style="display:flex;"><span>max_reading_slow <span style="color:#000;font-weight:bold">=</span> df_sensors<span style="color:#000;font-weight:bold">.</span>with_columns(
+</span></span><span style="display:flex;"><span>    pl<span style="color:#000;font-weight:bold">.</span>max_horizontal(
+</span></span><span style="display:flex;"><span>        <span style="color:#d14">&#34;sensor_a&#34;</span>, <span style="color:#d14">&#34;sensor_b&#34;</span>, <span style="color:#d14">&#34;sensor_c&#34;</span>
+</span></span><span style="display:flex;"><span>    )<span style="color:#000;font-weight:bold">.</span>alias(<span style="color:#d14">&#34;max_reading&#34;</span>)
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># The Polars way: using a vectorized, horizontal expression</span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># This is blazingly fast and leverages the query engine</span>
+</span></span><span style="display:flex;"><span>max_reading_fast <span style="color:#000;font-weight:bold">=</span> df_sensors<span style="color:#000;font-weight:bold">.</span>with_columns(
+</span></span><span style="display:flex;"><span>    pl<span style="color:#000;font-weight:bold">.</span>max_horizontal(
+</span></span><span style="display:flex;"><span>        pl<span style="color:#000;font-weight:bold">.</span>col(<span style="color:#d14">&#34;sensor_a&#34;</span>), pl<span style="color:#000;font-weight:bold">.</span>col(<span style="color:#d14">&#34;sensor_b&#34;</span>), pl<span style="color:#000;font-weight:bold">.</span>col(<span style="color:#d14">&#34;sensor_c&#34;</span>)
+</span></span><span style="display:flex;"><span>    )<span style="color:#000;font-weight:bold">.</span>alias(<span style="color:#d14">&#34;max_reading&#34;</span>)
+</span></span><span style="display:flex;"><span>)
+</span></span></code></pre></div><p>The expression <code>pl.max_horizontal()</code> is designed specifically for this use case. It is a vectorized, parallelized function that operates horizontally across the specified columns. It is orders of magnitude faster than a Python-based <code>apply</code> function and integrates perfectly into the Polars query optimizer. Always look for a native Polars expression before resorting to a row-wise operation.</p>
+<ul>
+<li>Applying the Same Function to Multiple Columns</li>
+</ul>
+<p>A common data cleaning or feature engineering task is to apply the same transformation to many columns at once. For instance, you might want to fill null values in all numerical columns, or cast all columns ending with <code>_id</code> to a string type. Polars makes this incredibly easy and efficient through its powerful column selectors within expressions.</p>
+<p>The <code>pl.col()</code> expression, which we’ve used to select single columns, is much more versatile. It can also accept:</p>
+<ul>
+<li>A list of column names.</li>
+<li>A regex pattern to match column names.</li>
+<li>A Polars data type to select all columns of that type.</li>
+</ul>
+<p>Let’s see this in action with our NYC Taxi dataset.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Assume &#39;df&#39; is our loaded taxi DataFrame</span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">import</span> <span style="color:#555">re</span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic">#df = pl.read_parquet(DATA_URL)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Example 1: Applying a function to a list of columns</span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Let&#39;s fill nulls in specific amount columns with 0</span>
+</span></span><span style="display:flex;"><span>df_filled_amounts <span style="color:#000;font-weight:bold">=</span> df<span style="color:#000;font-weight:bold">.</span>with_columns(
+</span></span><span style="display:flex;"><span>    pl<span style="color:#000;font-weight:bold">.</span>col([<span style="color:#d14">&#34;fare_amount&#34;</span>, <span style="color:#d14">&#34;tip_amount&#34;</span>, <span style="color:#d14">&#34;tolls_amount&#34;</span>, <span style="color:#d14">&#34;total_amount&#34;</span>])<span style="color:#000;font-weight:bold">.</span>fill_null(<span style="color:#099">0</span>)
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Example 2: Applying a function to columns selected by data type</span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Let&#39;s get the standard deviation of all floating point columns.</span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Note that this is an aggregation, so we use select() instead of with_columns().</span>
+</span></span><span style="display:flex;"><span>float_std_devs <span style="color:#000;font-weight:bold">=</span> df<span style="color:#000;font-weight:bold">.</span>select(
+</span></span><span style="display:flex;"><span>    pl<span style="color:#000;font-weight:bold">.</span>col(pl<span style="color:#000;font-weight:bold">.</span>Float64)<span style="color:#000;font-weight:bold">.</span>std()<span style="color:#000;font-weight:bold">.</span>name<span style="color:#000;font-weight:bold">.</span>suffix(<span style="color:#d14">&#34;_std_dev&#34;</span>)
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># The .suffix() method is a convenient way to add a suffix to the names of all</span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># newly created columns, resulting in &#39;trip_distance_std_dev&#39;, &#39;fare_amount_std_dev&#39;, etc.</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Example 3: Applying a function to columns selected by a regex pattern</span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Let&#39;s cast all columns containing &#34;ID&#34; in their name to strings (pl.Utf8)</span>
+</span></span><span style="display:flex;"><span>df_casted_ids <span style="color:#000;font-weight:bold">=</span> df<span style="color:#000;font-weight:bold">.</span>with_columns(
+</span></span><span style="display:flex;"><span>    [pl<span style="color:#000;font-weight:bold">.</span>col(col)<span style="color:#000;font-weight:bold">.</span>cast(pl<span style="color:#000;font-weight:bold">.</span>Utf8) <span style="color:#000;font-weight:bold">for</span> col <span style="color:#000;font-weight:bold">in</span> df<span style="color:#000;font-weight:bold">.</span>columns <span style="color:#000;font-weight:bold">if</span> <span style="color:#d14">r</span><span style="color:#d14">&#34;ID&#34;</span> <span style="color:#000;font-weight:bold">in</span> col]
+</span></span><span style="display:flex;"><span>)
+</span></span></code></pre></div><p>This selector syntax is a cornerstone of efficient Polars code. It allows you to write sweeping, generic transformations that are both readable and highly performant, avoiding the need for manual loops over column names. By combining data type and regex selectors, you can build powerful and reusable data cleaning pipelines.</p>
+<p>In a similar way, we can iterate through column names and data types:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#000;font-weight:bold">for</span> column_name, dtype <span style="color:#000;font-weight:bold">in</span> df<span style="color:#000;font-weight:bold">.</span>schema<span style="color:#000;font-weight:bold">.</span>items():
+</span></span><span style="display:flex;"><span>  <span style="color:#0086b3">print</span>(<span style="color:#d14">f</span><span style="color:#d14">&#34;Column &#39;</span><span style="color:#d14">{</span>column_name<span style="color:#d14">}</span><span style="color:#d14">&#39; has dtype: </span><span style="color:#d14">{</span>dtype<span style="color:#d14">}</span><span style="color:#d14">&#34;</span>)
+</span></span></code></pre></div><pre><code>## Column 'VendorID' has dtype: Int64
+## Column 'tpep_pickup_datetime' has dtype: Datetime(time_unit='ns', time_zone=None)
+## Column 'tpep_dropoff_datetime' has dtype: Datetime(time_unit='ns', time_zone=None)
+## Column 'passenger_count' has dtype: Float64
+## Column 'trip_distance' has dtype: Float64
+## Column 'RatecodeID' has dtype: Float64
+## Column 'store_and_fwd_flag' has dtype: String
+## Column 'PULocationID' has dtype: Int64
+## Column 'DOLocationID' has dtype: Int64
+## Column 'payment_type' has dtype: Int64
+## Column 'fare_amount' has dtype: Float64
+## Column 'extra' has dtype: Float64
+## Column 'mta_tax' has dtype: Float64
+## Column 'tip_amount' has dtype: Float64
+## Column 'tolls_amount' has dtype: Float64
+## Column 'improvement_surcharge' has dtype: Float64
+## Column 'total_amount' has dtype: Float64
+## Column 'congestion_surcharge' has dtype: Float64
+## Column 'airport_fee' has dtype: Float64
+</code></pre>
+<ul>
+<li>Understanding Structs: Grouping Fields for Clarity</li>
+</ul>
+<p>As your data analysis becomes more complex, you may find yourself with a wide DataFrame containing many related columns. For instance, you might have <code>pickup_latitude</code>, <code>pickup_longitude</code>, <code>pickup_time</code>, and then <code>dropoff_latitude</code>, <code>dropoff_longitude</code>, and <code>dropoff_time</code>. Keeping these as six separate top-level columns can become unwieldy.</p>
+<p>Polars offers a powerful solution for this: the <code>Struct</code> data type. A <code>Struct</code> is a nested data type that groups multiple fields (columns) into a single, logical parent column. Think of it like a dictionary or an object that lives inside a cell of your DataFrame.</p>
+<p><strong>Creating and Using Structs</strong></p>
+<p>You can create a <code>Struct</code> using the <code>pl.struct()</code> expression, typically within a <code>with_columns</code> context.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Assume &#39;df&#39; is our loaded taxi DataFrame</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Let&#39;s group pickup and dropoff information into structs</span>
+</span></span><span style="display:flex;"><span>df_with_structs <span style="color:#000;font-weight:bold">=</span> df<span style="color:#000;font-weight:bold">.</span>with_columns([
+</span></span><span style="display:flex;"><span>    pl<span style="color:#000;font-weight:bold">.</span>struct(
+</span></span><span style="display:flex;"><span>        [pl<span style="color:#000;font-weight:bold">.</span>col(<span style="color:#d14">&#34;tpep_pickup_datetime&#34;</span>), pl<span style="color:#000;font-weight:bold">.</span>col(<span style="color:#d14">&#34;PULocationID&#34;</span>)]
+</span></span><span style="display:flex;"><span>    )<span style="color:#000;font-weight:bold">.</span>alias(<span style="color:#d14">&#34;pickup_info&#34;</span>),
+</span></span><span style="display:flex;"><span>    pl<span style="color:#000;font-weight:bold">.</span>struct(
+</span></span><span style="display:flex;"><span>        [pl<span style="color:#000;font-weight:bold">.</span>col(<span style="color:#d14">&#34;tpep_dropoff_datetime&#34;</span>), pl<span style="color:#000;font-weight:bold">.</span>col(<span style="color:#d14">&#34;DOLocationID&#34;</span>)]
+</span></span><span style="display:flex;"><span>    )<span style="color:#000;font-weight:bold">.</span>alias(<span style="color:#d14">&#34;dropoff_info&#34;</span>)
+</span></span><span style="display:flex;"><span>])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># The resulting DataFrame will now have &#39;pickup_info&#39; and &#39;dropoff_info&#39; columns.</span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># These columns contain struct values, not simple numbers or strings.</span>
+</span></span></code></pre></div><p>The primary benefit is organization, but the real power comes from operating on these structs. Polars provides a special <code>.struct</code> namespace for expressions to interact with <code>Struct</code> columns.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Let&#39;s work with our new df_with_structs DataFrame</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Example 1: Accessing a field within a struct</span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># We can extract just the pickup location ID from the struct</span>
+</span></span><span style="display:flex;"><span>df_extracted_field <span style="color:#000;font-weight:bold">=</span> df_with_structs<span style="color:#000;font-weight:bold">.</span>select(
+</span></span><span style="display:flex;"><span>    pl<span style="color:#000;font-weight:bold">.</span>col(<span style="color:#d14">&#34;pickup_info&#34;</span>)<span style="color:#000;font-weight:bold">.</span>struct<span style="color:#000;font-weight:bold">.</span>field(<span style="color:#d14">&#34;PULocationID&#34;</span>)<span style="color:#000;font-weight:bold">.</span>alias(<span style="color:#d14">&#34;pickup_id_from_struct&#34;</span>)
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Example 2: Renaming fields within a struct</span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># This is useful for creating cleaner, more understandable nested data</span>
+</span></span><span style="display:flex;"><span>df_renamed_struct <span style="color:#000;font-weight:bold">=</span> df_with_structs<span style="color:#000;font-weight:bold">.</span>with_columns(
+</span></span><span style="display:flex;"><span>    pl<span style="color:#000;font-weight:bold">.</span>col(<span style="color:#d14">&#34;pickup_info&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">.</span>struct<span style="color:#000;font-weight:bold">.</span>rename_fields([<span style="color:#d14">&#34;timestamp&#34;</span>, <span style="color:#d14">&#34;location_id&#34;</span>])
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">.</span>alias(<span style="color:#d14">&#34;pickup_info_renamed&#34;</span>)
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Example 3: Unnesting a struct</span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># The opposite of creating a struct is &#39;unnesting&#39; it, which flattens</span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># the fields back into top-level columns. This is very useful after</span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># you&#39;ve performed your grouped operations.</span>
+</span></span><span style="display:flex;"><span>df_unnested <span style="color:#000;font-weight:bold">=</span> (df_with_structs
+</span></span><span style="display:flex;"><span> <span style="color:#000;font-weight:bold">.</span>drop([<span style="color:#d14">&#34;tpep_pickup_datetime&#34;</span>, <span style="color:#d14">&#34;PULocationID&#34;</span>])
+</span></span><span style="display:flex;"><span> <span style="color:#000;font-weight:bold">.</span>unnest(<span style="color:#d14">&#34;pickup_info&#34;</span>)
+</span></span><span style="display:flex;"><span> )
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># This would add &#39;tpep_pickup_datetime&#39; and &#39;PULocationID&#39; back as top-level</span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># columns (if they weren&#39;t already there).</span>
+</span></span></code></pre></div><p><code>Structs</code> are a powerful tool for managing complexity. They allow you to group related data, operate on those groups as a unit, and maintain a cleaner, more organized top-level DataFrame structure.</p>
+<ul>
+<li>Strings and Regex</li>
+</ul>
+<p>String manipulation is a fundamental part of data cleaning and feature engineering. Polars has a rich set of string operations available through the <code>.str</code> expression namespace. This includes simple checks, powerful regex-based extraction, and replacement functions.</p>
+<p><strong>Selecting and Filtering with String Patterns</strong></p>
+<p>We’ve already seen how to select columns using a regex pattern in <code>pl.col()</code>. The same logic applies when you need to filter rows based on the content of a string column. The <code>.str.contains()</code> method is your primary tool for this, and it fully supports regular expressions.</p>
+<p>Let’s create a sample DataFrame to illustrate these concepts.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>df_logs <span style="color:#000;font-weight:bold">=</span> pl<span style="color:#000;font-weight:bold">.</span>DataFrame({
+</span></span><span style="display:flex;"><span>    <span style="color:#d14">&#34;timestamp&#34;</span>: [<span style="color:#d14">&#34;2023-10-26 10:00:00&#34;</span>, <span style="color:#d14">&#34;2023-10-26 10:05:00&#34;</span>, <span style="color:#d14">&#34;2023-10-26 10:10:00&#34;</span>],
+</span></span><span style="display:flex;"><span>    <span style="color:#d14">&#34;log_message&#34;</span>: [<span style="color:#d14">&#34;INFO: User user_123 logged in.&#34;</span>, <span style="color:#d14">&#34;WARNING: Disk space low on host_abc.&#34;</span>, <span style="color:#d14">&#34;INFO: Process pid_456 completed successfully.&#34;</span>],
+</span></span><span style="display:flex;"><span>    <span style="color:#d14">&#34;service_name&#34;</span>: [<span style="color:#d14">&#34;authentication-service&#34;</span>, <span style="color:#d14">&#34;monitoring-service&#34;</span>, <span style="color:#d14">&#34;data-pipeline-service&#34;</span>]
+</span></span><span style="display:flex;"><span>})
+</span></span></code></pre></div><p><strong>Filtering Rows Based on String Matches</strong></p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Filter for rows where the log message contains &#34;INFO&#34;</span>
+</span></span><span style="display:flex;"><span>info_logs <span style="color:#000;font-weight:bold">=</span> df_logs<span style="color:#000;font-weight:bold">.</span>filter(
+</span></span><span style="display:flex;"><span>    pl<span style="color:#000;font-weight:bold">.</span>col(<span style="color:#d14">&#34;log_message&#34;</span>)<span style="color:#000;font-weight:bold">.</span>str<span style="color:#000;font-weight:bold">.</span>contains(<span style="color:#d14">&#34;INFO&#34;</span>)
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Filter for rows from either the &#39;authentication&#39; or &#39;data-pipeline&#39; service</span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># We use a regex pattern with the OR operator &#39;|&#39;</span>
+</span></span><span style="display:flex;"><span>auth_or_pipeline_logs <span style="color:#000;font-weight:bold">=</span> df_logs<span style="color:#000;font-weight:bold">.</span>filter(
+</span></span><span style="display:flex;"><span>    pl<span style="color:#000;font-weight:bold">.</span>col(<span style="color:#d14">&#34;service_name&#34;</span>)<span style="color:#000;font-weight:bold">.</span>str<span style="color:#000;font-weight:bold">.</span>contains(<span style="color:#d14">&#34;authentication|data-pipeline&#34;</span>)
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># You can also use other helpful methods like .starts_with() and .ends_with()</span>
+</span></span><span style="display:flex;"><span>monitoring_logs <span style="color:#000;font-weight:bold">=</span> df_logs<span style="color:#000;font-weight:bold">.</span>filter(
+</span></span><span style="display:flex;"><span>    pl<span style="color:#000;font-weight:bold">.</span>col(<span style="color:#d14">&#34;service_name&#34;</span>)<span style="color:#000;font-weight:bold">.</span>str<span style="color:#000;font-weight:bold">.</span>starts_with(<span style="color:#d14">&#34;monitoring&#34;</span>)
+</span></span><span style="display:flex;"><span>)
+</span></span></code></pre></div><p><strong>Extracting Data from Strings with Regex</strong></p>
+<p>Often, you don’t just want to know if a pattern exists; you want to extract the matching data into a new column. The <code>.str.extract()</code> method is perfect for this. It takes a regex pattern with a capture group (defined by parentheses <code>()</code>) and extracts the content of that group.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Extract the user ID, host name, and process ID from the log messages.</span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># We use a regex with a capture group `(\w+)` which means &#34;one or more word characters&#34;.</span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># The second argument to extract, `1`, specifies we want the first capture group.</span>
+</span></span><span style="display:flex;"><span>df_extracted <span style="color:#000;font-weight:bold">=</span> df_logs<span style="color:#000;font-weight:bold">.</span>with_columns(
+</span></span><span style="display:flex;"><span>    pl<span style="color:#000;font-weight:bold">.</span>col(<span style="color:#d14">&#34;log_message&#34;</span>)<span style="color:#000;font-weight:bold">.</span>str<span style="color:#000;font-weight:bold">.</span>extract(<span style="color:#d14">r</span><span style="color:#d14">&#34;user_(\w+)&#34;</span>, <span style="color:#099">1</span>)<span style="color:#000;font-weight:bold">.</span>alias(<span style="color:#d14">&#34;user_id&#34;</span>),
+</span></span><span style="display:flex;"><span>    pl<span style="color:#000;font-weight:bold">.</span>col(<span style="color:#d14">&#34;log_message&#34;</span>)<span style="color:#000;font-weight:bold">.</span>str<span style="color:#000;font-weight:bold">.</span>extract(<span style="color:#d14">r</span><span style="color:#d14">&#34;host_(\w+)&#34;</span>, <span style="color:#099">1</span>)<span style="color:#000;font-weight:bold">.</span>alias(<span style="color:#d14">&#34;host_name&#34;</span>),
+</span></span><span style="display:flex;"><span>    pl<span style="color:#000;font-weight:bold">.</span>col(<span style="color:#d14">&#34;log_message&#34;</span>)<span style="color:#000;font-weight:bold">.</span>str<span style="color:#000;font-weight:bold">.</span>extract(<span style="color:#d14">r</span><span style="color:#d14">&#34;pid_(\d+)&#34;</span>, <span style="color:#099">1</span>)<span style="color:#000;font-weight:bold">.</span>alias(<span style="color:#d14">&#34;process_id&#34;</span>)<span style="color:#000;font-weight:bold">.</span>cast(pl<span style="color:#000;font-weight:bold">.</span>Int64)
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Notice we can chain .cast() after .extract() to convert the extracted string &#34;456&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># into a proper integer.</span>
+</span></span></code></pre></div><p>This ability to use the <code>.str</code> namespace within a <code>with_columns</code> or <code>filter</code> context, combined with the power of regex, allows you to perform complex text processing tasks as part of a single, optimized Polars query.</p>
+
+
+
+
+<h2 id="final-example">Final Example
+  <a href="#final-example"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>Let’s write one final, comprehensive query to showcase the expressiveness and power of Polars. Our goal is to find the top 5 busiest routes (defined by pickup and dropoff location IDs) for trips paid by credit card, calculating their average fare, distance, and trip count.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Define the full, chained lazy query</span>
+</span></span><span style="display:flex;"><span>top_routes_plan <span style="color:#000;font-weight:bold">=</span> pl<span style="color:#000;font-weight:bold">.</span>scan_parquet(DATA_URL)<span style="color:#000;font-weight:bold">.</span>filter(
+</span></span><span style="display:flex;"><span>    <span style="color:#998;font-style:italic"># Condition 1: Payment type is Credit Card (ID 1)</span>
+</span></span><span style="display:flex;"><span>    pl<span style="color:#000;font-weight:bold">.</span>col(<span style="color:#d14">&#34;payment_type&#34;</span>) <span style="color:#000;font-weight:bold">==</span> <span style="color:#099">1</span>
+</span></span><span style="display:flex;"><span>)<span style="color:#000;font-weight:bold">.</span>filter(
+</span></span><span style="display:flex;"><span>    <span style="color:#998;font-style:italic"># Condition 2: Both location IDs are valid (not null)</span>
+</span></span><span style="display:flex;"><span>    pl<span style="color:#000;font-weight:bold">.</span>col(<span style="color:#d14">&#34;PULocationID&#34;</span>)<span style="color:#000;font-weight:bold">.</span>is_not_null() <span style="color:#000;font-weight:bold">&amp;</span> pl<span style="color:#000;font-weight:bold">.</span>col(<span style="color:#d14">&#34;DOLocationID&#34;</span>)<span style="color:#000;font-weight:bold">.</span>is_not_null()
+</span></span><span style="display:flex;"><span>)<span style="color:#000;font-weight:bold">.</span>group_by([<span style="color:#d14">&#34;PULocationID&#34;</span>, <span style="color:#d14">&#34;DOLocationID&#34;</span>])<span style="color:#000;font-weight:bold">.</span>agg([
+</span></span><span style="display:flex;"><span>    pl<span style="color:#000;font-weight:bold">.</span>mean(<span style="color:#d14">&#34;fare_amount&#34;</span>)<span style="color:#000;font-weight:bold">.</span>alias(<span style="color:#d14">&#34;avg_fare&#34;</span>),
+</span></span><span style="display:flex;"><span>    pl<span style="color:#000;font-weight:bold">.</span>mean(<span style="color:#d14">&#34;trip_distance&#34;</span>)<span style="color:#000;font-weight:bold">.</span>alias(<span style="color:#d14">&#34;avg_distance&#34;</span>),
+</span></span><span style="display:flex;"><span>    pl<span style="color:#000;font-weight:bold">.</span>len()<span style="color:#000;font-weight:bold">.</span>alias(<span style="color:#d14">&#34;trip_count&#34;</span>)
+</span></span><span style="display:flex;"><span>])<span style="color:#000;font-weight:bold">.</span>sort(
+</span></span><span style="display:flex;"><span>    <span style="color:#d14">&#34;trip_count&#34;</span>, descending<span style="color:#000;font-weight:bold">=</span><span style="color:#000;font-weight:bold">True</span>
+</span></span><span style="display:flex;"><span>)<span style="color:#000;font-weight:bold">.</span>limit(<span style="color:#099">5</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Execute the plan and materialize the result</span>
+</span></span><span style="display:flex;"><span>top_routes_df <span style="color:#000;font-weight:bold">=</span> top_routes_plan<span style="color:#000;font-weight:bold">.</span>collect()
+</span></span></code></pre></div><p>This single, readable block of code represents a sophisticated query that would be significantly more verbose and less performant in other libraries. It demonstrates the culmination of Polars’ design: lazy scanning, predicate pushdown, multi-key grouping, parallel aggregation, sorting, and limiting—all optimized and executed as one cohesive unit.</p>
+
+
+
+
+<h2 id="conclusion-when-and-why-to-use-polars">Conclusion: When and Why to Use Polars
+  <a href="#conclusion-when-and-why-to-use-polars"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>Polars is not a replacement for pandas in every conceivable situation. The pandas ecosystem is mature, with deep integrations into visualization and machine learning libraries. For small datasets (tens or hundreds of megabytes), the performance difference may not be a deciding factor, and the familiar pandas API might be more convenient.</p>
+<p>You can convert a polars DataFrame to a pandas Data.Frame in this way:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>top_routes_df<span style="color:#000;font-weight:bold">.</span>to_pandas()
+</span></span></code></pre></div><pre><code>##    PULocationID  DOLocationID   avg_fare  avg_distance  trip_count
+## 0           237           236   6.437305      1.096252       15293
+## 1           236           237   7.061231      1.087370       13164
+## 2           236           236   5.570402      0.719279       10636
+## 3           237           237   5.629696      0.703183        8973
+## 4           264           264  16.457482      2.631818        8184
+</code></pre>
+<p>In sum, you should strongly consider Polars when:</p>
+<ul>
+<li>
+<p>Performance is critical: You are working with medium-to-large datasets (hundreds of MBs to hundreds of GBs) and your processing times are becoming a bottleneck.</p>
+</li>
+<li>
+<p>Memory is a constraint: You need to process datasets that are larger than your available RAM. The lazy API and efficient memory model are game-changers here.</p>
+</li>
+<li>
+<p>You value a modern, consistent API: The Expression API, while requiring a slight mental shift, is exceptionally powerful, consistent, and less prone to the subtle inconsistencies found in the pandas API.</p>
+</li>
+<li>
+<p>You are starting a new project: For new data-intensive projects, starting with Polars can prevent many of the performance and memory headaches that often arise later when using traditional tools.</p>
+</li>
+</ul>
+<p>Polars represents a significant step forward in the world of high-performance data manipulation in Python. By using parallelism, lazy execution, and a powerful expression-based API, it provides a scalable tool for data scientists and researchers. In my opinion, taking the time to learn its core concepts will pay enormous dividends in the speed, efficiency, and clarity of future data analysis work.</p>
+
+        
+        <details closed class="f6 fw7 input-reset">
+  <dl class="f6 lh-copy">
+    <dt class="fw7">Posted on:</dt>
+    <dd class="fw5 ml0">July 7, 2025</dd>
+  </dl>
+  <dl class="f6 lh-copy">
+    <dt class="fw7">Length:</dt>
+    <dd class="fw5 ml0">19 minute read, 3841 words</dd>
+  </dl>
+  
+  
+  
+  <dl class="f6 lh-copy">
+    <dt class="fw7">See Also:</dt>
+    
+  </dl>
+</details>
+
+      </section>
+      <footer class="post-footer">
+        <div class="post-pagination dt w-100 mt4 mb2">
+  
+  
+    <a class="prev dtc pr2 tl v-top fw6"
+    href="/blog/2025-07-08-polars-selectors/">&larr; Polars Selectors and Panel Data</a>
+  
+  
+  
+    <a class="next dtc pl2 tr v-top fw6"
+    href="/blog/2025-05-23-random-effects-regression-a-mathematical-exposition/">Random Effects Regression: A Mathematical Exposition &rarr;</a>
+  
+</div>
+
+      </footer>
+    </article>
+    
+      
+<div class="post-comments pa0 pa4-l mt4">
+  
+  <script src="https://utteranc.es/client.js"
+          repo="basm92/new_website"
+          issue-term="pathname"
+          theme="boxy-light"
+          label="comments :crystal_ball:"
+          crossorigin="anonymous"
+          async
+          type="text/javascript">
+  </script>
+  
+</div>
+
+    
+  </section>
+</main>
+<footer class="site-footer pv4 bt b--transparent ph5" role="contentinfo">
+  <nav class="db dt-l w-100">
+    <p class="site-copyright f7 db dtc-l v-mid w-100 w-33-l tc tl-l pv2 pv0-l mv0 lh-copy">
+      &copy; 2025 Bas Machielsen
+      <span class="middot-divider"></span>
+      Made with <span xmlns:dct="http://purl.org/dc/terms/" property="dct:title"><a xmlns:dct="http://purl.org/dc/terms/" href="https://github.com/hugo-apero/" rel="dct:source">Hugo Apéro</a></span>.
+      <br />
+      
+Based on <span xmlns:dct="http://purl.org/dc/terms/" property="dct:title"><a xmlns:dct="http://purl.org/dc/terms/" href="https://github.com/formspree/blogophonic-hugo" rel="dct:source">Blogophonic</a></span> by <a xmlns:cc="http://creativecommons.org/ns#" href="https://formspree.io" property="cc:attributionName" rel="cc:attributionURL">Formspree</a>.
+    </p>
+    
+    <div class="site-social-links db dtc-l v-mid w-100 w-33-l tc pv2 pv0-l mv0">
+      <div class="social-icon-links" aria-hidden="true">
+  
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://github.com/basm92" title="github" target="_blank" rel="noopener">
+      <i class="fab fa-github fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://scholar.google.com/citations?user=bS8uo44AAAAJ" title="google" target="_blank" rel="noopener">
+      <i class="fab fa-google fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://twitter.com/basss92" title="twitter" target="_blank" rel="noopener">
+      <i class="fab fa-twitter fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="mailto:a.h.machielsen@uu.nl" title="envelope" >
+      <i class="fas fa-envelope fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="mailto:basmachielsen@live.nl" title="envelope" >
+      <i class="far fa-envelope fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://orcid.org/0000-0002-9692-0615" title="orcid" target="_blank" rel="noopener">
+      <i class="ai ai-orcid fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="/blog/index.xml" title="rss" >
+      <i class="fas fa-rss fa-lg fa-fw"></i>
+    </a>
+  
+</div>
+
+    </div>
+    
+    <div class="site-links f6 db dtc-l v-mid w-100 w-67-l tc tr-l pv2 pv0-l mv0">
+      
+      <a class="dib pv1 ph2 link" href="/license/" title="License">License</a>
+      
+      <a class="dib pv1 ph2 link" href="/contact/" title="Contact form">Contact</a>
+      
+      <a class="dib pv1 ph2 link" href="/contributors/" title="Contributors">Contributors</a>
+      
+    </div>
+  </nav>
+  
+    <script>
+
+    var i, text, code, codes = document.getElementsByTagName('code');
+    for (let i = 0; i < codes.length;) {
+      code = codes[i];
+      if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+        text = code.textContent;
+        if (/^\$[^$]/.test(text) && /[^$]\$$/.test(text)) {
+          text = text.replace(/^\$/, '\\(').replace(/\$$/, '\\)');
+          code.textContent = text;
+        }
+        if (/^\\\((.|\s)+\\\)$/.test(text) ||
+            /^\\\[(.|\s)+\\\]$/.test(text) ||
+            /^\$(.|\s)+\$$/.test(text) ||
+            /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+          code.outerHTML = code.innerHTML;  
+          continue;
+        }
+      }
+      i++;
+    }
+</script>
+
+  
+    
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.css" integrity="sha384-RZU/ijkSsFbcmivfdRBQDtwuwVqK7GMOw6IMvKyeWL2K5UAlyp6WonmB8m7Jd0Hn" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.js" integrity="sha384-pK1WpvzWVBQiP0/GjnvRxV4mOb0oxFuyRxJlk6vVw146n3egcN5C925NCP7a7BY8" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/contrib/auto-render.min.js" integrity="sha384-vZTG03m+2yp6N6BNi5iM4rW4oIwk5DfcNdFfxkk9ZWpDriOkXX8voJBFrAO7MpVl" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
+
+
+
+    
+  
+  
+</footer>
+
+      </div>
+    </body>
+</html>

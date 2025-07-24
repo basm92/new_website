@@ -1,0 +1,514 @@
+---
+title: Polars Selectors and Panel Data
+author: 'Bas Machielsen'
+date: '2025-07-08'
+excerpt: 'A small blogpost about selection of variables in polars. And a focus on time series and panel data.'
+slug: []
+categories: []
+tags: []
+---
+
+## Introduction
+
+In this post, let’s dive into these more advanced and idiomatic Polars techniques. These patterns are crucial for writing concise, expressive, and efficient Polars code, moving beyond basic transformations into more nuanced data manipulation.
+
+We will use a new example dataset for these concepts to better illustrate their specific use cases. Let’s imagine a dataset from a university’s course enrollment system.
+
+``` python
+import polars as pl
+import polars.selectors as cs # We'll need this for advanced column selection
+
+# Create our example DataFrame
+df_courses = pl.DataFrame({
+    "student_id": [101, 102, 101, 103, 102, 104, 101],
+    "full_name": ["Alice Smith", "Bob Johnson", "Alice Smith", "Charlie Brown", "Bob Johnson", "Diana Prince", "Alice Smith"],
+    "course_name": ["Intro to CS", "Linear Algebra", "Data Structures", "Calc I", "Linear Algebra", "World History", "Algorithms"],
+    "grade_numeric": [95.5, 88.0, 91.2, 76.0, 89.5, None, 98.1],
+    "grade_letter": ["A", "B", "A", "C", "B", "A", "A"],
+    "credits": [4, 4, 4, 3, 4, 3, 4]
+})
+
+df_courses
+```
+
+<div><style>
+.dataframe > thead > tr,
+.dataframe > tbody > tr {
+  text-align: right;
+  white-space: pre-wrap;
+}
+</style>
+<small>shape: (7, 6)</small><table border="1" class="dataframe"><thead><tr><th>student_id</th><th>full_name</th><th>course_name</th><th>grade_numeric</th><th>grade_letter</th><th>credits</th></tr><tr><td>i64</td><td>str</td><td>str</td><td>f64</td><td>str</td><td>i64</td></tr></thead><tbody><tr><td>101</td><td>&quot;Alice Smith&quot;</td><td>&quot;Intro to CS&quot;</td><td>95.5</td><td>&quot;A&quot;</td><td>4</td></tr><tr><td>102</td><td>&quot;Bob Johnson&quot;</td><td>&quot;Linear Algebra&quot;</td><td>88.0</td><td>&quot;B&quot;</td><td>4</td></tr><tr><td>101</td><td>&quot;Alice Smith&quot;</td><td>&quot;Data Structures&quot;</td><td>91.2</td><td>&quot;A&quot;</td><td>4</td></tr><tr><td>103</td><td>&quot;Charlie Brown&quot;</td><td>&quot;Calc I&quot;</td><td>76.0</td><td>&quot;C&quot;</td><td>3</td></tr><tr><td>102</td><td>&quot;Bob Johnson&quot;</td><td>&quot;Linear Algebra&quot;</td><td>89.5</td><td>&quot;B&quot;</td><td>4</td></tr><tr><td>104</td><td>&quot;Diana Prince&quot;</td><td>&quot;World History&quot;</td><td>null</td><td>&quot;A&quot;</td><td>3</td></tr><tr><td>101</td><td>&quot;Alice Smith&quot;</td><td>&quot;Algorithms&quot;</td><td>98.1</td><td>&quot;A&quot;</td><td>4</td></tr></tbody></table></div>
+
+## Advanced Indexing: Selecting Data by Position
+
+While filtering data based on its content (`.filter()`) is the most common way to select rows, there are times when you need to select data based on its integer position or index. Polars provides powerful and efficient ways to do this, far beyond simple head/tail operations.
+
+#### Method 1: Chaining `nth`, `drop`, and `slice`
+
+This method shows the power of chaining operations together to achieve a precise subset. Let’s break down the user’s first snippet: `(df.select(...).drop(...)).slice(...)`.
+
+1.  **`pl.nth(indices)`**: This expression is used within a `select` or `filter` context to pick rows by their specific, zero-based index. You can provide a single index or a list of indices. It’s the equivalent of “give me the 0th row, the 1st row, and the rows from index 3 to 5.”
+
+2.  **`.drop(column_name)`**: This is a straightforward method to remove one or more columns from the DataFrame after they have been used in a calculation or selection.
+
+3.  **`.slice(offset, length)`**: This method selects a contiguous block (a “slice”) of rows from a DataFrame, starting at the `offset` index and taking `length` rows.
+
+Let’s apply this logic to our `df_courses` dataset. Imagine we want to select the first two rows and rows 4 through 5, create a lowercase version of the `course_name`, drop the original `course_name`, and then from that result, take only the rows starting from the 4th position.
+
+``` python
+complex_selection = (
+    df_courses
+    .select(
+        pl.nth([0, 1] + list(range(3, 5))), # Select rows 0, 1, 3, 4
+        test=pl.col("course_name").str.to_lowercase() # Create a new column 'test'
+    )
+   # Drop the original column
+).slice(2, 2) # From the result, take 2 rows starting at index 2
+```
+
+This chain is executed sequentially. First Polars selects rows `[0, 1, 3, 4]`, creating a new 4-row DataFrame. Then, `.slice(2, 2)` is applied to this *new* DataFrame, selecting the final two rows (which were originally rows 3 and 4 of `df_courses`).
+
+#### Method 2: Using `polars.selectors`
+
+Polars has a dedicated module, `polars.selectors` (conventionally imported as `cs`), for creating expressive column selections. This is often cleaner than manual list building.
+
+The user’s snippet `cs.by_index(...)` is a powerful column selector. It allows you to select columns based on their integer position.
+
+``` python
+# Select the first two columns (student_id, full_name) and the last three columns
+# using their indices.
+# Note: list(range(3,6)) corresponds to columns at index 3, 4, and 5.
+selected_cols_by_index = df_courses.select(
+    cs.by_index([0, 1] + list(range(3, 6)))
+)
+```
+
+Using selectors like `cs.by_index()`, `cs.by_name()`, `cs.by_dtype()`, or `cs.matches()` is the modern, idiomatic way to build lists of columns for operations within `select` or `with_columns`.
+
+### Dynamic Column Transformations and Renaming
+
+As your data pipelines grow, you often need to apply transformations not just to column values, but to the column names themselves.
+
+#### Dynamic Renaming with a Lambda Function
+
+The `.rename()` method can accept a dictionary for explicit renames, but its real power lies in accepting a function (like a lambda). This function is applied to every column name, allowing you to perform programmatic renames across the entire DataFrame.
+
+Let’s say we want to standardize our column names to be all lowercase and have no underscores.
+
+``` python
+# The user's snippet applied to our df_courses
+df_renamed = df_courses.rename(
+    lambda column_name: column_name.lower().replace("_", "")
+)
+# This will transform 'student_id' -> 'studentid', 'full_name' -> 'fullname', etc.
+```
+
+This is incredibly useful for cleaning up data from sources with inconsistent naming conventions.
+
+#### The Universal Selector: `pl.all()`
+
+Often you want to apply an operation to *every* column. `pl.all()` is a selector that means exactly that: “all columns”. It’s a powerful shorthand that prevents you from having to type out every column name.
+
+``` python
+# Append a suffix to all column names
+df_suffixed = df_courses.select(
+    pl.all().name.suffix("_original")  # Correct method
+)
+
+# You can also exclude columns from the 'all' selection
+df_all_but_id = df_courses.select(
+    pl.all().exclude("student_id")
+)
+
+# Check if any value in any column is null
+null_check = df_courses.select(
+    pl.all().is_null().any()
+)
+```
+
+`pl.all()` is your go-to tool for DataFrame-wide transformations. It pairs beautifully with other selectors like `.exclude()` and methods like `.prefix()` or `.suffix()` to create expressive and maintainable code.
+
+## Combining DataFrames: The `concat` Operation
+
+Stitching DataFrames together is a fundamental task. Polars’ `pl.concat()` function is a versatile tool for this, and the `how` parameter dictates its behavior.
+
+Let’s create two simple DataFrames to demonstrate.
+
+``` python
+df1 = pl.DataFrame({
+    "a": [1, 2],
+    "b": [3, 4]
+})
+
+df2 = pl.DataFrame({
+    "a": [5, 6],
+    "c": [7, 8]
+})
+```
+
+- **`how="vertical"` (default)**: This stacks DataFrames on top of each other. It will match columns by name and fill missing values with nulls. This is the most common type of concatenation.
+
+- **`how="horizontal"`**: This places DataFrames side-by-side, creating a wider DataFrame. This is only advisable if the DataFrames have the same height and no overlapping column names.
+
+- **`how="diagonal"`**: This is a more specialized method shown in the user’s snippet. It concatenates the DataFrames along the diagonal, extending both rows and columns. It effectively places the second DataFrame below and to the right of the first one, filling the misaligned quadrants with nulls.
+
+``` python
+# The user's snippet shows diagonal concatenation
+# We will use df1 and df2 which have a similar structure to the user's df3 and df4
+concatenated_diagonal = pl.concat([df1, df2], how="diagonal")
+```
+
+The resulting `concatenated_diagonal` DataFrame will have columns `a`, `b`, and `c`. The first two rows will have values for `a` and `b` (from `df1`) and null for `c`. The next two rows will have values for `a` and `c` (from `df2`) and null for `b`. This is useful in scenarios where you are merging data from different schemas that have some overlap but are fundamentally staggered.
+
+### Custom Functions: A Guide to Performance and Pitfalls
+
+What happens when a built-in Polars expression doesn’t exist for your specific, complex logic? Polars provides ways to apply custom Python functions, but it’s crucial to understand the performance hierarchy.
+
+**The Golden Rule: Native expressions are always fastest. Use custom Python functions only when absolutely necessary.**
+
+Let’s establish a clear hierarchy from most-performant to least-performant.
+
+#### 1. (Slowest) Row-wise `pl.apply`
+
+This applies a Python function to each row. As discussed previously, this is an **anti-pattern** and should be avoided. It serializes the process and involves costly data conversion between Rust and Python for every single row.
+
+``` python
+# Snippet: calculating sum of two columns row by row
+# THIS IS VERY SLOW AND NOT RECOMMENDED
+df_slow_apply = df_courses.select(
+    pl.struct(["grade_numeric", "credits"])
+    .map_elements(
+        lambda x: x["grade_numeric"] + x["credits"] if None not in x.values() else None,
+        return_dtype=pl.Float64  # or whatever your expected dtype is
+    )
+    .alias("total_score")
+)
+
+# The correct, native, and blazingly fast way to do this:
+df_fast_native = df_courses.select(
+    (pl.col("grade_numeric") + pl.col("credits")).alias("total_score")
+)
+```
+
+#### 2. (Better) Element-wise `.map()`
+
+The `.map()` (or its alias `.apply` on an expression) method applies a Python function to each *element* within a column. This is still slower than a native expression because of the Python function call overhead for each value, but it is significantly better than a row-wise apply.
+
+``` python
+# The user's snippet: multiply every value in every column by 2
+# This will fail on non-numeric columns, so let's select numeric ones first
+df_mapped = df_courses.with_columns(
+    (cs.numeric() * 2).name.suffix("_doubled")
+)
+```
+
+This is best used for complex transformations on single values for which no native Polars function exists.
+
+#### 3. (Fastest Custom Method) `.struct().map()`
+
+This is the idiomatic Polars solution for performing custom row-wise logic that involves multiple columns. It strikes a balance between flexibility and performance.
+
+1.  **`pl.struct([...])`**: You first bundle the columns you need for your calculation into a temporary `Struct`.
+2.  **`.map(lambda s: ...)`**: You then apply your Python function to this `Struct` object.
+
+The magic here is that Polars can pass the entire `Struct` to Python much more efficiently than individual row elements. The lambda function receives a dictionary-like object, which is easy and readable to work with.
+
+``` python
+# This snippet: divide col1 by col2. Let's use our data.
+# Goal: Calculate a custom 'weighted_grade' = grade_numeric * (credits / 4)
+# The corrected, working version of your code
+# Corrected code with the required null check using 'is not None'
+df_struct_map = df_courses.with_columns(
+    pl.struct(["grade_numeric", "credits"])
+      .map_elements(
+          lambda s: s["grade_numeric"] * (s["credits"] / 4) if s['grade_numeric'] is not None else None,
+          return_dtype=pl.Float64
+      )
+      .alias("weighted_grade")
+)
+```
+
+This approach is vastly superior to `.apply()` because it minimizes the overhead between Rust and Python and allows the query optimizer to better reason about the operation. When you absolutely need custom logic across columns, `struct().map()` is the tool to reach for.
+
+#### 4. Idiomatic, high-performance Polars Code
+
+But if you can use standard functions, you should always prefer this.
+
+``` python
+# The explicit null check is not needed, as Polars handles it automatically.
+df_struct_map = df_courses.with_columns(
+    (pl.col("grade_numeric") * (pl.col("credits") / 4)).alias("weighted_grade")
+)
+```
+
+## Panel Data
+
+### Analyzing Panel Data: Accessing Past Observations with Window Functions
+
+A very common and powerful type of dataset in fields like econometrics and finance is **panel data** (or longitudinal data). This data structure involves tracking multiple individuals (people, companies, sensors, etc.) over multiple points in time. A key analytical task is to compute new features for an individual at a specific time point that depend on that same individual’s state at a *previous* time point.
+
+Examples of such tasks include:
+- Calculating the month-over-month sales growth for each store in a retail chain.
+- Finding the change in a patient’s heart rate since their last visit.
+- Determining if a stock’s price has increased for three consecutive days.
+
+Attempting to do this with traditional looping or complex joins is inefficient and cumbersome. Polars solves this problem elegantly with **window functions**, invoked using the `.over()` expression.
+
+A window function is a calculation that operates on a “window” of rows (a subset of the data) that are related to the current row. The `.over()` clause specifies how to form these windows. This is different from a `.group_by().agg()` operation, which collapses each group into a single row. A window function performs a calculation for each row, but within the context of its group, and returns a result for every single row.
+
+#### Example Dataset: Patient Vital Signs
+
+Let’s create a dataset tracking the vital signs of several patients over a series of hospital visits. Note that the data is deliberately not sorted by patient or date to demonstrate that Polars will handle this correctly.
+
+``` python
+import polars as pl
+from datetime import date
+
+df_vitals = pl.DataFrame({
+    "patient_id": [101, 205, 101, 303, 205, 101],
+    "visit_date": [
+        date(2023, 1, 15),
+        date(2023, 1, 20),
+        date(2023, 2, 10),
+        date(2023, 1, 5),
+        date(2023, 3, 1),
+        date(2023, 4, 5),
+    ],
+    "heart_rate": [78, 95, 82, 70, 92, 75],
+    "systolic_bp": [120, 145, 122, 110, 141, 118]
+})
+```
+
+Our goal is to create a new column, `previous_heart_rate`, which for each visit, shows the heart rate for that *same patient* from their immediately preceding visit.
+
+#### The Wrong Way: A Simple `shift`
+
+A newcomer might think to use `.shift(1)` on the `heart_rate` column. Let’s see why this is incorrect.
+
+``` python
+# Incorrect approach: a simple shift does not respect the groups
+df_wrong_shift = df_vitals.with_columns(
+    pl.col("heart_rate").shift(1).alias("previous_heart_rate")
+)
+```
+
+This operation blindly shifts the entire `heart_rate` column down by one position, irrespective of the `patient_id`. The second row (patient 205) would incorrectly get the previous heart rate from the first row (patient 101). This is meaningless.
+
+#### The Right Way: `shift()` with `.over()`
+
+The solution is to tell Polars to perform the `shift` operation *within the context of each patient’s group*. The `.over()` clause does exactly this. It partitions the data by the given column(s) and applies the expression to each partition independently.
+
+**Crucially, the concept of “previous” is only meaningful if the data is sorted by time.** Therefore, the first and most important step is to sort the DataFrame by the time column.
+
+``` python
+# The correct, efficient, and idiomatic Polars way
+
+# Step 1: Sort the data to establish a clear chronological order.
+# This is essential for any time-based window function.
+df_sorted = df_vitals.sort("visit_date")
+
+# Step 2: Apply the window function.
+df_with_previous_hr = df_sorted.with_columns(
+    pl.col("heart_rate").shift(1).over("patient_id").alias("previous_heart_rate")
+)
+```
+
+Let’s break down the key expression: `pl.col("heart_rate").shift(1).over("patient_id")`
+
+1.  **`pl.col("heart_rate")`**: We select the column we want to operate on.
+2.  **`.shift(1)`**: We specify the operation: get the value from the previous row.
+3.  **`.over("patient_id")`**: This is the magic. It instructs Polars:
+    - “First, partition the (already sorted) DataFrame by `patient_id`.”
+    - “Then, for each partition (i.e., for each patient’s timeline), apply the `.shift(1)` operation independently.”
+    - “Finally, stitch the results back together in the original order.”
+
+The result is a DataFrame where the `previous_heart_rate` for a given row correctly corresponds to that same patient’s prior visit, and is `null` for the very first visit of each patient since there is no preceding data for them.
+
+#### Expanding the Concept: More Powerful Window Functions
+
+The `shift` operation is just the beginning. The `.over()` clause can be combined with a vast array of expressions to answer more complex questions.
+
+**Example 1: Calculating the Change in Blood Pressure**
+
+Now that we have the previous value, we can easily calculate the change since the last visit.
+
+``` python
+# We can define the 'previous_bp' inside the same expression
+df_with_bp_change = df_vitals.sort("visit_date").with_columns(
+    (
+        pl.col("systolic_bp") - pl.col("systolic_bp").shift(1).over("patient_id")
+    ).alias("bp_change_since_last_visit")
+)
+```
+
+**Example 2: Calculating a Rolling Average**
+
+Let’s compute the 2-visit rolling average heart rate for each patient.
+
+``` python
+# The rolling_mean function also works as a window function
+df_with_rolling_avg = df_vitals.sort("visit_date").with_columns(
+    pl.col("heart_rate").rolling_mean(window_size=2).over("patient_id").alias("2_visit_hr_avg")
+)
+```
+
+Here, for each row, Polars looks at the current and previous heart rate *for that patient* and computes the average.
+
+**Example 3: A Cumulative Visit Count**
+
+We can also use window functions for cumulative calculations, like numbering the visits for each patient.
+
+``` python
+# We use pl.lit(1) to create a column of 1s to sum up
+# The idiomatic and correct way to generate a visit number
+df_with_visit_count = df_vitals.sort("visit_date").with_columns(
+    pl.arange(1, pl.len() + 1).over("patient_id").alias("visit_number")
+)
+
+print(df_with_visit_count)
+```
+
+    ## shape: (6, 5)
+    ## ┌────────────┬────────────┬────────────┬─────────────┬──────────────┐
+    ## │ patient_id ┆ visit_date ┆ heart_rate ┆ systolic_bp ┆ visit_number │
+    ## │ ---        ┆ ---        ┆ ---        ┆ ---         ┆ ---          │
+    ## │ i64        ┆ date       ┆ i64        ┆ i64         ┆ i64          │
+    ## ╞════════════╪════════════╪════════════╪═════════════╪══════════════╡
+    ## │ 303        ┆ 2023-01-05 ┆ 70         ┆ 110         ┆ 1            │
+    ## │ 101        ┆ 2023-01-15 ┆ 78         ┆ 120         ┆ 1            │
+    ## │ 205        ┆ 2023-01-20 ┆ 95         ┆ 145         ┆ 1            │
+    ## │ 101        ┆ 2023-02-10 ┆ 82         ┆ 122         ┆ 2            │
+    ## │ 205        ┆ 2023-03-01 ┆ 92         ┆ 141         ┆ 2            │
+    ## │ 101        ┆ 2023-04-05 ┆ 75         ┆ 118         ┆ 3            │
+    ## └────────────┴────────────┴────────────┴─────────────┴──────────────┘
+
+The `cumsum()` (cumulative sum) function, when applied over the patient partitions, effectively counts the visits in chronological order for each patient.
+
+## Multi-level data
+
+You can and absolutely should use `.over()` with multiple grouping columns. This is the standard and highly efficient way to handle nested contexts, such as an individual within a country, a product within a store, or a sensor on a specific machine. Let’s build on our previous logic.
+
+### Multi-Level Window Functions: Handling Nested Groups
+
+Often, your “individual” entity is itself part of a larger group, and you need your calculations to respect both levels of this hierarchy. For example, when calculating a user’s “previous month’s activity,” you must ensure you don’t accidentally pull data from a user with the same ID but in a *different country*.
+
+The `.over()` clause elegantly handles this by accepting a list of column names. When you provide multiple columns, Polars creates partitions based on the **unique combinations** of the values in those columns.
+
+#### Example Dataset: User Activity by Country
+
+Let’s create a dataset of user spending, where users can be active in different countries. We will also include a user with the same ID (`101`) in two different countries to explicitly demonstrate how Polars keeps them separate.
+
+``` python
+import polars as pl
+from datetime import date
+
+df_activity = pl.DataFrame({
+    "country": ["USA", "USA", "Canada", "USA", "Canada", "USA", "Canada"],
+    "user_id": [101, 102, 101, 101, 101, 102, 205],
+    "month": [
+        date(2023, 1, 1),
+        date(2023, 1, 1),
+        date(2023, 1, 1), # User 101 in Canada
+        date(2023, 2, 1), # User 101 in USA
+        date(2023, 2, 1), # User 101 in Canada
+        date(2023, 2, 1), # User 102 in USA
+        date(2023, 1, 1),
+    ],
+    "monthly_spend": [50, 120, 45, 65, 55, 110, 200]
+})
+```
+
+Our goal is to calculate `previous_month_spend` for each user *within each country*. The spending of User 101 in the USA should be completely independent of the spending of User 101 in Canada.
+
+#### The Solution: Passing a List to `.over()`
+
+The logic remains the same as before, but we simply provide a list of our grouping columns to the `.over()` clause.
+
+``` python
+# The pattern for multi-level window functions
+
+# Step 1: Sort by the full hierarchy, with time last.
+# This ensures that within each (country, user) group, the data is chronological.
+df_sorted = df_activity.sort("country", "user_id", "month")
+
+# Step 2: Apply the window function over the multi-level group.
+df_with_previous_spend = df_sorted.with_columns(
+    pl.col("monthly_spend")
+    .shift(1)
+    .over(["country", "user_id"])  # Pass a list of columns here
+    .alias("previous_month_spend")
+)
+
+df_with_previous_spend.head(5)
+```
+
+<div><style>
+.dataframe > thead > tr,
+.dataframe > tbody > tr {
+  text-align: right;
+  white-space: pre-wrap;
+}
+</style>
+<small>shape: (5, 5)</small><table border="1" class="dataframe"><thead><tr><th>country</th><th>user_id</th><th>month</th><th>monthly_spend</th><th>previous_month_spend</th></tr><tr><td>str</td><td>i64</td><td>date</td><td>i64</td><td>i64</td></tr></thead><tbody><tr><td>&quot;Canada&quot;</td><td>101</td><td>2023-01-01</td><td>45</td><td>null</td></tr><tr><td>&quot;Canada&quot;</td><td>101</td><td>2023-02-01</td><td>55</td><td>45</td></tr><tr><td>&quot;Canada&quot;</td><td>205</td><td>2023-01-01</td><td>200</td><td>null</td></tr><tr><td>&quot;USA&quot;</td><td>101</td><td>2023-01-01</td><td>50</td><td>null</td></tr><tr><td>&quot;USA&quot;</td><td>101</td><td>2023-02-01</td><td>65</td><td>50</td></tr></tbody></table></div>
+
+This output clearly demonstrates that the window functions have correctly respected the two-level grouping hierarchy.
+
+The expression `pl.col("monthly_spend").shift(1).over(["country", "user_id"])` instructs Polars to:
+
+1.  First, conceptually partition the data based on the unique `(country, user_id)` pairs. This creates logical sub-groups like `("Canada", 101)`, `("Canada", 205)`, `("USA", 101)`, and `("USA", 102)`.
+2.  Within each of these independent sub-groups, apply the `.shift(1)` operation.
+3.  The `shift` for the `("USA", 101)` group will never see data from the `("Canada", 101)` group, which is exactly the behavior we need.
+
+### Advanced Example: Difference from Country Average
+
+The power of this pattern extends far beyond simple `shift` operations. Let’s ask a more complex question: **“For each month, how did a user’s spending differ from their country’s average spending in that same month?”**
+
+This requires a different kind of window. We need to group by `country` and `month` to calculate the average, but still return a value for every user row.
+
+``` python
+# Calculate the difference from the country's monthly average
+df_with_country_diff = df_activity.with_columns(
+    (
+        pl.col("monthly_spend") - pl.mean("monthly_spend").over(["country", "month"])
+    ).alias("spend_vs_country_avg")
+)
+```
+
+In this expression, `.over(["country", "month"])` tells Polars:
+1. For each row, find its `(country, month)` group (e.g., `("USA", 2023-01-01)`).
+2. Calculate the `mean("monthly_spend")` for that entire group.
+3. Subtract this group mean from the individual row’s `monthly_spend`.
+4. Return this result for the current row.
+
+``` python
+df_with_country_diff.head(5)
+```
+
+<div><style>
+.dataframe > thead > tr,
+.dataframe > tbody > tr {
+  text-align: right;
+  white-space: pre-wrap;
+}
+</style>
+<small>shape: (5, 5)</small><table border="1" class="dataframe"><thead><tr><th>country</th><th>user_id</th><th>month</th><th>monthly_spend</th><th>spend_vs_country_avg</th></tr><tr><td>str</td><td>i64</td><td>date</td><td>i64</td><td>f64</td></tr></thead><tbody><tr><td>&quot;USA&quot;</td><td>101</td><td>2023-01-01</td><td>50</td><td>-35.0</td></tr><tr><td>&quot;USA&quot;</td><td>102</td><td>2023-01-01</td><td>120</td><td>35.0</td></tr><tr><td>&quot;Canada&quot;</td><td>101</td><td>2023-01-01</td><td>45</td><td>-77.5</td></tr><tr><td>&quot;USA&quot;</td><td>101</td><td>2023-02-01</td><td>65</td><td>-22.5</td></tr><tr><td>&quot;Canada&quot;</td><td>101</td><td>2023-02-01</td><td>55</td><td>0.0</td></tr></tbody></table></div>
+
+This is a profoundly powerful operation that elegantly calculates a group-level statistic and broadcasts it back to the individual members of the group, all within a single, highly optimized expression.
+
+**In summary**, using `.over()` with a list of columns is the standard, idiomatic, and highly performant way to conduct analysis on hierarchical or multi-level panel data. It gives you precise control over the context of your calculations, ensuring that your analysis respects the nested structure of your data.
+
+#### Summary: The Power of `over()`
+
+To analyze panel data and access past information for an individual:
+
+1.  **Always sort your DataFrame first** by the column that defines time (`visit_date`, `timestamp`, etc.). This is the most critical step.
+2.  Use `.with_columns()` (or `select()`) to create your new feature.
+3.  Inside, define your expression using a function like `shift()`, `rolling_mean()`, `cumsum()`, etc.
+4.  Chain **`.over(grouping_column)`** to the end of your expression. The `grouping_column` is the identifier for your individuals (`patient_id`, `store_id`, etc.).
+
+This pattern is one of the cornerstones of high-performance data analysis in Polars. It is declarative, highly readable, and allows the query optimizer to execute these complex, grouped time-series operations with maximum efficiency and parallelism.
+
+## Conclusion
+
+Hopefully this post was able to demonstrate a bit of the power of the `over()` paradigm in polars. Thanks for reading.
